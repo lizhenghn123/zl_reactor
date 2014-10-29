@@ -46,7 +46,7 @@ unsigned int JSHash(const char *str)
 //BKDR Hash Function
 unsigned int BKDRHash(const char *str)
 {
-	unsigned int seed = 131; //31 131 1313 13131 131313 
+	//unsigned int seed = 131; //31 131 1313 13131 131313 
 	unsigned int hash = 0;
 
 	while( *str )

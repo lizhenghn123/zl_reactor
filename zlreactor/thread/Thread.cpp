@@ -56,7 +56,7 @@ Thread::Thread(const ThreadFunc& func, const std::string& name/* = unknown*/)
     // Create the thread
 #if defined(OS_WINDOWS)
     threadId_ = (HANDLE) _beginthreadex(0, 0, StartThread, (void *)data, 0, &win32ThreadID_);
-#elif defined(_TTHREAD_POSIX_)
+#else
     if(pthread_create(&threadId_, NULL, StartThread, (void *)data) != 0)
         threadId_ = 0;
 #endif
@@ -82,7 +82,7 @@ void Thread::join()
 #if defined(OS_WINDOWS)
         WaitForSingleObject(threadId_, INFINITE);
         CloseHandle(threadId_);
-#elif defined(_TTHREAD_POSIX_)
+#else
         pthread_join(threadId_, NULL);
 #endif
     }
@@ -101,7 +101,7 @@ void Thread::detach()
     {
 #if defined(OS_WINDOWS)
         CloseHandle(threadId_);
-#elif defined(_TTHREAD_POSIX_)
+#else
         pthread_detach(threadId_);
 #endif
         notAThread = true;
@@ -114,8 +114,8 @@ Thread::id Thread::get_id() const
         return id();
 #if defined(OS_WINDOWS)
     return id((unsigned long int) win32ThreadID_);
-#elif defined(_TTHREAD_POSIX_)
-    return _pthread_t_to_ID(mHandle);
+#else
+    return id(threadId_);
 #endif
 }
 
@@ -143,8 +143,8 @@ Thread::id this_thread::get_id()
 {
 #if defined(OS_WINDOWS)
     return Thread::id((unsigned long int) GetCurrentThreadId());
-#elif defined(_TTHREAD_POSIX_)
-    return _pthread_t_to_ID(pthread_self());
+#else
+    return Thread::id(pthread_self());
 #endif
 }
 

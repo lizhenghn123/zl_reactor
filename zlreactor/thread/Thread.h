@@ -62,7 +62,7 @@ private:
     mutable Mutex          threadMutex_;     ///< Serializer for access to the thread private data.
     bool                   notAThread;       ///< True if this object is not a thread of execution.
 #if defined(OS_WINDOWS)
-    unsigned int             win32ThreadID_;  ///< Unique thread ID (filled out by _beginthreadex).
+    unsigned int           win32ThreadID_;  ///< Unique thread ID (filled out by _beginthreadex).
 #endif
 };
 

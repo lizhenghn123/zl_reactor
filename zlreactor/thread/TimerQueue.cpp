@@ -85,9 +85,9 @@ void TimerQueue::processThread()
 
         //这里可以改为将延迟时间取list中最小的那个间隔，保证每次延迟时间到都有回调
         //或者使用multimap保存，每次找到最小间隔
-        //while(select(0,0,0,0,&tm)<0&&errno==EINTR);
-        int ret = select(0,0,0,0,&tm);
-
+        while(select(0,0,0,0,&tm)<0&&errno==EINTR);
+        //int ret = select(0,0,0,0,&tm);
+        
         end = zl::base::StopWatch::now(); //gettimeofday(&end,0);
         delay=(end.tv_sec-start.tv_sec)*1000+(end.tv_usec-start.tv_usec)/1000;
 
