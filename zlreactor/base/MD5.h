@@ -32,10 +32,10 @@ documentation and/or software.
 
 #ifndef BZF_MD5_H
 #define BZF_MD5_H
-
+#include "Define.h"
 #include <string>
 #include <iostream>
-
+NAMESPACE_ZL_BASE_START
 
 // a small class for calculating MD5 hashes of strings or byte arrays
 // it is not meant to be fast or secure
@@ -89,4 +89,5 @@ private:
     static inline void II(uint4& a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
 };
 
+NAMESPACE_ZL_BASE_END
 #endif

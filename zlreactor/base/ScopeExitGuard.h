@@ -11,8 +11,8 @@
 // ***********************************************************************
 #ifndef ZL_SCOPEEXITGUARD_H
 #define ZL_SCOPEEXITGUARD_H
-#include <stdio.h>
-#include <Windows.h>
+#include "Define.h"
+NAMESPACE_ZL_BASE_START
 
 namespace detail
 {
@@ -44,7 +44,7 @@ namespace detail
 		}
 	}; 
 
-	template < typename T >
+/*	template < typename T >
 	struct FreeLibraryPolicy
 	{
 		void operator()(T handle)
@@ -52,7 +52,7 @@ namespace detail
 			BOOL suc = ::FreeLibrary(handle);
 			assert(suc);
 		}
-	}; 
+	};*/ 
 }
 
 template <typename HandleT,
@@ -140,13 +140,13 @@ public:
     }
 
 private:
-	value_type handle_;
+    value_type handle_;
 };
 
 
 typedef ScopeExitGuard<FILE*,	detail::FreeMemPolicy>						    ScopeFreeMem;
 typedef ScopeExitGuard<FILE*,	detail::DeletePolicy>						    ScopeCloseFile;
-typedef ScopeExitGuard<HMODULE,	detail::FreeLibraryPolicy>						ScopeFreeLibrary;
+//typedef ScopeExitGuard<HMODULE,	detail::FreeLibraryPolicy>						ScopeFreeLibrary;
 
-
+NAMESPACE_ZL_BASE_END
 #endif  /* ZL_SCOPEEXITGUARD_H */

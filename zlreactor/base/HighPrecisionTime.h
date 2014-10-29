@@ -1,11 +1,10 @@
 #ifndef HIGHPRECISIONTIME_FILE_H
 #define HIGHPRECISIONTIME_FILE_H
-
-#include "osDefine.h"
-
+#include "Define.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #endif
+NAMESPACE_ZL_BASE_START
 
 class HighPrecisionTime
 {
@@ -68,5 +67,5 @@ private:
     LARGE_INTEGER	m_liPerfStart;	//Starting count
 };
 
-
+NAMESPACE_ZL_BASE_END
 #endif /* HIGHPRECISIONTIME_FILE_H */

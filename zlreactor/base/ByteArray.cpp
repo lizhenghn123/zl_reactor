@@ -1,7 +1,7 @@
 #include "ByteArray.h"
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+NAMESPACE_ZL_BASE_START
 
 ByteArray::ByteArray(int allocSize)
 {
@@ -120,3 +120,4 @@ void ByteArray::reversalArray(char *bytes, size_t size)
     }
 }
 
+NAMESPACE_ZL_BASE_END

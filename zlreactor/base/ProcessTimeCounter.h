@@ -9,8 +9,9 @@
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
-#include "OsDefine.h"
-#include <assert.h>
+#ifndef ZL_PROCESSTIMECOUNTER_H
+#define ZL_PROCESSTIMECOUNTER_H
+#include "Define.h"
 #ifdef OS_LINUX
 #include <sys/time.h>
 #include <sys/types.h>
@@ -18,6 +19,7 @@
 #else
 #include <Windows.h>
 #endif
+NAMESPACE_ZL_BASE_START
 
 class ProcessTimeCounter
 {
@@ -235,6 +237,7 @@ inline ProcessTimeCounter::interval_type ProcessTimeCounter::microSeconds() cons
 {
 	return PeriodCount() / interval_type(10);
 }
+
 #elif defined(OS_WINDOWS)
 inline /* static */ HANDLE ProcessTimeCounter::processHandle()
 {
@@ -318,4 +321,8 @@ inline ProcessTimeCounter::interval_type ProcessTimeCounter::microSeconds() cons
 {
 	return periodCount() / interval_type(10);
 }
-#endif
+
+#endif 
+
+NAMESPACE_ZL_BASE_END
+#endif  /* ZL_PROCESSTIMECOUNTER_H */

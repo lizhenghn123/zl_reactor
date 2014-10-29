@@ -73,7 +73,7 @@ void TimerQueue::processThread()
     unsigned int delay;
 
     struct timeval tm;
-    end = zl::StopWatch::now(); ////gettimeofday(&end,0);
+    end = zl::base::StopWatch::now(); ////gettimeofday(&end,0);
 
     const static int DEFULT_INTERVAL = 1;
     while(running_)
@@ -88,7 +88,7 @@ void TimerQueue::processThread()
         //while(select(0,0,0,0,&tm)<0&&errno==EINTR);
         int ret = select(0,0,0,0,&tm);
 
-        end = zl::StopWatch::now(); //gettimeofday(&end,0);
+        end = zl::base::StopWatch::now(); //gettimeofday(&end,0);
         delay=(end.tv_sec-start.tv_sec)*1000+(end.tv_usec-start.tv_usec)/1000;
 
         //pthread_mutex_lock(&manage->m_mutex);

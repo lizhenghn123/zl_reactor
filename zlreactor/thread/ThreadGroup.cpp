@@ -23,7 +23,7 @@ void ThreadGroup::create_thread(std::function<void ()> func, int thread_num/* = 
     for (int i = 0; i < thread_num; ++i)
     {
         std::string thr_name("threadgroup_thread_");
-        thr_name += toStr(i);
+        thr_name += zl::base::toStr(i);
         vecThreads_.push_back(new Thread(func, thr_name));
     }
 }

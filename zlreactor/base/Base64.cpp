@@ -1,6 +1,6 @@
 #include "base/Base64.h"
 #include <string.h>
-#include <assert.h>
+NAMESPACE_ZL_BASE_START
 
 static int base64EncodeImpl(const char *src, int len, std::string& dst);
 static int base64DecodeImpl(const char *src, int len, std::string& dst);
@@ -132,3 +132,5 @@ static int base64DecodeImpl(const char *src, int len, std::string& dst)
 
     return vLen;
 }
+
+NAMESPACE_ZL_BASE_END

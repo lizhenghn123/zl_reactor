@@ -11,8 +11,10 @@
 // ***********************************************************************
 #ifndef ZL_BYTEARRAY_H
 #define ZL_BYTEARRAY_H
+#include "Define.h"
 #include <string>
 #include <vector>
+NAMESPACE_ZL_BASE_START
 
 enum Endian
 {
@@ -144,4 +146,5 @@ private:
     std::vector<char> bytesBuf_;
 };
 
+NAMESPACE_ZL_BASE_END
 #endif /* ZL_BYTEARRAY_H */

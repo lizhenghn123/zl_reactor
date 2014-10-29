@@ -29,14 +29,10 @@ These notices must be retained in any copies of any part of this
 documentation and/or software.
 
 */
-
-/* interface header */
 #include "base/MD5.h"
-
-/* system implementation headers */
 #include <stdio.h>
 #include <string.h>
-
+NAMESPACE_ZL_BASE_START
 
 // Constants for MD5Transform routine.
 #define S11 7
@@ -369,3 +365,5 @@ std::ostream& operator<<(std::ostream& out, MD5 md5)
     return out << md5.hexdigest();
 }
 //////////////////////////////
+
+NAMESPACE_ZL_BASE_END

@@ -11,7 +11,9 @@
 // ***********************************************************************
 #ifndef ZL_BASE64_H
 #define ZL_BASE64_H
+#include "Define.h"
 #include <string>
+NAMESPACE_ZL_BASE_START
 
 // len == strlen(src), and strlen(dst) >= len * 4 / 3
 // 返回编码后的字符串长度
@@ -25,4 +27,5 @@ int         base64Decode(const char *src, size_t len, char *dst);
 int         base64Decode(const char *src, int len, std::string& dst);
 int         base64Decode(const std::string& src, std::string& dst);
 
+NAMESPACE_ZL_BASE_END
 #endif  /* ZL_BASE64_H */

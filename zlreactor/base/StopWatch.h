@@ -12,7 +12,6 @@
 #ifndef ZL_STOPWTACH_H
 #define ZL_STOPWTACH_H
 #include "Define.h"
-
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #include <time.h>
@@ -25,8 +24,7 @@
 #else
 #error "You must be include OsDefine.h firstly"
 #endif
-
-NAMESPACE_ZL_START
+NAMESPACE_ZL_BASE_START
 
 #define GET_TICK_COUNT(a, b) ((b.tv_sec - a.tv_sec)*1000000 + (b.tv_usec - a.tv_usec))
 
@@ -120,6 +118,6 @@ private:
     timeval		start_time;
 };
 
-NAMESPACE_ZL_END
 
+NAMESPACE_ZL_BASE_END
 #endif /** ZL_STOPWTACH_H */

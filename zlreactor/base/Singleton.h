@@ -16,10 +16,8 @@
 // ***********************************************************************
 #ifndef ZL_SINGLETON_H
 #define ZL_SINGLETON_H
-
 #include "Define.h"
 #include "thread/Mutex.h"
-
 NAMESPACE_ZL_START
 
 #define DECLARE_SINGLETON_CLASS(type)  friend class Singleton< type >
@@ -105,6 +103,6 @@ private:
 template < typename T >
 typename Singleton<T>::Proxy Singleton<T>::proxy_;
 
-NAMESPACE_ZL_END
 
+NAMESPACE_ZL_END
 #endif /* ZL_SINGLETON_H */

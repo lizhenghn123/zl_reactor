@@ -11,7 +11,8 @@
 // ***********************************************************************
 #ifndef ZL_SMARTASSERT_H
 #define ZL_SMARTASSERT_H
-#include <stdio.h>
+#include "Define.h"
+NAMESPACE_ZL_BASE_START
 
 #define SMART_ASSERT_DEBUG_MODE  //enable SMART_ASSERT macro, can use in Debug/Release env 
 
@@ -66,4 +67,5 @@ SmartAssert MakeAssert(bool enAbort, const char* expr, const char* function, con
 #define SMART_ASSERT_LOG(expr)  ((void) 0)
 #endif
 
+NAMESPACE_ZL_BASE_END
 #endif  /* ZL_SMARTASSERT_H */

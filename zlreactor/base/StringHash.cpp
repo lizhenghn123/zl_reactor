@@ -1,4 +1,5 @@
 #include "StringHash.h"
+NAMESPACE_ZL_BASE_START
 
 //SDBM Hash Function
 unsigned int SDBMHash(const char *str)
@@ -78,4 +79,6 @@ unsigned int FNVHash(const char *str)
 		hash ^= ch;  
 	}  
 	return hash;  
-}  
+}
+
+NAMESPACE_ZL_BASE_END
