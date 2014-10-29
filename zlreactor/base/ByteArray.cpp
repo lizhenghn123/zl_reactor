@@ -42,7 +42,7 @@ void ByteArray::writeString(const std::string& val)
 void ByteArray::writeChars(const char *val, size_t size, int offset/* = 0*/)
 {
     const char *srcByte = val + offset;
-    if((int)bytesBuf_.size() < (writePos_ + size))
+    if(bytesBuf_.size() < (writePos_ + size))
     {
         bytesBuf_.resize(writePos_ + size);  //每次只按需扩展所需大小，避免多分配内存, 也可直接resize 2倍大小，就像stl那样
     }
@@ -67,7 +67,7 @@ char ByteArray::readByte()
 bool ByteArray::readBytes(char *val, size_t size, int offset/* = 0*/)
 {
     char *dstByte = val + offset;
-    if(readPos_ + size > (int)bytesBuf_.size())
+    if(readPos_ + size > bytesBuf_.size())
     {
         *dstByte = 0;
         return false;

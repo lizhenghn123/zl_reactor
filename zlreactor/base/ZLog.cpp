@@ -217,7 +217,7 @@ bool ZLog::zlog(const char *file, int line, ZLogPriority priority, const char *f
     if (header_ & ZL_LOG_HEADER_TIME)
     {
         offset += ZL_SNPRINTF(log_entry + offset, max_size - offset, "%02d:%02d:%02d:%06d ",
-			result->tm_hour, result->tm_min, result->tm_sec, time.micoSeconds() % ZL_USEC_PER_SEC);
+			result->tm_hour, result->tm_min, result->tm_sec, int(time.micoSeconds() % ZL_USEC_PER_SEC));
     }
     if (header_ & ZL_LOG_HEADER_MARK)
     {
@@ -302,7 +302,7 @@ bool ZLogFile::init(const char *log_dir, const char *file_name, size_t max_file_
 const char *ZLogFile::makeLogFilePath()
 {
     ::memset(curr_log_file_, '\0', MAX_FILE_PATH_LEN);
-	ZL_SNPRINTF(curr_log_file_, MAX_FILE_PATH_LEN, "%s/%s-%u.log", log_dir_, log_file_name_, cur_file_index_);
+	ZL_SNPRINTF(curr_log_file_, MAX_FILE_PATH_LEN, "%s/%s-%d.log", log_dir_, log_file_name_, (int)cur_file_index_);
     return curr_log_file_;
 }
 

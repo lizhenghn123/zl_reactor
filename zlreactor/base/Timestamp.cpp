@@ -55,7 +55,7 @@ std::string Timestamp::toString(bool showlocaltime/* = true*/)
 {
     struct tm *tm_time = NULL;
     time_t seconds = static_cast<time_t>(microSeconds_ / ZL_USEC_PER_SEC);
-    long microseconds = microSeconds_ % (ZL_USEC_PER_SEC);
+    int microseconds = microSeconds_ % (ZL_USEC_PER_SEC);
 
     if(showlocaltime)
         tm_time = localtime(&seconds);
