@@ -2,7 +2,7 @@
 // Filename         : ZLog.h
 // Author           : LIZHENG
 // Created          : 2014-07-13
-// Description      : 日志类,可设置日志级别\输出格式\输出类型\重定向输出, 参考自Apache Portable Runtime(APR)
+// Description      : 日志类,可设置日志级别\输出格式\输出类型\重定向输出
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2014-07-14
@@ -11,12 +11,13 @@
 // ***********************************************************************
 #ifndef ZL_ZLOG_H
 #define ZL_ZLOG_H
-
+#include "Define.h"
 #include <stdarg.h>
 #include <stdlib.h>
+NAMESPACE_ZL_BASE_START
 
 #define MAX_LOG_FILE_SIZE  (10 * 1024 * 1024)    /** 默认每个日志文件大小（MB）*/
-#define MAX_LOG_FILE_COUNT (10)					 /** 默认循环日志文件数量 */
+#define MAX_LOG_FILE_COUNT (10)                  /** 默认循环日志文件数量 */
 
 #define ZL_LOG_MARK	 __FILE__,__LINE__           /** 输出格式：文件+行号 */
 #define ZL_PTR_FMT   "<0x%x>"                    /** 输出格式：指针地址值 */
@@ -95,4 +96,6 @@ void zl_log_set_handler(zl_log_ext_handler_f handler);
 #define LOG_ALERT(s, ...)        zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
 #define LOG_EMERGENCY(s, ...)    zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
 
+
+NAMESPACE_ZL_BASE_END
 #endif /* ZL_ZLOG_H */

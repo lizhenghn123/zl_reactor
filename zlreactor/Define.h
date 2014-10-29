@@ -22,7 +22,6 @@
 #include <iterator>
 #include <numeric>
 #include <stdint.h>
-#include <stdio.h>
 #include <assert.h>
 #include "OsDefine.h"
 
@@ -32,6 +31,9 @@
 
 #define NAMESPACE_ZL_START        namespace zl {
 #define NAMESPACE_ZL_END          }  /* namespace zl */
+
+#define NAMESPACE_ZL_BASE_START NAMESPACE_ZL_START namespace base {
+#define NAMESPACE_ZL_BASE_END   } }  /* namespace zl::base */
 
 #define NAMESPACE_ZL_THREAD_START NAMESPACE_ZL_START namespace thread {
 #define NAMESPACE_ZL_THREAD_END   } }  /* namespace zl::thread */

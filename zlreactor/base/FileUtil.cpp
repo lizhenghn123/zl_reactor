@@ -81,7 +81,11 @@ bool createRecursionDir(const char *dir)
 bool isFileExist(const char *filepath)
 {
     FILE *file = fopen(filepath, "rb");
-    return file != NULL;
+    if (!file)
+        return false;
+
+    ::fclose(file);
+    return true;
     //std::ifstream infile(filepath);
     //return infile.good();
 }

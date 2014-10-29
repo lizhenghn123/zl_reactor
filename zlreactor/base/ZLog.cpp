@@ -4,13 +4,8 @@
 #include <string>
 #include "thread/Mutex.h"
 #include "base/Timestamp.h"
-#ifdef OS_WINDOWS
-#include <shlwapi.h>
-#pragma comment(lib, "shlwapi")
-#else
-#include <dirent.h>
-#include <sys/stat.h>
-#endif
+#include "base/FileUtil.h"
+NAMESPACE_ZL_BASE_START
 
 #define MAX_LOG_ENTRY_SIZE 4096      /* 每次log输出的最大大小 */
 #define MAX_FILE_PATH_LEN  1024      /* 日志文件路径最大长度 */
@@ -24,10 +19,6 @@
 
 class  ZLog;
 class  ZLogFile;
-static bool IsDirectory(const char *dir);
-static bool CreateRecursionDir(const char *dir);
-static bool IsFileExist(const char *path);
-static size_t GetFileSize(const char *path);
 
 static const char priority_snames[ZL_LOG_PRIO_COUNT][MAX_PRIORITY_NAME_LENGTH + 1] =
 {
@@ -112,12 +103,12 @@ public:
               ZLogPriority priority = ZL_LOG_PRIO_INFO, ZLogMasking mask = ZL_LOG_MASKING_COMPLETE,
               bool append = true);
 
-    void SetLogHandler(zl_log_ext_handler_f handler)
+    void setLogHandler(zl_log_ext_handler_f handler)
     {
         ext_handler_ = handler;
     }
 
-    bool Zlog(const char *file, int line, ZLogPriority priority, const char *format, va_list arg_ptr);
+    bool zlog(const char *file, int line, ZLogPriority priority, const char *format, va_list arg_ptr);
 
 private:
     ZLogOutput            mode_;
@@ -166,7 +157,7 @@ bool zl_log_instance_destroy()
 
 void zl_log_set_handler(zl_log_ext_handler_f handler)
 {
-    g_zlogger->SetLogHandler(handler);
+    g_zlogger->setLogHandler(handler);
 }
 
 bool zl_log(const char *file, int line, ZLogPriority priority, const char *format, ...)
@@ -187,7 +178,7 @@ bool zl_log(const char *file, int line, ZLogPriority priority, const char *forma
         }
         else
         {
-            status = g_zlogger->Zlog(file, line, priority, format, arg_ptr);
+            status = g_zlogger->zlog(file, line, priority, format, arg_ptr);
         }
         va_end(arg_ptr);
     }
@@ -209,7 +200,7 @@ bool ZLog::init(const char *log_dir, const char *log_name,
     return log_file_->init(log_dir, log_name, max_file_size, max_file_count, append);
 }
 
-bool ZLog::Zlog(const char *file, int line, ZLogPriority priority, const char *format, va_list arg_ptr)
+bool ZLog::zlog(const char *file, int line, ZLogPriority priority, const char *format, va_list arg_ptr)
 {
     char log_entry[MAX_LOG_ENTRY_SIZE];
     size_t max_size = MAX_LOG_ENTRY_SIZE - 2;
@@ -270,8 +261,8 @@ bool ZLogFile::init(const char *log_dir, const char *file_name, size_t max_file_
     max_file_size_ = (max_file_size <= 0 ? MAX_LOG_FILE_SIZE : max_file_size);
     max_file_count_ = (max_file_count <= 0 ? MAX_LOG_FILE_COUNT : max_file_count);
 
-	if (!IsDirectory(log_dir_))
-		CreateRecursionDir(log_dir);
+    if (!zl::isDirectory(log_dir_)) 
+        zl::createRecursionDir(log_dir);
 
     if (append_ == true)
     {
@@ -279,12 +270,12 @@ bool ZLogFile::init(const char *log_dir, const char *file_name, size_t max_file_
         while (cur_file_index_ < max_file_count_)
         {
             const char *log_file_path = makeLogFilePath();
-			if (!IsFileExist(log_file_path))
+            if (!zl::isFileExist(log_file_path))
             {
                 if (cur_file_index_ > 0)
                     cur_file_index_--;
                 log_file_path = makeLogFilePath();
-				cur_size_ = GetFileSize(log_file_path);
+                cur_size_ = zl::getFileSize(log_file_path);
                 break;
             }
             cur_file_index_++;
@@ -341,91 +332,4 @@ bool ZLogFile::dumpLog(const char *log_entry, size_t size)
     return true;
 }
 
-static bool IsDirectory(const char *path)
-{
-#ifdef OS_WINDOWS
-	return PathIsDirectoryA(path) ? true : false;
-#else
-	DIR * pdir = opendir(path);
-	if (pdir != NULL)
-	{
-		closedir(pdir);
-		pdir = NULL;
-		return true;
-	}
-	return false;
-#endif
-}
-
-static void ModifyDirPath(std::string &path) // 修改目录路径为X/Y/Z/
-{
-	if (path.empty())
-	{
-		return;
-	}
-	for (std::string::iterator iter = path.begin(); iter != path.end(); ++iter)
-	{
-		if (*iter == '\\')
-		{
-			*iter = '/';
-		}
-	}
-	if (path.at(path.length() - 1) != '/')
-	{
-		path += "/";
-	}
-}
-
-static bool CreateRecursionDir(const char *dir)
-{
-	std::string dirs(dir);
-	if (dirs.empty())
-		return true;
-
-	ModifyDirPath(dirs);
-
-	std::string::size_type pos = dirs.find('/');
-	while (pos != std::string::npos)
-	{
-		std::string cur = dirs.substr(0, pos - 0);
-		if (cur.length() > 0 && !IsDirectory(cur.c_str()))
-		{
-			bool ret = false;
-#ifdef OS_WINDOWS
-			ret = CreateDirectoryA(cur.c_str(), NULL) ? true : false;
-#else
-			ret = (mkdir(cur.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == 0);
-#endif
-			if (!ret)
-			{
-				return false;
-			}
-		}
-		pos = dirs.find('/', pos + 1);
-	}
-
-	return true;
-}
-
-static bool IsFileExist(const char *path)
-{
-    FILE *fp = ::fopen(path, "rb");
-    if (!fp)
-        return false;
-
-    ::fclose(fp);
-    return true;
-}
-
-static size_t GetFileSize(const char *path)
-{
-    FILE *fp = ::fopen(path, "rb");
-    if (!fp)
-        return 0;
-
-    ::fseek(fp, 0, SEEK_END);
-    size_t ret = ::ftell(fp);
-    ::fclose(fp);
-
-    return ret;
-}
+NAMESPACE_ZL_BASE_END
