@@ -48,10 +48,8 @@ private:
     unsigned int  timer_duration_;     //开始设置为interval，随延迟时间到，减少
     unsigned long trigger_sum_;        //触发计数
 
-    void         *args_;               //回调函数参数
     void (*callback_)(Timer *,void *); //回调函数
-public:
-
+    void          *args_;              //回调函数参数
 };
 
 NAMESPACE_ZL_THREAD_END

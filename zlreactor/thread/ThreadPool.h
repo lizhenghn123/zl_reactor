@@ -45,7 +45,7 @@ private:
     Mutex                 mutex_;
     Condition             cond_;
     std::deque<Task>      queue_;
-    std::vector<Thread *>  threads_;
+    std::vector<Thread *> threads_;
 };
 
 NAMESPACE_ZL_THREAD_END

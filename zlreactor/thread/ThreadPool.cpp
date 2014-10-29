@@ -4,7 +4,7 @@
 NAMESPACE_ZL_THREAD_START
 
 ThreadPool::ThreadPool(const std::string& name/* = "ThreadPool"*/)
-    : mutex_(), cond_(mutex_), name_(name), running_(false)
+    : name_(name), running_(false), mutex_(), cond_(mutex_)
 {
 }
 

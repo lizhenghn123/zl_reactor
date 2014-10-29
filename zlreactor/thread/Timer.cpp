@@ -4,13 +4,12 @@
 NAMESPACE_ZL_THREAD_START
 
 Timer::Timer(unsigned int interval,void (*func)(Timer *,void *),void *args,TimerType type/* = TIMER_ONCE*/)
-    : timer_interval_(interval), timer_duration_(interval),
-      timer_state_(TIMER_IDLE), timer_type_(type),
+    : timer_state_(TIMER_IDLE), timer_type_(type), timer_interval_(interval),
+	  timer_duration_(interval), trigger_sum_(0),      
       callback_(func), args_(args)
 {
     assert(callback_);
     assert(args_);
-    trigger_sum_ = 0;
 }
 
 Timer::~Timer()
