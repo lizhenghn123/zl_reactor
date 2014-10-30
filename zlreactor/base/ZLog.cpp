@@ -217,7 +217,7 @@ bool ZLog::zlog(const char *file, int line, ZLogPriority priority, const char *f
     if (header_ & ZL_LOG_HEADER_TIME)
     {
         offset += ZL_SNPRINTF(log_entry + offset, max_size - offset, "%02d:%02d:%02d:%06d ",
-			result->tm_hour, result->tm_min, result->tm_sec, int(time.micoSeconds() % ZL_USEC_PER_SEC));
+			result->tm_hour, result->tm_min, result->tm_sec, int(time.microSeconds() % ZL_USEC_PER_SEC));
     }
     if (header_ & ZL_LOG_HEADER_MARK)
     {
