@@ -29,8 +29,13 @@ public:
     explicit Timestamp(zl_time_t ms);
 public:
     static Timestamp now();
+    static double  timediff(const Timestamp& lhs, const Timestamp& rhs)
+    {
+         long delta = lhs.microSeconds() - rhs.microSeconds();
+         return ZL_TIME_SEC(delta * 1.0);
+    }
 public:
-    zl_time_t micoSeconds() const
+    zl_time_t microSeconds() const
     {
         return microSeconds_;
     }
@@ -52,12 +57,23 @@ private:
 
 inline bool operator<(const Timestamp& lhs, const Timestamp& rhs)
 {
-    return lhs.micoSeconds() < rhs.micoSeconds();
+    return lhs.microSeconds() < rhs.microSeconds();
 }
 
 inline bool operator==(const Timestamp& lhs, const Timestamp& rhs)
 {
-    return lhs.micoSeconds() == rhs.micoSeconds();
+    return lhs.microSeconds() == rhs.microSeconds();
+}
+
+inline Timestamp operator+(const Timestamp& lhs, double seconds)
+{
+       long delta = seconds * ZL_USEC_PER_SEC;
+       return Timestamp(lhs.microSeconds() + delta);
+}
+
+inline Timestamp operator+(double seconds, const Timestamp& rhs)
+{
+      return (rhs + seconds);
 }
 
 } // namespace base
