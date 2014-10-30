@@ -34,4 +34,7 @@ libzlreactor_a_SOURCES = \
 					 thread/TimerQueue.cpp \
 					 net/NetUtil.cpp \
 					 net/SocketUtil.cpp \
-					 net/InetAddress.cpp 
+					 net/InetAddress.cpp \
+					 net/Socket.cpp \
+					 net/ActiveSocket.cpp \
+					 net/PassiveSocket.cpp 
