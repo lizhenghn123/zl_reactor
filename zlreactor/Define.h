@@ -24,6 +24,10 @@
 #include <stdint.h>
 #include <assert.h>
 #include "OsDefine.h"
+#ifdef OS_WINDOWS
+#define  _WINSOCKAPI_
+#include <Windows.h>
+#endif
 
 #if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus > 199711L || __cplusplus == 201103L
 #define ZL_CXX11_ENABLED 1
