@@ -2,6 +2,8 @@
 #include <string.h>
 NAMESPACE_ZL_NET_START
 
+SocketInitialization  g_socket_init_once;
+
 int socketInitialise()
 {
 #ifdef OS_WINDOWS

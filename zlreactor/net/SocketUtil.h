@@ -138,7 +138,7 @@ namespace
         }
     };
 
-    static SocketInitialization  g_socket_init_once;
+    extern  SocketInitialization  g_socket_init_once;
 }
 
 NAMESPACE_ZL_NET_END
