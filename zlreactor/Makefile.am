@@ -37,4 +37,6 @@ libzlreactor_a_SOURCES = \
 					 net/InetAddress.cpp \
 					 net/Socket.cpp \
 					 net/ActiveSocket.cpp \
-					 net/PassiveSocket.cpp 
+					 net/PassiveSocket.cpp \
+					 net/Poller.cpp \
+					 net/EpollPoller.cpp 
