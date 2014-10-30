@@ -45,7 +45,7 @@ public:
      *
      * @param timeout     : 超时时间(单位:ms)
      * @param activeConns : 已激活的连接
-     * @return 当前时间
+     * @return            ：io multiplexing 调用返回时的当前时间
      */
 	virtual Timestamp poll(int timeoutMs, ChannelList& activeChannels) = 0;
 

@@ -96,6 +96,5 @@ void zl_log_set_handler(zl_log_ext_handler_f handler);
 #define LOG_ALERT(s, ...)        zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
 #define LOG_EMERGENCY(s, ...)    zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
 
-
 NAMESPACE_ZL_BASE_END
 #endif /* ZL_ZLOG_H */

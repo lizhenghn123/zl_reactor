@@ -13,14 +13,14 @@
 #define ZL_EPOLLPOLLER_H
 #include "net/Poller.h"
 
-NAMESPACE_ZL_NET_START
+struct epoll_event;
 
-#define MAX_EPOLL_EVENTS 1024
+NAMESPACE_ZL_NET_START
 
 class EpollPoller : public Poller
 {
 public:
-    EpollPoller(EventLoop *loop, ZL_SOCKET listenfd, int event_size = MAX_EPOLL_EVENTS, bool enableET = false);
+    EpollPoller(EventLoop *loop, bool enableET = false);
     ~EpollPoller();
 
 public:
@@ -31,10 +31,11 @@ public:
 	virtual Timestamp poll(int timeoutMs, ChannelList& activeChannels);
 
 private:
-    int  epollfd_;    // epoll的fd
-    bool enableET_;
-    ZL_SOCKET listenfd_;
+	typedef std::vector<struct epoll_event> EpollEventList;
 
+    int  epollfd_;     
+    bool enableET_;
+	EpollEventList events_;
 };
 
 NAMESPACE_ZL_NET_END

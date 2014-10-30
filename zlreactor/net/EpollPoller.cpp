@@ -2,39 +2,25 @@
 #include <string.h>
 #include <sys/epoll.h>
 #include "net/Socket.h"
-//#include "Channel.h"
+#include "net/Channel.h"
+#include "base/ZLog.h"
+using namespace zl::base;
 
 NAMESPACE_ZL_NET_START
 
 
-EpollPoller::EpollPoller(EventLoop *loop, ZL_SOCKET listenfd, int event_size /*= MAX_EPOLL_EVENTS*/, bool enableET/* = false*/)
-    : Poller(loop)
+EpollPoller::EpollPoller(EventLoop *loop, bool enableET/* = false*/)
+    : Poller(loop), enableET_(enableET), events_(64)
 {
-    listenfd_ = listenfd;
-    enableET_ = enableET;
-    epollfd_ = epoll_create(event_size);
-
-    //    struct epoll_event ev;
-    //    ev.data.fd = srvSocket_.GetSocket(); //设置与要处理的事件相关的文件描述符
-    //    ev.events = EPOLLIN|EPOLLET;         //设置要处理的事件类型
-    //    //ev.events=EPOLLIN;
-    //
-    //    epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, srvSocket_.GetSocket(), &ev);  //注册epoll事件
+    epollfd_ = epoll_create(1024);
+    assert(epollfd_ > 0 && " epoll create failure!");
 }
 
 EpollPoller::~EpollPoller()
 {
-    close(epollfd_);
+    ::close(epollfd_);
 }
 
-/*
- * 增加Socket到事件中
- *
- * @param socket 被加的socket
- * @param enableRead: 设置是否可读
- * @param enableWrite: 设置是否可写
- * @return  操作是否成功, true – 成功, false – 失败
- */
 bool EpollPoller::updateChannel(Channel *channel/*, bool enableRead, bool enableWrite*/)
 {
 /*    channel->ClearChannel();
@@ -62,12 +48,6 @@ bool EpollPoller::updateChannel(Channel *channel/*, bool enableRead, bool enable
 	return true;
 }
 
-/*
- * 删除Socket到事件中
- *
- * @param socket 被删除socket
- * @return  操作是否成功, true – 成功, false – 失败
- */
 bool EpollPoller::removeChannel(Channel *channel)
 {
 /*    channel->ClearChannel();
@@ -89,17 +69,36 @@ bool EpollPoller::removeChannel(Channel *channel)
 	return true;
 }
 
-/*
- * 得到读写事件。
- *
- * @param timeout  超时时间(单位:ms)
- * @param activeSockets  激活事件列表
- * @param cnt   events的数组大小
- * @return 事件数, 0为超时, -1为出错了
- */
-Timestamp EpollPoller::poll(int timeout, ChannelList& activeChannels)
+Timestamp EpollPoller::poll(int timeoutMs, ChannelList& activeChannels)
 {
-	return Timestamp::now();
+	int numEvents = ::epoll_wait(epollfd_, &*events_.begin(),
+                               static_cast<int>(events_.size()), timeoutMs);
+	int savedErrno = errno;
+	Timestamp now(Timestamp::now());
+	if (numEvents > 0)
+	{
+		LOG_INFO("poll: [%s] events happended", numEvents);
+		//fillActiveChannels(numEvents, activeChannels);
+		if (static_cast<size_t>(numEvents) == events_.size())
+		{
+			events_.resize(events_.size()*2);
+		}
+	}
+	else if (numEvents == 0)
+	{
+		LOG_INFO("poll: nothing happended");
+	}
+	else
+	{
+		// error happens, log uncommon ones
+		if (savedErrno != EINTR)
+		{
+			errno = savedErrno;
+			LOG_INFO("poll: error [%d]", savedErrno);
+		}
+	}
+	
+	return now;	
 /*    struct epoll_event epoll_events[MAX_EPOLL_EVENTS];
     int nfds = epoll_wait(epollfd_, epoll_events, MAX_EPOLL_EVENTS, -1); //等待epoll事件的发生
     Channel *channel;
