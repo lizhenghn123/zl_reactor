@@ -28,6 +28,7 @@
 #include <sys/utsname.h>
 #include <unistd.h>
 #include <errno.h>
+#include <poll.h>
 #endif
 
 #ifdef OS_WINDOWS

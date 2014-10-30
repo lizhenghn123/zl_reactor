@@ -2,7 +2,7 @@
 // Filename         : EventLoop.h
 // Author           : LIZHENG
 // Created          : 2014-10-26
-// Description      :
+// Description      : io service, 可管理socket，timer，file等io模式
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2014-10-26

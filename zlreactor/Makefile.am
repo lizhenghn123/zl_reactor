@@ -40,4 +40,5 @@ libzlreactor_a_SOURCES = \
 					 net/PassiveSocket.cpp \
 					 net/Poller.cpp \
 					 net/EpollPoller.cpp \
-					 net/EventLoop.cpp 
+					 net/EventLoop.cpp \
+					 net/Channel.cpp 
