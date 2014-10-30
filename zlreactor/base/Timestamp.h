@@ -11,6 +11,7 @@
 // ***********************************************************************
 #ifndef ZL_TIMESTAMP_H
 #define ZL_TIMESTAMP_H
+#include "Define.h"
 #include <string>
 
 #define ZL_MSEC_PER_SEC   (1000)
@@ -20,30 +21,28 @@
 namespace zl{
 namespace base {
 
-typedef long long zl_time_t;
-
 class Timestamp
 {
 public:
     Timestamp();
-    explicit Timestamp(zl_time_t ms);
+    explicit Timestamp(int64_t ms);
 public:
     static Timestamp now();
     static double  timediff(const Timestamp& lhs, const Timestamp& rhs)
     {
-         long delta = lhs.microSeconds() - rhs.microSeconds();
+         int64_t delta = lhs.microSeconds() - rhs.microSeconds();
          return ZL_TIME_SEC(delta * 1.0);
     }
 public:
-    zl_time_t microSeconds() const
+    int64_t microSeconds() const
     {
         return microSeconds_;
     }
-    zl_time_t millSeconds() const
+    int64_t millSeconds() const
     {
         return microSeconds_ / ZL_MSEC_PER_SEC;
     }
-    zl_time_t seconds()     const
+    int64_t seconds()     const
     {
         return microSeconds_ / ZL_USEC_PER_SEC;
     }
@@ -52,7 +51,7 @@ public:
     std::string toString(bool showlocaltime = true);
 
 private:
-    zl_time_t  microSeconds_;
+    int64_t  microSeconds_;
 };
 
 inline bool operator<(const Timestamp& lhs, const Timestamp& rhs)

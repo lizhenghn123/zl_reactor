@@ -16,7 +16,7 @@ Timestamp::Timestamp() : microSeconds_(0)
 
 }
 
-Timestamp::Timestamp(zl_time_t ms) : microSeconds_(ms)
+Timestamp::Timestamp(int64_t ms) : microSeconds_(ms)
 {
 
 }
@@ -33,7 +33,7 @@ Timestamp::Timestamp(zl_time_t ms) : microSeconds_(ms)
     li.LowPart = ft.dwLowDateTime;
     li.HighPart = ft.dwHighDateTime;
 
-    zl_time_t tt = (li.QuadPart - win_epoch_filetime) / 10;
+    int64_t tt = (li.QuadPart - win_epoch_filetime) / 10;
     return Timestamp(tt);
 #else
     struct timeval tv;
