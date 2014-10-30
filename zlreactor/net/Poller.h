@@ -27,26 +27,29 @@ class Poller
 public:
     typedef std::vector<Channel *>          ChannelList;
     typedef std::map<ZL_SOCKET, Channel *, std::greater<ZL_SOCKET> >  ChannelMap;
+
 public:
     Poller(EventLoop *loop);
 
     virtual ~Poller();
 
 public:
+	/// Changes the interested I/O events. Must be called in the loop thread.
 	virtual bool updateChannel(Channel* channel) = 0;
 
+    /// Changes the interested I/O events. Must be called in the loop thread.
 	virtual bool removeChannel(Channel* channel) = 0;
 
     /*
-     * 得到可响应读写事件的所有连接
+     * 得到可响应读写事件的所有连接, 必须在主线程中循环调用
      *
      * @param timeout     : 超时时间(单位:ms)
      * @param activeConns : 已激活的连接
-     * @return 激活的连接数，0为超时, -1为异常
+     * @return 当前时间
      */
 	virtual Timestamp poll(int timeoutMs, ChannelList& activeChannels) = 0;
 
-	virtual bool hasChannel(Channel* channel) const;
+	virtual bool hasChannel(const Channel* channel) const;
 
 public:
     /*

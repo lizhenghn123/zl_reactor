@@ -1,5 +1,5 @@
 #include "net/Poller.h"
-//#include "Channel.h"
+#include "net/Channel.h"
 NAMESPACE_ZL_NET_START
 
 Poller::Poller(EventLoop *loop) : loop_(loop)
@@ -10,11 +10,10 @@ Poller::~Poller()
 {
 }
 
-bool Poller::hasChannel(Channel* channel) const
+bool Poller::hasChannel(const Channel* channel) const
 {
-	//ChannelMap::iterator itr = channelMap_.find(channel->fd());
-    //return it != channels_.end() && it->second == channel;
-	return true;
+	ChannelMap::const_iterator itr = channelMap_.find(channel->fd());
+    return itr != channelMap_.end() && itr->second == channel;
 }
 
 Channel* Poller::getChannel(ZL_SOCKET sock)
