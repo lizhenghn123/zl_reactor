@@ -38,6 +38,7 @@ public:
     std::string ipPort() const;
 
     size_t addressLength() const { return sizeof(addr_); }
+    operator struct sockaddr *() const{ return (struct sockaddr*)&addr_; }
 
     const ZL_SOCKADDR_IN& getSockAddrInet() const { return addr_; }
     void setSockAddrInet(const ZL_SOCKADDR_IN& addr) { addr_ = addr; }
