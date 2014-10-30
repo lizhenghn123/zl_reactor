@@ -20,6 +20,7 @@ NAMESPACE_ZL_NET_START
 using zl::base::Timestamp;
 class Socket;
 class Channel;
+class EventLoop;
 
 class Poller
 {
@@ -27,9 +28,9 @@ public:
     typedef std::vector<Channel *>          ChannelList;
     typedef std::map<ZL_SOCKET, Channel *, std::greater<ZL_SOCKET> >  ChannelMap;
 public:
-    Poller() { }
+    Poller(EventLoop *loop);
 
-    virtual ~Poller() { }
+    virtual ~Poller();
 
 public:
 	virtual bool updateChannel(Channel* channel) = 0;
@@ -56,7 +57,8 @@ public:
 	Channel* getChannel(ZL_SOCKET sock);
 
 protected:
-    ChannelMap  channelMap;
+    ChannelMap  channelMap_;
+    EventLoop   *loop_;
 };
 
 NAMESPACE_ZL_NET_END

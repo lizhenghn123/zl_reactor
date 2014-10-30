@@ -20,7 +20,7 @@ NAMESPACE_ZL_NET_START
 class EpollPoller : public Poller
 {
 public:
-    EpollPoller(ZL_SOCKET listenfd, int event_size = MAX_EPOLL_EVENTS, bool enableET = false);
+    EpollPoller(EventLoop *loop, ZL_SOCKET listenfd, int event_size = MAX_EPOLL_EVENTS, bool enableET = false);
     ~EpollPoller();
 
 public:

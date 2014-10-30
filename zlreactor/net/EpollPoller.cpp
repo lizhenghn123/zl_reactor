@@ -7,7 +7,8 @@
 NAMESPACE_ZL_NET_START
 
 
-EpollPoller::EpollPoller(ZL_SOCKET listenfd, int event_size /*= MAX_EPOLL_EVENTS*/, bool enableET/* = false*/)
+EpollPoller::EpollPoller(EventLoop *loop, ZL_SOCKET listenfd, int event_size /*= MAX_EPOLL_EVENTS*/, bool enableET/* = false*/)
+    : Poller(loop)
 {
     listenfd_ = listenfd;
     enableET_ = enableET;
@@ -54,7 +55,7 @@ bool EpollPoller::updateChannel(Channel *channel/*, bool enableRead, bool enable
     ev.events |= EPOLLERR;
     ev.events |= EPOLLHUP;
 
-    channelMap[sock] = channel;
+    channelMap_[sock] = channel;
 
     bool rc = (epoll_ctl(epollfd_, EPOLL_CTL_ADD, channel->GetSocket()->GetSocket(), &ev) == 0);
     return rc; */
@@ -77,10 +78,10 @@ bool EpollPoller::removeChannel(Channel *channel)
     ev.data.fd = 0;//channel->GetSocket()->GetSocket();
     ev.events = 0;
 
-    ChannelMap::iterator itr = channelMap.find(sock);
-    if(itr != channelMap.end())
+    ChannelMap::iterator itr = channelMap_.find(sock);
+    if(itr != channelMap_.end())
     {
-        channelMap.erase(itr);
+        channelMap_.erase(itr);
     }
 
     bool rc = (epoll_ctl(epollfd_, EPOLL_CTL_DEL, channel->GetSocket()->GetSocket(), &ev) == 0);
