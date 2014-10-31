@@ -24,18 +24,22 @@ public:
     ~EpollPoller();
 
 public:
-	virtual bool updateChannel(Channel* channel);
+    virtual bool updateChannel(Channel *channel);
 
-	virtual bool removeChannel(Channel* channel);
+    virtual bool removeChannel(Channel *channel);
 
-	virtual Timestamp poll(int timeoutMs, ChannelList& activeChannels);
+    virtual Timestamp poll_once(int timeoutMs, ChannelList& activeChannels);
 
 private:
-	typedef std::vector<struct epoll_event> EpollEventList;
+    bool update(Channel *channel, int operation);
+    void fireActiveChannels(int numEvents, ChannelList& activeChannels) const;
 
-    int  epollfd_;     
+private:
+    typedef std::vector<struct epoll_event> EpollEventList;
+
+    int  epollfd_;
     bool enableET_;
-	EpollEventList events_;
+    EpollEventList events_;
 };
 
 NAMESPACE_ZL_NET_END

@@ -21,126 +21,99 @@ EpollPoller::~EpollPoller()
     ::close(epollfd_);
 }
 
-bool EpollPoller::updateChannel(Channel *channel/*, bool enableRead, bool enableWrite*/)
+Timestamp EpollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
 {
-/*    channel->ClearChannel();
-    ZL_SOCKET sock = channel->GetSocket()->GetSocket();
+    int numEvents = ::epoll_wait(epollfd_, &*events_.begin(),
+                               static_cast<int>(events_.size()), timeoutMs);
+    int savedErrno = errno;
+    Timestamp now(Timestamp::now());
+    if (numEvents > 0)
+    {
+        LOG_INFO("poll: [%s] events happended", numEvents);
+        //fillActiveChannels(numEvents, activeChannels);
+        if (static_cast<size_t>(numEvents) == events_.size())
+        {
+            events_.resize(events_.size()*2);
+        }
+    }
+    else if (numEvents == 0)
+    {
+        LOG_INFO("poll: nothing happended");
+    }
+    else
+    {
+        // error happens, log uncommon ones
+        if (savedErrno != EINTR)
+        {
+            errno = savedErrno;
+            LOG_INFO("poll: error [%d]", savedErrno);
+        }
+    }
 
-    struct epoll_event ev = { 0, { 0 } };
-    //ev.data.ptr = channel;
-    ev.data.fd = sock;
+    return now;
+}
 
-    ev.events = 0;
-    if(enableRead)
-        ev.events |= EPOLLIN;
-    if(enableWrite)
-        ev.events |= EPOLLOUT;
-    if(enableET_)
-        ev.events |= EPOLLET;
+void EpollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels) const
+{
+    assert(static_cast<size_t>(numEvents) <= events_.size());
+    for (int i = 0; i < numEvents; ++i)
+    {
+        Channel *channel = static_cast<Channel*>(events_[i].data.ptr);
+        assert(hasChannel(channel)&& "the poll socket must be already exist");
+        channel->set_revents(events_[i].events);
+        activeChannels.push_back(channel);
+    }
+}
 
-    ev.events |= EPOLLERR;
-    ev.events |= EPOLLHUP;
-
-    channelMap_[sock] = channel;
-
-    bool rc = (epoll_ctl(epollfd_, EPOLL_CTL_ADD, channel->GetSocket()->GetSocket(), &ev) == 0);
-    return rc; */
-	return true;
+bool EpollPoller::updateChannel(Channel *channel)
+{
+    ZL_SOCKET fd = channel->fd();
+    if(hasChannel(channel))    //exist, update
+    {
+        assert(getChannel(fd) == channel);
+        if(channel->isNoneEvent())
+        {
+            channelMap_.erase(fd);
+            return update(channel, EPOLL_CTL_DEL);
+        }
+        else
+        {
+            return update(channel, EPOLL_CTL_MOD);
+        }
+    }
+    else                       //new, add
+    {
+        assert(getChannel(fd) == NULL);
+        channelMap_[fd] = channel;
+        return update(channel, EPOLL_CTL_ADD);
+    }
 }
 
 bool EpollPoller::removeChannel(Channel *channel)
 {
-/*    channel->ClearChannel();
-    ZL_SOCKET sock = channel->GetSocket()->GetSocket();
-    struct epoll_event ev;
-    memset(&ev, 0, sizeof(ev));
-    ev.data.ptr = 0;
-    ev.data.fd = 0;//channel->GetSocket()->GetSocket();
-    ev.events = 0;
+    ZL_SOCKET fd = channel->fd();
+    assert(hasChannel(channel) && "the remove socket must be already exist");
+    assert(getChannel(fd) == channel && "the remove socket must be already exist");
+    assert(channel->isNoneEvent());
+    size_t n = channelMap_.erase(fd);
+    (void)n;
+    assert(n == 1);
 
-    ChannelMap::iterator itr = channelMap_.find(sock);
-    if(itr != channelMap_.end())
-    {
-        channelMap_.erase(itr);
-    }
-
-    bool rc = (epoll_ctl(epollfd_, EPOLL_CTL_DEL, channel->GetSocket()->GetSocket(), &ev) == 0);
-    return rc;  */
-	return true;
+    return update(channel, EPOLL_CTL_DEL);
 }
 
-Timestamp EpollPoller::poll(int timeoutMs, ChannelList& activeChannels)
+bool EpollPoller::update(Channel *channel, int operation)
 {
-	int numEvents = ::epoll_wait(epollfd_, &*events_.begin(),
-                               static_cast<int>(events_.size()), timeoutMs);
-	int savedErrno = errno;
-	Timestamp now(Timestamp::now());
-	if (numEvents > 0)
-	{
-		LOG_INFO("poll: [%s] events happended", numEvents);
-		//fillActiveChannels(numEvents, activeChannels);
-		if (static_cast<size_t>(numEvents) == events_.size())
-		{
-			events_.resize(events_.size()*2);
-		}
-	}
-	else if (numEvents == 0)
-	{
-		LOG_INFO("poll: nothing happended");
-	}
-	else
-	{
-		// error happens, log uncommon ones
-		if (savedErrno != EINTR)
-		{
-			errno = savedErrno;
-			LOG_INFO("poll: error [%d]", savedErrno);
-		}
-	}
-	
-	return now;	
-/*    struct epoll_event epoll_events[MAX_EPOLL_EVENTS];
-    int nfds = epoll_wait(epollfd_, epoll_events, MAX_EPOLL_EVENTS, -1); //等待epoll事件的发生
-    Channel *channel;
-    ZL_SOCKET sock;
-    uint32_t events;
-    for(int i = 0; i < nfds; ++i)   //处理所发生的所有事件
+    ZL_SOCKET fd = channel->fd();
+    struct epoll_event ev = { 0, { 0 } };
+    ev.events = channel->events();
+    ev.data.ptr = channel;
+    if (::epoll_ctl(epollfd_, operation, fd, &ev) < 0)
     {
-        events = epoll_events[i].events;
-        sock = epoll_events[i].data.fd;
-        //channel = epoll_events[i].data.ptr;
-        channel = getChannel(sock);
-        if(channel == NULL)
-        {
-            printf("channel == null[%d]\n", sock);
-            continue;
-        }
-        channel->clearChannel();
-        if(sock == listenfd_)
-        {
-            channel->setChannel(SOCKETEVENT_ACCEPT);
-        }
-        else if(events & EPOLLIN)
-        {
-            channel->setChannel(SOCKETEVENT_READ);
-        }
-        else if(events & EPOLLOUT)
-        {
-            channel->setChannel(SOCKETEVENT_WRITE);
-        }
-        else if((events & EPOLLRDHUP) || (events & EPOLLERR))
-        {
-            channel->setChannel(SOCKETEVENT_HUP | SOCKETEVENT_ERROR);
-            printf("EPOLLRDHUP[%d]\n", channel->GetChannel());
-            //            struct epoll_event ev;
-            //            ev.data.ptr = 0;
-            //            epoll_ctl(epollfd_, EPOLL_CTL_DEL, sock, &ev);
-        }
-        if(channel->getChannel())
-            activeChannels.push_back(channel);
+        LOG_CRITICA("EpollPoller::update error, [socket %d][op %d]", fd, operation);
+        return false;
     }
-    return activeChannels.size();
-*/
+    return true;
 }
 
 NAMESPACE_ZL_NET_END

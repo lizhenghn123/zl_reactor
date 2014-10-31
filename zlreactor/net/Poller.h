@@ -30,15 +30,16 @@ public:
 
 public:
     Poller(EventLoop *loop);
-
     virtual ~Poller();
+
+    static Poller* createPoller(EventLoop *loop);
 
 public:
 	/// Changes the interested I/O events. Must be called in the loop thread.
-	virtual bool updateChannel(Channel* channel) = 0;
+	virtual bool updateChannel(Channel *channel) = 0;
 
     /// Changes the interested I/O events. Must be called in the loop thread.
-	virtual bool removeChannel(Channel* channel) = 0;
+	virtual bool removeChannel(Channel *channel) = 0;
 
     /*
      * 得到可响应读写事件的所有连接, 必须在主线程中循环调用
@@ -47,9 +48,9 @@ public:
      * @param activeConns : 已激活的连接
      * @return            ：io multiplexing 调用返回时的当前时间
      */
-	virtual Timestamp poll(int timeoutMs, ChannelList& activeChannels) = 0;
+	virtual Timestamp poll_once(int timeoutMs, ChannelList& activeChannels) = 0;
 
-	virtual bool hasChannel(const Channel* channel) const;
+	virtual bool hasChannel(const Channel *channel) const;
 
 public:
     /*
@@ -57,7 +58,7 @@ public:
      * @param sock     : 连接socket
      * @return socket对应的连接, 如不存在返回NULL
      */
-	Channel* getChannel(ZL_SOCKET sock);
+	Channel* getChannel(ZL_SOCKET sock) const;
 
 protected:
     ChannelMap  channelMap_;
