@@ -23,6 +23,7 @@
 #include <numeric>
 #include <stdint.h>
 #include <assert.h>
+#include <string.h>
 #include "OsDefine.h"
 #ifdef OS_WINDOWS
 #define  _WINSOCKAPI_

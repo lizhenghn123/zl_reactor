@@ -41,4 +41,5 @@ libzlreactor_a_SOURCES = \
 					 net/Poller.cpp \
 					 net/EpollPoller.cpp \
 					 net/EventLoop.cpp \
-					 net/Channel.cpp 
+					 net/Channel.cpp \
+					 net/Acceptor.cpp 
