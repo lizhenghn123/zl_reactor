@@ -1,6 +1,5 @@
-#include "Socket.h"
-#include <string.h>
-#include "InetAddress.h"
+#include "net/Socket.h"
+#include "net/InetAddress.h"
 NAMESPACE_ZL_NET_START
 
 const static int MAX_RECV_SIZE = 64;
@@ -21,22 +20,22 @@ Socket::Socket() : sockfd_(ZL_INVALID_SOCKET)
 
 Socket::~Socket()
 {
-    Close();
+    close();
 }
 
-bool Socket::Create()
+bool Socket::create()
 {
     sockfd_ = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-    if(!IsValid())
+    if(!isValid())
         return false;
 
     return true;
 }
 
-bool Socket::Bind(const char *ip, int port)
+bool Socket::bind(const char *ip, int port)
 {
-    if(!IsValid())
+    if(!isValid())
     {
         return false;
     }
@@ -56,7 +55,7 @@ bool Socket::Bind(const char *ip, int port)
     }
     sockaddr_.sin_addr.s_addr = nIP;
 
-    int ret = ZL_BIND(sockfd_, (struct sockaddr *) &sockaddr_, sizeof(sockaddr_));
+    int ret = ::ZL_BIND(sockfd_, (struct sockaddr *) &sockaddr_, sizeof(sockaddr_));
     if(ret == -1)
     {
         return false;
@@ -64,14 +63,10 @@ bool Socket::Bind(const char *ip, int port)
     return true;
 }
 
-bool Socket::Listen(int backlog /*= 5*/) const
+bool Socket::bind(const InetAddress& addr)
 {
-    if(!IsValid())
-    {
-        return false;
-    }
-
-    int ret = ZL_LISTEN(sockfd_, backlog);
+    sockaddr_ = addr.getSockAddrInet();
+	int ret = ::ZL_BIND(sockfd_, (struct sockaddr *) &sockaddr_, sizeof(sockaddr_));
     if(ret == -1)
     {
         return false;
@@ -79,10 +74,25 @@ bool Socket::Listen(int backlog /*= 5*/) const
     return true;
 }
 
-bool Socket::Accept(Socket& new_socket) const
+bool Socket::listen(int backlog /*= 5*/) const
+{
+    if(!isValid())
+    {
+        return false;
+    }
+
+    int ret = ::ZL_LISTEN(sockfd_, backlog);
+    if(ret == -1)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool Socket::accept(Socket& new_socket) const
 {
     int addr_length = sizeof(new_socket.sockaddr_);
-    new_socket.sockfd_ = ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, (socklen_t *)&addr_length);
+    new_socket.sockfd_ = ::ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, (socklen_t *)&addr_length);
 
     if(new_socket.sockfd_ <= 0)
         return false;
@@ -90,27 +100,27 @@ bool Socket::Accept(Socket& new_socket) const
         return true;
 }
 
-int Socket::Send(const std::string& data) const
+int Socket::send(const std::string& data) const
 {
-    return Send(data.c_str(), data.size());
+    return send(data.c_str(), data.size());
 }
 
-int Socket::Send(const char *data, size_t size)const
+int Socket::send(const char *data, size_t size)const
 {
-    int len = ZL_SEND(sockfd_, data, size, 0);
+    int len = ::ZL_SEND(sockfd_, data, size, 0);
     //if (len == -1)     // error
     //else if (len == 0) // connection is closed
     //else               // ok
     return len;
 }
 
-int Socket::Recv(std::string& data) const
+int Socket::recv(std::string& data) const
 {
     char buf[MAX_RECV_SIZE + 1] = { 0 };
 
     while(true)
     {
-        int len = Recv(buf, MAX_RECV_SIZE, false);
+        int len = recv(buf, MAX_RECV_SIZE, false);
         if(len == 0)  // 连接已关闭
         {
             return 0;
@@ -136,14 +146,14 @@ int Socket::Recv(std::string& data) const
     return data.size();
 }
 
-int Socket::Recv(char *data, int length, bool complete /*= false */) const
+int Socket::recv(char *data, int length, bool complete /*= false */) const
 {
     int received = 0;
     if(complete)
     {
         while(received != length)
         {
-            int len = ZL_RECV(sockfd_, (char *)data + received, length - received, 0);
+            int len = ::ZL_RECV(sockfd_, (char *)data + received, length - received, 0);
             if(len == -1)
             {
                 printf("status == -1, errno == [%d], in Socket::recv\n", errno);
@@ -161,30 +171,30 @@ int Socket::Recv(char *data, int length, bool complete /*= false */) const
     }
     else
     {
-        received = ZL_RECV(sockfd_, (char *)data, length, 0);
+        received = ::ZL_RECV(sockfd_, (char *)data, length, 0);
     }
     return received;
 }
 
-int Socket::SendTo(const std::string& data, int flags, InetAddress& sinaddr)const
+int Socket::sendTo(const std::string& data, int flags, InetAddress& sinaddr)const
 {
-    return SendTo(data.c_str(), data.size(), flags, sinaddr);
+    return sendTo(data.c_str(), data.size(), flags, sinaddr);
 }
 
-int Socket::SendTo(const char *data, size_t size, int flags, InetAddress& sinaddr)const
+int Socket::sendTo(const char *data, size_t size, int flags, InetAddress& sinaddr)const
 {
-    int len = ZL_SENDTO(sockfd_, data, size, flags, sinaddr, sinaddr.addressLength());
+    int len = ::ZL_SENDTO(sockfd_, data, size, flags, sinaddr, sinaddr.addressLength());
 
     return len;
 }
 
-int Socket::RecvFrom(std::string& data, int flags, InetAddress& sinaddr)const
+int Socket::recvFrom(std::string& data, int flags, InetAddress& sinaddr)const
 {
     char buf[MAX_RECV_SIZE + 1] = { 0 };
 
     while(true)
     {
-        int len = RecvFrom(buf, MAX_RECV_SIZE, flags, sinaddr);
+        int len = recvFrom(buf, MAX_RECV_SIZE, flags, sinaddr);
         if(len == -1 || len == 0)
             break;
         //buf[len] = '\0';
@@ -195,18 +205,18 @@ int Socket::RecvFrom(std::string& data, int flags, InetAddress& sinaddr)const
     return data.size();
 }
 
-int Socket::RecvFrom(char *data, int length, int flags, InetAddress& sinaddr)const
+int Socket::recvFrom(char *data, int length, int flags, InetAddress& sinaddr)const
 {
     socklen_t slen;
-    int len = ZL_RECVFROM(sockfd_, data, length, flags, sinaddr, &slen);
+    int len = ::ZL_RECVFROM(sockfd_, data, length, flags, sinaddr, &slen);
     if(slen != sinaddr.addressLength())
         throw SocketException("unknown protocol type(in Socket::RecvFrom)");
     return len;
 }
 
-bool Socket::Connect(const std::string& host, int port)
+bool Socket::connect(const std::string& host, int port)
 {
-    if(!IsValid())
+    if(!isValid())
     {
         return false;
     }
@@ -218,20 +228,20 @@ bool Socket::Connect(const std::string& host, int port)
     if(errno == EAFNOSUPPORT)
         return false;
 
-    status = ZL_CONNECT(sockfd_, (sockaddr *)&sockaddr_, sizeof(sockaddr_));
+    status = ::ZL_CONNECT(sockfd_, (sockaddr *)&sockaddr_, sizeof(sockaddr_));
 
     return status == 0 ? true : false;
 }
 
-void Socket::Close()
+void Socket::close()
 {
-    if(IsValid())
+    if(isValid())
     {
-        ZL_CLOSE(sockfd_);
+        ::ZL_CLOSE(sockfd_);
     }
 }
 
-bool Socket::SetBlocking()
+bool Socket::setBlocking()
 {
 #if defined(OS_WINDOWS)
     unsigned long ul = 0;
@@ -254,7 +264,7 @@ bool Socket::SetBlocking()
     return true;
 }
 
-bool Socket::SetNonBlocking()
+bool Socket::setNonBlocking()
 {
 #if defined(OS_WINDOWS)
     unsigned long ul = 1;
@@ -277,45 +287,45 @@ bool Socket::SetNonBlocking()
     return true;
 }
 
-bool Socket::SetNoDelay(bool flag /*= true*/)
+bool Socket::setNoDelay(bool flag /*= true*/)
 {
     int optval = flag ? 1 : 0;
-    return SetOpt(IPPROTO_TCP, TCP_NODELAY, (char *)&optval, sizeof(optval));
+    return setOpt(IPPROTO_TCP, TCP_NODELAY, (char *)&optval, sizeof(optval));
 }
 
-bool Socket::SetReuseAddr(bool flag /*= true*/)
+bool Socket::setReuseAddr(bool flag /*= true*/)
 {
     int optval = flag ? 1 : 0;
-    return SetOpt(SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
+    return setOpt(SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
 }
 
-bool Socket::SetKeepAlive(bool flag /*= true*/)
+bool Socket::setKeepAlive(bool flag /*= true*/)
 {
     int optval = flag ? 1 : 0;
-    return SetOpt(SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval));
+    return setOpt(SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval));
 }
 
-bool Socket::SetSocketReadSize(int readSize)
+bool Socket::setSocketReadSize(int readSize)
 {
     return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDBUF, &readSize, sizeof(readSize)) == 0;
 }
 
-bool Socket::GetSocketReadSize(int& readSize)
+bool Socket::getSocketReadSize(int& readSize)
 {
     return (ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDBUF, &readSize, sizeof(readSize)) == 0);
 }
 
-bool Socket::SetSocketWriteSize(int writeSize)
+bool Socket::setSocketWriteSize(int writeSize)
 {
     return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVBUF, &writeSize, sizeof(writeSize)) == 0;
 }
 
-bool Socket::GetSocketWriteSize(int& writeSize)
+bool Socket::getSocketWriteSize(int& writeSize)
 {
     return (ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVBUF, &writeSize, sizeof(writeSize)) == 0);
 }
 
-bool Socket::SetSendTimeout(int sendTimeoutSec, int sendTimeoutUsec/* = 0*/)
+bool Socket::setSendTimeout(int sendTimeoutSec, int sendTimeoutUsec/* = 0*/)
 {
     struct timeval time;
     time.tv_sec = sendTimeoutSec;
@@ -324,7 +334,7 @@ bool Socket::SetSendTimeout(int sendTimeoutSec, int sendTimeoutUsec/* = 0*/)
     return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDTIMEO, &time, sizeof(struct timeval)) == 0;
 }
 
-bool Socket::GetSendTimeout(int& sendTimeoutSec, int& sendTimeoutUsec)
+bool Socket::getSendTimeout(int& sendTimeoutSec, int& sendTimeoutUsec)
 {
     struct timeval time;
     if(ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDTIMEO, &time, sizeof(struct timeval)) == 0)
@@ -336,7 +346,7 @@ bool Socket::GetSendTimeout(int& sendTimeoutSec, int& sendTimeoutUsec)
     return false;
 }
 
-bool Socket::SetReceiveTimeout(int recvTimeoutSec, int recvTimeoutUsec/* = 0*/)
+bool Socket::setReceiveTimeout(int recvTimeoutSec, int recvTimeoutUsec/* = 0*/)
 {
     struct timeval time;
     time.tv_sec = recvTimeoutSec;
@@ -345,7 +355,7 @@ bool Socket::SetReceiveTimeout(int recvTimeoutSec, int recvTimeoutUsec/* = 0*/)
     return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVTIMEO, &time, sizeof(struct timeval)) == 0;
 }
 
-bool Socket::GetReceiveTimeout(int& recvTimeoutSec, int& recvTimeoutUsec)
+bool Socket::getReceiveTimeout(int& recvTimeoutSec, int& recvTimeoutUsec)
 {
     struct timeval time;
     if(ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVTIMEO, &time, sizeof(struct timeval)) == 0)
@@ -357,7 +367,7 @@ bool Socket::GetReceiveTimeout(int& recvTimeoutSec, int& recvTimeoutUsec)
     return false;
 }
 
-bool Socket::SetLinger(bool enable, int waitTimeSec /*= 5*/)
+bool Socket::setLinger(bool enable, int waitTimeSec /*= 5*/)
 {
     linger lngr;
     lngr.l_onoff = enable ? 1 : 0;
@@ -366,7 +376,7 @@ bool Socket::SetLinger(bool enable, int waitTimeSec /*= 5*/)
     return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_LINGER, &lngr, sizeof(linger)) == 0;
 }
 
-bool Socket::GetLinger(bool& enable, int& waitTimeSec)
+bool Socket::getLinger(bool& enable, int& waitTimeSec)
 {
     linger lngr;
     if(ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVTIMEO, &lngr, sizeof(lngr)) == 0)
@@ -378,14 +388,14 @@ bool Socket::GetLinger(bool& enable, int& waitTimeSec)
     return false;
 }
 
-bool Socket::SetOpt(int level, int name, char *value, int len)
+bool Socket::setOpt(int level, int name, char *value, int len)
 {
     assert(value != NULL);
     assert(len > 0);
     return ZL_SETSOCKOPT(sockfd_, level, name, value, len) == 0;
 }
 
-bool  Socket::GetOpt(int level, int optname, int& optval)
+bool  Socket::getOpt(int level, int optname, int& optval)
 {
     ZL_SOCKLEN optlen = sizeof(optval);
 
@@ -394,21 +404,21 @@ bool  Socket::GetOpt(int level, int optname, int& optval)
     return true;
 }
 
-short Socket::GetHostPort()
+short Socket::getHostPort()
 {
     char buf[16];
     ZL_SNPRINTF(buf, 16, "%d", ntohs(sockaddr_.sin_port));
     return ::atoi(buf);
 }
 
-std::string Socket::GetHostIP()
+std::string Socket::getHostIP()
 {
     char ip[256], tmp[256];
     ZL_SNPRINTF(ip, 128, "%s", inet_ntop(AF_INET, &sockaddr_.sin_addr, tmp, 256));
     return std::string(ip);
 }
 
-std::string Socket::GetHost()
+std::string Socket::getHost()
 {
     char host[256], ip[256];
     ZL_SNPRINTF(host, 256, "%s:%d", inet_ntop(AF_INET, &sockaddr_.sin_addr, ip, 256), ntohs(sockaddr_.sin_port));

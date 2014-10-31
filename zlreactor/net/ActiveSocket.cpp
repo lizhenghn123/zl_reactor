@@ -8,11 +8,11 @@ ActiveSocket::ActiveSocket()
 
 ActiveSocket::ActiveSocket(const char *host, int port)
 {
-    if(!Socket::Create())
+    if(!Socket::create())
     {
         throw SocketException("Could not create client socket.");
     }
-    if(!Socket::Connect(host, port))
+    if(!Socket::connect(host, port))
     {
         throw SocketException("Could not Connect to server.");
     }
@@ -24,7 +24,7 @@ ActiveSocket::~ActiveSocket()
 
 const ActiveSocket& ActiveSocket::operator << (const std::string& data) const
 {
-    if(!Socket::Send(data))
+    if(!Socket::send(data))
     {
         throw SocketException("Could not write to socket.");
     }
@@ -34,7 +34,7 @@ const ActiveSocket& ActiveSocket::operator << (const std::string& data) const
 
 const ActiveSocket& ActiveSocket::operator >> (std::string& data) const
 {
-    if(!Socket::Recv(data))
+    if(!Socket::recv(data))
     {
         throw SocketException("Could not read from socket.");
         //printf("Could not read from socket.");

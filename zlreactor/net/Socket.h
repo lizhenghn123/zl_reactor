@@ -11,10 +11,8 @@
 // ***********************************************************************
 #ifndef ZL_SOCKET_H
 #define ZL_SOCKET_H
-#include <stdio.h>
 #include <exception>
-#include "OsDefine.h"
-#include "SocketUtil.h"
+#include "net/SocketUtil.h"
 NAMESPACE_ZL_NET_START
 
 class SocketAddress;
@@ -36,75 +34,76 @@ public:
     virtual ~Socket();
 public:
     // Server Initialization
-    bool           Create();
-    bool           Bind(const char *ip, int port);
-    bool           Listen(int backlog = 5) const;
-    bool           Accept(Socket&) const;
-    void           Close();
+    bool           create();
+    bool           bind(const char *ip, int port);
+	bool           bind(const InetAddress& addr); 
+    bool           listen(int backlog = 5) const;
+    bool           accept(Socket&) const;
+    void           close();
 
     // Client Initialization
-    bool           Connect(const std::string& host, const int port);
+    bool           connect(const std::string& host, const int port);
 
     // Socket Settings
     /** Enable/disable Block Socket */
-    bool           SetBlocking();
-    bool           SetNonBlocking();
+    bool           setBlocking();
+    bool           setNonBlocking();
 
     /** Enable/disable TCP_NODELAY(enable/disable Nagle's algorithm) */
-    bool           SetNoDelay(bool flag = true);
+    bool           setNoDelay(bool flag = true);
 
     /** Enable/disable SO_REUSEADDR(TIME_WAIT) */
-    bool           SetReuseAddr(bool flag = true);
+    bool           setReuseAddr(bool flag = true);
 
     /** Enable/disable SO_KEEPALIVE */
-    bool           SetKeepAlive(bool flag = true);
+    bool           setKeepAlive(bool flag = true);
 
     /** Set/Get SO_SNDBUF */
-    bool           SetSocketReadSize(int readSize);
-    bool           GetSocketReadSize(int& readSize);
+    bool           setSocketReadSize(int readSize);
+    bool           getSocketReadSize(int& readSize);
 
     /** Set/Get  SO_RCVBUF */
-    bool           SetSocketWriteSize(int writeSize);
-    bool           GetSocketWriteSize(int& writeSize);
+    bool           setSocketWriteSize(int writeSize);
+    bool           getSocketWriteSize(int& writeSize);
 
     /** Set/Get  SO_SNDTIMEO */
-    bool           SetSendTimeout(int sendTimeoutSec, int sendTimeoutUsec = 0);
-    bool           GetSendTimeout(int& sendTimeoutSec, int& sendTimeoutUsec);
+    bool           setSendTimeout(int sendTimeoutSec, int sendTimeoutUsec = 0);
+    bool           getSendTimeout(int& sendTimeoutSec, int& sendTimeoutUsec);
 
     /** Set/Get  SO_RCVTIMEO */
-    bool           SetReceiveTimeout(int recvTimeoutSec, int recvTimeoutUsec = 0);
-    bool           GetReceiveTimeout(int& recvTimeoutSec, int& recvTimeoutUsec);
+    bool           setReceiveTimeout(int recvTimeoutSec, int recvTimeoutUsec = 0);
+    bool           getReceiveTimeout(int& recvTimeoutSec, int& recvTimeoutUsec);
 
     /** Set/Get  SO_LINGER */
-    bool           SetLinger(bool enable, int waitTimeSec = 5);
-    bool           GetLinger(bool& enable, int& waitTimeSec);
+    bool           setLinger(bool enable, int waitTimeSec = 5);
+    bool           getLinger(bool& enable, int& waitTimeSec);
 
-    bool           SetOpt(int level, int name, char *value, int len);
-    bool           GetOpt(int level, int optname, int& optval);
+    bool           setOpt(int level, int name, char *value, int len);
+    bool           getOpt(int level, int optname, int& optval);
 
     // Net Transimission
-    int            Send(const std::string& data) const;
-    int            Send(const char *data, size_t size)const;
-    int            Recv(std::string& data) const;
-    int            Recv(char *data, int length, bool complete = false)const;
-    int            SendTo(const std::string& data, int flags, InetAddress& sinaddr)const;
-    int            SendTo(const char *data, size_t size, int flags, InetAddress& sinaddr)const;
-    int            RecvFrom(std::string& data, int flags, InetAddress& sinaddr)const;
-    int            RecvFrom(char *data, int length, int flags, InetAddress& sinaddr)const;
+    int            send(const std::string& data) const;
+    int            send(const char *data, size_t size)const;
+    int            recv(std::string& data) const;
+    int            recv(char *data, int length, bool complete = false)const;
+    int            sendTo(const std::string& data, int flags, InetAddress& sinaddr)const;
+    int            sendTo(const char *data, size_t size, int flags, InetAddress& sinaddr)const;
+    int            recvFrom(std::string& data, int flags, InetAddress& sinaddr)const;
+    int            recvFrom(char *data, int length, int flags, InetAddress& sinaddr)const;
 
     // Property Access
-    bool           IsValid() const
+    bool           isValid() const
     {
         return sockfd_ != ZL_INVALID_SOCKET;
     }
-    const          ZL_SOCKET& GetSocket()const
+    const          ZL_SOCKET& getSocket()const
     {
         return sockfd_;
     }
 
-    short          GetHostPort();
-    std::string    GetHostIP();
-    std::string    GetHost();    // IP:Port
+    short          getHostPort();
+    std::string    getHostIP();
+    std::string    getHost();    // IP:Port
 
 public://protected:
     ZL_SOCKET       sockfd_;
