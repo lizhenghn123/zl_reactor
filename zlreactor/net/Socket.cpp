@@ -12,30 +12,19 @@ recv read write send 函数的返回值说明:
 除此之外，非阻塞模式下返回值 < 0 并且 (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)的情况下认为连接是正常的，继续接收/发送
 *********/
 
-Socket::Socket() : sockfd_(ZL_INVALID_SOCKET)
+Socket::Socket(ZL_SOCKET fd) : sockfd_(fd) 
 {
-    sockfd_ = ZL_INVALID_SOCKET;
     ::memset(&sockaddr_, 0, sizeof(sockaddr_));
 }
 
-Socket::Socket(ZL_SOCKET fd)
+Socket::Socket(ZL_SOCKET fd, ZL_SOCKADDR_IN sockAddr)
+    : sockfd_(fd), sockaddr_(sockAddr)
 {
-    sockfd_ = fd;
-    ::memset(&sockaddr_, 0, sizeof(sockaddr_));
+
 }
 
 Socket::~Socket()
 {
-}
-
-bool Socket::create()
-{
-    sockfd_ = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-    if(!isValid())
-        return false;
-
-    return true;
 }
 
 bool Socket::bind(const char *ip, int port)
@@ -103,6 +92,21 @@ bool Socket::accept(Socket& new_socket) const
         return false;
     else
         return true;
+}
+
+ZL_SOCKET Socket::accept(InetAddress *peerAddr) const
+{
+    printf("------%d\n", sockfd_);
+    ZL_SOCKADDR_IN addr;
+    ::memset(&addr, 0, sizeof(addr));
+    int addr_length = sizeof(addr);
+    ZL_SOCKET connfd = ::ZL_ACCEPT(sockfd_, (sockaddr *)&addr, (socklen_t *)&addr_length);
+    assert(connfd > 0 && "ffff");
+    if (connfd > 0)
+    {
+        peerAddr->setSockAddrInet(addr);
+    }
+    return connfd;
 }
 
 int Socket::send(const std::string& data) const

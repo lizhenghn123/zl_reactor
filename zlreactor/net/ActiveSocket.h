@@ -18,7 +18,7 @@ NAMESPACE_ZL_NET_START
 class ActiveSocket : public Socket
 {
 public:
-    ActiveSocket();
+    explicit ActiveSocket(ZL_SOCKET fd);
     ActiveSocket(const char *host, int port);
     ~ActiveSocket();
 

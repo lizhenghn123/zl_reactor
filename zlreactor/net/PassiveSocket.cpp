@@ -2,17 +2,13 @@
 
 NAMESPACE_ZL_NET_START
 
-PassiveSocket::PassiveSocket()
+PassiveSocket::PassiveSocket(ZL_SOCKET fd) : Socket(fd)
 {
 
 }
 
-PassiveSocket::PassiveSocket(const char *ip, int port)
+PassiveSocket::PassiveSocket(const char *ip, int port) : Socket(createSocket())
 {
-    if(!Socket::create())
-    {
-        throw SocketException("Could not create server socket.");
-    }
     if(!Socket::bind(ip, port))
     {
         throw SocketException("Could not bind to port.");

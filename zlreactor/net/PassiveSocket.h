@@ -18,7 +18,7 @@ NAMESPACE_ZL_NET_START
 class PassiveSocket : public Socket
 {
 public:
-    PassiveSocket();
+    explicit PassiveSocket(ZL_SOCKET fd);
     PassiveSocket(const char *ip, int port);
     ~PassiveSocket();
 

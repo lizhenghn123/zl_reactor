@@ -1,17 +1,13 @@
 #include "net/ActiveSocket.h"
 NAMESPACE_ZL_NET_START
 
-ActiveSocket::ActiveSocket()
+ActiveSocket::ActiveSocket(ZL_SOCKET fd) : Socket(fd)
 {
 
 }
 
-ActiveSocket::ActiveSocket(const char *host, int port)
+ActiveSocket::ActiveSocket(const char *host, int port) : Socket(createSocket())
 {
-    if(!Socket::create())
-    {
-        throw SocketException("Could not create client socket.");
-    }
     if(!Socket::connect(host, port))
     {
         throw SocketException("Could not Connect to server.");

@@ -21,6 +21,12 @@ int socketCleanup()
     return 0;
 }
 
+ZL_SOCKET createSocket()
+{
+    ZL_SOCKET sockfd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    return sockfd;
+}
+
 ZL_SOCKET socketCreateAndListen(const char *ip, int port, int backlog)
 {
     ZL_SOCKET sockfd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);

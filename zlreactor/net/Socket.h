@@ -31,14 +31,15 @@ class Socket
 {
 public:
     explicit Socket(ZL_SOCKET fd);
+    Socket(ZL_SOCKET fd, ZL_SOCKADDR_IN sockAddr);
     virtual ~Socket();
 public:
     // Server Initialization
-    bool           create();
     bool           bind(const char *ip, int port);
-	bool           bind(const InetAddress& addr); 
+    bool           bind(const InetAddress& addr); 
     bool           listen(int backlog = 5) const;
-    bool           accept(Socket&) const;
+    ZL_SOCKET      accept(InetAddress *peerAddr) const;
+    bool           accept(Socket& new_socket) const;
     void           close();
 
     // Client Initialization
@@ -111,7 +112,7 @@ public:
     std::string    getHost();    // IP:Port
 
 public://protected:
-    ZL_SOCKET       sockfd_;
+    /*const*/ ZL_SOCKET sockfd_;
     ZL_SOCKADDR_IN  sockaddr_;
 };
 

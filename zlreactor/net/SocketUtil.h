@@ -112,6 +112,8 @@ int socketInitialise();
 
 int socketCleanup();
 
+ZL_SOCKET createSocket();
+
 ZL_SOCKET socketCreateAndListen(const char *ip, int port, int backlog = 5);
 
 ZL_SOCKET acceptOne(ZL_SOCKET sockfd, struct sockaddr_in *addr);

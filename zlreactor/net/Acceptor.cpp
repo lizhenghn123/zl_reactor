@@ -11,11 +11,8 @@ NAMESPACE_ZL_NET_START
 Acceptor::Acceptor(EventLoop *loop, const InetAddress& listenAddr)
     : loop_(loop)
 {
-    accept_socket = new Socket();
-    if (!accept_socket->create())
-    {
-        throw SocketException("Could not create server socket.");
-    }
+    accept_socket = new Socket(createSocket());
+
     accept_socket->setNoDelay();
 
     if (!accept_socket->setReuseAddr(true))
@@ -33,7 +30,6 @@ Acceptor::Acceptor(EventLoop *loop, const InetAddress& listenAddr)
 
 Acceptor::~Acceptor()
 {
-    accept_socket->close();
     Safe_Delete(accept_channel_);
     Safe_Delete(accept_socket);
 }
@@ -44,7 +40,7 @@ void Acceptor::listen()
     {
         throw SocketException("Could not listen to port.");
     }
-    LOG_INFO("server host [%s]", accept_socket->getHost().c_str());
+    LOG_INFO("Acceptor::listen on [%s]", accept_socket->getHost().c_str());
 
     accept_channel_->enableReading();
 }
@@ -53,17 +49,20 @@ void Acceptor::onAccept(Timestamp now)
 {
     while (true)
     {
-        ActiveSocket socket;
-        if (accept_socket->accept(socket))
+        //ActiveSocket socket;
+        //if (accept_socket->accept(socket)) //不能这样了，因为ActiveSocket销毁时会关闭socket fd
+        InetAddress peerAddr;
+        ZL_SOCKET newfd = accept_socket->accept(&peerAddr);
+        if(newfd > 0)
         {
             if (newConnCallBack_)
-            {
-                newConnCallBack_(socket.getSocket(), InetAddress(socket.getAddr()));
+            {  
+                LOG_INFO("accept one client on Acceptor::OnAccept [%s]", peerAddr.ipPort().c_str());
+                newConnCallBack_(newfd, peerAddr);
             }
             else
             {
                 LOG_ALERT("no callback on Acceptor::OnAccept(), and close the coming connection!");
-                socket.close();
             }
             break;
         }
