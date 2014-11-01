@@ -124,6 +124,14 @@ int setSocketReadSize(ZL_SOCKET fd, int readSize);
 
 int setSocketWriteSize(ZL_SOCKET fd, int writeSize);
 
+struct sockaddr_in getLocalAddr(ZL_SOCKET sockfd);
+
+struct sockaddr_in getPeerAddr(ZL_SOCKET sockfd);
+
+bool isSelfConnect(ZL_SOCKET sockfd);
+
+int getSocketError(ZL_SOCKET sockfd);
+
 namespace
 {
     class SocketInitialization

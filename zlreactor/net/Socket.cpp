@@ -18,6 +18,12 @@ Socket::Socket() : sockfd_(ZL_INVALID_SOCKET)
     ::memset(&sockaddr_, 0, sizeof(sockaddr_));
 }
 
+Socket::Socket(ZL_SOCKET fd)
+{
+    sockfd_ = fd;
+    ::memset(&sockaddr_, 0, sizeof(sockaddr_));
+}
+
 Socket::~Socket()
 {
     close();

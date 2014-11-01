@@ -95,4 +95,61 @@ int setSocketWriteSize(ZL_SOCKET fd, int writeSize)
     return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_RCVBUF, &writeSize, sizeof(writeSize));
 }
 
+typedef struct sockaddr SA;
+const SA* sockaddr_cast(const struct sockaddr_in* addr)
+{
+    return static_cast<const SA*>((const void*)addr);
+}
+SA* sockaddr_cast(struct sockaddr_in* addr)
+{
+    return static_cast<SA*>((void*)addr);
+}
+
+struct sockaddr_in getLocalAddr(ZL_SOCKET sockfd)
+{
+    struct sockaddr_in localaddr;
+    bzero(&localaddr, sizeof localaddr);
+    socklen_t addrlen = static_cast<socklen_t>(sizeof localaddr);
+    if (::getsockname(sockfd, sockaddr_cast(&localaddr), &addrlen) < 0)
+    {
+        printf("sockets::getLocalAddr\"");
+    }
+    return localaddr;
+}
+
+struct sockaddr_in getPeerAddr(ZL_SOCKET sockfd)
+{
+    struct sockaddr_in peeraddr;
+    bzero(&peeraddr, sizeof peeraddr);
+    socklen_t addrlen = static_cast<socklen_t>(sizeof peeraddr);
+    if (::getpeername(sockfd, sockaddr_cast(&peeraddr), &addrlen) < 0)
+    {
+        printf("sockets::getPeerAddr\"");
+    }
+    return peeraddr;
+}
+
+bool isSelfConnect(ZL_SOCKET sockfd)
+{
+    struct sockaddr_in localaddr = getLocalAddr(sockfd);
+    struct sockaddr_in peeraddr = getPeerAddr(sockfd);
+    return localaddr.sin_port == peeraddr.sin_port
+        && localaddr.sin_addr.s_addr == peeraddr.sin_addr.s_addr;
+}
+
+int getSocketError(ZL_SOCKET sockfd)
+{
+    int optval;
+    socklen_t optlen = static_cast<socklen_t>(sizeof(optval));
+
+    if (::getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) < 0)
+    {
+        return errno;
+    }
+    else
+    {
+        return optval;
+    }
+}
+
 NAMESPACE_ZL_NET_END

@@ -1,5 +1,6 @@
 #include "net/Poller.h"
 #include "net/Channel.h"
+#include "net/EpollPoller.h"
 NAMESPACE_ZL_NET_START
 
 Poller::Poller(EventLoop *loop) : loop_(loop)
@@ -22,6 +23,11 @@ Channel* Poller::getChannel(ZL_SOCKET sock) const
     if(itr == channelMap_.end())
         return NULL;
     return itr->second;
+}
+
+/*static*/ Poller* Poller::createPoller(EventLoop *loop)
+{
+    return  new EpollPoller(loop);
 }
 
 NAMESPACE_ZL_NET_END

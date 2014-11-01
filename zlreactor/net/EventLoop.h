@@ -40,6 +40,8 @@ public:
     void queueInLoop(const Functor& func);
     //bool IsInLoopThread() const { return threadId_ == CurrentThread::tid(); }
     bool isInLoopThread() const { return true; }
+    bool assertInLoopThread() const  { return true; }
+
 private:
     typedef std::vector<Channel*> ChannelList;
     ChannelList activeChannels_;

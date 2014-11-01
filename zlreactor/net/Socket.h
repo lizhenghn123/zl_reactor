@@ -31,6 +31,7 @@ class Socket
 {
 public:
     Socket();
+    Socket(ZL_SOCKET fd);
     virtual ~Socket();
 public:
     // Server Initialization

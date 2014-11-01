@@ -8,12 +8,12 @@ NAMESPACE_ZL_NET_START
 
 EventLoop::EventLoop() : looping_(false), quit_(false)
 {
-
+    poller_ = Poller::createPoller(this);
 }
 
 EventLoop::~EventLoop()
 {
-
+     Safe_Delete(poller_);
 }
 
 void EventLoop::loop()
@@ -22,7 +22,7 @@ void EventLoop::loop()
     while (true)
     {
         activeChannels_.clear();
-        retime = poller_->poll_once(10000, &activeChannels_);
+        retime = poller_->poll_once(10000, activeChannels_);
 
         for (ChannelList::iterator it = activeChannels_.begin(); it != activeChannels_.end(); ++it)
         {
