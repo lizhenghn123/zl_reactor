@@ -2,6 +2,8 @@
 #include <assert.h>
 #include "net/Channel.h"
 #include "net/Poller.h"
+#include "base/Timestamp.h"
+using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 EventLoop::EventLoop() : looping_(false), quit_(false)
@@ -16,7 +18,20 @@ EventLoop::~EventLoop()
 
 void EventLoop::loop()
 {
+    Timestamp retime;
+    while (true)
+    {
+        activeChannels_.clear();
+        retime = poller_->poll_once(10000, &activeChannels_);
 
+        for (ChannelList::iterator it = activeChannels_.begin(); it != activeChannels_.end(); ++it)
+        {
+            currentActiveChannel_ = *it;
+            currentActiveChannel_->handleEvent(retime);
+        }
+        currentActiveChannel_ = NULL;
+        //doPendingFunctors();
+    }
 }
 
 void EventLoop::quit()

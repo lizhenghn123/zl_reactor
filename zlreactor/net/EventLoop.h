@@ -21,35 +21,35 @@ class Poller;
 class EventLoop
 {
 public:
-	typedef std::function<void()> Functor;
+    typedef std::function<void()> Functor;
 public:
-	EventLoop();
-	~EventLoop();
+    EventLoop();
+    ~EventLoop();
 
-	void loop();
-	void quit();
-
-public:
-	void wakeup();
-	void updateChannel(Channel* channel);
-	void removeChannel(Channel* channel);
-	bool hasChannel(Channel* channel);
+    void loop();
+    void quit();
 
 public:
-	void runInLoop(const Functor& func);
-	void queueInLoop(const Functor& func);
-	//bool IsInLoopThread() const { return threadId_ == CurrentThread::tid(); }
-	bool isInLoopThread() const { return true; }
+    void wakeup();
+    void updateChannel(Channel* channel);
+    void removeChannel(Channel* channel);
+    bool hasChannel(Channel* channel);
+
+public:
+    void runInLoop(const Functor& func);
+    void queueInLoop(const Functor& func);
+    //bool IsInLoopThread() const { return threadId_ == CurrentThread::tid(); }
+    bool isInLoopThread() const { return true; }
 private:
-	typedef std::vector<Channel*> ChannelList;
-	ChannelList activeChannels_;
-	Channel* currentActiveChannel_;
+    typedef std::vector<Channel*> ChannelList;
+    ChannelList activeChannels_;
+    Channel *currentActiveChannel_;
 
-	Poller *poller_;
-	bool looping_; /* atomic */
-	bool quit_; /* atomic and shared between threads, okay on x86, I guess. */
-	bool eventHandling_; /* atomic */
-	mutable zl::thread::Mutex mutex_;
+    Poller *poller_;
+    bool looping_; /* atomic */
+    bool quit_; /* atomic and shared between threads, okay on x86, I guess. */
+    bool eventHandling_; /* atomic */
+    mutable zl::thread::Mutex mutex_;
 };
 
 NAMESPACE_ZL_NET_END
