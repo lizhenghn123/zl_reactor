@@ -26,7 +26,6 @@ Socket::Socket(ZL_SOCKET fd)
 
 Socket::~Socket()
 {
-    close();
 }
 
 bool Socket::create()
