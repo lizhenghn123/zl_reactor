@@ -102,6 +102,11 @@ public:
         return sockfd_;
     }
 
+    const ZL_SOCKADDR_IN getAddr()
+    {
+        return sockaddr_;
+    }
+
     short          getHostPort();
     std::string    getHostIP();
     std::string    getHost();    // IP:Port

@@ -4,6 +4,7 @@
 #include "net/EventLoop.h"
 #include "base/ZLog.h"
 #include "net/ActiveSocket.h"
+#include "net/InetAddress.h"
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
@@ -52,18 +53,17 @@ void Acceptor::onAccept(Timestamp now)
 {
     while (true)
     {
-        ActiveSocket *socket = new ActiveSocket;
-        if (accept_socket->accept(*socket))
+        ActiveSocket socket;
+        if (accept_socket->accept(socket))
         {
             if (newConnCallBack_)
             {
-                newConnCallBack_(socket);
+                newConnCallBack_(socket.getSocket(), InetAddress(socket.getAddr()));
             }
             else
             {
                 LOG_ALERT("no callback on Acceptor::OnAccept(), and close the coming connection!");
-                socket->close();
-                Safe_Delete(socket);
+                socket.close();
             }
             break;
         }

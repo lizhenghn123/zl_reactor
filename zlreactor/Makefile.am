@@ -2,7 +2,12 @@
 
 CXXFLAGS = -Wall -g -O2 -fPIC
 
-lib_LIBRARIES = libzlreactor.a
+
+plugindir = ../../lib
+INSTALL_DIR=$(cd "$(dirname "$0")"; pwd)
+#plugindir = $INSTALL_DIR/lib
+#plugindir = /media/sf_D_DRIVE/zl_reactor/lib
+plugin_LTLIBRARIES = libzlreactor.la
 
 ## 安装根目录
 
@@ -10,14 +15,14 @@ lib_LIBRARIES = libzlreactor.a
 
 ## 安装头文件目录
 
-libzlreactor_a_LIBFLAGS =
-libzlreactor_a_LIBADD =
+libzlreactor_la_LIBFLAGS =
+libzlreactor_la_LIBADD =
 
 INCLUDES                   = -I../
-libzlreactor_a_CPPFLAGS = -std=c++0x
+libzlreactor_la_CPPFLAGS = -std=c++0x -fPIC -shared
 #libzlreactor_a_LDFLAGS = -lpthread	
 
-libzlreactor_a_SOURCES = \
+libzlreactor_la_SOURCES = \
 					 base/Base64.cpp \
 					 base/ByteArray.cpp \
 					 base/Date.cpp \
@@ -42,4 +47,6 @@ libzlreactor_a_SOURCES = \
 					 net/EpollPoller.cpp \
 					 net/EventLoop.cpp \
 					 net/Channel.cpp \
-					 net/Acceptor.cpp 
+					 net/Acceptor.cpp \
+					 net/TcpConnection.cpp \
+					 net/TcpServer.cpp 

@@ -24,8 +24,8 @@ using zl::base::Timestamp;
 class Acceptor : zl::NonCopy
 {
 public:
-    typedef std::function<void(Socket *)> NewConnectionCallback;
-
+    //typedef std::function<void(Socket *)> NewConnectionCallback;
+    typedef std::function<void (int , const InetAddress&)> NewConnectionCallback;
 public:
     Acceptor(EventLoop *loop, const InetAddress& listenAddr);
     ~Acceptor();
