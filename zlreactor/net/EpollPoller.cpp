@@ -27,8 +27,8 @@ Timestamp EpollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
     Timestamp now(Timestamp::now());
     if (numEvents > 0)
     {
-        LOG_INFO("poll: [%s] events happended", numEvents);
-        //fillActiveChannels(numEvents, activeChannels);
+        LOG_INFO("EpollPoller::poll_once: [%d] events happended", numEvents);
+        fireActiveChannels(numEvents, activeChannels);
         if (static_cast<size_t>(numEvents) == events_.size())
         {
             events_.resize(events_.size()*2);
@@ -36,7 +36,7 @@ Timestamp EpollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
     }
     else if (numEvents == 0)
     {
-        LOG_INFO("poll: nothing happended");
+        //LOG_INFO("EpollPoller::poll_once: nothing happended");
     }
     else
     {
@@ -44,7 +44,7 @@ Timestamp EpollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
         if (savedErrno != EINTR)
         {
             errno = savedErrno;
-            LOG_INFO("poll: error [%d]", savedErrno);
+            LOG_INFO("EpollPoller::poll_once: error [%d]", savedErrno);
         }
     }
 
@@ -66,6 +66,7 @@ void EpollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels)
 bool EpollPoller::updateChannel(Channel *channel)
 {
     ZL_SOCKET fd = channel->fd();
+	LOG_INFO("EpollPoller::updateChannel[%d]", fd);
     if(hasChannel(channel))    //exist, update
     {
         assert(getChannel(fd) == channel);

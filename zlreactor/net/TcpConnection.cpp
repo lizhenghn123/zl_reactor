@@ -4,8 +4,20 @@
 #include "net/EventLoop.h"
 #include "net/Channel.h"
 using namespace zl::base;
-
 NAMESPACE_ZL_NET_START
+//void defaultConnectionCallback(TcpConnection* conn);
+//void defaultMessageCallback(TcpConnection* conn, Buffer* buffer, Timestamp receiveTime);
+void defaultConnectionCallback(TcpConnectionPtr conn)
+{
+  LOG_INFO("defaultConnectionCallback : [%s]<->[%s] [%s]\n", conn->localAddress().ipPort().c_str(),
+	    conn->peerAddress().ipPort().c_str(), conn->connected() ? "UP1" : "DOWN1");
+  // do not call conn->forceClose(), because some users want to register message callback only.
+}
+
+void defaultMessageCallback(TcpConnectionPtr conn, Buffer* buf, Timestamp receiveTime)
+{
+    LOG_INFO("defaultMessageCallback : [s]\n");
+}
 
 TcpConnection::TcpConnection(EventLoop* loop, int sockfd, const InetAddress& localAddr, const InetAddress& peerAddr)
     : loop_(loop), state_(kConnecting), localAddr_(localAddr.getSockAddrInet()), peerAddr_(peerAddr.getSockAddrInet())
@@ -80,6 +92,7 @@ void TcpConnection::connectDestroyed()
 
 void TcpConnection::handleRead(Timestamp receiveTime)
 {
+    LOG_INFO("TcpConnection::handleRead fd = %d, state = %d", socket_->getSocket(), state_);
     loop_->assertInLoopThread();
     //int savedErrno = 0;
     //ssize_t n = inputBuffer_.readFd(channel_->fd(), &savedErrno);
@@ -87,7 +100,8 @@ void TcpConnection::handleRead(Timestamp receiveTime)
     size_t n = socket_->recv(data);
     if (n > 0)
     {
-        messageCallback_(this, &inputBuffer_, receiveTime);
+        //messageCallback_(this, &inputBuffer_, receiveTime);
+		messageCallback_(this, &data, receiveTime);
     }
     else if (n == 0)
     {
@@ -108,7 +122,7 @@ void TcpConnection::handleWrite()
 void TcpConnection::handleClose()
 {
     loop_->assertInLoopThread();
-    LOG_INFO("fd = %d, state = %d", socket_->getSocket(), state_);
+    LOG_INFO("TcpConnection::handleClose fd = %d, state = %d", socket_->getSocket(), state_);
     assert(state_ == kConnected || state_ == kDisconnecting);
     // we don't close fd, leave it to dtor, so we can find leaks easily.
     setState(kDisconnected);

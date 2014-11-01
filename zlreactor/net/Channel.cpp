@@ -2,7 +2,9 @@
 #include <sstream>
 #include <assert.h>
 #include "net/Connection.h"
+#include "base/ZLog.h"
 #include "net/EventLoop.h"
+using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 //const int Channel::kNoneEvent = SOCKETEVENT_NONE;
@@ -45,7 +47,9 @@ void Channel::handleEventWithHold(Timestamp receiveTime)
 {
     if ((revents_ & SOCKETEVENT_HUP) && !(revents_ & SOCKETEVENT_READ))
     {
-        if (closeCallback_) closeCallback_();
+		LOG_INFO("Channel::handleEventWithHold Channel::handleEventWithHold");
+        if (closeCallback_) 
+			closeCallback_();
     }
 
     //if (revents_ & POLLNVAL)
