@@ -99,15 +99,6 @@ public:
         return events_ & kWriteEvent;
     }
 
-    int index()  // for Poller
-    { 
-        return index_; 
-    }
-    void set_index(int idx) 
-    { 
-        index_ = idx;
-    }
-
     EventLoop* ownerLoop() { return loop_; }
 
     std::string reventsToString() const; // for debug
@@ -128,12 +119,7 @@ public: //private:
     ZL_SOCKET  fd_;
     int        events_;
     int        revents_;  // the poll return events
-    int        index_;    // used by Poller.
-    bool       logHup_;
 
-    bool tied_;
-    bool eventHandling_;
-    bool addedToLoop_;
     ReadEventCallback readCallback_;
     EventCallback writeCallback_;
     EventCallback closeCallback_;

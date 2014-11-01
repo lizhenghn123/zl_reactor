@@ -5,9 +5,7 @@
 #include "net/Channel.h"
 #include "base/ZLog.h"
 using namespace zl::base;
-
 NAMESPACE_ZL_NET_START
-
 
 EpollPoller::EpollPoller(EventLoop *loop, bool enableET/* = false*/)
     : Poller(loop), enableET_(enableET), events_(64)

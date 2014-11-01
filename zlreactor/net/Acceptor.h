@@ -24,28 +24,28 @@ using zl::base::Timestamp;
 class Acceptor : zl::NonCopy
 {
 public:
-	typedef std::function<void(Socket *)> NewConnectionCallback;
+    typedef std::function<void(Socket *)> NewConnectionCallback;
 
 public:
-	Acceptor(EventLoop *loop, const InetAddress& listenAddr);
-	~Acceptor();
+    Acceptor(EventLoop *loop, const InetAddress& listenAddr);
+    ~Acceptor();
 
-	void setNewConnectionCallback(const NewConnectionCallback& callback)
-	{
-		newConnCallBack_ = callback;
-	}
+    void setNewConnectionCallback(const NewConnectionCallback& callback)
+    {
+        newConnCallBack_ = callback;
+    }
 
-	void listen();
-
-private:
-	void onAccept();
-    //void handleRead();
+    void listen();
 
 private:
-	EventLoop *loop_;
-	Socket    *accept_socket;
-	Channel   *accept_channel_;
-	NewConnectionCallback newConnCallBack_;
+    void onAccept(Timestamp now);
+    //    void handleRead();
+
+private:
+    EventLoop *loop_;
+    Socket    *accept_socket;
+    Channel   *accept_channel_;
+    NewConnectionCallback newConnCallBack_;
 };
 
 NAMESPACE_ZL_NET_END
