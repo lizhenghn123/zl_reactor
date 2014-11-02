@@ -96,12 +96,10 @@ bool Socket::accept(Socket& new_socket) const
 
 ZL_SOCKET Socket::accept(InetAddress *peerAddr) const
 {
-    printf("------%d\n", sockfd_);
     ZL_SOCKADDR_IN addr;
     ::memset(&addr, 0, sizeof(addr));
     int addr_length = sizeof(addr);
     ZL_SOCKET connfd = ::ZL_ACCEPT(sockfd_, (sockaddr *)&addr, (socklen_t *)&addr_length);
-    assert(connfd > 0 && "ffff");
     if (connfd > 0)
     {
         peerAddr->setSockAddrInet(addr);

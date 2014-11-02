@@ -14,6 +14,7 @@ Acceptor::Acceptor(EventLoop *loop, const InetAddress& listenAddr)
     accept_socket = new Socket(SocketUtil::createSocket());
 
     accept_socket->setNoDelay();
+    accept_socket->setNonBlocking();
 
     if (!accept_socket->setReuseAddr(true))
     {
@@ -64,7 +65,6 @@ void Acceptor::onAccept(Timestamp now)
             {
                 LOG_ALERT("no callback on Acceptor::OnAccept(), and close the coming connection!");
             }
-            break;
         }
         else
         {
