@@ -314,24 +314,24 @@ bool Socket::setKeepAlive(bool flag /*= true*/)
     return setOpt(SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval));
 }
 
-bool Socket::setSocketReadSize(int readSize)
+bool Socket::setSendBuffer(int size)
 {
-    return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDBUF, &readSize, sizeof(readSize)) == 0;
+    return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size)) == 0;
+}
+      
+bool Socket::getSendBuffer(int& size)
+{
+    return (ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size)) == 0);
 }
 
-bool Socket::getSocketReadSize(int& readSize)
+bool Socket::setRecvBuffer(int size)
 {
-    return (ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDBUF, &readSize, sizeof(readSize)) == 0);
+    return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size)) == 0;
 }
 
-bool Socket::setSocketWriteSize(int writeSize)
+bool Socket::getRecvBuffer(int& size)
 {
-    return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVBUF, &writeSize, sizeof(writeSize)) == 0;
-}
-
-bool Socket::getSocketWriteSize(int& writeSize)
-{
-    return (ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVBUF, &writeSize, sizeof(writeSize)) == 0);
+    return (ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size)) == 0);
 }
 
 bool Socket::setSendTimeout(int sendTimeoutSec, int sendTimeoutUsec/* = 0*/)

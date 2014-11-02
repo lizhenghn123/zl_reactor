@@ -117,6 +117,7 @@ public:
     static ZL_SOCKET createSocket();
     static ZL_SOCKET createSocketAndListen(const char *ip, int port, int backlog = 5);
     static int closeSocket(ZL_SOCKET fd);
+    static void shutDown(ZL_SOCKET fd);
     static ZL_SOCKET acceptOne(ZL_SOCKET sockfd, struct sockaddr_in *addr);
 
     static int setNonBlocking(ZL_SOCKET fd, bool nonBlocking = true);

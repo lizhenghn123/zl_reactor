@@ -34,6 +34,11 @@ int SocketUtil::closeSocket(ZL_SOCKET fd)
     return 0;
 }
 
+void SocketUtil::shutDown(ZL_SOCKET fd)
+{ 
+    ::shutdown(fd, SHUT_RDWR);
+}
+
 ZL_SOCKET SocketUtil::createSocketAndListen(const char *ip, int port, int backlog)
 {
     ZL_SOCKET sockfd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);

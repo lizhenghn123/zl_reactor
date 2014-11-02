@@ -60,12 +60,12 @@ public:
     bool           setKeepAlive(bool flag = true);
 
     /** Set/Get SO_SNDBUF */
-    bool           setSocketReadSize(int readSize);
-    bool           getSocketReadSize(int& readSize);
+    bool           setSendBuffer(int size);
+    bool           getSendBuffer(int& size);
 
     /** Set/Get  SO_RCVBUF */
-    bool           setSocketWriteSize(int writeSize);
-    bool           getSocketWriteSize(int& writeSize);
+    bool           setRecvBuffer(int size);
+    bool           getRecvBuffer(int& size);
 
     /** Set/Get  SO_SNDTIMEO */
     bool           setSendTimeout(int sendTimeoutSec, int sendTimeoutUsec = 0);
