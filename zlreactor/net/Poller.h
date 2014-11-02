@@ -26,39 +26,56 @@ class Poller
 {
 public:
     typedef std::vector<Channel *>          ChannelList;
-    typedef std::map<ZL_SOCKET, Channel *, std::greater<ZL_SOCKET> >  ChannelMap;
+    typedef std::map<ZL_SOCKET, Channel *>  ChannelMap;
 
 public:
     Poller(EventLoop *loop);
     virtual ~Poller();
 
-    static Poller* createPoller(EventLoop *loop);
+    static Poller *createPoller(EventLoop *loop);
 
 public:
-	/// Changes the interested I/O events. Must be called in the loop thread.
-	virtual bool updateChannel(Channel *channel) = 0;
-
-    /// Changes the interested I/O events. Must be called in the loop thread.
-	virtual bool removeChannel(Channel *channel) = 0;
+    /*
+     * 添加/更新Channel所绑定socket的I/O events, 必须在主循环中调用
+     *
+     * @param channel     : 待更新的Channel
+     * @return            ：成功为true，失败为false
+     */
+    virtual bool updateChannel(Channel *channel) = 0;
 
     /*
-     * 得到可响应读写事件的所有连接, 必须在主线程中循环调用
+     * 删除Channel所绑定socket的I/O events, 必须在主循环中调用
+     *
+     * @param channel     : 待删除的Channel
+     * @return            ：成功为true，失败为false
+     */
+    virtual bool removeChannel(Channel *channel) = 0;
+
+    /*
+     * 得到可响应读写事件的所有连接, 必须在主循环中调用
      *
      * @param timeout     : 超时时间(单位:ms)
      * @param activeConns : 已激活的连接
      * @return            ：io multiplexing 调用返回时的当前时间
      */
-	virtual Timestamp poll_once(int timeoutMs, ChannelList& activeChannels) = 0;
+    virtual Timestamp poll_once(int timeoutMs, ChannelList &activeChannels) = 0;
 
-	virtual bool hasChannel(const Channel *channel) const;
+    /*
+     * 判断该Channel是否在Poller中
+     *
+     * @param channel     : 待删除的Channel
+     * @return            ：存在为true，否则为false
+     */
+    virtual bool hasChannel(const Channel *channel) const;
 
 public:
     /*
      * 获取当前存在的连接
+     *
      * @param sock     : 连接socket
      * @return socket对应的连接, 如不存在返回NULL
      */
-	Channel* getChannel(ZL_SOCKET sock) const;
+    Channel* getChannel(ZL_SOCKET sock) const;
 
 protected:
     ChannelMap  channelMap_;
@@ -66,5 +83,4 @@ protected:
 };
 
 NAMESPACE_ZL_NET_END
-
 #endif  /* ZL_POLLER_H */

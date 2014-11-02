@@ -7,6 +7,13 @@
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
+ZL_STATIC_ASSERT(EPOLLIN == POLLIN);
+ZL_STATIC_ASSERT(EPOLLPRI == POLLPRI);
+ZL_STATIC_ASSERT(EPOLLOUT == POLLOUT);
+ZL_STATIC_ASSERT(EPOLLRDHUP == POLLRDHUP);
+ZL_STATIC_ASSERT(EPOLLERR == POLLERR);
+ZL_STATIC_ASSERT(EPOLLHUP == POLLHUP);
+
 EpollPoller::EpollPoller(EventLoop *loop, bool enableET/* = false*/)
     : Poller(loop), enableET_(enableET), events_(64)
 {
@@ -111,6 +118,8 @@ bool EpollPoller::update(Channel *channel, int operation)
     ZL_SOCKET fd = channel->fd();
     struct epoll_event ev = { 0, { 0 } };
     ev.events = channel->events();
+    if (enableET_)
+        ev.events |=  EPOLLET;
     ev.data.ptr = channel;
     if (::epoll_ctl(epollfd_, operation, fd, &ev) < 0)
     {

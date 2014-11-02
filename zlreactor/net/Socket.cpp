@@ -25,6 +25,7 @@ Socket::Socket(ZL_SOCKET fd, ZL_SOCKADDR_IN sockAddr)
 
 Socket::~Socket()
 {
+    SocketUtil::closeSocket(sockfd_);
 }
 
 bool Socket::bind(const char *ip, int port)

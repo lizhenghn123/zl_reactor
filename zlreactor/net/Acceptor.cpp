@@ -31,13 +31,16 @@ Acceptor::Acceptor(EventLoop *loop, const InetAddress& listenAddr)
 
 Acceptor::~Acceptor()
 {
+    accept_channel_->disableAll();
+    accept_channel_->remove();
     Safe_Delete(accept_channel_);
     Safe_Delete(accept_socket);
 }
 
 void Acceptor::listen()
 {
-    if (!accept_socket->listen(64))
+    loop_->assertInLoopThread();
+    if (!accept_socket->listen(128)) //may be bigger, see 'cat /proc/sys/net/core/somaxconn'
     {
         throw SocketException("Could not listen to port.");
     }
@@ -48,27 +51,26 @@ void Acceptor::listen()
 
 void Acceptor::onAccept(Timestamp now)
 {
+    loop_->assertInLoopThread();
     while (true)
     {
-        //ActiveSocket socket;
-        //if (accept_socket->accept(socket)) //不能这样了，因为ActiveSocket销毁时会关闭socket fd
         InetAddress peerAddr;
         ZL_SOCKET newfd = accept_socket->accept(&peerAddr);
         if(newfd > 0)
         {
             if (newConnCallBack_)
             {  
-                LOG_INFO("accept one client on Acceptor::OnAccept [%s]", peerAddr.ipPort().c_str());
+                LOG_INFO("Acceptor::OnAccept accept one client from[%d][%s]", newfd, peerAddr.ipPort().c_str());
                 newConnCallBack_(newfd, peerAddr);
             }
             else
             {
-                LOG_ALERT("no callback on Acceptor::OnAccept(), and close the coming connection!");
+                LOG_ALERT("Acceptor::OnAccept() no callback , and close the coming connection![%d]", newfd);
             }
         }
         else
         {
-            LOG_ALERT("accept connection fail on Acceptor::OnAccept()!");
+            LOG_ALERT("Acceptor::OnAccept() accept connection fail![%d][%d]", newfd, errno);
             //if (errno == )
             //EAGAIN：套接字处于非阻塞状态，当前没有连接请求。
             //	EBADF：非法的文件描述符。

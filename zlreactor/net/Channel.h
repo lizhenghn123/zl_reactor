@@ -19,8 +19,6 @@ NAMESPACE_ZL_NET_START
 class EventLoop;
 using zl::base::Timestamp;
 
-
-
 class Channel
 {
 public:
