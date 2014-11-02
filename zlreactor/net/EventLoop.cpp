@@ -5,9 +5,10 @@
 #include "base/Timestamp.h"
 #include "base/ZLog.h"
 using namespace zl::base;
+using namespace zl::thread;
 NAMESPACE_ZL_NET_START
 
-EventLoop::EventLoop() : looping_(false), quit_(false)
+EventLoop::EventLoop() : looping_(false), quit_(false), callingPendingFunctors_(false)
 {
     poller_ = Poller::createPoller(this);
 }
@@ -31,7 +32,8 @@ void EventLoop::loop()
             currentActiveChannel_->handleEvent(retime);
         }
         currentActiveChannel_ = NULL;
-        //doPendingFunctors();
+
+        callPendingFunctors();    //处理poll等待过程中发生的事件
     }
 }
 
@@ -57,10 +59,10 @@ void EventLoop::removeChannel(Channel* channel)
 {
 	//assert(channel->ownerLoop() == this);
 	//assertInLoopThread();
-	if (eventHandling_)
+	if ( 0 &&eventHandling_)
 	{
-		assert(currentActiveChannel_ == channel ||
-			std::find(activeChannels_.begin(), activeChannels_.end(), channel) == activeChannels_.end());
+		assert(currentActiveChannel_ == channel && "must be current channel!");
+		assert(std::find(activeChannels_.begin(), activeChannels_.end(), channel) == activeChannels_.end() && "why");
 	}
 	poller_->removeChannel(channel);
 }
@@ -72,7 +74,7 @@ bool EventLoop::hasChannel(Channel* channel)
 
 void EventLoop::runInLoop(const Functor& func)
 {
-    LOG_INFO("EventLoop::runInLoop [%d]", isInLoopThread());
+    LOG_INFO("EventLoop::runInLoop [%d][%d]", isInLoopThread(), &func);
 	if (isInLoopThread())
 	{
 		func();
@@ -85,8 +87,32 @@ void EventLoop::runInLoop(const Functor& func)
 
 void EventLoop::queueInLoop(const Functor& func)
 {
-	//zl::thread::MutexLocker lock(mutex_);
+    LOG_INFO("EventLoop::queueInLoop [%d][%d]", isInLoopThread(), &func);
+    {
+        MutexLocker lock(mutex_);
+        pendingFunctors_.push_back(func);
+    }
 
+    if (!isInLoopThread() || callingPendingFunctors_)
+    {
+        wakeup();
+    }
+}
+
+void EventLoop::callPendingFunctors()
+{
+    std::vector<Functor> tmp_functors;
+    callingPendingFunctors_ = true;
+    {
+        MutexLocker lock(mutex_);
+        tmp_functors.swap(pendingFunctors_);
+    }
+
+    for (size_t i = 0; i < tmp_functors.size(); ++i)
+    {
+        tmp_functors[i]();
+    }
+    callingPendingFunctors_ = false;
 }
 
 NAMESPACE_ZL_NET_END

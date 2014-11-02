@@ -72,6 +72,7 @@ bool EpollPoller::updateChannel(Channel *channel)
         assert(getChannel(fd) == channel);
         if(channel->isNoneEvent())
         {
+            LOG_INFO("EpollPoller::updateChannel [%d][%0x] NoneEvent", fd, channel);
             channelMap_.erase(fd);
             return update(channel, EPOLL_CTL_DEL);
         }
@@ -90,7 +91,11 @@ bool EpollPoller::updateChannel(Channel *channel)
 
 bool EpollPoller::removeChannel(Channel *channel)
 {
+    if(!hasChannel(channel))   // 注意 updateChannel 函数中也有一处removeChannel的逻辑
+        return true;
+
     ZL_SOCKET fd = channel->fd();
+    LOG_INFO("EpollPoller::removeChannel [%d][%0x]", fd, channel);
     assert(hasChannel(channel) && "the remove socket must be already exist");
     assert(getChannel(fd) == channel && "the remove socket must be already exist");
     assert(channel->isNoneEvent());

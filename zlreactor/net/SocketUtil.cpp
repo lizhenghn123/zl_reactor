@@ -1,5 +1,7 @@
 ﻿#include "net/SocketUtil.h"
 #include <string.h>
+#include "base/ZLog.h"
+using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 SocketInitialization  g_socket_init_once;
@@ -23,12 +25,14 @@ int SocketUtil::socketCleanup()
 
 ZL_SOCKET SocketUtil::createSocket()
 {
-    ZL_SOCKET sockfd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    return sockfd;
+    ZL_SOCKET fd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    LOG_INFO("createSocket [%d]", fd);
+    return fd;
 }
 
 int SocketUtil::closeSocket(ZL_SOCKET fd)
 {
+    LOG_INFO("closeSocket [%d]", fd);
     if (fd) 
         return ::ZL_CLOSE(fd);
     return 0;

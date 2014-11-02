@@ -43,6 +43,9 @@ public:
     bool assertInLoopThread() const  { return true; }
 
 private:
+    void callPendingFunctors();   //call after loop() return
+
+private:
     typedef std::vector<Channel*> ChannelList;
     ChannelList activeChannels_;
     Channel *currentActiveChannel_;
@@ -51,7 +54,10 @@ private:
     bool looping_; /* atomic */
     bool quit_; /* atomic and shared between threads, okay on x86, I guess. */
     bool eventHandling_; /* atomic */
+
+    bool callingPendingFunctors_;
     mutable zl::thread::Mutex mutex_;
+    std::vector<Functor> pendingFunctors_;  //在poll等待时发生的事件，需要加锁
 };
 
 NAMESPACE_ZL_NET_END
