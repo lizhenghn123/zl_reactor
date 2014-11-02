@@ -29,7 +29,7 @@ public:
     ~TcpConnection();
 
     EventLoop* getLoop() const { return loop_; }
-    ZL_SOCKET fd() { return socket_->getSocket(); }
+    ZL_SOCKET fd() { return socket_->fd(); }
     const InetAddress& localAddress() const { return localAddr_; }
     const InetAddress& peerAddress() const { return peerAddr_; }
 
@@ -78,13 +78,12 @@ private:
 
     Socket *socket_;
     Channel *channel_;
-    const InetAddress localAddr_;
-    const InetAddress peerAddr_;
+    const InetAddress     localAddr_;
+    const InetAddress     peerAddr_;
     ConnectionCallback    connectionCallback_;
     MessageCallback       messageCallback_;
     WriteCompleteCallback writeCompleteCallback_;
     CloseCallback         closeCallback_;
-    size_t highWaterMark_;
     Buffer inputBuffer_;
     Buffer outputBuffer_; // FIXME: use list<Buffer> as output buffer.
 };

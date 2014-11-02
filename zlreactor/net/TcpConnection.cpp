@@ -92,7 +92,7 @@ void TcpConnection::connectDestroyed()
 
 void TcpConnection::handleRead(Timestamp receiveTime)
 {
-    LOG_INFO("TcpConnection::handleRead fd = %d, state = %d", socket_->getSocket(), state_);
+    LOG_INFO("TcpConnection::handleRead fd = %d, state = %d", socket_->fd(), state_);
     loop_->assertInLoopThread();
     //int savedErrno = 0;
     //ssize_t n = inputBuffer_.readFd(channel_->fd(), &savedErrno);
@@ -122,7 +122,7 @@ void TcpConnection::handleWrite()
 void TcpConnection::handleClose()
 {
     loop_->assertInLoopThread();
-    LOG_INFO("TcpConnection::handleClose fd = %d, state = %d", socket_->getSocket(), state_);
+    LOG_INFO("TcpConnection::handleClose fd = %d, state = %d", socket_->fd(), state_);
     assert(state_ == kConnected || state_ == kDisconnecting);
     // we don't close fd, leave it to dtor, so we can find leaks easily.
     setState(kDisconnected);

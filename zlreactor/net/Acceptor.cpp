@@ -24,7 +24,7 @@ Acceptor::Acceptor(EventLoop *loop, const InetAddress& listenAddr)
         throw SocketException("Could not bind to port.");
     }
 
-    accept_channel_ = new Channel(loop, accept_socket->getSocket());
+    accept_channel_ = new Channel(loop, accept_socket->fd());
     accept_channel_->setReadCallback(std::bind(&Acceptor::onAccept, this, std::placeholders::_1));
 }
 

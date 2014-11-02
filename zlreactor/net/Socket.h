@@ -97,12 +97,12 @@ public:
     {
         return sockfd_ != ZL_INVALID_SOCKET;
     }
-    const          ZL_SOCKET& getSocket()const
+    const          ZL_SOCKET& fd()const
     {
         return sockfd_;
     }
 
-    const ZL_SOCKADDR_IN getAddr()
+    const ZL_SOCKADDR_IN addr()
     {
         return sockaddr_;
     }

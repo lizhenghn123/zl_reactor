@@ -3,10 +3,10 @@
 CXXFLAGS = -Wall -g -O2 -fPIC
 
 
-plugindir = ../../lib
-INSTALL_DIR=$(cd "$(dirname "$0")"; pwd)
+#plugindir = ../../lib
+#INSTALL_DIR=$(cd "$(dirname "$0")"; pwd)
 #plugindir = $INSTALL_DIR/lib
-#plugindir = /media/sf_D_DRIVE/zl_reactor/lib
+plugindir = /media/sf_D_DRIVE/zl_reactor/lib
 plugin_LTLIBRARIES = libzlreactor.la
 
 ## 安装根目录
