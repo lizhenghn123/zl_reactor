@@ -46,7 +46,7 @@ void EchoServer::onMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp 
     string msg(buf->data());
     cout << "EchoServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, ["
         << buf->data() << "], received at " << time.toString() << "\n";
-    //conn->send(msg);
+    //conn->send(msg.data(), msg.size());
 }
 
 int main()
