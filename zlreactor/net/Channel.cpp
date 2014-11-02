@@ -7,12 +7,9 @@
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
-//const int Channel::kNoneEvent = SOCKETEVENT_NONE;
-//const int Channel::kReadEvent = SOCKETEVENT_READ;
-//const int Channel::kWriteEvent = SOCKETEVENT_WRITE;
-const int Channel::kNoneEvent = 0;
-const int Channel::kReadEvent = POLLIN | POLLPRI;
-const int Channel::kWriteEvent = POLLOUT;
+const int Channel::kEventNone  = 0;
+const int Channel::kEventRead  = POLLIN | POLLPRI;
+const int Channel::kEventWrite = POLLOUT;
 
 Channel::Channel(EventLoop* loop, ZL_SOCKET fd)
     : loop_(loop), fd_(fd), events_(0), revents_(0)

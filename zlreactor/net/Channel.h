@@ -19,11 +19,14 @@ NAMESPACE_ZL_NET_START
 class EventLoop;
 using zl::base::Timestamp;
 
+
+
 class Channel
 {
 public:
     typedef std::function<void()>          EventCallback;
     typedef std::function<void(Timestamp)> ReadEventCallback;
+
 public:
     Channel(EventLoop* loop, ZL_SOCKET fd);
     ~Channel();
@@ -53,53 +56,60 @@ public:
         return fd_;
     }
 
-    int events() const 
-    { 
-        return events_; 
+    int events() const
+    {
+        return events_;
     }
 
-    void set_revents(int revt) // used by pollers
-    { 
-        revents_ = revt; 
+    void set_revents(int revt) // used by pollers, set return events
+    {
+        revents_ = revt;
     } 
     
-    int revents() const 
-    { 
-        return revents_; 
+    int revents() const
+    {
+        return revents_;
     }
 
     bool isNoneEvent() const 
-    { 
-        return events_ == Channel::kNoneEvent; 
+    {
+        return events_ == Channel::kEventNone;
     }
 
     void enableReading()
-    { 
-        events_ |= kReadEvent; update(); 
+    {
+        events_ |= kEventRead; update(); 
     }
 
-    // void disableReading() { events_ &= ~kReadEvent; update(); }
+    void disableReading() 
+    {
+        events_ &= ~kEventRead; update(); 
+    }
+
     void enableWriting() 
     { 
-        events_ |= kWriteEvent; update();
+        events_ |= kEventWrite; update();
     }
 
     void disableWriting() 
-    { 
-        events_ &= ~kWriteEvent; update(); 
+    {
+        events_ &= ~kEventWrite; update(); 
     }
 
     void disableAll() 
-    { 
-        events_ = kNoneEvent; update(); 
+    {
+        events_ = kEventNone; update(); 
     }
 
     bool isWriting() const
     { 
-        return events_ & kWriteEvent;
+        return events_ & kEventWrite;
     }
 
-    EventLoop* ownerLoop() { return loop_; }
+    EventLoop* ownerLoop()
+    {
+        return loop_;
+    }
 
     std::string reventsToString() const; // for debug
 
@@ -111,9 +121,9 @@ public: //private:
     void update();
     void handleEventWithHold(Timestamp receiveTime);
 
-    static const int kNoneEvent;
-    static const int kReadEvent;
-    static const int kWriteEvent;
+    static const int kEventNone;
+    static const int kEventRead;
+    static const int kEventWrite;
 
     EventLoop  *loop_;
     ZL_SOCKET  fd_;
