@@ -48,22 +48,26 @@ public:
 private:
     void wakeupPoller();          //wakeup the waiting poller
     void callPendingFunctors();   //call when loop() return
+    void handleRead();            //read event for wakeupfd_
 
 private:
     typedef std::vector<Channel*> ChannelList;
 
     const thread::Thread::id currentThreadId_;  // thread id of this object created
 
-    ChannelList              activeChannels_;
-    Channel                  *currentActiveChannel_;
+    ChannelList              activeChannels_;   // active channels when poll return
+    Channel                  *currentActiveChannel_; // the current processing active channel 
     Poller                   *poller_;          // I/O poller
-    bool                     looping_;          // atomic 
-    bool                     running_;          // atomic and shared between threads
-    bool                     eventHandling_;    // atomic 
+    bool                     looping_;          // need atomic
+    bool                     running_;          // need atomic
+    bool                     eventHandling_;    // need atomic
+
+    int                      wakeupfd_;         // wakeup poller::poll
+    Channel                  *wakeupChannel_;   // channel of wakeupfd_
 
     bool                     callingPendingFunctors_;  // flag for callPendingFunctors func
     thread::Mutex            mutex_;            // for guard  pendingFunctors_
-    std::vector<Functor>     pendingFunctors_;  // 在poll等待时发生的事件，需要加锁
+    std::vector<Functor>     pendingFunctors_;  // functors when polling, need mutex guard
 };
 
 NAMESPACE_ZL_NET_END

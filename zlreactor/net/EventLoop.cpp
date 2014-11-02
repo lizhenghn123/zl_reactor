@@ -45,7 +45,11 @@ void EventLoop::loop()
 
 void EventLoop::stop()
 {
-
+    running_ = false;
+    if (!isInLoopThread())
+    {
+        wakeupPoller();
+    }
 }
 
 void EventLoop::wakeupPoller()
