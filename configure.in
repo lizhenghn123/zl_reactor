@@ -11,6 +11,7 @@ AC_CONFIG_FILES([Makefile
                 zlreactor/Makefile
                 examples/Makefile
 				examples/test_str_util/Makefile
+				examples/echoserver/Makefile
                ])
 
 # Checks for programs.

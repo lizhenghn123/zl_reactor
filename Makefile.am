@@ -1,1 +1,5 @@
-SUBDIRS = zlreactor examples
+SUBDIRS = 
+
+SUBDIRS += zlreactor
+
+SUBDIRS += examples
