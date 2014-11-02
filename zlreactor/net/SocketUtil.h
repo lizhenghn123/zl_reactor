@@ -108,31 +108,31 @@ typedef socklen_t    ZL_SOCKLEN;
 
 NAMESPACE_ZL_NET_START
 
-int socketInitialise();
+class SocketUtil
+{
+public:
+    static int socketInitialise();
+    static int socketCleanup();
 
-int socketCleanup();
+    static ZL_SOCKET createSocket();
+    static ZL_SOCKET createSocketAndListen(const char *ip, int port, int backlog = 5);
+    static int closeSocket(ZL_SOCKET fd);
+    static ZL_SOCKET acceptOne(ZL_SOCKET sockfd, struct sockaddr_in *addr);
 
-ZL_SOCKET createSocket();
+    static int setNonBlocking(ZL_SOCKET fd, bool nonBlocking = true);
+    static int setNoDelay(ZL_SOCKET fd, bool noDelay = true);
+    static int setSendBuffer(ZL_SOCKET fd, int readSize);
+    static int setRecvBuffer(ZL_SOCKET fd, int writeSize);
+    static int getSendBuffer(ZL_SOCKET fd);
+    static int getRecvBuffer(ZL_SOCKET fd);
 
-ZL_SOCKET socketCreateAndListen(const char *ip, int port, int backlog = 5);
+    static struct sockaddr_in getLocalAddr(ZL_SOCKET sockfd);
+    static struct sockaddr_in getPeerAddr(ZL_SOCKET sockfd);
 
-ZL_SOCKET acceptOne(ZL_SOCKET sockfd, struct sockaddr_in *addr);
+    static bool isSelfConnect(ZL_SOCKET sockfd);
 
-int setNonBlocking(ZL_SOCKET fd, bool nonBlocking = true);
-
-int setNoDelay(ZL_SOCKET fd, bool noDelay = true);
-
-int setSocketReadSize(ZL_SOCKET fd, int readSize);
-
-int setSocketWriteSize(ZL_SOCKET fd, int writeSize);
-
-struct sockaddr_in getLocalAddr(ZL_SOCKET sockfd);
-
-struct sockaddr_in getPeerAddr(ZL_SOCKET sockfd);
-
-bool isSelfConnect(ZL_SOCKET sockfd);
-
-int getSocketError(ZL_SOCKET sockfd);
+    static int getSocketError(ZL_SOCKET sockfd);
+};
 
 namespace
 {
@@ -141,11 +141,11 @@ namespace
     public:
         SocketInitialization()
         {
-            socketInitialise();
+            SocketUtil::socketInitialise();
         }
         ~SocketInitialization()
         {
-            socketCleanup();
+            SocketUtil::socketCleanup();
         }
     };
 

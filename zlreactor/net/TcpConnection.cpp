@@ -136,7 +136,7 @@ void TcpConnection::handleClose()
 
 void TcpConnection::handleError()
 {
-    int err = zl::net::getSocketError(channel_->fd());
+    int err = SocketUtil::getSocketError(channel_->fd());
     LOG_ERROR("TcpConnection::handleError [%d], SO_ERROR = %d", channel_->fd(), err);
 }
 

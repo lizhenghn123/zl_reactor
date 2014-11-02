@@ -7,7 +7,7 @@ PassiveSocket::PassiveSocket(ZL_SOCKET fd) : Socket(fd)
 
 }
 
-PassiveSocket::PassiveSocket(const char *ip, int port) : Socket(createSocket())
+PassiveSocket::PassiveSocket(const char *ip, int port) : Socket(SocketUtil::createSocket())
 {
     if(!Socket::bind(ip, port))
     {

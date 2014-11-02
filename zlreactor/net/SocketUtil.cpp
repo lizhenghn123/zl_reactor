@@ -4,7 +4,7 @@ NAMESPACE_ZL_NET_START
 
 SocketInitialization  g_socket_init_once;
 
-int socketInitialise()
+int SocketUtil::socketInitialise()
 {
 #ifdef OS_WINDOWS
     WSADATA wsaData;
@@ -13,7 +13,7 @@ int socketInitialise()
     return 0;
 }
 
-int socketCleanup()
+int SocketUtil::socketCleanup()
 {
 #ifdef OS_WINDOWS
     return WSACleanup();
@@ -21,13 +21,20 @@ int socketCleanup()
     return 0;
 }
 
-ZL_SOCKET createSocket()
+ZL_SOCKET SocketUtil::createSocket()
 {
     ZL_SOCKET sockfd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     return sockfd;
 }
 
-ZL_SOCKET socketCreateAndListen(const char *ip, int port, int backlog)
+int SocketUtil::closeSocket(ZL_SOCKET fd)
+{
+    if (fd) 
+        return ::ZL_CLOSE(fd);
+    return 0;
+}
+
+ZL_SOCKET SocketUtil::createSocketAndListen(const char *ip, int port, int backlog)
 {
     ZL_SOCKET sockfd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if(sockfd < 0) return sockfd;
@@ -58,14 +65,14 @@ ZL_SOCKET socketCreateAndListen(const char *ip, int port, int backlog)
     return sockfd;
 }
 
-ZL_SOCKET acceptOne(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
+ZL_SOCKET SocketUtil::acceptOne(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
 {
     int addrlen = sizeof(*addr);
     ZL_SOCKET connfd = ZL_ACCEPT(sockfd, (sockaddr *)addr, (socklen_t *)&addrlen);
     return connfd;
 }
 
-int setNonBlocking(ZL_SOCKET fd, bool nonBlocking/* = true*/)
+int SocketUtil::setNonBlocking(ZL_SOCKET fd, bool nonBlocking/* = true*/)
 {
 #if defined(OS_LINUX)
     int flags = fcntl(fd, F_GETFL);
@@ -81,7 +88,7 @@ int setNonBlocking(ZL_SOCKET fd, bool nonBlocking/* = true*/)
 #endif
 }
 
-int setNoDelay(ZL_SOCKET fd, bool noDelay/* = true*/)
+int SocketUtil::setNoDelay(ZL_SOCKET fd, bool noDelay/* = true*/)
 {
 #ifdef OS_LINUX
     int optval = noDelay ? 1 : 0;
@@ -91,14 +98,34 @@ int setNoDelay(ZL_SOCKET fd, bool noDelay/* = true*/)
     return ZL_SETSOCKOPT(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&optval, sizeof(optval));
 }
 
-int setSocketReadSize(ZL_SOCKET fd, int readSize)
+int SocketUtil::setSendBuffer(ZL_SOCKET fd, int readSize)
 {
     return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_SNDBUF, &readSize, sizeof(readSize));
 }
 
-int setSocketWriteSize(ZL_SOCKET fd, int writeSize)
+int SocketUtil::setRecvBuffer(ZL_SOCKET fd, int writeSize)
 {
     return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_RCVBUF, &writeSize, sizeof(writeSize));
+}
+
+int SocketUtil::getSendBuffer(ZL_SOCKET fd) 
+{
+    socklen_t buff_szie = sizeof(socklen_t);
+    int optname = 0;
+    int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_SNDBUF, &optname, &buff_szie);
+    (void)ret;
+    assert(ret != -1);
+    return optname > 0 ? optname : 0;
+}
+
+int SocketUtil::getRecvBuffer(ZL_SOCKET fd)
+{
+    socklen_t buff_szie = sizeof(socklen_t);
+    int optname = 0;
+    int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_RCVBUF, &optname, &buff_szie);
+    (void)ret;
+    assert(ret != -1);
+    return optname > 0 ? optname : 0;
 }
 
 typedef struct sockaddr SA;
@@ -111,7 +138,7 @@ SA* sockaddr_cast(struct sockaddr_in* addr)
     return static_cast<SA*>((void*)addr);
 }
 
-struct sockaddr_in getLocalAddr(ZL_SOCKET sockfd)
+struct sockaddr_in SocketUtil::getLocalAddr(ZL_SOCKET sockfd)
 {
     struct sockaddr_in localaddr;
     bzero(&localaddr, sizeof localaddr);
@@ -123,7 +150,7 @@ struct sockaddr_in getLocalAddr(ZL_SOCKET sockfd)
     return localaddr;
 }
 
-struct sockaddr_in getPeerAddr(ZL_SOCKET sockfd)
+struct sockaddr_in SocketUtil::getPeerAddr(ZL_SOCKET sockfd)
 {
     struct sockaddr_in peeraddr;
     bzero(&peeraddr, sizeof peeraddr);
@@ -135,7 +162,7 @@ struct sockaddr_in getPeerAddr(ZL_SOCKET sockfd)
     return peeraddr;
 }
 
-bool isSelfConnect(ZL_SOCKET sockfd)
+bool SocketUtil::isSelfConnect(ZL_SOCKET sockfd)
 {
     struct sockaddr_in localaddr = getLocalAddr(sockfd);
     struct sockaddr_in peeraddr = getPeerAddr(sockfd);
@@ -143,7 +170,7 @@ bool isSelfConnect(ZL_SOCKET sockfd)
         && localaddr.sin_addr.s_addr == peeraddr.sin_addr.s_addr;
 }
 
-int getSocketError(ZL_SOCKET sockfd)
+int SocketUtil::getSocketError(ZL_SOCKET sockfd)
 {
     int optval;
     socklen_t optlen = static_cast<socklen_t>(sizeof(optval));

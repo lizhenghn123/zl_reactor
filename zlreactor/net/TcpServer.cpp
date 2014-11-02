@@ -34,7 +34,7 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr)
     EventLoop* ioLoop = loop_; //loopthreadPool_->getNextLoop();
 
     LOG_INFO("TcpServer::newConnection [%d] from [%s]", sockfd, peerAddr.ipPort().c_str());
-    InetAddress localAddr(zl::net::getLocalAddr(sockfd));
+    InetAddress localAddr(SocketUtil::getLocalAddr(sockfd));
     TcpConnectionPtr conn  = new TcpConnection(ioLoop, sockfd, localAddr, peerAddr);
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);

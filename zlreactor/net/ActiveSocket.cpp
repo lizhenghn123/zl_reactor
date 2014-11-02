@@ -6,7 +6,7 @@ ActiveSocket::ActiveSocket(ZL_SOCKET fd) : Socket(fd)
 
 }
 
-ActiveSocket::ActiveSocket(const char *host, int port) : Socket(createSocket())
+ActiveSocket::ActiveSocket(const char *host, int port) : Socket(SocketUtil::createSocket())
 {
     if(!Socket::connect(host, port))
     {

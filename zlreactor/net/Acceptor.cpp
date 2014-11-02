@@ -11,7 +11,7 @@ NAMESPACE_ZL_NET_START
 Acceptor::Acceptor(EventLoop *loop, const InetAddress& listenAddr)
     : loop_(loop)
 {
-    accept_socket = new Socket(createSocket());
+    accept_socket = new Socket(SocketUtil::createSocket());
 
     accept_socket->setNoDelay();
 
