@@ -13,12 +13,14 @@
 #define ZL_EVENTLOOP_H
 #include "Define.h"
 #include "base/Timestamp.h"
+#include "base/NonCopy.h"
 #include "thread/Mutex.h"
+#include "thread/Thread.h"
 NAMESPACE_ZL_NET_START
 class Channel;
 class Poller;
 
-class EventLoop
+class EventLoop : zl::NonCopy
 {
 public:
     typedef std::function<void()> Functor;
@@ -27,37 +29,41 @@ public:
     ~EventLoop();
 
     void loop();
-    void quit();
+    void stop();
 
 public:
-    void wakeup();
-    void updateChannel(Channel* channel);
-    void removeChannel(Channel* channel);
-    bool hasChannel(Channel* channel);
+    void updateChannel(Channel *channel);
+    void removeChannel(Channel *channel);
+    bool hasChannel(Channel *channel);
 
-public:
+    //在主线程中运行，如果是其他线程调用，则转为调用queueInLoop
     void runInLoop(const Functor& func);
+    
+    //将该异步调用存储，并等待poller返回时再注意调用异步队列中的操作
     void queueInLoop(const Functor& func);
-    //bool IsInLoopThread() const { return threadId_ == CurrentThread::tid(); }
-    bool isInLoopThread() const { return true; }
-    bool assertInLoopThread() const  { return true; }
+
+    bool isInLoopThread() const { return currentThreadId_ == thread::this_thread::get_id(); }
+    void assertInLoopThread() const;
 
 private:
-    void callPendingFunctors();   //call after loop() return
+    void wakeupPoller();          //wakeup the waiting poller
+    void callPendingFunctors();   //call when loop() return
 
 private:
     typedef std::vector<Channel*> ChannelList;
-    ChannelList activeChannels_;
-    Channel *currentActiveChannel_;
 
-    Poller *poller_;
-    bool looping_; /* atomic */
-    bool quit_; /* atomic and shared between threads, okay on x86, I guess. */
-    bool eventHandling_; /* atomic */
+    const thread::Thread::id currentThreadId_;  // thread id of this object created
 
-    bool callingPendingFunctors_;
-    mutable zl::thread::Mutex mutex_;
-    std::vector<Functor> pendingFunctors_;  //在poll等待时发生的事件，需要加锁
+    ChannelList              activeChannels_;
+    Channel                  *currentActiveChannel_;
+    Poller                   *poller_;          // I/O poller
+    bool                     looping_;          // atomic 
+    bool                     running_;          // atomic and shared between threads
+    bool                     eventHandling_;    // atomic 
+
+    bool                     callingPendingFunctors_;  // flag for callPendingFunctors func
+    thread::Mutex            mutex_;            // for guard  pendingFunctors_
+    std::vector<Functor>     pendingFunctors_;  // 在poll等待时发生的事件，需要加锁
 };
 
 NAMESPACE_ZL_NET_END

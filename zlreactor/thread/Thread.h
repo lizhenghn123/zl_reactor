@@ -122,6 +122,10 @@ public:
         return os;
     }
 
+    unsigned long int pid() const
+    {
+        return mId;
+    }
 private:
     unsigned long int mId;
 };

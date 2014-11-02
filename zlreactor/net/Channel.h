@@ -14,12 +14,13 @@
 #include "Define.h"
 #include "net/SocketUtil.h"
 #include "base/Timestamp.h"
+#include "base/NonCopy.h"
 NAMESPACE_ZL_NET_START
 
 class EventLoop;
 using zl::base::Timestamp;
 
-class Channel
+class Channel : zl::NonCopy
 {
 public:
     typedef std::function<void()>          EventCallback;
@@ -29,93 +30,57 @@ public:
     Channel(EventLoop* loop, ZL_SOCKET fd);
     ~Channel();
 
+    ZL_SOCKET fd() const { return fd_; }
+
+    EventLoop* ownerLoop() { return loop_; }
+
     void setReadCallback(const ReadEventCallback& cb)
-    {
-        readCallback_ = cb;
-    }
+    { readCallback_ = cb; }
 
     void setWriteCallback(const EventCallback& cb)
-    {
-        writeCallback_ = cb;
-    }
+    { writeCallback_ = cb; }
 
     void setCloseCallback(const EventCallback& cb)
-    {
-        closeCallback_ = cb;
-    }
+    { closeCallback_ = cb; }
 
     void setErrorCallback(const EventCallback& cb)
-    {
-        errorCallback_ = cb;
-    }
-
-    ZL_SOCKET fd() const
-    {
-        return fd_;
-    }
+    { errorCallback_ = cb; }
 
     int events() const
-    {
-        return events_;
-    }
+    { return events_; }
 
     void set_revents(int revt) // used by pollers, set return events
-    {
-        revents_ = revt;
-    } 
+    { revents_ = revt; }
     
     int revents() const
-    {
-        return revents_;
-    }
+    { return revents_; }
 
-    bool isNoneEvent() const 
-    {
-        return events_ == Channel::kEventNone;
-    }
+    bool isNoneEvent() const
+    { return events_ == Channel::kEventNone; }
 
     void enableReading()
-    {
-        events_ |= kEventRead; update(); 
-    }
+    { events_ |= kEventRead; update(); }
 
     void disableReading() 
-    {
-        events_ &= ~kEventRead; update(); 
-    }
+    { events_ &= ~kEventRead; update(); }
 
     void enableWriting() 
-    { 
-        events_ |= kEventWrite; update();
-    }
+    { events_ |= kEventWrite; update(); }
 
     void disableWriting() 
-    {
-        events_ &= ~kEventWrite; update(); 
-    }
+    { events_ &= ~kEventWrite; update(); }
 
     void disableAll() 
-    {
-        events_ = kEventNone; update(); 
-    }
+    { events_ = kEventNone; update(); }
 
     bool isWriting() const
-    { 
-        return events_ & kEventWrite;
-    }
-
-    EventLoop* ownerLoop()
-    {
-        return loop_;
-    }
-
-    std::string reventsToString() const; // for debug
-
-    void remove();
+    { return events_ & kEventWrite; }
 
     void handleEvent(Timestamp receiveTime);
+    void remove();
+    std::string reventsToString() const;
 
-public: //private:
+private:
     void update();
     void handleEventWithHold(Timestamp receiveTime);
 
@@ -126,12 +91,12 @@ public: //private:
     EventLoop  *loop_;
     ZL_SOCKET  fd_;
     int        events_;
-    int        revents_;  // the poll return events
+    int        revents_;  // events of the poller returned
 
     ReadEventCallback readCallback_;
-    EventCallback writeCallback_;
-    EventCallback closeCallback_;
-    EventCallback errorCallback_;
+    EventCallback     writeCallback_;
+    EventCallback     closeCallback_;
+    EventCallback     errorCallback_;
 };
 
 NAMESPACE_ZL_NET_END

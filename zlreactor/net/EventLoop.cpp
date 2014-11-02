@@ -8,20 +8,26 @@ using namespace zl::base;
 using namespace zl::thread;
 NAMESPACE_ZL_NET_START
 
-EventLoop::EventLoop() : looping_(false), quit_(false), callingPendingFunctors_(false)
+EventLoop::EventLoop()
+    : currentThreadId_(this_thread::get_id()),
+      looping_(false),
+      running_(false),
+      callingPendingFunctors_(false)
 {
     poller_ = Poller::createPoller(this);
 }
 
 EventLoop::~EventLoop()
 {
-     Safe_Delete(poller_);
+    Safe_Delete(poller_);
 }
 
 void EventLoop::loop()
 {
+    running_ = true;
+
     Timestamp retime;
-    while (true)
+    while (running_)
     {
         activeChannels_.clear();
         retime = poller_->poll_once(10000, activeChannels_);
@@ -37,34 +43,34 @@ void EventLoop::loop()
     }
 }
 
-void EventLoop::quit()
+void EventLoop::stop()
 {
 
 }
 
-void EventLoop::wakeup()
+void EventLoop::wakeupPoller()
 {
 
 }
 
 void EventLoop::updateChannel(Channel* channel)
 {
-	LOG_INFO("EventLoop::updateChannel [%d]", channel->fd());
-	//assert(channel->ownerLoop() == this);
-	//assertInLoopThread();
-	poller_->updateChannel(channel);
+    LOG_INFO("EventLoop::updateChannel [%d]", channel->fd());
+    assert(channel->ownerLoop() == this);
+    assertInLoopThread();
+    poller_->updateChannel(channel);
 }
 
 void EventLoop::removeChannel(Channel* channel)
 {
-	//assert(channel->ownerLoop() == this);
-	//assertInLoopThread();
-	if ( 0 &&eventHandling_)
-	{
-		assert(currentActiveChannel_ == channel && "must be current channel!");
-		assert(std::find(activeChannels_.begin(), activeChannels_.end(), channel) == activeChannels_.end() && "why");
-	}
-	poller_->removeChannel(channel);
+    assert(channel->ownerLoop() == this);
+    assertInLoopThread();
+    if ( 0 &&eventHandling_)
+    {
+        assert(currentActiveChannel_ == channel && "must be current channel!");
+        assert(std::find(activeChannels_.begin(), activeChannels_.end(), channel) == activeChannels_.end() && "why");
+    }
+    poller_->removeChannel(channel);
 }
 
 bool EventLoop::hasChannel(Channel* channel)
@@ -75,14 +81,14 @@ bool EventLoop::hasChannel(Channel* channel)
 void EventLoop::runInLoop(const Functor& func)
 {
     LOG_INFO("EventLoop::runInLoop [%d][%d]", isInLoopThread(), &func);
-	if (isInLoopThread())
-	{
-		func();
-	}
-	else
-	{
-		queueInLoop(func);
-	}
+    if (isInLoopThread())
+    {
+        func();
+    }
+    else
+    {
+        queueInLoop(func);
+    }
 }
 
 void EventLoop::queueInLoop(const Functor& func)
@@ -95,7 +101,7 @@ void EventLoop::queueInLoop(const Functor& func)
 
     if (!isInLoopThread() || callingPendingFunctors_)
     {
-        wakeup();
+        wakeupPoller();
     }
 }
 
@@ -113,6 +119,15 @@ void EventLoop::callPendingFunctors()
         tmp_functors[i]();
     }
     callingPendingFunctors_ = false;
+}
+
+void EventLoop::assertInLoopThread() const 
+{
+    if(!isInLoopThread()) //TODO : add log or assert
+    {
+        LOG_ALERT("EventLoop::abortNotInLoopThread - EventLoop [%0x] was created in threadId_ [%d], " 
+            "but current thread id = [%d].", this, currentThreadId_.pid(), this_thread::get_id().pid());
+    }
 }
 
 NAMESPACE_ZL_NET_END

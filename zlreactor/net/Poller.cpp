@@ -15,7 +15,7 @@ bool Poller::hasChannel(const Channel* channel) const
 {
     for (ChannelMap::const_iterator itr = channelMap_.begin(); itr!=channelMap_.end(); ++itr)
     {
-        printf("=====[%d][%0x]\n", itr->first, itr->second);
+        //printf("hasChannel [%d][%0x]\n", itr->first, itr->second);
     }
     ChannelMap::const_iterator itr = channelMap_.find(channel->fd());
     return itr != channelMap_.end() && itr->second == channel;

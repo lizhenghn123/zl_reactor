@@ -16,6 +16,7 @@
 #include "thread/Mutex.h"
 #include "net/CallBacks.h"
 #include "net/InetAddress.h"
+#include "base/NonCopy.h"
 NAMESPACE_ZL_NET_START
 using zl::base::Timestamp;
 class ByteBuffer;
@@ -24,7 +25,7 @@ class Tcpconnection;
 class InetAddress;
 class Acceptor;
 
-class TcpServer
+class TcpServer : zl::NonCopy
 {
 public:
     TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::string& server_name = "TcpServer");

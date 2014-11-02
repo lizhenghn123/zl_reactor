@@ -5,13 +5,11 @@
 #include "net/Channel.h"
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
-//void defaultConnectionCallback(TcpConnection* conn);
-//void defaultMessageCallback(TcpConnection* conn, Buffer* buffer, Timestamp receiveTime);
+
 void defaultConnectionCallback(TcpConnectionPtr conn)
 {
   LOG_INFO("defaultConnectionCallback : [%s]<->[%s] [%s]\n", conn->localAddress().ipPort().c_str(),
-	    conn->peerAddress().ipPort().c_str(), conn->connected() ? "UP1" : "DOWN1");
-  // do not call conn->forceClose(), because some users want to register message callback only.
+        conn->peerAddress().ipPort().c_str(), conn->connected() ? "UP" : "DOWN");
 }
 
 void defaultMessageCallback(TcpConnectionPtr conn, Buffer* buf, Timestamp receiveTime)
@@ -43,7 +41,7 @@ TcpConnection::~TcpConnection()
     Safe_Delete(channel_);
 }
 
-void TcpConnection::send(const void* data, int len)
+void TcpConnection::send(const void* data, size_t len)
 {
     if (state_ == kConnected)
     {

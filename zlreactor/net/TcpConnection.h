@@ -13,6 +13,7 @@
 #define ZL_TCPCONNECTION_H
 #include "Define.h"
 #include "base/Timestamp.h"
+#include "base/NonCopy.h"
 #include "net/CallBacks.h"
 #include "net/InetAddress.h"
 #include "net/Socket.h"
@@ -21,19 +22,20 @@ class Channel;
 class EventLoop;
 class Socket;
 class InetAddress;
+using zl::base::Timestamp;
 
-class TcpConnection
+class TcpConnection : zl::NonCopy
 {
 public:
     TcpConnection(EventLoop* loop, int sockfd, const InetAddress& localAddr, const InetAddress& peerAddr);
     ~TcpConnection();
 
-    EventLoop* getLoop() const { return loop_; }
-    ZL_SOCKET fd() { return socket_->fd(); }
+public:
+    EventLoop* getLoop() const              { return loop_; }
+    ZL_SOCKET fd() const                    { return socket_->fd(); }
     const InetAddress& localAddress() const { return localAddr_; }
-    const InetAddress& peerAddress() const { return peerAddr_; }
-
-    bool connected() const { return state_ == kConnected; }
+    const InetAddress& peerAddress() const  { return peerAddr_; }
+    bool connected() const                  { return state_ == kConnected; }
 
     void setConnectionCallback(const ConnectionCallback& cb)
     { connectionCallback_ = cb; }
@@ -44,7 +46,10 @@ public:
     void setWriteCompleteCallback(const WriteCompleteCallback& cb)
     { writeCompleteCallback_ = cb; }
 
-    void send(const void* message, int len);
+    void setCloseCallback(const CloseCallback& cb)
+    { closeCallback_ = cb; }
+
+    void send(const void* message, size_t len);
     void send(Buffer* message);
     void shutdown();
 
@@ -54,13 +59,9 @@ public:
     Buffer* outputBuffer()
     { return &outputBuffer_; }
 
-    void setCloseCallback(const CloseCallback& cb)
-    { closeCallback_ = cb; }
-
-    // called when TcpServer accepts a new connection
-    void connectEstablished();   // should be called only once
-    // called when TcpServer has removed me from its map
-    void connectDestroyed();  // should be called only once
+    void connectEstablished();  // called when TcpServer accepts a new connection
+    
+    void connectDestroyed(); // called when TcpServer has removed me from its map
 
 private:
     enum StateE { kDisconnected, kConnecting, kConnected, kDisconnecting };
@@ -73,19 +74,21 @@ private:
     void setState(StateE s) { state_ = s; }
 
 private:
-    EventLoop* loop_;
-    StateE state_;  
-
-    Socket *socket_;
-    Channel *channel_;
+    EventLoop             *loop_;
+    StateE                state_;
+    Socket                *socket_;
+    Channel               *channel_;
     const InetAddress     localAddr_;
     const InetAddress     peerAddr_;
+
+    Buffer inputBuffer_;
+    Buffer outputBuffer_; // FIXME: use list<Buffer> as output buffer.
+
     ConnectionCallback    connectionCallback_;
     MessageCallback       messageCallback_;
     WriteCompleteCallback writeCompleteCallback_;
     CloseCallback         closeCallback_;
-    Buffer inputBuffer_;
-    Buffer outputBuffer_; // FIXME: use list<Buffer> as output buffer.
+
 };
 
 NAMESPACE_ZL_NET_END

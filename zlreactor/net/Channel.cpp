@@ -1,7 +1,6 @@
 #include "net/Channel.h"
 #include <sstream>
 #include <assert.h>
-#include "net/Connection.h"
 #include "base/ZLog.h"
 #include "net/EventLoop.h"
 using namespace zl::base;
@@ -42,29 +41,33 @@ void Channel::handleEvent(Timestamp receiveTime)
 
 void Channel::handleEventWithHold(Timestamp receiveTime)
 {
-    if ((revents_ & SOCKETEVENT_HUP) && !(revents_ & SOCKETEVENT_READ))
+    if ((revents_ & POLLHUP) && !(revents_ & POLLIN))
     {
-		LOG_INFO("Channel::handleEventWithHold Channel::handleEventWithHold");
-        if (closeCallback_) 
-			closeCallback_();
+        LOG_INFO("Channel::handleEventWithHold closeCallback, fd[%d]", fd_); 
+        if (closeCallback_)
+            closeCallback_();
     }
 
-    //if (revents_ & POLLNVAL)
-    //{
-    //	LOG_WARN << "Channel::handle_event() POLLNVAL";
-    //}
+    if (revents_ & POLLNVAL)
+    { 
+        LOG_WARN("Channel::handle_event() POLLNVAL, fd[%d]", fd_);
+    }
 
-    if (revents_ & (SOCKETEVENT_ERROR/* | POLLNVAL*/))
+    if (revents_ & (POLLERR | POLLNVAL))
     {
-        if (errorCallback_) errorCallback_();
+        LOG_INFO("Channel::handleEventWithHold closeCallback, fd[%d]", fd_);
+        if (errorCallback_)
+            errorCallback_();
     }
-    if (revents_ & (SOCKETEVENT_READ/* | POLLPRI */| SOCKETEVENT_HUP))
+    if (revents_ & (POLLIN | POLLPRI | POLLRDHUP))
     {
-        if (readCallback_) readCallback_(receiveTime);
+        if (readCallback_) 
+            readCallback_(receiveTime);
     }
-    if (revents_ & SOCKETEVENT_WRITE)
+    if (revents_ & POLLOUT)
     {
-        if (writeCallback_) writeCallback_();
+        if (writeCallback_)
+            writeCallback_();
     }
 }
 
@@ -72,20 +75,20 @@ std::string Channel::reventsToString() const
 {
     std::ostringstream oss;
     oss << fd_ << ": ";
-    if (revents_ & SOCKETEVENT_READ)
+    if (revents_ & POLLIN)
         oss << "IN ";
-    //if (revents_ & POLLPRI)
-    //	oss << "PRI ";
-    if (revents_ & SOCKETEVENT_WRITE)
+    if (revents_ & POLLPRI)
+        oss << "PRI ";
+    if (revents_ & POLLOUT)
         oss << "OUT ";
-    if (revents_ & SOCKETEVENT_HUP)
+    if (revents_ & POLLHUP)
         oss << "HUP ";
-    //if (revents_ & POLLRDHUP)
-    //	oss << "RDHUP ";
-    if (revents_ & SOCKETEVENT_ERROR)
+    if (revents_ & POLLRDHUP)
+        oss << "RDHUP ";
+    if (revents_ & POLLERR)
         oss << "ERR ";
-    //if (revents_ & POLLNVAL)
-    //	oss << "NVAL ";
+    if (revents_ & POLLNVAL)
+        oss << "NVAL ";
 
     return oss.str().c_str();
 }
