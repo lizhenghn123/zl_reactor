@@ -2,6 +2,9 @@ MAINTAINERCLEANFILES   = Makefile.in
 
 SUBDIRS                =
 
-SUBDIRS +=             test_str_util
+SUBDIRS                += test_str_util
 
-SUBDIRS +=             echoserver
+SUBDIRS                += echoserver
+
+
+SUBDIRS                += atomic

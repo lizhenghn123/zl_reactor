@@ -6,7 +6,4 @@ INCLUDES = -I../../zlreactor
 
 testStrUtil_SOURCES = test_str_util.cpp 
 
-#chaos_perf_LDADD = \
-#			  $(top_srcdir)/zl_reactor/libzlreactor.a \
-#			  -lpthread
 

@@ -31,7 +31,8 @@
 #define ATOMIC_FETCH_AND_ADD(ptr, v)  __sync_fetch_and_add(ptr, v)
 #define ATOMIC_FETCH_AND_SUB(ptr, v)  __sync_fetch_and_sub(ptr, v)
 #define ATOMIC_FETCH(ptr)             __sync_add_and_fetch(ptr, 0)
-#define ATOMIC_SET(ptr, v)            (void)__sync_bool_compare_and_swap(ptr, *(ptr), v)
+//#define ATOMIC_SET(ptr, v)            __sync_bool_compare_and_swap(ptr, *(ptr), v)
+#define ATOMIC_SET(ptr, v)            __sync_val_compare_and_swap(ptr, *(ptr), v) 
 
 #elif defined(OS_WINDOWS)
 #include <Windows.h>
@@ -46,21 +47,27 @@
 
 NAMESPACE_ZL_THREAD_START
 
+template <typename T>
 class Atomic
 {
 public:
     typedef  volatile long atomic_t;
 public:
-    Atomic() : atomic_(0)
-    {}
-    ~Atomic()
-    {}
+    Atomic()
+    {
+#ifdef OS_LINUX
+        ATOMIC_SET(&atomic_, 0);
+#else
+        MutexLocker lock(mutex_);
+        atomic_ = 0;
+#endif
+    }
 public:
-    inline atomic_t inc(int n = 1)
+    inline atomic_t inc(T n = 1)
     {
         return ATOMIC_ADD(&atomic_, n);
     }
-    inline atomic_t incAndFetch(int n = 1)
+    inline atomic_t incAndFetch(T n = 1)
     {
 #ifdef OS_LINUX
         return ATOMIC_ADD_AND_FETCH(&atomic_, n);
@@ -70,15 +77,15 @@ public:
         return atomic_;
 #endif
     }
-    inline atomic_t fetchAndInc(int n = 1)
+    inline atomic_t fetchAndInc(T n = 1)
     {
         return ATOMIC_FETCH_AND_ADD(&atomic_, n);
     }
-    inline atomic_t dec(int n = 1)
+    inline atomic_t dec(T n = 1)
     {
         return ATOMIC_SUB(&atomic_, n);
     }
-    inline atomic_t decAndFetch(int n = 1)
+    inline atomic_t decAndFetch(T n = 1)
     {
 #ifdef OS_LINUX
         return ATOMIC_SUB_AND_FETCH(&atomic_, n);
@@ -88,13 +95,14 @@ public:
         return atomic_;
 #endif
     }
-    inline atomic_t fetchAndDec(int n = 1)
+    inline atomic_t fetchAndDec(T n = 1)
     {
         return ATOMIC_FETCH_AND_SUB(&atomic_, n);
     }
     inline atomic_t value()
     {
         return ATOMIC_FETCH(&atomic_);
+        return ATOMIC_FETCH_AND_ADD(&atomic_, 0);
     }
 public:
     atomic_t operator++()
@@ -113,19 +121,19 @@ public:
     {
         return fetchAndDec(1);
     }
-    atomic_t operator+=(int num)
+    atomic_t operator+=(T num)
     {
         return incAndFetch(num);
     }
-    atomic_t operator-=(int num)
+    atomic_t operator-=(T num)
     {
         return decAndFetch(num);
     }
-    bool operator==(long value)
+    bool operator==(T value)
     {
-        return (atomic_ == value);
+        return (value() == value);
     }
-    operator long() const
+    operator atomic_t() const
     {
         return atomic_;
     }
@@ -134,6 +142,72 @@ private:
     atomic_t atomic_;
 #ifdef OS_WINDOWS
     Mutex    mutex_;
+#endif
+};
+
+template<>
+class Atomic<bool>
+{
+public:
+    Atomic()
+    {
+#ifdef OS_LINUX
+        ATOMIC_SET(&atomic_, 0);
+#else
+        MutexLocker lock(mutex_);
+        atomic_ = 0;
+#endif
+    }
+
+    Atomic& operator=(bool flag)
+    {
+#ifdef OS_LINUX
+        ATOMIC_SET(&atomic_, flag ? 1 : 0);
+#else
+        MutexLocker lock(mutex_);
+        atomic_ = flag;
+#endif
+        return *this;
+    }
+
+    bool clear()     // set false
+    {
+#ifdef OS_LINUX
+         return ATOMIC_SET(&atomic_, 0);
+#else
+         MutexLocker lock(mutex_);
+         int oldvalue = atomic_;
+         atomic_ = 0;
+         return oldvalue;
+#endif
+    }
+
+    bool test_and_set()  //set true and return old value
+    {  
+#ifdef OS_LINUX
+        return ATOMIC_SET(&atomic_, 1);
+#else
+        MutexLocker lock(mutex_);
+        int oldvalue = atomic_;
+        atomic_ = 1;
+        return oldvalue;
+#endif
+    }
+
+    operator bool() 
+    {
+#ifdef OS_LINUX
+        return ATOMIC_FETCH(&atomic_);
+#else
+        MutexLocker lock(mutex_);
+        return atomic_;
+#endif
+    }
+
+private:
+    volatile int  atomic_;
+#ifdef OS_WINDOWS
+    mutable Mutex    mutex_;
 #endif
 };
 

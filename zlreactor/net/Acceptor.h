@@ -2,7 +2,7 @@
 // Filename         : Acceptor.h
 // Author           : LIZHENG
 // Created          : 2014-10-26
-// Description      :
+// Description      : 服务端接受器，监听在某一端口上，接受远程Socket连接
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2014-10-26

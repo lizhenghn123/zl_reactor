@@ -17,7 +17,7 @@ Channel::Channel(EventLoop* loop, ZL_SOCKET fd)
 
 Channel::~Channel()
 {
-    //if (loop_->isInLoopThread())
+    if (loop_->isInLoopThread())
     {
         assert(!loop_->hasChannel(this));
     }

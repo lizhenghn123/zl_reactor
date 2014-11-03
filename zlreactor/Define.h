@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 #include "OsDefine.h"
 #ifdef OS_WINDOWS
 #define  _WINSOCKAPI_
