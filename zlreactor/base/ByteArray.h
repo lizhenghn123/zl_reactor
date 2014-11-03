@@ -25,7 +25,7 @@ enum Endian
 class ByteArray
 {
 public:
-    ByteArray(int allocSize);
+    ByteArray(int allocSize = 64);
     ~ByteArray();
 
 public:    //Data Write

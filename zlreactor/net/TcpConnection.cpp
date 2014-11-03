@@ -3,6 +3,7 @@
 #include "base/ZLog.h"
 #include "net/EventLoop.h"
 #include "net/Channel.h"
+
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
@@ -14,7 +15,7 @@ void defaultConnectionCallback(TcpConnectionPtr conn)
 
 void defaultMessageCallback(TcpConnectionPtr conn, Buffer* buf, Timestamp receiveTime)
 {
-    LOG_INFO("defaultMessageCallback : [s]\n");
+    LOG_INFO("defaultMessageCallback : [%d][%d]", conn->fd(), buf->data());
 }
 
 TcpConnection::TcpConnection(EventLoop* loop, int sockfd, const InetAddress& localAddr, const InetAddress& peerAddr)
@@ -153,6 +154,29 @@ void TcpConnection::handleRead(Timestamp receiveTime)
 
 void TcpConnection::handleWrite()
 {
+    LOG_INFO("TcpConnection::handleWrite fd = %d, state = %d", socket_->fd(), state_);
+    loop_->assertInLoopThread();
+    if (channel_->isWriting())
+    {
+        //std::string data;
+        //size_t n = socket_->recv(data);
+        //if (n > 0)
+        //{
+        //    messageCallback_(this, &data, receiveTime);
+        //}
+        //else if (n == 0)
+        //{
+        //    handleClose();
+        //}
+        //else
+        //{
+        //    handleError();
+        //}
+    }
+    else
+    {
+        LOG_ERROR("TcpConnection::handleWrite error fd = %d, state = %d", socket_->fd(), state_);
+    }
 }
 
 void TcpConnection::handleClose()

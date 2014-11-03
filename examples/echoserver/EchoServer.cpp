@@ -38,7 +38,7 @@ void EchoServer::start()
 void EchoServer::onConnection(const TcpConnectionPtr& conn)
 {
     cout  << conn->localAddress().ipPort() << " is "
-        << (conn->connected() ? "UP" : "DOWN"); 
+        << (conn->connected() ? "UP" : "DOWN") << "\n"; 
 }
 
 void EchoServer::onMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp time)

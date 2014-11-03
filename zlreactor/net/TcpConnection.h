@@ -14,6 +14,7 @@
 #include "Define.h"
 #include "base/Timestamp.h"
 #include "base/NonCopy.h"
+#include "base/ByteArray.h"
 #include "net/CallBacks.h"
 #include "net/InetAddress.h"
 #include "net/Socket.h"
@@ -81,8 +82,8 @@ private:
     const InetAddress     localAddr_;
     const InetAddress     peerAddr_;
 
-    Buffer inputBuffer_;
-    Buffer outputBuffer_; // FIXME: use list<Buffer> as output buffer.
+    Buffer                inputBuffer_;
+    Buffer                outputBuffer_; // FIXME: use list<Buffer> as output buffer.
 
     ConnectionCallback    connectionCallback_;
     MessageCallback       messageCallback_;

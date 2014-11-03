@@ -13,8 +13,8 @@
 #define ZL_CALLBACKS_H
 NAMESPACE_ZL_NET_START
 
+class ByteArray;
 //class Buffer;
-class ByteBuffer;
 class EventLoop;
 class TcpConnection;
 class InetAddress;
@@ -22,6 +22,8 @@ class Acceptor;
 using zl::base::Timestamp;
 
 typedef std::string Buffer;
+//typedef ByteArray  Buffer;
+//typedef ByteArray*  BufferPtr;
 //typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 typedef TcpConnection* TcpConnectionPtr;
 
