@@ -159,13 +159,23 @@ public:
 #endif
     }
 
-    Atomic& operator=(bool flag)
+    Atomic(bool value)
     {
 #ifdef OS_LINUX
-        ATOMIC_SET(&atomic_, flag ? 1 : 0);
+        ATOMIC_SET(&atomic_, value ? 1 : 0);
 #else
         MutexLocker lock(mutex_);
-        atomic_ = flag;
+        atomic_ = value;
+#endif
+    }
+
+    Atomic& operator=(bool value)
+    {
+#ifdef OS_LINUX
+        ATOMIC_SET(&atomic_, value ? 1 : 0);
+#else
+        MutexLocker lock(mutex_);
+        atomic_ = value;
 #endif
         return *this;
     }
@@ -194,7 +204,7 @@ public:
 #endif
     }
 
-    operator bool() 
+    operator bool()
     {
 #ifdef OS_LINUX
         return ATOMIC_FETCH(&atomic_);
@@ -207,7 +217,7 @@ public:
 private:
     volatile int  atomic_;
 #ifdef OS_WINDOWS
-    mutable Mutex    mutex_;
+    Mutex    mutex_;
 #endif
 };
 

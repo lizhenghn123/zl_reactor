@@ -16,6 +16,7 @@
 #include "base/NonCopy.h"
 #include "thread/Mutex.h"
 #include "thread/Thread.h"
+#include "thread/Atomic.h"
 NAMESPACE_ZL_NET_START
 class Channel;
 class Poller;
@@ -42,6 +43,7 @@ public:
     //将该异步调用存储，并等待poller返回时再注意调用异步队列中的操作
     void queueInLoop(const Functor& func);
 
+    bool isRunning() { return running_; }
     bool isInLoopThread() const { return currentThreadId_ == thread::this_thread::get_id(); }
     void assertInLoopThread() const;
 
@@ -58,14 +60,13 @@ private:
     ChannelList              activeChannels_;   // active channels when poll return
     Channel                  *currentActiveChannel_; // the current processing active channel 
     Poller                   *poller_;          // I/O poller
-    bool                     looping_;          // need atomic
-    bool                     running_;          // need atomic
-    bool                     eventHandling_;    // need atomic
+    thread::Atomic<bool>     running_;          // status for eventloop running
+    thread::Atomic<bool>     eventHandling_;    // status for active channel handling
 
     int                      wakeupfd_;         // wakeup poller::poll
     Channel                  *wakeupChannel_;   // channel of wakeupfd_
 
-    bool                     callingPendingFunctors_;  // flag for callPendingFunctors func
+    thread::Atomic<bool>     callingPendingFunctors_;  // status for pending functors calling
     thread::Mutex            mutex_;            // for guard  pendingFunctors_
     std::vector<Functor>     pendingFunctors_;  // functors when polling, need mutex guard
 };

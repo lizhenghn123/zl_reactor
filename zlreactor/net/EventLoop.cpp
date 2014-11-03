@@ -10,8 +10,8 @@ NAMESPACE_ZL_NET_START
 
 EventLoop::EventLoop()
     : currentThreadId_(this_thread::get_id()),
-      looping_(false),
       running_(false),
+      eventHandling_(false),
       callingPendingFunctors_(false)
 {
     poller_ = Poller::createPoller(this);
@@ -32,12 +32,14 @@ void EventLoop::loop()
         activeChannels_.clear();
         retime = poller_->poll_once(10000, activeChannels_);
         //LOG_INFO("EventLoop::loop [%s][%d]", retime.toString().c_str(), activeChannels_.size());
+        eventHandling_ = true;
         for (ChannelList::iterator it = activeChannels_.begin(); it != activeChannels_.end(); ++it)
         {
             currentActiveChannel_ = *it;
             currentActiveChannel_->handleEvent(retime);
         }
         currentActiveChannel_ = NULL;
+        eventHandling_ = false;
 
         callPendingFunctors();    //处理poll等待过程中发生的事件
     }
@@ -69,7 +71,7 @@ void EventLoop::removeChannel(Channel* channel)
 {
     assert(channel->ownerLoop() == this);
     assertInLoopThread();
-    if ( 0 &&eventHandling_)
+    if (eventHandling_)
     {
         assert(currentActiveChannel_ == channel && "must be current channel!");
         assert(std::find(activeChannels_.begin(), activeChannels_.end(), channel) == activeChannels_.end() && "why");
