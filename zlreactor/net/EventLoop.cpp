@@ -1,5 +1,6 @@
 #include "net/EventLoop.h"
 #include <assert.h>
+#include <sys/eventfd.h>     // for eventfd
 #include "net/Channel.h"
 #include "net/Poller.h"
 #include "base/Timestamp.h"
@@ -8,18 +9,46 @@ using namespace zl::base;
 using namespace zl::thread;
 NAMESPACE_ZL_NET_START
 
+namespace
+{
+    enum WakeupPollerType
+    {
+        kWakeupPoller = 0,
+        kExitPoller = 1
+    };
+
+    int createEventfd()
+    {
+        int efd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+        if (efd < 0)
+        {
+            LOG_ALERT("create eventfd failed when EventLoop::EventLoop");
+            assert(efd) ;
+        }
+        return efd;
+    }
+}
+
 EventLoop::EventLoop()
     : currentThreadId_(this_thread::get_id()),
+      currentActiveChannel_(NULL),
       running_(false),
       eventHandling_(false),
       callingPendingFunctors_(false)
+      
 {
     poller_ = Poller::createPoller(this);
+
+    wakeupfd_ = createEventfd();
+    wakeupChannel_ = new Channel(this, wakeupfd_);
+    wakeupChannel_->setReadCallback(std::bind(&EventLoop::handleRead, this));
+    wakeupChannel_->enableReading();  // ready for read event of wakeupfd_
 }
 
 EventLoop::~EventLoop()
 {
     Safe_Delete(poller_);
+    Safe_Delete(wakeupChannel_);
 }
 
 void EventLoop::loop()
@@ -50,13 +79,8 @@ void EventLoop::stop()
     running_ = false;
     if (!isInLoopThread())
     {
-        wakeupPoller();
+        wakeupPoller(kExitPoller);
     }
-}
-
-void EventLoop::wakeupPoller()
-{
-
 }
 
 void EventLoop::updateChannel(Channel* channel)
@@ -107,7 +131,7 @@ void EventLoop::queueInLoop(const Functor& func)
 
     if (!isInLoopThread() || callingPendingFunctors_)
     {
-        wakeupPoller();
+        wakeupPoller(kWakeupPoller);
     }
 }
 
@@ -133,6 +157,30 @@ void EventLoop::assertInLoopThread() const
     {
         LOG_ALERT("EventLoop::abortNotInLoopThread - EventLoop [%0x] was created in threadId_ [%d], " 
             "but current thread id = [%d].", this, currentThreadId_.pid(), this_thread::get_id().pid());
+    }
+}
+
+void EventLoop::wakeupPoller(int type)
+{
+    uint64_t value = (type == 1) ? kExitPoller : kWakeupPoller;
+    size_t n = SocketUtil::write(wakeupfd_, &value, sizeof(value));
+    if (n != sizeof(value))
+    {
+        LOG_ERROR("EventLoop::wakeupPoller() wakeupfd_ write error[%d][%d]", n, errno);
+    }
+}
+
+void EventLoop::handleRead()
+{
+    uint64_t value = 0;
+    size_t n = SocketUtil::read(wakeupfd_, &value, sizeof(value));
+    if (n != sizeof(value))
+    {
+        LOG_ERROR("EventLoop::handleRead() wakeupfd_ read error[%d][%d]", n, errno);
+    }
+    else if(value == kExitPoller) //exit
+    {
+          running_ = false;
     }
 }
 

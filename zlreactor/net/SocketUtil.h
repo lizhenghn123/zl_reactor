@@ -120,6 +120,9 @@ public:
     static void shutDown(ZL_SOCKET fd);
     static ZL_SOCKET acceptOne(ZL_SOCKET sockfd, struct sockaddr_in *addr);
 
+    static size_t read(int sockfd, void *buf, size_t count);
+    static size_t write(int sockfd, const void *buf, size_t count);
+
     static int setNonBlocking(ZL_SOCKET fd, bool nonBlocking = true);
     static int setNoDelay(ZL_SOCKET fd, bool noDelay = true);
     static int setSendBuffer(ZL_SOCKET fd, int readSize);

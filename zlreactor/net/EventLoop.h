@@ -48,7 +48,7 @@ public:
     void assertInLoopThread() const;
 
 private:
-    void wakeupPoller();          //wakeup the waiting poller
+    void wakeupPoller(int type);  //wakeup the waiting poller
     void callPendingFunctors();   //call when loop() return
     void handleRead();            //read event for wakeupfd_
 

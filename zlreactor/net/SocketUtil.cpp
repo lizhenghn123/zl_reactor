@@ -81,6 +81,16 @@ ZL_SOCKET SocketUtil::acceptOne(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
     return connfd;
 }
 
+size_t SocketUtil::read(int sockfd, void *buf, size_t count)
+{
+    return ::ZL_READ(sockfd, buf, count);
+}
+
+size_t SocketUtil::write(int sockfd, const void *buf, size_t count)
+{
+    return ::ZL_WRITE(sockfd, buf, count);
+}
+
 int SocketUtil::setNonBlocking(ZL_SOCKET fd, bool nonBlocking/* = true*/)
 {
 #if defined(OS_LINUX)
