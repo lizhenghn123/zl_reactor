@@ -13,6 +13,7 @@ AC_CONFIG_FILES([Makefile
 				examples/test_str_util/Makefile
 				examples/echoserver/Makefile
 				examples/atomic/Makefile
+				examples/buffer_test/Makefile
                ])
 
 # Checks for programs.

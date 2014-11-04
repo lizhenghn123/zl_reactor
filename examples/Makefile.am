@@ -6,5 +6,6 @@ SUBDIRS                += test_str_util
 
 SUBDIRS                += echoserver
 
-
 SUBDIRS                += atomic
+
+SUBDIRS                += buffer_test

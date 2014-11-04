@@ -11074,7 +11074,7 @@ CC="$lt_save_CC"
 # Only expand once:
 
 
-ac_config_files="$ac_config_files Makefile zlreactor/Makefile examples/Makefile examples/test_str_util/Makefile examples/echoserver/Makefile examples/atomic/Makefile"
+ac_config_files="$ac_config_files Makefile zlreactor/Makefile examples/Makefile examples/test_str_util/Makefile examples/echoserver/Makefile examples/atomic/Makefile examples/buffer_test/Makefile"
 
 
 # Checks for programs.
@@ -19142,6 +19142,7 @@ do
     "examples/test_str_util/Makefile") CONFIG_FILES="$CONFIG_FILES examples/test_str_util/Makefile" ;;
     "examples/echoserver/Makefile") CONFIG_FILES="$CONFIG_FILES examples/echoserver/Makefile" ;;
     "examples/atomic/Makefile") CONFIG_FILES="$CONFIG_FILES examples/atomic/Makefile" ;;
+    "examples/buffer_test/Makefile") CONFIG_FILES="$CONFIG_FILES examples/buffer_test/Makefile" ;;
 
   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
