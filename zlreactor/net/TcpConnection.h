@@ -51,12 +51,14 @@ public:
     void setCloseCallback(const CloseCallback& cb)
     { closeCallback_ = cb; }
 
-    void send(const void* message, size_t len);
-    void send(NetBuffer* message);
-    void shutdown();
+    void connectEstablished();   // called when TcpServer accepts a new connection
+    void connectDestroyed();     // called when TcpServer has removed me from its map
 
-    void connectEstablished();  // called when TcpServer accepts a new connection
-    void connectDestroyed(); // called when TcpServer has removed me from its map
+    void send(const void* data, size_t len);
+    void send(const std::string& buffer);
+    void send(NetBuffer* buffer);
+
+    void shutdown();
 
 private:
     enum StateE { kDisconnected, kConnecting, kConnected, kDisconnecting };
@@ -64,7 +66,8 @@ private:
     void handleWrite();
     void handleClose();
     void handleError();
-    void sendInLoop(const void* message, size_t len);
+    void sendInLoop(const void* data, size_t len);
+    void sendInLoop2(const std::string& buffer);
     void shutdownInLoop();
     void setState(StateE s) { state_ = s; }
 

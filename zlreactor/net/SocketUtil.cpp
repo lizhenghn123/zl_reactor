@@ -43,6 +43,11 @@ void SocketUtil::shutDown(ZL_SOCKET fd)
     ::shutdown(fd, SHUT_RDWR);
 }
 
+void shutdownWrite(ZL_SOCKET sockfd)
+{
+    ::shutdown(sockfd, SHUT_WR);
+}
+
 ZL_SOCKET SocketUtil::createSocketAndListen(const char *ip, int port, int backlog)
 {
     ZL_SOCKET sockfd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -81,12 +86,12 @@ ZL_SOCKET SocketUtil::acceptOne(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
     return connfd;
 }
 
-size_t SocketUtil::read(int sockfd, void *buf, size_t count)
+size_t SocketUtil::read(ZL_SOCKET sockfd, void *buf, size_t count)
 {
     return ::ZL_READ(sockfd, buf, count);
 }
 
-size_t SocketUtil::write(int sockfd, const void *buf, size_t count)
+size_t SocketUtil::write(ZL_SOCKET sockfd, const void *buf, size_t count)
 {
     return ::ZL_WRITE(sockfd, buf, count);
 }
