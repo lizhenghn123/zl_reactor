@@ -17,7 +17,7 @@ public:
 private:
     void onConnection(const TcpConnectionPtr& conn);
 
-    void onMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp time);
+    void onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time);
 
     TcpServer server_;
 };
@@ -41,11 +41,11 @@ void EchoServer::onConnection(const TcpConnectionPtr& conn)
         << (conn->connected() ? "UP" : "DOWN") << "\n"; 
 }
 
-void EchoServer::onMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp time)
+void EchoServer::onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
 {
-    string msg(buf->data());
+    string msg(buf->toString());
     cout << "EchoServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, ["
-        << buf->data() << "], received at " << time.toString() << "\n";
+        << msg.data() << "], received at " << time.toString() << "\n";
     //conn->send(msg.data(), msg.size());
 }
 

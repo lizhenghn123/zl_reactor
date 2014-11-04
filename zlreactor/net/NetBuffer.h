@@ -100,7 +100,7 @@ public:     // Data Write & Read
         return nnum;
     }
 
-    /// peek Number using host endian
+    /// peek number using host endian
     /// Number == bool\int8_t\int16_t\int32_t\int64_t\float\double\....
     /// Require: readableBytes() >= sizeof(Number)
     template <typename Number>
@@ -112,19 +112,16 @@ public:     // Data Write & Read
         return NetUtil::net2Host(nnum);
     }
 
-    /// prepend int32_t using network endian
-    void prependInt32(int32_t x)
+    /// prepend number using network endian
+    /// Number = int8_t\int16_t\int32_t\int64_t\...
+    template <typename Number>
+    void prepend(Number num)
     {
-        int32_t be32 = x; //sockets::hostToNetwork32(x);
-        prepend(&be32, sizeof be32);
+        Number nnum = NetUtil::host2Net(num);
+        prepend(&nnum, sizeof(nnum));
     }
 
-    void prependInt8(int8_t x)
-    {
-        prepend(&x, sizeof x);
-    }
-
-    void prepend(const void* /*restrict*/ data, size_t len)
+    void prepend(const void* data, size_t len)
     {
         assert(len <= prependableBytes());
         readerIndex_ -= len;

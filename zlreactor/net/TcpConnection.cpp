@@ -13,9 +13,9 @@ void defaultConnectionCallback(TcpConnectionPtr conn)
         conn->peerAddress().ipPort().c_str(), conn->connected() ? "UP" : "DOWN");
 }
 
-void defaultMessageCallback(TcpConnectionPtr conn, Buffer* buf, Timestamp receiveTime)
+void defaultMessageCallback(TcpConnectionPtr conn, NetBuffer* buf, Timestamp receiveTime)
 {
-    LOG_INFO("defaultMessageCallback : [%d][%d]", conn->fd(), buf->data());
+    LOG_INFO("defaultMessageCallback : [%d][%s]", conn->fd(), buf->toString().c_str());
 }
 
 TcpConnection::TcpConnection(EventLoop* loop, int sockfd, const InetAddress& localAddr, const InetAddress& peerAddr)
@@ -57,7 +57,7 @@ void TcpConnection::send(const void* data, size_t len)
     }
 }
 
-void TcpConnection::send(Buffer* buf)
+void TcpConnection::send(NetBuffer* buf)
 {
 }
 
@@ -138,9 +138,10 @@ void TcpConnection::handleRead(Timestamp receiveTime)
     loop_->assertInLoopThread();
     std::string data;
     size_t n = socket_->recv(data);
+    inputBuffer_.write(data);
     if (n > 0)
     {
-        messageCallback_(this, &data, receiveTime);
+        messageCallback_(this, &inputBuffer_, receiveTime);
     }
     else if (n == 0)
     {

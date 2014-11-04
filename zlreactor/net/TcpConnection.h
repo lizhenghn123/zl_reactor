@@ -18,6 +18,7 @@
 #include "net/CallBacks.h"
 #include "net/InetAddress.h"
 #include "net/Socket.h"
+#include "net/NetBuffer.h"
 NAMESPACE_ZL_NET_START
 class Channel;
 class EventLoop;
@@ -51,17 +52,10 @@ public:
     { closeCallback_ = cb; }
 
     void send(const void* message, size_t len);
-    void send(Buffer* message);
+    void send(NetBuffer* message);
     void shutdown();
 
-    Buffer* inputBuffer()
-    { return &inputBuffer_; }
-
-    Buffer* outputBuffer()
-    { return &outputBuffer_; }
-
     void connectEstablished();  // called when TcpServer accepts a new connection
-    
     void connectDestroyed(); // called when TcpServer has removed me from its map
 
 private:
@@ -82,8 +76,8 @@ private:
     const InetAddress     localAddr_;
     const InetAddress     peerAddr_;
 
-    Buffer                inputBuffer_;
-    Buffer                outputBuffer_; // FIXME: use list<Buffer> as output buffer.
+    NetBuffer             inputBuffer_;
+    NetBuffer             outputBuffer_; // FIXME: use list<Buffer> as output buffer.
 
     ConnectionCallback    connectionCallback_;
     MessageCallback       messageCallback_;

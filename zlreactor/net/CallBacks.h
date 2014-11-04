@@ -19,16 +19,17 @@ class EventLoop;
 class TcpConnection;
 class InetAddress;
 class Acceptor;
+class NetBuffer;
 using zl::base::Timestamp;
 
-typedef std::string Buffer;
+//typedef std::string Buffer;
 //typedef ByteArray  Buffer;
 //typedef ByteArray*  BufferPtr;
 //typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 typedef TcpConnection* TcpConnectionPtr;
 
 void defaultConnectionCallback(TcpConnectionPtr conn);
-void defaultMessageCallback(TcpConnectionPtr conn, Buffer* buffer, Timestamp receiveTime);
+void defaultMessageCallback(TcpConnectionPtr conn, NetBuffer* buffer, Timestamp receiveTime);
 
 typedef std::function<void()> TimerCallback;
 typedef std::function<void (TcpConnection*)> ConnectionCallback;
@@ -36,7 +37,7 @@ typedef std::function<void (TcpConnection*)> CloseCallback;
 typedef std::function<void (TcpConnection*)> WriteCompleteCallback;
 
 // the data has been read to (buf, len)
-typedef std::function<void (const TcpConnectionPtr&, Buffer*, Timestamp)> MessageCallback;
+typedef std::function<void (const TcpConnectionPtr&, NetBuffer*, Timestamp)> MessageCallback;
 
 NAMESPACE_ZL_NET_END
 #endif  /* ZL_CALLBACKS_H */
