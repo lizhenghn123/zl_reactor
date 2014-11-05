@@ -118,5 +118,4 @@ public://protected:
 
 
 NAMESPACE_ZL_NET_END
-
 #endif  /* ZL_SOCKET_H */

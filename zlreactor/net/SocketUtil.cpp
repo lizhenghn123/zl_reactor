@@ -43,7 +43,7 @@ void SocketUtil::shutDown(ZL_SOCKET fd)
     ::shutdown(fd, SHUT_RDWR);
 }
 
-void shutdownWrite(ZL_SOCKET sockfd)
+void SocketUtil::shutdownWrite(ZL_SOCKET sockfd)
 {
     ::shutdown(sockfd, SHUT_WR);
 }

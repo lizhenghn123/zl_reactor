@@ -14,6 +14,7 @@ AC_CONFIG_FILES([Makefile
 				examples/echoserver/Makefile
 				examples/atomic/Makefile
 				examples/buffer_test/Makefile
+				examples/exception_mangle/Makefile
                ])
 
 # Checks for programs.

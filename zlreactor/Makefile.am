@@ -30,6 +30,8 @@ libzlreactor_la_SOURCES = \
 					 base/StringHash.cpp \
 					 base/Timestamp.cpp \
 					 base/ZLog.cpp \
+					 base/Demangle.cpp \
+					 base/Exception.cpp \
 					 thread/Thread.cpp \
 					 thread/ThreadGroup.cpp \
 					 thread/ThreadPool.cpp \

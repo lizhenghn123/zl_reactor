@@ -167,7 +167,7 @@ void EventLoop::handleRead()
 {
     uint64_t value = 0;
     size_t n = SocketUtil::read(wakeupfd_, &value, sizeof(value));
-    if (n != sizeof(value))
+    if (n != sizeof(value)) //always return 8 byte
     {
         LOG_ERROR("EventLoop::handleRead() wakeupfd_ read error[%d][%d]", n, errno);
     }
