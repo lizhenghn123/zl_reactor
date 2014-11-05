@@ -120,6 +120,7 @@ public:
     static void shutDown(ZL_SOCKET fd);
     static void shutdownWrite(ZL_SOCKET sockfd);
 
+    static int  connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr);
     static ZL_SOCKET acceptOne(ZL_SOCKET sockfd, struct sockaddr_in *addr);
     static size_t read(ZL_SOCKET sockfd, void *buf, size_t count);
     static size_t write(ZL_SOCKET sockfd, const void *buf, size_t count);
