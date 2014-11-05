@@ -31,12 +31,12 @@ TcpConnection::TcpConnection(EventLoop* loop, int sockfd, const InetAddress& loc
     channel_->setWriteCallback(std::bind(&TcpConnection::handleWrite, this));
     channel_->setCloseCallback(std::bind(&TcpConnection::handleClose, this));
     channel_->setErrorCallback(std::bind(&TcpConnection::handleError, this));
-    LOG_INFO("TcpConnection::TcpConnection(), [%d][%0x][%0x]", socket_->fd(), socket_, channel_);
+    LOG_INFO("TcpConnection::TcpConnection(), [%0x] [%d][%0x][%0x]", this, socket_->fd(), socket_, channel_);
 }
 
 TcpConnection::~TcpConnection()
 {
-    LOG_INFO("TcpConnection::~TcpConnection(), [%d][%0x][%0x]", socket_->fd(), socket_, channel_);
+    LOG_INFO("TcpConnection::~TcpConnection(),[%0x] [%d][%0x][%0x]", this, socket_->fd(), socket_, channel_);
     assert(state_ == kDisconnected);
     Safe_Delete(socket_);
     Safe_Delete(channel_);
@@ -54,9 +54,7 @@ void TcpConnection::send(const void* data, size_t len)
         {
             loop_->runInLoop(std::bind(&TcpConnection::sendInLoop, this, data, len));
         }
-    }  
-    //std::string ttt(data, data+len)
-    //send(ttt);
+    }
 }
 
 void TcpConnection::send(const std::string& buffer)
@@ -76,7 +74,6 @@ void TcpConnection::send(NetBuffer* buffer)
         else
         {
             loop_->runInLoop(std::bind(&TcpConnection::sendInLoop2, this, buffer->retrieveAllAsString()));
-            //loop_->runInLoop(std::bind(&TcpConnection::sendInLoop2, this, "ddd", 23));
         }
     }
 }
@@ -93,7 +90,8 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
     size_t nwrote = 0;
     size_t remaining = len;
     bool faultError = false;
-    // if no thing in output queue, try writing directly
+    // 如果当前连接尚没有注册可写事件（比如直接调用send接口），并且发送缓冲区为空
+    // 就直接发送数据，发送成功则回调写完成实现；
     if (!channel_->isWriting() && outputBuffer_.readableBytes() == 0)
     {
         nwrote = socket_->send((const char*)data, len);
@@ -120,6 +118,7 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
     }
 
     assert(remaining <= len);
+    //如果发送成功且数据尚未发送完毕，则将剩余数据存入缓冲区，并注册该channel上的可写事件
     if (!faultError && remaining > 0)
     {
         outputBuffer_.write(static_cast<const char*>(data) + nwrote, remaining);
@@ -147,9 +146,9 @@ void TcpConnection::shutdown()
 void TcpConnection::shutdownInLoop()
 {
     loop_->assertInLoopThread();
-    if (!channel_->isWriting())
+    if (!channel_->isWriting())    // 如果不再关注可写事件，说明数据发送完毕
     {
-        SocketUtil::shutdownWrite(socket_->fd());   // we are not writing
+        SocketUtil::shutdownWrite(socket_->fd());  // 仅仅关闭写端，因为可能读端还有数据要读
     }
 }
 
@@ -174,8 +173,10 @@ void TcpConnection::connectDestroyed()
 
         connectionCallback_(this);
     }
-    SocketUtil::closeSocket(socket_->fd());
+    //SocketUtil::closeSocket(socket_->fd());
     channel_->remove();
+    TcpConnection *self = this;
+    Safe_Delete(self); //  delete this;
 }
 
 void TcpConnection::handleRead(Timestamp receiveTime)
@@ -210,16 +211,16 @@ void TcpConnection::handleWrite()
         if (n > 0)
         {
             outputBuffer_.retrieve(n);
-            if (outputBuffer_.readableBytes() == 0)
+            if (outputBuffer_.readableBytes() == 0)  // 缓冲区为空，数据发送完毕，删除该channel上的可写事件
             {
                 channel_->disableWriting();
                 if (writeCompleteCallback_)
                 {
                     loop_->queueInLoop(std::bind(writeCompleteCallback_, this));
                 }
-                if (state_ == kDisconnecting)
+                if (state_ == kDisconnecting) // 数据发送完毕，且连接已断开 
                 {
-                    shutdownInLoop();
+                    shutdownInLoop();         // 关闭socket的可写
                 }
             }
         }

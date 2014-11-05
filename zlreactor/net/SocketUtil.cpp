@@ -32,10 +32,12 @@ ZL_SOCKET SocketUtil::createSocket()
 
 int SocketUtil::closeSocket(ZL_SOCKET fd)
 {
-    LOG_INFO("closeSocket [%d]", fd);
-    if (fd) 
+    if (fd)
+    {
+        LOG_INFO("closeSocket [%d]", fd);
         return ::ZL_CLOSE(fd);
-    return 0;
+    }
+    return -1;
 }
 
 void SocketUtil::shutDown(ZL_SOCKET fd)
