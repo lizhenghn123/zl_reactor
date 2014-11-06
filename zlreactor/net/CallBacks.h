@@ -13,8 +13,8 @@
 #define ZL_CALLBACKS_H
 NAMESPACE_ZL_NET_START
 
+//using namespace zl::base;
 class ByteArray;
-//class Buffer;
 class EventLoop;
 class TcpConnection;
 class InetAddress;
@@ -35,8 +35,6 @@ typedef std::function<void()> TimerCallback;
 typedef std::function<void (TcpConnection*)> ConnectionCallback;
 typedef std::function<void (TcpConnection*)> CloseCallback;
 typedef std::function<void (TcpConnection*)> WriteCompleteCallback;
-
-// the data has been read to (buf, len)
 typedef std::function<void (const TcpConnectionPtr&, NetBuffer*, Timestamp)> MessageCallback;
 
 NAMESPACE_ZL_NET_END

@@ -51,4 +51,5 @@ libzlreactor_la_SOURCES = \
 					 net/Acceptor.cpp \
 					 net/TcpConnection.cpp \
 					 net/TcpServer.cpp \
+					 net/TcpClient.cpp \
 					 net/Connector.cpp 

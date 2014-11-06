@@ -117,6 +117,10 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
         }
     }
 
+    if(remaining > len)
+    {
+        LOG_INFO("TcpConnection::sendInLoop [%d], remaining[%d], len[%d]", socket_->fd(), remaining, len);
+    }
     assert(remaining <= len);
     //如果发送成功且数据尚未发送完毕，则将剩余数据存入缓冲区，并注册该channel上的可写事件
     if (!faultError && remaining > 0)
@@ -211,6 +215,7 @@ void TcpConnection::handleWrite()
         if (n > 0)
         {
             outputBuffer_.retrieve(n);
+            LOG_INFO("TcpConnection::handleWrite fd = %d, send = %d, reserve = %d", socket_->fd(), n, outputBuffer_.readableBytes());
             if (outputBuffer_.readableBytes() == 0)  // 缓冲区为空，数据发送完毕，删除该channel上的可写事件
             {
                 channel_->disableWriting();

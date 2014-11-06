@@ -13,7 +13,6 @@
 #define ZL_NETBUFFER_H
 #include "Define.h"
 #include "net/NetUtil.h"
-using namespace std;
 NAMESPACE_ZL_NET_START
 
 /// A buffer class modeled after org.jboss.netty.buffer.ChannelBuffer

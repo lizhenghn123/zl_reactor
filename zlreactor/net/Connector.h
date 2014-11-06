@@ -66,5 +66,7 @@ private:
     NewConnectionCallback      newConnCallBack_;
 };
 
+typedef Connector* ConnectorPtr;
+
 NAMESPACE_ZL_NET_END
 #endif  /* ZL_CONNECTOR_H */

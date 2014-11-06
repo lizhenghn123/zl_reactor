@@ -37,13 +37,13 @@ void EchoServer::start()
 
 void EchoServer::onConnection(const TcpConnectionPtr& conn)
 {
-    cout  << conn->localAddress().ipPort() << " is "
+    cout  << "EchoServer::onConnection " << conn->peerAddress().ipPort() << " is "
         << (conn->connected() ? "UP" : "DOWN") << "\n"; 
 }
 
 void EchoServer::onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
 {
-    string msg(buf->toString());
+    string msg(buf->retrieveAllAsString());
     cout << "EchoServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, ["
         << msg.data() << "], received at " << time.toString() << "\n";
     //cout << "EchoServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, received at " << time.toString() << "\n"; 
