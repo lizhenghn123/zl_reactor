@@ -24,12 +24,15 @@ class EventLoop;
 class Tcpconnection;
 class InetAddress;
 class Acceptor;
+class EventLoopThreadPool;
 
 class TcpServer : zl::NonCopy
 {
 public:
     TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::string& server_name = "TcpServer");
     ~TcpServer();
+
+    void setThreadNum(size_t numThreads);
     void start();
 
 public:
@@ -51,18 +54,20 @@ private:
     void removeConnectionInLoop(const TcpConnectionPtr& conn);
 
 private:
-    EventLoop *loop_;         // acceptor eventloop
-    Acceptor  *acceptor_;
-    InetAddress serverAddr_;
+    typedef std::map<int, TcpConnectionPtr>     ConnectionMap;
+    typedef std::vector<EventLoopThreadPool*>   EventLoopList;
+    EventLoop             *loop_;         // acceptor eventloop
+    Acceptor              *acceptor_;
+    InetAddress           serverAddr_;
 
     ConnectionCallback    connectionCallback_;
     MessageCallback       messageCallback_;
     WriteCompleteCallback writeCompleteCallback_;
 
-    typedef std::map<int, TcpConnectionPtr> ConnectionMap;
-    ConnectionMap connections_;
+    ConnectionMap         connections_;
+    EventLoopThreadPool   *evloopThreadPool_;
 
-    const std::string serverName_;
+    const std::string     serverName_;
 };
 
 NAMESPACE_ZL_NET_END

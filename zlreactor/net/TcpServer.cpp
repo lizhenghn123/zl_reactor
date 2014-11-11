@@ -4,6 +4,7 @@
 #include "net/Acceptor.h"
 #include "net/TcpConnection.h"
 #include "net/EventLoop.h"
+#include "net/EventLoopThreadPool.h"
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
@@ -12,10 +13,12 @@ TcpServer::TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::
 {
     acceptor_ = new Acceptor(loop, listenAddr);
     acceptor_->setNewConnectionCallback(std::bind(&TcpServer::newConnection, 
-                this, std::placeholders::_1, std::placeholders::_2));
+                            this, std::placeholders::_1, std::placeholders::_2));
 
     connectionCallback_ = defaultConnectionCallback;
     messageCallback_ = defaultMessageCallback;
+
+    evloopThreadPool_ = new EventLoopThreadPool(loop_);
 }
 
 TcpServer::~TcpServer()
@@ -23,15 +26,23 @@ TcpServer::~TcpServer()
 
 }
 
+void TcpServer::setThreadNum(size_t numThreads)
+{
+    if(numThreads <= 0)
+        numThreads = zl::thread::Thread::hardware_concurrency();
+    evloopThreadPool_->setThreadNum(numThreads);
+}
+
 void TcpServer::start()
 {
+    evloopThreadPool_->start();
     loop_->runInLoop(std::bind(&Acceptor::listen, acceptor_));
 }
 
 void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr)
 {
     loop_->assertInLoopThread();
-    EventLoop* ioLoop = loop_; //loopthreadPool_->getNextLoop();
+    EventLoop* ioLoop = evloopThreadPool_->getNextLoop();  // loop_;
 
     LOG_INFO("TcpServer::newConnection [%d] from [%s]", sockfd, peerAddr.ipPort().c_str());
     InetAddress localAddr(SocketUtil::getLocalAddr(sockfd));

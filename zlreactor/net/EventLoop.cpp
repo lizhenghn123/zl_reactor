@@ -17,8 +17,9 @@ namespace
         if (efd < 0)
         {
             LOG_ALERT("create eventfd failed when EventLoop::EventLoop");
-            assert(efd) ;
+            assert(efd);
         }
+        LOG_INFO("EventLoop::createEventfd [%d]", efd);
         return efd;
     }
 }
@@ -78,7 +79,7 @@ void EventLoop::stop()
 
 void EventLoop::updateChannel(Channel* channel)
 {
-    LOG_INFO("EventLoop::updateChannel [%d]", channel->fd());
+    LOG_INFO("EventLoop[%0x]::updateChannel [%d]", this, channel->fd());
     assert(channel->ownerLoop() == this);
     assertInLoopThread();
     poller_->updateChannel(channel);
@@ -103,7 +104,7 @@ bool EventLoop::hasChannel(Channel* channel)
 
 void EventLoop::runInLoop(const Functor& func)
 {
-    LOG_INFO("EventLoop::runInLoop [%d][%d]", isInLoopThread(), &func);
+    LOG_INFO("EventLoop[%0x]::runInLoop [%d][%0x]", this, isInLoopThread(), &func);
     if (isInLoopThread())
     {
         func();
@@ -116,7 +117,7 @@ void EventLoop::runInLoop(const Functor& func)
 
 void EventLoop::queueInLoop(const Functor& func)
 {
-    LOG_INFO("EventLoop::queueInLoop [%d][%d]", isInLoopThread(), &func);
+    LOG_INFO("EventLoop[%0x]::runInLoop [%d][%0x]", this, isInLoopThread(), &func);
     {
         MutexLocker lock(mutex_);
         pendingFunctors_.push_back(func);
