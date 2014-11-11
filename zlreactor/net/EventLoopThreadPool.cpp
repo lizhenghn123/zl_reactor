@@ -21,7 +21,6 @@ EventLoopThreadPool::~EventLoopThreadPool()
     assert(loops_.size() == threads_.size());
     for(size_t i = 0; i < loops_.size(); ++i)
     {
-        Safe_Delete(loops_[i]);
         Safe_Delete(threads_[i]);
     }
 }
