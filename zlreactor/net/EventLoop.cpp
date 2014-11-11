@@ -123,7 +123,7 @@ void EventLoop::queueInLoop(const Functor& func)
         pendingFunctors_.push_back(func);
     }
 
-    if (!isInLoopThread()/* || !callingPendingFunctors_*/) // may be should wakeup at any time
+    if (!isInLoopThread() || !callingPendingFunctors_) // may be should wakeup at any time
     {
         wakeupPoller();
     }
@@ -147,10 +147,11 @@ void EventLoop::callPendingFunctors()
 
 void EventLoop::assertInLoopThread() const 
 {
-    if(!isInLoopThread()) //TODO : add log or assert
+    if(!isInLoopThread())
     {
         LOG_ALERT("EventLoop::abortNotInLoopThread - EventLoop [%0x] was created in threadId_ [%d], " 
             "but current thread id = [%d].", this, currentThreadId_.pid(), this_thread::get_id().pid());
+        assert("EventLoop::assertInLoopThread()" && "why???");
     }
 }
 

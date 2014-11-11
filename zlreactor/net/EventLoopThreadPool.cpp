@@ -15,8 +15,8 @@ EventLoopThreadPool::EventLoopThreadPool(EventLoop* baseLoop)
 
 EventLoopThreadPool::~EventLoopThreadPool()
 {
-//    std::for_each(loops_.begin(), loops_.end(), &EventLoop::stop);
-//    std::for_each(threads_.begin(), threads_.end(), &Thread::join);
+    std::for_each(loops_.begin(), loops_.end(), std::bind(&EventLoop::stop, std::placeholders::_1));
+    std::for_each(threads_.begin(), threads_.end(), std::bind(&Thread::join, std::placeholders::_1));
 
     assert(loops_.size() == threads_.size());
     for(size_t i = 0; i < loops_.size(); ++i)
