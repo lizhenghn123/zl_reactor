@@ -35,8 +35,6 @@ libzlreactor_la_SOURCES = \
 					 thread/Thread.cpp \
 					 thread/ThreadGroup.cpp \
 					 thread/ThreadPool.cpp \
-					 thread/Timer.cpp \
-					 thread/TimerQueue.cpp \
 					 net/NetUtil.cpp \
 					 net/NetBuffer.cpp \
 					 net/SocketUtil.cpp \
