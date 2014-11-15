@@ -14,7 +14,7 @@
 // usage : ./stress_client 127.0.0.1 8888 100
 
 //static const char* request = "GET http://localhost/index.html HTTP/1.1\r\nConnection: keep-alive\r\n\r\nxxxxxxxxxxxx";
-static const char *request = "hello world\n";
+static const char *request = "hello world";
 
 int setnonblocking(int fd)
 {
