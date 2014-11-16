@@ -11,5 +11,3 @@ SUBDIRS                += atomic
 SUBDIRS                += buffer_test
 
 SUBDIRS                += exception_mangle
-
-SUBDIRS                += stress_client
