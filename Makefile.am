@@ -4,4 +4,4 @@ SUBDIRS += zlreactor
 
 SUBDIRS += examples
 
-SUBDIRS += experiments
+SUBDIRS += tests
