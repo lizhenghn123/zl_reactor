@@ -15,6 +15,7 @@ AC_CONFIG_FILES([Makefile
 				examples/atomic/Makefile
 				examples/buffer_test/Makefile
 				examples/exception_mangle/Makefile
+				examples/stress_client/Makefile
 				experiments/Makefile
                 experiments/universal_timer/Makefile
                ])

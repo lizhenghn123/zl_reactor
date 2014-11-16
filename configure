@@ -11074,7 +11074,7 @@ CC="$lt_save_CC"
 # Only expand once:
 
 
-ac_config_files="$ac_config_files Makefile zlreactor/Makefile examples/Makefile examples/test_str_util/Makefile examples/echoserver/Makefile examples/atomic/Makefile examples/buffer_test/Makefile examples/exception_mangle/Makefile experiments/Makefile experiments/universal_timer/Makefile"
+ac_config_files="$ac_config_files Makefile zlreactor/Makefile examples/Makefile examples/test_str_util/Makefile examples/echoserver/Makefile examples/atomic/Makefile examples/buffer_test/Makefile examples/exception_mangle/Makefile examples/stress_client/Makefile experiments/Makefile experiments/universal_timer/Makefile"
 
 
 # Checks for programs.
@@ -19144,6 +19144,7 @@ do
     "examples/atomic/Makefile") CONFIG_FILES="$CONFIG_FILES examples/atomic/Makefile" ;;
     "examples/buffer_test/Makefile") CONFIG_FILES="$CONFIG_FILES examples/buffer_test/Makefile" ;;
     "examples/exception_mangle/Makefile") CONFIG_FILES="$CONFIG_FILES examples/exception_mangle/Makefile" ;;
+    "examples/stress_client/Makefile") CONFIG_FILES="$CONFIG_FILES examples/stress_client/Makefile" ;;
     "experiments/Makefile") CONFIG_FILES="$CONFIG_FILES experiments/Makefile" ;;
     "experiments/universal_timer/Makefile") CONFIG_FILES="$CONFIG_FILES experiments/universal_timer/Makefile" ;;
 
