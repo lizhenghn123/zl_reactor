@@ -261,7 +261,7 @@ public:
         mutex_.unlock();
     }
 private:
-    mutable Mutex& mutex_;
+    Mutex& mutex_;
 };
 
 class MutexTryLocker
@@ -284,7 +284,7 @@ public:
 
 private:
     bool  isLocked_;
-    mutable Mutex& mutex_;
+    Mutex& mutex_;
 };
 
 class RWMutexReadLocker
@@ -300,7 +300,7 @@ public:
         mutex_.readUnLock();
     }
 private:
-    mutable RWMutex& mutex_;
+    RWMutex& mutex_;
 };
 
 class RWMutexReadTryLocker
@@ -323,7 +323,7 @@ public:
 
 private:
     bool  isLocked_;
-    mutable RWMutex& mutex_;
+    RWMutex& mutex_;
 };
 
 class RWMutexWriteLocker
@@ -339,7 +339,7 @@ public:
         mutex_.writeUnLock();
     }
 private:
-    mutable RWMutex& mutex_;
+    RWMutex& mutex_;
 };
 
 class RWMutexWriteTryLocker
@@ -362,7 +362,7 @@ public:
 
 private:
     bool  isLocked_;
-    mutable RWMutex& mutex_;
+    RWMutex& mutex_;
 };
 
 NAMESPACE_ZL_THREAD_END
