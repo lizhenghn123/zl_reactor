@@ -12,5 +12,6 @@ SUBDIRS                += buffer_test
 
 SUBDIRS                += exception_mangle
 
-
 SUBDIRS                += thread_test
+
+SUBDIRS                += blockqueue_test

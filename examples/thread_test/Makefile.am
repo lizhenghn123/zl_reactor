@@ -7,4 +7,4 @@ INCLUDES = -I../../zlreactor
 thread_test_CPPFLAGS = -std=c++0x
 thread_test_LDFLAGS = -L../../lib -lzlreactor
 
-thread_test_SOURCES = thread_test.cpp
+thread_test_SOURCES = Thread_Test.cpp
