@@ -100,13 +100,13 @@ public:
 
 	T operator()()
 	{
-		T *obj = Get();
+		T *obj = get();
 		return *obj;
 	}
 
-	T* operator-> () 
+	T* operator->() 
 	{
-		return Get();
+		return get();
 	}
 
 private:
