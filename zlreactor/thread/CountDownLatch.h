@@ -20,9 +20,7 @@ class CountDownLatch : NonCopy
 {
 public:
     explicit CountDownLatch(int count)
-        : count_(count),
-        mutex_(),
-        condition_(mutex_)
+        : count_(count), mutex_(), condition_(mutex_)
     {
 
     }
