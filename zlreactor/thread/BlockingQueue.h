@@ -85,7 +85,7 @@ public:
     virtual bool try_pop(JobType& job)
     {
         LockGuard lock(mutex_);
-        if(queue_.empty() && !stopFlag_)
+        if(queue_.empty() || stopFlag_)
             return false;
         return popOne(job, Order());
     }

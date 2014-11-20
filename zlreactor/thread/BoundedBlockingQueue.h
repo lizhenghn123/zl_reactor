@@ -92,16 +92,6 @@ public:
         return job;
     }
 
-    virtual bool try_pop(JobType& job)
-    {
-        LockGuard lock(mutex_);
-        if(queue_.empty() && !stopFlag_)
-            return false;
-        popOne(job, Order());
-        notFull_.notify_one();
-        return true;
-    }
-
     virtual bool pop(std::vector<JobType>& vec, int pop_size = 1)
     {
         LockGuard lock(mutex_);
@@ -125,6 +115,16 @@ public:
                 vec.push_back(job);
             }
         }
+        return true;
+    }
+
+    virtual bool try_pop(JobType& job)
+    {
+        LockGuard lock(mutex_);
+        if(queue_.empty() || stopFlag_)
+            return false;
+        popOne(job, Order());
+        notFull_.notify_one();
         return true;
     }
 
@@ -164,7 +164,7 @@ private:
     template <typename T>
     bool popOne(JobType& job, T tag);
 
-    template <>
+    //template <>
     bool popOne(JobType& job, tagFIFO tag)
     {
         job = queue_.front();
@@ -172,7 +172,7 @@ private:
         return true;
     }
 
-    template <>
+    //template <>
     bool popOne(JobType& job, tagFILO tag)
     {
         job = queue_.top();
@@ -180,7 +180,7 @@ private:
         return true;
     }
 
-    template <>
+    //template <>
     bool popOne(JobType& job, tagPRIO tag)
     {
         job = queue_.top();
