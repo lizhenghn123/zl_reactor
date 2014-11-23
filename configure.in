@@ -21,6 +21,7 @@ AC_CONFIG_FILES([Makefile
 				tests/stress_client/Makefile
                 tests/universal_timer/Makefile
                 tests/eventfd_epoll/Makefile
+                tests/timerqueue/Makefile
                ])
 
 # Checks for programs.
