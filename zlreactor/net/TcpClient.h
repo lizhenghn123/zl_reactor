@@ -29,7 +29,6 @@ class Connector;
 class ByteBuffer;
 class Tcpconnection;
 
-
 class TcpClient
 {
 public:

@@ -19,6 +19,7 @@
 #include "net/InetAddress.h"
 #include "net/Socket.h"
 #include "net/NetBuffer.h"
+#include <memory>     //for enable_shared_from_this
 NAMESPACE_ZL_NET_START
 class Channel;
 class EventLoop;
@@ -26,7 +27,7 @@ class Socket;
 class InetAddress;
 using zl::base::Timestamp;
 
-class TcpConnection : zl::NonCopy
+class TcpConnection : zl::NonCopy, public std::enable_shared_from_this< TcpConnection > 
 {
 public:
     TcpConnection(EventLoop* loop, int sockfd, const InetAddress& localAddr, const InetAddress& peerAddr);

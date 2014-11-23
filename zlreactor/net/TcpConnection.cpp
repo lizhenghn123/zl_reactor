@@ -7,13 +7,13 @@
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
-void defaultConnectionCallback(TcpConnectionPtr conn)
+void defaultConnectionCallback(const TcpConnectionPtr& conn)
 {
   LOG_INFO("defaultConnectionCallback : [%s]<->[%s] [%s]\n", conn->localAddress().ipPort().c_str(),
         conn->peerAddress().ipPort().c_str(), conn->connected() ? "UP" : "DOWN");
 }
 
-void defaultMessageCallback(TcpConnectionPtr conn, NetBuffer* buf, Timestamp receiveTime)
+void defaultMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp receiveTime)
 {
     LOG_INFO("defaultMessageCallback : [%d][%s]", conn->fd(), buf->toString().c_str());
 }
@@ -73,7 +73,7 @@ void TcpConnection::send(NetBuffer* buffer)
         }
         else
         {
-            loop_->runInLoop(std::bind(&TcpConnection::sendInLoop2, this, buffer->retrieveAllAsString()));
+            loop_->runInLoop(std::bind(&TcpConnection::sendInLoop2, shared_from_this(), buffer->retrieveAllAsString()));
         }
     }
 }
@@ -100,7 +100,7 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
             remaining = len - nwrote;
             if (remaining == 0 && writeCompleteCallback_)
             {
-                loop_->queueInLoop(std::bind(writeCompleteCallback_, this));
+                loop_->queueInLoop(std::bind(writeCompleteCallback_, shared_from_this()));
             }
         }
         else // nwrote < 0
@@ -143,7 +143,7 @@ void TcpConnection::shutdown()
     if (state_ == kConnected)
     {
         setState(kDisconnecting);
-        loop_->runInLoop(std::bind(&TcpConnection::shutdownInLoop, this));
+        loop_->runInLoop(std::bind(&TcpConnection::shutdownInLoop, shared_from_this()));
     }
 }
 
@@ -163,7 +163,8 @@ void TcpConnection::connectEstablished()
     setState(kConnected);
     channel_->enableReading();
 
-    connectionCallback_(this);
+    TcpConnectionPtr sp_this(shared_from_this());
+    connectionCallback_(sp_this);
 }
 
 void TcpConnection::connectDestroyed()
@@ -175,12 +176,11 @@ void TcpConnection::connectDestroyed()
         setState(kDisconnected);
         channel_->disableAll();
 
-        connectionCallback_(this);
+        TcpConnectionPtr sp_this(shared_from_this());
+        connectionCallback_(sp_this);
     }
     //SocketUtil::closeSocket(socket_->fd());
     channel_->remove();
-    TcpConnection *self = this;
-    Safe_Delete(self); //  delete this;
 }
 
 void TcpConnection::handleRead(Timestamp receiveTime)
@@ -192,7 +192,7 @@ void TcpConnection::handleRead(Timestamp receiveTime)
     inputBuffer_.write(data);
     if (n > 0)
     {
-        messageCallback_(this, &inputBuffer_, receiveTime);
+        messageCallback_(shared_from_this(), &inputBuffer_, receiveTime);
     }
     else if (n == 0)
     {
@@ -221,7 +221,7 @@ void TcpConnection::handleWrite()
                 channel_->disableWriting();
                 if (writeCompleteCallback_)
                 {
-                    loop_->queueInLoop(std::bind(writeCompleteCallback_, this));
+                    loop_->queueInLoop(std::bind(writeCompleteCallback_, shared_from_this()));
                 }
                 if (state_ == kDisconnecting) // 数据发送完毕，且连接已断开 
                 {
@@ -252,9 +252,9 @@ void TcpConnection::handleClose()
     setState(kDisconnected);
     channel_->disableAll();
 
-    connectionCallback_(this);
+    connectionCallback_(shared_from_this());
 
-    closeCallback_(this);
+    closeCallback_(shared_from_this());
 }
 
 void TcpConnection::handleError()

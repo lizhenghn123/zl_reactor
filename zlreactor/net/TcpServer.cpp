@@ -23,7 +23,15 @@ TcpServer::TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::
 
 TcpServer::~TcpServer()
 {
+    loop_->assertInLoopThread();
 
+    for (ConnectionMap::iterator it(connections_.begin()); it != connections_.end(); ++it)
+    {
+        TcpConnectionPtr conn = it->second;
+        it->second.reset();
+        conn->getLoop()->runInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
+        conn.reset();
+    }
 }
 
 void TcpServer::setThreadNum(size_t numThreads)
@@ -46,7 +54,7 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr)
 
     LOG_INFO("TcpServer::newConnection [%d] from [%s]", sockfd, peerAddr.ipPort().c_str());
     InetAddress localAddr(SocketUtil::getLocalAddr(sockfd));
-    TcpConnectionPtr conn  = new TcpConnection(ioLoop, sockfd, localAddr, peerAddr);
+    TcpConnectionPtr conn(new TcpConnection(ioLoop, sockfd, localAddr, peerAddr));
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);
     conn->setWriteCompleteCallback(writeCompleteCallback_);
