@@ -15,6 +15,8 @@
 #include "base/NonCopy.h"
 #include "thread/Mutex.h"
 #include "thread/Thread.h"
+#include "base/Timestamp.h"
+using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 
 class Timer;
@@ -35,10 +37,12 @@ private:
     void processThread();   //定时器延迟线程
 
 private:
+    typedef std::multimap<Timestamp, Timer*>  TimerList;
+
     bool                running_;
     bool                checkTimer_;
 
-    std::set<Timer*>    timers_;
+    TimerList           timers_;
     std::vector<Timer*> addTimes_;
     std::vector<Timer*> delTimes_;
 

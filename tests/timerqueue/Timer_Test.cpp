@@ -10,14 +10,14 @@ using namespace zl::net;
 void print(Timer *self)
 {
     Timestamp now = Timestamp::now();
-    printf("[%0x]async timer trigger : print :%s\n", self, now.toString().c_str());
+    printf("[%s][%0x]async timer trigger : print\n", now.toString().c_str(), self);
     printf("hello world\n");
 }
 
 void print_num(Timer *self, int num)
 { 
     Timestamp now = Timestamp::now();
-    printf("[%0x]async timer trigger : print_num :%s\n", self, now.toString().c_str());
+    printf("[%s][%0x]async timer trigger : print_num\n", now.toString().c_str(), self);
     printf("hello world[%d]\n", num);
 
     num ++;
@@ -52,7 +52,7 @@ void test_async_timer()
     Timer t2(&tqueue, 2300);
 
     Timestamp now = Timestamp::now();
-    printf("async timer start : %s\n", now.toString().c_str());
+    printf("[%s]async timer start\n", now.toString().c_str());
 
     t1.async_wait(std::bind(print, &t1));
     t2.async_wait(std::bind(print_num, &t2, 1));
