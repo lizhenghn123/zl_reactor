@@ -32,18 +32,18 @@ public:
 private:
     void addTimerWithHold(Timer *vtimer);
     void deleteTimerWithHold(Timer *vtimer);
+    void processThread();   //定时器延迟线程
 
 private:
-    void processThread(); //定时器延迟线程
+    bool                running_;
+    bool                checkTimer_;
 
-    zl::thread::Mutex m_mutex;
-
-    bool running_;
-    bool checkTimer_;
-    zl::thread::Thread thread_;
-    std::set<Timer*> timers_;
+    std::set<Timer*>    timers_;
     std::vector<Timer*> addTimes_;
     std::vector<Timer*> delTimes_;
+
+    zl::thread::Mutex   mutex_;
+    zl::thread::Thread  thread_;
 };
 
 NAMESPACE_ZL_NET_END
