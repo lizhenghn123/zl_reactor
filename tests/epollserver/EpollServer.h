@@ -9,12 +9,13 @@ public:
 
     ~EpollServer();
 
-    void RunLoop();
+    void runLoop();
 
 private:
-    bool InitServer();
+    bool initServer();
+    void setNonBlock(int sock);
 
-    static void ListenThread(void *args);
+    static void listenThread(void *args);
 
 private:
     int             epollFd_;

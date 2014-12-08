@@ -11,3 +11,7 @@ SUBDIRS                += eventfd_epoll
 SUBDIRS                += timerqueue
 
 SUBDIRS                += timerfd
+
+SUBDIRS                += epollclient
+
+SUBDIRS                += epollserver

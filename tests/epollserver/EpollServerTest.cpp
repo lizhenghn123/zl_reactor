@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
         server = new EpollServer(argv[1], atoi(argv[2]));
     }
 
-    server->RunLoop();
+    server->runLoop();
 
 	return 0;
 }

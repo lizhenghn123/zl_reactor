@@ -22,7 +22,7 @@ EpollServer::~EpollServer()
     close(epollFd_);
 }
 
-bool EpollServer::InitServer()
+bool EpollServer::initServer()
 {
     srvSocket_ = socket(AF_INET, SOCK_STREAM, 0);
     if(srvSocket_ <= 0)
@@ -62,7 +62,7 @@ bool EpollServer::InitServer()
         return false;
     }
 
-    if(pthread_create(&listenThread_, 0, (void * ( *)(void *))ListenThread, this) != 0)
+    if(pthread_create(&listenThread_, 0, (void * ( *)(void *))listenThread, this) != 0)
     {
         printf("pthread_create ： create thread error!");
         return false;
@@ -72,7 +72,7 @@ bool EpollServer::InitServer()
 }
 
 // 监听线程，负责接收客户端连接，加入到epoll集合中
-void EpollServer::ListenThread(void *args)
+void EpollServer::listenThread(void *args)
 {
     EpollServer *this_server = static_cast<EpollServer *>(args);
 
@@ -88,6 +88,7 @@ void EpollServer::ListenThread(void *args)
         }
         else
         {
+            this_server->setNonBlock(client_socket);
             struct epoll_event    ev;
             ev.events = EPOLLIN | EPOLLERR | EPOLLHUP;
             ev.data.fd = client_socket;
@@ -96,9 +97,9 @@ void EpollServer::ListenThread(void *args)
     } 
 }
 
-void EpollServer::RunLoop()
+void EpollServer::runLoop()
 {
-    if(!InitServer())
+    if(!initServer())
     {
         printf("init server error!!!");
         return;
@@ -163,4 +164,12 @@ void EpollServer::RunLoop()
             }
         }
     }
+}
+
+void EpollServer::setNonBlock(int sock)
+{
+    int old_option = fcntl(sock, F_GETFL);
+    int new_option = old_option | O_NONBLOCK;
+    fcntl(sock, F_SETFL, new_option);
+    //return old_option;
 }

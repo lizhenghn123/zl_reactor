@@ -16,7 +16,7 @@ const char *SEND_MSG = "hello world!";
 
 EpollClient::EpollClient(const char *serverIP, int serverPort, int connNum)
 {
-	strcpy(srvIp_, serverIP);
+	strcpy(srvIP_, serverIP);
 	srvPort_ = serverPort;
 	epollFd_ = -1;
 	maxConnNum_ = connNum;
@@ -28,21 +28,21 @@ EpollClient::~EpollClient()
 	close(epollFd_);
 }
 
-bool EpollClient::Start()
+bool EpollClient::start()
 {
 	epollFd_ = epoll_create(100);
 
-	CreateSockets();
+	createSockets();
 
 	running_ = true;
 }
 
-void EpollClient::CreateSockets()
+void EpollClient::createSockets()
 {
 	struct sockaddr_in address;
 	bzero(&address, sizeof(address));
 	address.sin_family = AF_INET;
-	inet_pton(AF_INET, srvIp_, &address.sin_addr);
+	inet_pton(AF_INET, srvIP_, &address.sin_addr);
 	address.sin_port = htons(srvPort_);
 
 	for(int i = 0; i < maxConnNum_; ++i)
@@ -59,8 +59,8 @@ void EpollClient::CreateSockets()
 		if(ret == 0)
 		{
 			printf("build connection %d\n", i);
-			SetNonBlock(sockfd);
-			AddSock(sockfd);
+			setNonBlock(sockfd);
+			addSock(sockfd);
 		}
 		else
 		{
@@ -70,7 +70,7 @@ void EpollClient::CreateSockets()
 	}
 }
 
-bool EpollClient::RunLoop()
+bool EpollClient::runLoop()
 {
 	epoll_event events[10000];
 	char buffer[2048];
@@ -82,10 +82,10 @@ bool EpollClient::RunLoop()
 			int sockfd = events[i].data.fd;
 			if(events[i].events & EPOLLIN)
 			{
-				if(!SockRead(sockfd, buffer, 2048))
+				if(!sockRead(sockfd, buffer, 2048))
 				{
 					printf("socket read fail [%d][%d][%s]", sockfd, errno, strerror(errno));
-					DelSock(sockfd);
+					delSock(sockfd);
 				}
 				struct epoll_event event;
 				event.events = EPOLLOUT | EPOLLET | EPOLLERR;
@@ -94,10 +94,10 @@ bool EpollClient::RunLoop()
 			}
 			else if(events[i].events & EPOLLOUT)
 			{
-				if(!SockWrite(sockfd, SEND_MSG, (int)strlen(SEND_MSG)))
+				if(!sockWrite(sockfd, SEND_MSG, (int)strlen(SEND_MSG)))
 				{
 					printf("socket write fail [%d][%d][%s]", sockfd, errno, strerror(errno));
-					DelSock(sockfd);
+					delSock(sockfd);
 				}
 				struct epoll_event event;
 				event.events = EPOLLIN | EPOLLET | EPOLLERR;
@@ -107,7 +107,7 @@ bool EpollClient::RunLoop()
 			else if(events[i].events & EPOLLERR)
 			{
 				printf("events[i].events & EPOLLERR [%d][%d][%s]", sockfd, errno, strerror(errno));
-				DelSock(sockfd);
+				delSock(sockfd);
 			}
 		}
 	}
@@ -115,7 +115,7 @@ bool EpollClient::RunLoop()
 	return true;
 }
 
-void EpollClient::SetNonBlock(int sock)
+void EpollClient::setNonBlock(int sock)
 {
 	int old_option = fcntl(sock, F_GETFL);
 	int new_option = old_option | O_NONBLOCK;
@@ -123,7 +123,7 @@ void EpollClient::SetNonBlock(int sock)
 	//return old_option;
 }
 
-void EpollClient::AddSock(int sock)
+void EpollClient::addSock(int sock)
 {
 	epoll_event event;
 	event.data.fd = sock;
@@ -131,13 +131,13 @@ void EpollClient::AddSock(int sock)
 	epoll_ctl(epollFd_, EPOLL_CTL_ADD, sock, &event);
 }
 
-void EpollClient::DelSock(int sock)
+void EpollClient::delSock(int sock)
 {
 	epoll_ctl(epollFd_, EPOLL_CTL_DEL, sock, 0);
 	close(sock);
 }
 
-bool EpollClient::SockWrite(int sockfd, const char *buffer, int len)
+bool EpollClient::sockWrite(int sockfd, const char *buffer, int len)
 {
 	int bytes_write = 0;
 	printf("write out %d bytes to socket %d\n", len, sockfd);
@@ -162,7 +162,7 @@ bool EpollClient::SockWrite(int sockfd, const char *buffer, int len)
 	}
 }
 
-bool EpollClient::SockRead(int sockfd, char *buffer, int len)
+bool EpollClient::sockRead(int sockfd, char *buffer, int len)
 {
 	memset(buffer, '\0', len);
 	int bytes_read = recv(sockfd, buffer, len, 0);

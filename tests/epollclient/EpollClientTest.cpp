@@ -14,9 +14,9 @@ int main(int argc, char *argv[])
     }
 
 	pollclient = new EpollClient(argv[1], atoi(argv[2]), atoi(argv[3]));
-	pollclient->Start();
+	pollclient->start();
 
-	pollclient->RunLoop();
+	pollclient->runLoop();
 	
     return 0;
 }

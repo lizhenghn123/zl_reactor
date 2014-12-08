@@ -9,20 +9,20 @@ public:
 	~EpollClient();
 
 public:
-	bool RunLoop();
-	bool Start();
-	void Stop() { running_ = false; }
+	bool runLoop();
+	bool start();
+	void stop() { running_ = false; }
 
 private:
-	void CreateSockets();
-	void SetNonBlock(int sock);
-	void AddSock(int sock);
-	void DelSock(int sock);
-	bool SockWrite(int sockfd, const char *buffer, int len);
-	bool SockRead(int sockfd, char *buffer, int len);
+	void createSockets();
+	void setNonBlock(int sock);
+	void addSock(int sock);
+	void delSock(int sock);
+	bool sockWrite(int sockfd, const char *buffer, int len);
+	bool sockRead(int sockfd, char *buffer, int len);
 
 private:
-	char srvIp_[64];
+	char srvIP_[64];
 	short srvPort_;
 	int epollFd_;
 	int maxConnNum_;
