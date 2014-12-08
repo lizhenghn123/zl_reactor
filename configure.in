@@ -23,6 +23,8 @@ AC_CONFIG_FILES([Makefile
                 tests/eventfd_epoll/Makefile
                 tests/timerqueue/Makefile
                 tests/timerfd/Makefile
+                tests/epollclient/Makefile
+                tests/epollserver/Makefile
                ])
 
 # Checks for programs.
