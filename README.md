@@ -1,8 +1,12 @@
 zl_reactor
 ==========
 
-学习网络编程，学习reactor模型，自己实现一遍练手；
+学习C++，学习linux编程，学习网络编程，学习reactor模型，自己实现一遍练手；
 
 感谢
 
-* [Muduo](https://github.com/chenshuo/muduo) 
+* [c++11](http://www.cplusplus.com/reference/)
+
+* [Muduo](https://github.com/chenshuo/muduo)
+
+* [libevent](http://libevent.org/)  
