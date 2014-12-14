@@ -46,7 +46,7 @@ void ThreadPool::run(const Task& task)
     }
     else
     {
-        MutexLocker guard(mutex_);
+        LockGuard<Mutex> lock(mutex_);
         queue_.push_back(task);
         cond_.notify_one();
     }
@@ -74,7 +74,7 @@ void ThreadPool::executeThread()
 
 ThreadPool::Task ThreadPool::popOne()
 {
-    MutexLocker guard(mutex_);
+    LockGuard<Mutex> lock(mutex_);
     while (queue_.empty() && running_)
     {
         cond_.wait();

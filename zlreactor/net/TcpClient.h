@@ -19,7 +19,6 @@
 #include "base/NonCopy.h"
 using zl::base::Timestamp;
 using zl::thread::Mutex;
-using zl::thread::MutexLocker;
 
 NAMESPACE_ZL_NET_START
 

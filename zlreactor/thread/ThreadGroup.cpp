@@ -19,7 +19,7 @@ ThreadGroup::~ThreadGroup()
 
 void ThreadGroup::create_thread(std::function<void ()> func, int thread_num/* = 1*/)
 {
-    MutexLocker lock(mutex_);
+    LockGuard<Mutex> lock(mutex_);
     for (int i = 0; i < thread_num; ++i)
     {
         std::string thr_name("threadgroup_thread_");
@@ -30,13 +30,13 @@ void ThreadGroup::create_thread(std::function<void ()> func, int thread_num/* = 
 
 void ThreadGroup::add_thread(Thread *thd)
 {
-    MutexLocker lock(mutex_);
+    LockGuard<Mutex> lock(mutex_);
     vecThreads_.push_back(thd);
 }
 
 void ThreadGroup::remove_thread(Thread *thd)
 {
-    MutexLocker lock(mutex_);
+    LockGuard<Mutex> lock(mutex_);
     std::vector<Thread *>::iterator it = std::find(vecThreads_.begin(), vecThreads_.end(), thd);
     if(it != vecThreads_.end())
     {
@@ -46,13 +46,13 @@ void ThreadGroup::remove_thread(Thread *thd)
 
 void ThreadGroup::join_all()
 {
-    MutexLocker lock(mutex_);
+    LockGuard<Mutex> lock(mutex_);
     for_each(vecThreads_.begin(), vecThreads_.end(), std::bind(&Thread::join, std::placeholders::_1));
 }
 
 size_t ThreadGroup::size() const
 {
-    MutexLocker lock(mutex_);
+    LockGuard<Mutex> lock(mutex_);
     return vecThreads_.size();
 }
 

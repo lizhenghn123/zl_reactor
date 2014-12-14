@@ -73,7 +73,7 @@ private:
         {
             if(0 == instance_)
             {
-                MutexLocker guard(lock_);
+                zl::thread::LockGuard<zl::thread::Mutex> guard(lock_);
                 if(0 == instance_)
                 {
                     instance_ = new T;
@@ -91,7 +91,7 @@ private:
             }
         }
         T *instance_;
-        Mutex lock_;
+        zl::thread::Mutex lock_;
     };
 protected:
     Singleton()  {	}

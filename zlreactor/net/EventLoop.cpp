@@ -119,7 +119,7 @@ void EventLoop::queueInLoop(const Functor& func)
 {
     LOG_INFO("EventLoop[%0x]::runInLoop [%d][%0x]", this, isInLoopThread(), &func);
     {
-        MutexLocker lock(mutex_);
+        LockGuard<Mutex> lock(mutex_);
         pendingFunctors_.push_back(func);
     }
 
@@ -134,7 +134,7 @@ void EventLoop::callPendingFunctors()
     std::vector<Functor> tmp_functors;
     callingPendingFunctors_ = true;
     {
-        MutexLocker lock(mutex_);
+        LockGuard<Mutex> lock(mutex_);
         tmp_functors.swap(pendingFunctors_);
     }
 

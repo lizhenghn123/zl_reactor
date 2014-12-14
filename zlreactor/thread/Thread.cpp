@@ -32,7 +32,7 @@ struct ThreadImplDataInfo
             std::terminate();
         }
         // The thread is no longer executing
-        MutexLocker guard(thread_->threadMutex_);
+        LockGuard<Mutex> lock(thread_->threadMutex_);
         thread_->notAThread = true;
     }
 };
@@ -90,13 +90,13 @@ void Thread::join()
 
 bool Thread::joinable() const
 {
-    MutexLocker lock(threadMutex_);
+    LockGuard<Mutex> lock(threadMutex_);
     return !notAThread;
 }
 
 void Thread::detach()
 {
-    MutexLocker lock(threadMutex_);
+    LockGuard<Mutex> lock(threadMutex_);
     if(!notAThread)
     {
 #if defined(OS_WINDOWS)

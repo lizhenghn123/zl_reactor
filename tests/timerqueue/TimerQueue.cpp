@@ -15,7 +15,7 @@ TimerQueue::~TimerQueue()
 {
     running_ = false;
     {
-        zl::thread::MutexLocker lock(mutex_);
+	    zl::thread::LockGuard<zl::thread::Mutex> lock(mutex_);
         timers_.clear();
     }
     thread_.join();
@@ -32,7 +32,7 @@ void TimerQueue::addTimer(Timer * timer)
         addTimes_.push_back(timer);
     else
     {
-        zl::thread::MutexLocker lock(mutex_);
+        zl::thread::LockGuard<zl::thread::Mutex> lock(mutex_);
         addTimerWithHold(timer);
     }
 }
@@ -43,7 +43,7 @@ void TimerQueue::deleteTimer(Timer * timer)
         delTimes_.push_back(timer);
     else
     {
-        zl::thread::MutexLocker lock(mutex_);
+	    zl::thread::LockGuard<zl::thread::Mutex> lock(mutex_);
         deleteTimerWithHold(timer);
     }
 }
@@ -95,7 +95,7 @@ void TimerQueue::processThread()
         Timestamp now(Timestamp::now());
         //printf("[%s] select\n", now.toString().c_str());
         {
-            zl::thread::MutexLocker lock(mutex_);
+		    zl::thread::LockGuard<zl::thread::Mutex> lock(mutex_);
             checkTimer_ = true;
             for(TimerList::iterator iter = timers_.begin(); iter!=timers_.end(); )
             {

@@ -30,7 +30,7 @@ public:
     typedef Job                                 JobType;
     typedef Queue                               QueueType;
     typedef zl::thread::Mutex                   MutexType;
-    typedef zl::thread::MutexLocker             LockGuard;
+    typedef zl::thread::LockGuard<MutexType>    LockGuard;
     typedef zl::thread::Condition               ConditionType;
 
 public:
@@ -85,7 +85,7 @@ public:
     virtual bool try_pop(JobType& job)
     {
         LockGuard lock(mutex_);
-        if(queue_.empty() || stopFlag_)
+        if(queue_.empty() && !stopFlag_)
             return false;
         return popOne(job, Order());
     }

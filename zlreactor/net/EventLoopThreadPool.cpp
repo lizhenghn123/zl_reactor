@@ -58,7 +58,7 @@ void EventLoopThreadPool::runLoop()
     EventLoop this_loop;
 
     {
-        zl::thread::MutexLocker lock(mutex_);
+        zl::thread::LockGuard<zl::thread::Mutex> lock(mutex_);
         loops_.push_back(&this_loop);
     }
     //zl::thread::this_thread::sleep_for(zl::thread::chrono::seconds(2));

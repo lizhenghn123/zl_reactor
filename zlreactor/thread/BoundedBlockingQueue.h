@@ -31,7 +31,7 @@ public:
     typedef Job                                 JobType;
     typedef Queue	                            QueueType;
     typedef zl::thread::Mutex                   MutexType;
-    typedef zl::thread::MutexLocker             LockGuard;
+    typedef zl::thread::LockGuard<MutexType>    LockGuard;
     typedef zl::thread::Condition               ConditionType;
 
 public:

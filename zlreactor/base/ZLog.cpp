@@ -308,7 +308,7 @@ const char *ZLogFile::makeLogFilePath()
 
 bool ZLogFile::dumpLog(const char *log_entry, size_t size)
 {
-	zl::thread::MutexLocker lock(mutex_);
+    zl::thread::LockGuard<zl::thread::Mutex> lock(mutex_);
 
     cur_size_ += size;
     if (cur_size_ > max_file_size_)

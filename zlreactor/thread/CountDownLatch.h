@@ -20,14 +20,16 @@ class CountDownLatch : NonCopy
 {
 public:
     explicit CountDownLatch(int count)
-        : count_(count), mutex_(), condition_(mutex_)
+        : count_(count),
+        mutex_(),
+        condition_(mutex_)
     {
 
     }
 
     void wait()
     {
-        MutexLocker guard(mutex_);
+        LockGuard<Mutex> lock(mutex_);
         while(count_ > 0)
         {
             condition_.wait();
@@ -36,7 +38,7 @@ public:
 
     void countDown()
     {
-        MutexLocker guard(mutex_);
+        LockGuard<Mutex> lock(mutex_);
         --count_;
         if(count_ == 0)
         {
@@ -46,7 +48,7 @@ public:
 
     int getCount() const
     {
-        MutexLocker guard(mutex_);
+        LockGuard<Mutex> lock(mutex_);
         return count_;
     }
 
