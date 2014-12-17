@@ -30,52 +30,52 @@ class Condition : public zl::NonCopy
 public:
     explicit Condition(Mutex& mu) : mutex_(mu)
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         InitializeConditionVariable(&condition_);
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         pthread_cond_init(&condition_, NULL);
-#endif
+    #endif
     }
 
     ~Condition()
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         //nothing
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         pthread_cond_destroy(&condition_);
-#endif
+    #endif
     }
 
 public:
     void wait()
     {
-#ifdef OS_WINDOWS
-        SleepConditionVariableCS(&condition_, mutex_.GetMutex(), INFINITE);
-#elif defined(OS_LINUX)
+    #ifdef OS_WINDOWS
+        SleepConditionVariableCS(&condition_, mutex_.getMutex(), INFINITE);
+    #elif defined(OS_LINUX)
         pthread_cond_wait(&condition_, mutex_.getMutex());
-#endif
+    #endif
     }
 
     void notify_one()
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         WakeConditionVariable(&condition_);
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         pthread_cond_signal(&condition_);
-#endif
+    #endif
     }
 
     void notify_all()
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         WakeAllConditionVariable(&condition_);
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         pthread_cond_broadcast(&condition_);
-#endif
+    #endif
     }
 
 private:
-    Mutex&		mutex_;
+    Mutex&    mutex_;
 #ifdef OS_WINDOWS
     CONDITION_VARIABLE condition_;
 #elif defined(OS_LINUX)
@@ -84,5 +84,4 @@ private:
 };
 
 NAMESPACE_ZL_THREAD_END
-
 #endif /* ZL_CONTDITION_H */

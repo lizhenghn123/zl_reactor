@@ -30,86 +30,84 @@ class RWMutex
 public:
     RWMutex()
     {
-        init_();
+    #ifdef OS_WINDOWS
+        ::InitializeSRWLock(&rwlock_);
+    #elif defined(OS_LINUX)
+        pthread_rwlock_init(&rwlock_, NULL);
+    #endif
     }
+
     ~RWMutex()
     {
-        close_();
+    #ifdef OS_WINDOWS
+        //nothing
+    #elif defined(OS_LINUX)
+        pthread_rwlock_destroy(&rwlock_);
+    #endif
     }
+
 public:
+
     bool readLock()
     {
-#ifdef	OS_WINDOWS
+    #ifdef OS_WINDOWS
         ::AcquireSRWLockShared(&rwlock_);
         return true;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return pthread_rwlock_rdlock(&rwlock_) == 0;
-#endif
+    #endif
     }
+
     bool readUnLock()
     {
-#ifdef	OS_WINDOWS
+    #ifdef OS_WINDOWS
         ::ReleaseSRWLockShared(&rwlock_);
         return true;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return pthread_rwlock_unlock(&rwlock_) == 0;
-#endif
+    #endif
     }
+
     bool writeLock()
     {
-#ifdef	OS_WINDOWS
+    #ifdef OS_WINDOWS
         ::AcquireSRWLockExclusive(&rwlock_);
         return true;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return pthread_rwlock_wrlock(&rwlock_) == 0;
-#endif
+    #endif
     }
+
     bool writeUnLock()
     {
-#ifdef	OS_WINDOWS
+    #ifdef OS_WINDOWS
         ::ReleaseSRWLockExclusive(&rwlock_);
         return true;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return pthread_rwlock_unlock(&rwlock_) == 0;
-#endif
+    #endif
     }
+
     bool tryReadLock()
     {
-#ifdef	OS_WINDOWS
+    #ifdef OS_WINDOWS
         return ::TryAcquireSRWLockShared(&rwlock_) == TRUE;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return pthread_rwlock_tryrdlock(&rwlock_) == 0;
-#endif
+    #endif
     }
+
     bool tryWriteLock()
     {
-#ifdef	OS_WINDOWS
+    #ifdef OS_WINDOWS
         return ::TryAcquireSRWLockShared(&rwlock_) == TRUE;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return pthread_rwlock_trywrlock(&rwlock_) == 0;
-#endif
+    #endif
     }
 
 private:
-    void init_()
-    {
-#ifdef	OS_WINDOWS
-        ::InitializeSRWLock(&rwlock_);
-#elif defined(OS_LINUX)
-        pthread_rwlock_init(&rwlock_, NULL);
-#endif
-    }
-    void close_()
-    {
-#ifdef	OS_WINDOWS
-        //nothing
-#elif defined(OS_LINUX)
-        pthread_rwlock_destroy(&rwlock_);
-#endif
-    }
-
-private:
-#ifdef	OS_WINDOWS
+#ifdef OS_WINDOWS
     SRWLOCK          rwlock_;  //not support Windows XP
 #elif defined(OS_LINUX)
     pthread_rwlock_t rwlock_;
@@ -196,5 +194,4 @@ private:
 };
 
 NAMESPACE_ZL_THREAD_END
-
 #endif  /* ZL_RWMUTEX_H */

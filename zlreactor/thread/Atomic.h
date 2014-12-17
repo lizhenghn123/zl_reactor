@@ -55,12 +55,12 @@ public:
 public:
     Atomic()
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         ATOMIC_SET(&atomic_, 0);
-#else
+    #else
         LockGuard<Mutex> lock(mutex_);
         atomic_ = 0;
-#endif
+    #endif
     }
 public:
     inline atomic_t inc(T n = 1)
@@ -69,13 +69,13 @@ public:
     }
     inline atomic_t incAndFetch(T n = 1)
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         return ATOMIC_ADD_AND_FETCH(&atomic_, n);
-#else
+    #else
         LockGuard<Mutex> lock(mutex_);
         atomic_ += n;
         return atomic_;
-#endif
+    #endif
     }
     inline atomic_t fetchAndInc(T n = 1)
     {
@@ -87,13 +87,13 @@ public:
     }
     inline atomic_t decAndFetch(T n = 1)
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         return ATOMIC_SUB_AND_FETCH(&atomic_, n);
-#else
+    #else
         LockGuard<Mutex> lock(mutex_);
         atomic_ -= n;
         return atomic_;
-#endif
+    #endif
     }
     inline atomic_t fetchAndDec(T n = 1)
     {
@@ -151,67 +151,67 @@ class Atomic<bool>
 public:
     Atomic()
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         ATOMIC_SET(&atomic_, 0);
-#else
+    #else
         LockGuard<Mutex> lock(mutex_);
         atomic_ = 0;
-#endif
+    #endif
     }
 
     Atomic(bool value)
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         ATOMIC_SET(&atomic_, value ? 1 : 0);
-#else
+    #else
         LockGuard<Mutex> lock(mutex_);
         atomic_ = value;
-#endif
+    #endif
     }
 
     Atomic& operator=(bool value)
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         ATOMIC_SET(&atomic_, value ? 1 : 0);
-#else
+    #else
         LockGuard<Mutex> lock(mutex_);
         atomic_ = value;
-#endif
+    #endif
         return *this;
     }
 
     bool clear()     // set false
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
          return ATOMIC_SET(&atomic_, 0);
-#else
+    #else
          LockGuard<Mutex> lock(mutex_);
          int oldvalue = atomic_;
          atomic_ = 0;
          return oldvalue;
-#endif
+    #endif
     }
 
     bool test_and_set()  //set true and return old value
     {  
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         return ATOMIC_SET(&atomic_, 1);
-#else
+    #else
         LockGuard<Mutex> lock(mutex_);
         int oldvalue = atomic_;
         atomic_ = 1;
         return oldvalue;
-#endif
+    #endif
     }
 
     operator bool()
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         return ATOMIC_FETCH(&atomic_);
-#else
+    #else
         LockGuard<Mutex> lock(mutex_);
         return atomic_;
-#endif
+    #endif
     }
 
 private:

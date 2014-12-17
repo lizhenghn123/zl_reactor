@@ -17,7 +17,6 @@
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #elif defined(OS_LINUX)
-#define OS_LINUX
 typedef unsigned long DWORD;
 #include <unistd.h>
 #include <pthread.h>
@@ -26,61 +25,62 @@ typedef unsigned long DWORD;
 
 NAMESPACE_ZL_THREAD_START
 
-class Semaphore : public ZL::NonCopy
+class Semaphore : public zl::NonCopy
 {
 public:
     explicit Semaphore(int initial = 0)
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         sem_ = ::CreateSemaphore(NULL, initial, 0x7fffffff, NULL);
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         if(sem_init(&sem_, 0, 0) != 0)
         {
             throw std::exception();
         }
-#endif
+    #endif
     }
+
     ~Semaphore()
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         ::CloseHandle(sem_);
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         sem_destroy(&sem_);
-#endif
+    #endif
     }
 
 public:
     // 以原子操作的方式将信号量减1，如果信号量的值为0，则阻塞，直到该值不为0.
     bool wait(DWORD duration = INFINITE)
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         if(::WaitForSingleObject(&sem_, duration) == WAIT_OBJECT_0)
             return true;
         return false;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return sem_wait(&sem_) == 0;
-#endif
+    #endif
     }
     // Wait的非阻塞版本
     bool try_wait()
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         return ::WaitForSingleObject(sem_, 0) == WAIT_OBJECT_0;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return sem_trywait(&sem_) == 0;
-#endif
+    #endif
     }
 
     // 以原子操作的方式将信号量的值加rc
     bool post(long rc = 1)
     {
-#ifdef OS_WINDOWS
+    #ifdef OS_WINDOWS
         if(::ReleaseSemaphore(sem_, rc, NULL))
             return true;
         return false;
-#elif defined(OS_LINUX)
+    #elif defined(OS_LINUX)
         return sem_post(&sem_) == 0;
-#endif
+    #endif
     }
 
 private:
@@ -92,5 +92,4 @@ private:
 };
 
 NAMESPACE_ZL_THREAD_END
-
 #endif  /* ZL_SEMAPHORE_H */

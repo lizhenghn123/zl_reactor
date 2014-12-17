@@ -73,7 +73,7 @@ private:
     size_t             cur_size_;
     size_t             cur_file_index_;
     bool               append_;
-	zl::thread::Mutex  mutex_;
+    zl::thread::Mutex  mutex_;
 };
 
 class ZLog
