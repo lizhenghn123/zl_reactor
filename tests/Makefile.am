@@ -15,3 +15,7 @@ SUBDIRS                += timerfd
 SUBDIRS                += epollclient
 
 SUBDIRS                += epollserver
+
+SUBDIRS                += signal_handler
+
+SUBDIRS                += signalfd_epoll
