@@ -57,6 +57,8 @@
 #define ZL_SNPRINTF  snprintf
 #endif
 
+#define UNUSED_STATEMENT(statement)    ((void)(statement))          /** just disable some warnings of compliers */
+
 #define Safe_Delete(p)        do { delete p; p = NULL; } while (0)
 #define Safe_Delete_Array(p)  do { delete[] p; p = NULL; } while (0)
 
