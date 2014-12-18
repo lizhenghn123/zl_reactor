@@ -33,7 +33,8 @@ void ThreadYield()
 // Thread function: Detach
 void ThreadDetach(int a)
 {
-    this_thread::sleep_for(chrono::milliseconds(100));
+    this_thread::sleep_for(chrono::milliseconds(1000));
+    cout << " .....deteched thread ....\n";
 }
 
 Mutex gMutex;
@@ -214,13 +215,12 @@ void exec_testt(void *arg)
 void test_threadusage()
 {
     // Test 9: detach,  这个在windows下有问题, 因为t释放时，其回调函数并没有结束
-    //cout << "\n" << "PART IX: Detach" << "\n";
-    //{
-    //    Thread t(std::bind(ThreadDetach, 43), "d");
-    //    t.detach();
-    //    this_thread::sleep_for(chrono::milliseconds(100));
-    //    cout << " Detached from thread." << "\n";
-    //}
+    {
+        Thread t(std::bind(thread_usage1::ThreadDetach, 43), "d");
+        t.detach();
+        //this_thread::sleep_for(chrono::milliseconds(100));
+        cout << " Detached from thread." << "\n";
+    }
     {
         Thread t1(func, "f1");
         t1.join();
@@ -306,10 +306,10 @@ namespace thread_tls
 int main()
 {
     cout << "test_threadusage1------------------------------\n";
-    thread_usage1::test_threadusage();
+    //thread_usage1::test_threadusage();
 
     cout << "test_threadusage2------------------------------\n";
-   // thread_usage2::test_threadusage();
+    thread_usage2::test_threadusage();
 
     cout << "test_threadpoll------------------------------\n";
   //  threadpool_usage::test_threadpoll();
@@ -317,5 +317,6 @@ int main()
     cout << "test_threadtls------------------------------\n";
    // thread_tls::test_threadtls();
     
+    getchar();
     return 0;
 }

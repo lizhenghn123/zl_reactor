@@ -32,8 +32,14 @@ struct ThreadImplDataInfo
             std::terminate();
         }
         // The thread is no longer executing
-        LockGuard<Mutex> lock(thread_->threadMutex_);
-        thread_->notAThread = true;
+        if(thread_->notAThread == false)     // this thread is alive now, set no-alive
+        {
+            LockGuard<Mutex> lock(thread_->threadMutex_);
+            thread_->notAThread = true;
+        }
+        else              // this thread is detached 
+        {
+        }
     }
 };
 
