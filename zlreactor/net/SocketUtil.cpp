@@ -144,7 +144,7 @@ int SocketUtil::getSendBuffer(ZL_SOCKET fd)
     socklen_t buff_szie = sizeof(socklen_t);
     int optname = 0;
     int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_SNDBUF, &optname, &buff_szie);
-    (void)ret;
+    UNUSED_STATEMENT(ret);
     assert(ret != -1);
     return optname > 0 ? optname : 0;
 }
@@ -154,7 +154,7 @@ int SocketUtil::getRecvBuffer(ZL_SOCKET fd)
     socklen_t buff_szie = sizeof(socklen_t);
     int optname = 0;
     int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_RCVBUF, &optname, &buff_szie);
-    (void)ret;
+    UNUSED_STATEMENT(ret);
     assert(ret != -1);
     return optname > 0 ? optname : 0;
 }
