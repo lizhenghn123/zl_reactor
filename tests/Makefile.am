@@ -19,3 +19,7 @@ SUBDIRS                += epollserver
 SUBDIRS                += signal_handler
 
 SUBDIRS                += signalfd_epoll
+
+SUBDIRS                += tcpselfconnect1
+
+SUBDIRS                += tcpselfconnect2
