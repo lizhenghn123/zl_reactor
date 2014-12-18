@@ -52,7 +52,8 @@ void Acceptor::listen()
 void Acceptor::onAccept(Timestamp now)
 {
     loop_->assertInLoopThread();
-    while (true)
+	int count = 0;
+    while(count < 100)
     {
         InetAddress peerAddr;
         ZL_SOCKET newfd = accept_socket->accept(&peerAddr);
@@ -67,12 +68,13 @@ void Acceptor::onAccept(Timestamp now)
             {
                 LOG_ALERT("Acceptor::OnAccept() no callback , and close the coming connection![%d]", newfd);
             }
+			count ++;
         }
         else
         {
-            LOG_ALERT("Acceptor::OnAccept() accept connection fail![%d][%d]", newfd, errno);
-            //if (errno == )
-            //EAGAIN：套接字处于非阻塞状态，当前没有连接请求。
+            if(errno != EAGAIN)
+                LOG_ALERT("Acceptor::OnAccept() accept connection fail![%d][%d]", newfd, errno);
+            //  11 : EAGAIN：套接字处于非阻塞状态，当前没有连接请求。
             //	EBADF：非法的文件描述符。
             //	ECONNABORTED：连接中断。
             //	EINTR：系统调用被信号中断。
