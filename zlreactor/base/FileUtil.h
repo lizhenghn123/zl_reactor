@@ -12,7 +12,7 @@
 #ifndef ZL_FILEUTIL_H
 #define ZL_FILEUTIL_H
 #include "Define.h"
-#include <sstream>
+#include <string>
 NAMESPACE_ZL_START
 
 // ------------------------  file utils  ------------------------
@@ -25,6 +25,9 @@ long  getFileSize(FILE *file);
 long  getFileSize(const char *filepath);
 bool  getFileData(const char *filepath, std::string& buf);
 
+
+std::string getAppFullPath();
+std::string getAppFileName();
 
 NAMESPACE_ZL_END
 #endif /* ZL_FILEUTIL_H */

@@ -34,6 +34,23 @@ static const char priority_snames[ZL_LOG_PRIO_COUNT][MAX_PRIORITY_NAME_LENGTH + 
 
 static ZLog *g_zlogger = NULL;
 
+namespace detail
+{
+    class GlobalZLog
+    {
+    public:
+         GlobalZLog()
+         {
+              zl_log_instance_create("log", zl::getAppFileName().c_str());
+         }
+         ~GlobalZLog()
+         {
+             zl_log_instance_destroy();
+         }
+    };
+    static GlobalZLog __private_initialise_zlog__;
+}
+
 class ZLogFile
 {
 public:
@@ -128,13 +145,13 @@ bool zl_log_instance_create(const char *log_dir, const char *log_name,
                             ZLogPriority priority/* = ZL_LOG_PRIO_INFO*/, ZLogMasking mask/* = ZL_LOG_MASKING_COMPLETE*/,
                             bool append/* = true*/)
 {
-    if (g_zlogger)
-    {
-        return true;
-    }
-    else if (!log_dir || !log_name)
+    if (!log_dir || !log_name)
     {
         return false;
+    }
+    else if (g_zlogger)
+    {
+        zl_log_instance_destroy();
     }
 
     g_zlogger = new ZLog;
