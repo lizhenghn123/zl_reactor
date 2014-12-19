@@ -23,3 +23,5 @@ SUBDIRS                += signalfd_epoll
 SUBDIRS                += tcpselfconnect1
 
 SUBDIRS                += tcpselfconnect2
+
+SUBDIRS                += PipePairFactory
