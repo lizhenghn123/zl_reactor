@@ -30,6 +30,8 @@ public:
 
     virtual Timestamp poll_once(int timeoutMs, ChannelList& activeChannels);
 
+	virtual const char* ioMultiplexerName() const { return "linux_epoll"; }
+
 private:
     bool update(Channel *channel, int operation);
     void fireActiveChannels(int numEvents, ChannelList& activeChannels) const;

@@ -68,6 +68,13 @@ public:
      */
     virtual bool hasChannel(const Channel *channel) const;
 
+    /*
+     * 获得当前所使用的IO复用技术的描述
+     *
+     * @return            ：IO复用的名称
+     */
+	virtual const char* ioMultiplexerName() const;
+
 public:
     /*
      * 获取当前存在的连接
