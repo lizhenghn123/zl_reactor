@@ -24,7 +24,7 @@ NAMESPACE_ZL_NET_START
 
 class EventLoop;
 class InetAddress;
-class Connector;
+class TcpConnector;
 class ByteBuffer;
 class Tcpconnection;
 
@@ -60,7 +60,7 @@ private:
 
 private:
     EventLoop              *loop_;
-    Connector              *connector_;
+    TcpConnector              *connector_;
     ConnectionCallback     connectionCallback_;
     MessageCallback        messageCallback_;
     WriteCompleteCallback  writeCompleteCallback_;

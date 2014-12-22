@@ -48,8 +48,8 @@ libzlreactor_la_SOURCES = \
 					 net/EventLoop.cpp \
 					 net/EventLoopThreadPool.cpp \
 					 net/Channel.cpp \
-					 net/Acceptor.cpp \
+					 net/TcpAcceptor.cpp \
 					 net/TcpConnection.cpp \
 					 net/TcpServer.cpp \
 					 net/TcpClient.cpp \
-					 net/Connector.cpp 
+					 net/TcpConnector.cpp 

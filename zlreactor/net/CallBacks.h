@@ -19,7 +19,7 @@ class ByteArray;
 class EventLoop;
 class TcpConnection;
 class InetAddress;
-class Acceptor;
+class TcpAcceptor;
 class NetBuffer;
 using zl::base::Timestamp;
 

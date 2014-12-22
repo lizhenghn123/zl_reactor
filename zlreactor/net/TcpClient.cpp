@@ -2,7 +2,7 @@
 #include "net/EventLoop.h"
 #include "net/InetAddress.h"
 #include "net/TcpConnection.h"
-#include "net/Connector.h"
+#include "net/TcpConnector.h"
 #include "net/SocketUtil.h"
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
@@ -14,7 +14,7 @@ namespace detail
         loop->queueInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
     }
 
-    void removeConnector(ConnectorPtr connector)
+    void removeConnector(TcpConnectorPtr connector)
     {
         Safe_Delete(connector);
     }
@@ -27,7 +27,7 @@ TcpClient::TcpClient(EventLoop* loop, const InetAddress& serverAddr)
     retry_(false),
     connect_(true)
 {
-    connector_ = new Connector(loop, serverAddr);
+    connector_ = new TcpConnector(loop, serverAddr);
     connector_->setNewConnectionCallback(std::bind(&TcpClient::newConnection, this, std::placeholders::_1));
 }
 

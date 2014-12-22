@@ -57,7 +57,7 @@ private:
     typedef std::map<int, TcpConnectionPtr>     ConnectionMap;
     typedef std::vector<EventLoopThreadPool*>   EventLoopList;
     EventLoop             *loop_;         // acceptor eventloop
-    Acceptor              *acceptor_;
+    TcpAcceptor           *acceptor_;
     InetAddress           serverAddr_;
 
     ConnectionCallback    connectionCallback_;
