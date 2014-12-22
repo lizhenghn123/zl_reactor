@@ -21,6 +21,11 @@ Timestamp::Timestamp(int64_t ms) : microSeconds_(ms)
 
 }
 
+/*static*/ Timestamp Timestamp::invalid()
+{
+    return  Timestamp();
+}
+
 /*static*/ Timestamp Timestamp::now()
 {
 #ifdef OS_WINDOWS

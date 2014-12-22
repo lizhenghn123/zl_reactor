@@ -2,7 +2,7 @@
 // Filename         : TimerQueue.h
 // Author           : LIZHENG
 // Created          : 2014-10-126
-// Description      :
+// Description      : 一个通用的定时器管理
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2014-10-26

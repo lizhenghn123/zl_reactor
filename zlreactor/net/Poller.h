@@ -39,7 +39,7 @@ public:
      * 添加/更新Channel所绑定socket的I/O events, 必须在主循环中调用
      *
      * @param channel     : 待更新的Channel
-     * @return            ：成功为true，失败为false
+     * @return            : 成功为true，失败为false
      */
     virtual bool updateChannel(Channel *channel) = 0;
 
@@ -47,7 +47,7 @@ public:
      * 删除Channel所绑定socket的I/O events, 必须在主循环中调用
      *
      * @param channel     : 待删除的Channel
-     * @return            ：成功为true，失败为false
+     * @return            : 成功为true，失败为false
      */
     virtual bool removeChannel(Channel *channel) = 0;
 
@@ -56,26 +56,26 @@ public:
      *
      * @param timeout     : 超时时间(单位:ms)
      * @param activeConns : 已激活的连接
-     * @return            ：io multiplexing 调用返回时的当前时间
+     * @return            : io multiplexing 调用返回时的当前时间
      */
     virtual Timestamp poll_once(int timeoutMs, ChannelList &activeChannels) = 0;
 
     /*
+     * 获得当前所使用的IO复用技术的描述
+     *
+     * @return            : IO复用的名称
+     */
+    virtual const char* ioMultiplexerName() const = 0;
+
+public:
+    /*
      * 判断该Channel是否在Poller中
      *
      * @param channel     : 待删除的Channel
-     * @return            ：存在为true，否则为false
+     * @return            : 存在为true，否则为false
      */
-    virtual bool hasChannel(const Channel *channel) const;
+    bool hasChannel(const Channel *channel) const;
 
-    /*
-     * 获得当前所使用的IO复用技术的描述
-     *
-     * @return            ：IO复用的名称
-     */
-	virtual const char* ioMultiplexerName() const;
-
-public:
     /*
      * 获取当前存在的连接
      *

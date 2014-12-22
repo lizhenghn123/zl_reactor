@@ -65,6 +65,12 @@ void EpollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels)
     {
         Channel *channel = static_cast<Channel*>(events_[i].data.ptr);
         assert(hasChannel(channel)&& "the poll socket must be already exist");
+        //int reevents = kEventNone;
+        //if (events_[i].events & EPOLLIN)  reevents |= kEventRead;
+        //if (events_[i].events & EPOLLOUT) reevents |= kEventWrite;
+        //if (events_[i].events & EPOLLERR) reevents |= kEventError;
+        //if (events_[i].events & EPOLLHUP) reevents |= kEventHup;
+        //channel->set_revents(reevents);
         channel->set_revents(events_[i].events);
         activeChannels.push_back(channel);
     }
@@ -73,7 +79,7 @@ void EpollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels)
 bool EpollPoller::updateChannel(Channel *channel)
 {
     ZL_SOCKET fd = channel->fd();
-	LOG_INFO("EpollPoller::updateChannel[%d]", fd);
+    LOG_INFO("EpollPoller::updateChannel[%d]", fd);
     if(hasChannel(channel))    //exist, update
     {
         assert(getChannel(fd) == channel);
@@ -118,8 +124,10 @@ bool EpollPoller::update(Channel *channel, int operation)
     ZL_SOCKET fd = channel->fd();
     struct epoll_event ev = { 0, { 0 } };
     ev.events = channel->events();
-    if (enableET_)
-        ev.events |=  EPOLLET;
+    //int events = channel->events();
+    //if(events & kEventRead)   ev.events |= POLLIN;
+    //if(events & kEventWrite)  ev.events |= POLLOUT;
+    if (enableET_)            ev.events |= EPOLLET;
     ev.data.ptr = channel;
     if (::epoll_ctl(epollfd_, operation, fd, &ev) < 0)
     {

@@ -7,6 +7,10 @@ zl_reactor
 
 * [c++11](http://www.cplusplus.com/reference/)
 
+* [TinyThread++](http://tinythreadpp.bitsnbites.eu/)
+
 * [Muduo](https://github.com/chenshuo/muduo)
 
 * [libevent](http://libevent.org/)  
+
+* [redis](https://github.com/antirez/redis)

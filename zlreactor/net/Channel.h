@@ -20,6 +20,16 @@ NAMESPACE_ZL_NET_START
 class EventLoop;
 using zl::base::Timestamp;
 
+//enum EventType
+//{
+//    kEventNone  = 0,
+//    kEventRead  = 1<<0,       //POLLIN | POLLPRI | POLLRDHUP
+//    kEventWrite = 1<<1,       //POLLOUT
+//    kEventPri   = 1<<2,       //POLLPRI
+//    kEventHup   = 1<<3,       //POLLHUP
+//    kEventError = 1<<4        //POLLERR | POLLNVAL
+//};
+
 class Channel : zl::NonCopy
 {
 public:

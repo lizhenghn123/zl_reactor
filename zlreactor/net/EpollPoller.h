@@ -21,6 +21,7 @@ class EpollPoller : public Poller
 {
 public:
     EpollPoller(EventLoop *loop, bool enableET = false);
+
     ~EpollPoller();
 
 public:
@@ -30,10 +31,11 @@ public:
 
     virtual Timestamp poll_once(int timeoutMs, ChannelList& activeChannels);
 
-	virtual const char* ioMultiplexerName() const { return "linux_epoll"; }
+    virtual const char* ioMultiplexerName() const { return "linux_epoll"; }
 
 private:
     bool update(Channel *channel, int operation);
+
     void fireActiveChannels(int numEvents, ChannelList& activeChannels) const;
 
 private:

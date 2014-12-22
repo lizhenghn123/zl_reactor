@@ -28,6 +28,8 @@ public:
     explicit Timestamp(int64_t ms);
 public:
     static Timestamp now();
+    static Timestamp invalid();
+
     static double  timediff(const Timestamp& lhs, const Timestamp& rhs)
     {
          int64_t delta = lhs.microSeconds() - rhs.microSeconds();
@@ -38,13 +40,18 @@ public:
     {
         return microSeconds_;
     }
-    int64_t millSeconds() const
+    int64_t millSeconds()  const
     {
         return microSeconds_ / ZL_MSEC_PER_SEC;
     }
-    int64_t seconds()     const
+    int64_t seconds()      const
     {
         return microSeconds_ / ZL_USEC_PER_SEC;
+    }
+
+    bool valid() const
+    {
+        return microSeconds_ > 0;
     }
 
     struct tm  *getTm(bool showlocaltime = true);
