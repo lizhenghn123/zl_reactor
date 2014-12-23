@@ -26,56 +26,6 @@ EpollPoller::~EpollPoller()
     ::close(epollfd_);
 }
 
-Timestamp EpollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
-{
-    int numEvents = ::epoll_wait(epollfd_, &*events_.begin(),
-                               static_cast<int>(events_.size()), timeoutMs);
-    int savedErrno = errno;
-    Timestamp now(Timestamp::now());
-    if (numEvents > 0)
-    {
-        LOG_INFO("EpollPoller::poll_once: [%d] events happended", numEvents);
-        fireActiveChannels(numEvents, activeChannels);
-        if (static_cast<size_t>(numEvents) == events_.size())
-        {
-            events_.resize(events_.size()*2);
-        }
-    }
-    else if (numEvents == 0)
-    {
-        //LOG_INFO("EpollPoller::poll_once: nothing happended");
-    }
-    else
-    {
-        // error happens, log uncommon ones
-        if (savedErrno != EINTR)
-        {
-            errno = savedErrno;
-            LOG_INFO("EpollPoller::poll_once: error [%d]", savedErrno);
-        }
-    }
-
-    return now;
-}
-
-void EpollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels) const
-{
-    assert(static_cast<size_t>(numEvents) <= events_.size());
-    for (int i = 0; i < numEvents; ++i)
-    {
-        Channel *channel = static_cast<Channel*>(events_[i].data.ptr);
-        assert(hasChannel(channel)&& "the poll socket must be already exist");
-        //int reevents = kEventNone;
-        //if (events_[i].events & EPOLLIN)  reevents |= kEventRead;
-        //if (events_[i].events & EPOLLOUT) reevents |= kEventWrite;
-        //if (events_[i].events & EPOLLERR) reevents |= kEventError;
-        //if (events_[i].events & EPOLLHUP) reevents |= kEventHup;
-        //channel->set_revents(reevents);
-        channel->set_revents(events_[i].events);
-        activeChannels.push_back(channel);
-    }
-}
-
 bool EpollPoller::updateChannel(Channel *channel)
 {
     ZL_SOCKET fd = channel->fd();
@@ -135,6 +85,56 @@ bool EpollPoller::update(Channel *channel, int operation)
         return false;
     }
     return true;
+}
+
+Timestamp EpollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
+{
+    int numEvents = ::epoll_wait(epollfd_, &*events_.begin(),
+        static_cast<int>(events_.size()), timeoutMs);
+    int savedErrno = errno;
+    Timestamp now(Timestamp::now());
+    if (numEvents > 0)
+    {
+        LOG_INFO("EpollPoller::poll_once: [%d] events happended", numEvents);
+        fireActiveChannels(numEvents, activeChannels);
+        if (static_cast<size_t>(numEvents) == events_.size())
+        {
+            events_.resize(events_.size()*2);
+        }
+    }
+    else if (numEvents == 0)
+    {
+        LOG_INFO("EpollPoller::poll_once: nothing happended");
+    }
+    else
+    {
+        // error happens, log uncommon ones
+        if (savedErrno != EINTR)
+        {
+            errno = savedErrno;
+            LOG_INFO("EpollPoller::poll_once: error [%d]", savedErrno);
+        }
+    }
+
+    return now;
+}
+
+void EpollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels) const
+{
+    assert(static_cast<size_t>(numEvents) <= events_.size());
+    for (int i = 0; i < numEvents; ++i)
+    {
+        Channel *channel = static_cast<Channel*>(events_[i].data.ptr);
+        assert(hasChannel(channel) && "the channel must be already exist");
+        //int reevents = kEventNone;
+        //if (events_[i].events & EPOLLIN)  reevents |= kEventRead;
+        //if (events_[i].events & EPOLLOUT) reevents |= kEventWrite;
+        //if (events_[i].events & EPOLLERR) reevents |= kEventError;
+        //if (events_[i].events & EPOLLHUP) reevents |= kEventHup;
+        //channel->set_revents(reevents);
+        channel->set_revents(events_[i].events);
+        activeChannels.push_back(channel);
+    }
 }
 
 NAMESPACE_ZL_NET_END

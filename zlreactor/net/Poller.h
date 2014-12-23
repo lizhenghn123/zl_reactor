@@ -17,6 +17,8 @@
 #include "base/Timestamp.h"
 NAMESPACE_ZL_NET_START
 
+#define USE_LINUX_EPOLL
+
 using zl::base::Timestamp;
 class Socket;
 class Channel;
