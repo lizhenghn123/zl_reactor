@@ -2,10 +2,11 @@
 // Filename         : PipePairFactory.h
 // Author           : LIZHENG
 // Created          : 2014-12-18
-// Description      : pipe、socketpair的封装，可用于进程间通信以及同步等待
+// Description      : pipe、socketpair、eventfd的封装，可用于线程/进程间通信及同步
+//                    未充分验证，可能有bug
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 2014-12-18
+// Last Modified On : 2014-12-24
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -15,7 +16,8 @@
 #include "base/Zlog.h"
 #include "base/Timestamp.h"
 #include "thread/Thread.h"
-#include <sys/epoll.h>
+#include <sys/epoll.h>        // for epoll
+#include <sys/eventfd.h>      // for eventfd
 using namespace zl::base;
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
@@ -33,19 +35,6 @@ public:
         }
         SocketUtil::setNonBlocking(fds_[0]); // fds_[0] for read.
         SocketUtil::setNonBlocking(fds_[1]); // fds_[1] for write.
-
-        epfd_ = epoll_create(2);
-        if(epfd_ == -1)
-        {
-            LOG_ERROR("FdPairFactory: epoll_create failed[%d]", errno);
-        }
-        struct epoll_event event;
-        memset(&event, 0, sizeof(event));
-        event.events = EPOLLIN;
-        if(epoll_ctl(epfd_, EPOLL_CTL_ADD, fds_[0], &event) != 0)
-        {
-            LOG_ERROR("FdPairFactory: epoll_ctl failed. [%d, %d, %s]", epfd_, fds_[0], errno);
-        }
     }
 
     ~FdPairFactory()
@@ -77,12 +66,12 @@ public:
         //fds_[1] = fds_[0];
     }
 
-    size_t write(const char *data, size_t len)
+    size_t write(const void *data, size_t len)
     {
         return SocketUtil::write(fds_[1], data, len);
     }
 
-    size_t read(char *buf, size_t size)
+    size_t read(void *buf, size_t size)
     {
         return SocketUtil::read(fds_[0], buf, size);
     }
@@ -100,6 +89,8 @@ public:
         {
             return read(c, 1) == 1;
         }
+
+        lazyInitEpoll();
 
         struct epoll_event events[1];
         while(true)
@@ -120,11 +111,12 @@ public:
             {
                 return true;
             }
-            if(errno != EAGAIN && errno != EWOULDBLOCK)
+            else if(errno != EAGAIN && errno != EWOULDBLOCK)
             {
                 LOG_ERROR("FdPairFactory: epoll read from[%d] failed[%d]", fds_[0], errno);
                 return false;
             }
+
             double eplase_microms = Timestamp::timediff(Timestamp::now(), now);
             timeoutMs -= static_cast<int>(eplase_microms / 1000);
             if(timeoutMs <= 0)
@@ -137,6 +129,25 @@ public:
     }
 
 private:
+    void lazyInitEpoll()
+    {
+        if(epfd_ > 0)
+            return ;
+
+        epfd_ = epoll_create(2);
+        if(epfd_ == -1)
+        {
+            LOG_ERROR("FdPairFactory: epoll_create failed[%d]", errno);
+        }
+        struct epoll_event event;
+        memset(&event, 0, sizeof(event));
+        event.events = EPOLLIN;
+        if(epoll_ctl(epfd_, EPOLL_CTL_ADD, fds_[0], &event) != 0)
+        {
+            LOG_ERROR("FdPairFactory: epoll_ctl failed. [%d, %d, %s]", epfd_, fds_[0], errno);
+        }
+    }
+
     void close(int fd)
     {
         if(fd != -1)
@@ -277,9 +288,33 @@ public:
     }
 };
 
+class EventFdGenerator
+{
+public:
+    int create(int fds[2])
+    {
+         fds[0] = fds[1] = createEventfd();
+         return 0;
+    }
+
+private:
+    int createEventfd()
+    {
+        int efd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+        if (efd < 0)
+        {
+            LOG_ERROR("create eventfd failed when EventLoop::EventLoop");
+            assert(efd);
+        }
+        LOG_INFO("EventFdGenerator::createEventfd [%d]", efd);
+        return efd;
+    }
+};
+
 typedef FdPairFactory< PipePairGenerator >    PipePairFactory;
 typedef FdPairFactory< SocketPairGenerator >  SocketPairFactory;
 typedef FdPairFactory< TcpPairGenerator >     TcpPairFactory;
+typedef FdPairFactory< EventFdGenerator >     EventFdPairFactory;
 
 NAMESPACE_ZL_NET_END
 #endif  /* ZL_PIPEPAIRFACTORY_H */

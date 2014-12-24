@@ -89,8 +89,7 @@ bool EpollPoller::update(Channel *channel, int operation)
 
 Timestamp EpollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
 {
-    int numEvents = ::epoll_wait(epollfd_, &*events_.begin(),
-        static_cast<int>(events_.size()), timeoutMs);
+    int numEvents = ::epoll_wait(epollfd_, &*events_.begin(), static_cast<int>(events_.size()), timeoutMs);
     int savedErrno = errno;
     Timestamp now(Timestamp::now());
     if (numEvents > 0)
