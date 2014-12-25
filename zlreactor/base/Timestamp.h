@@ -72,14 +72,19 @@ inline bool operator==(const Timestamp& lhs, const Timestamp& rhs)
 }
 
 inline Timestamp operator+(const Timestamp& lhs, double seconds)
-{ 
+{
     long delta = seconds * ZL_USEC_PER_SEC;
     return Timestamp(lhs.microSeconds() + delta);
 }
 
 inline Timestamp operator+(double seconds, const Timestamp& rhs)
-{ 
+{
     return (rhs + seconds);
+}
+
+inline Timestamp operator+=(Timestamp& lhs, double seconds)
+{
+    return lhs = lhs + seconds;
 }
 
 } // namespace base

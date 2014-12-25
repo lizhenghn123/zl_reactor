@@ -17,9 +17,12 @@
 #include "thread/Mutex.h"
 #include "thread/Thread.h"
 #include "thread/Atomic.h"
+#include "net/CallBacks.h"
 NAMESPACE_ZL_NET_START
 class Channel;
 class Poller;
+class Timer;
+class TimerQueue;
 
 class EventLoop : zl::NonCopy
 {
@@ -30,7 +33,7 @@ public:
     ~EventLoop();
 
     void loop();
-    void stop();
+    void quit();
 
 public:
     void updateChannel(Channel *channel);
@@ -42,6 +45,10 @@ public:
     
     //将该异步调用存储，并等待poller返回时再注意调用异步队列中的操作
     void queueInLoop(const Functor& func);
+
+    TimerId addTimer(const TimerCallback& cb, const Timestamp& when);
+    TimerId addTimer(const TimerCallback& cb, double delaySeconds, bool repeat);
+    void    cancelTimer(TimerId id);
 
     bool isRunning() { return running_; }
     bool isInLoopThread() const { return currentThreadId_ == thread::this_thread::get_id(); }
@@ -69,6 +76,8 @@ private:
     thread::Atomic<bool>     callingPendingFunctors_;  // status for pending functors calling
     thread::Mutex            mutex_;            // for guard  pendingFunctors_
     std::vector<Functor>     pendingFunctors_;  // functors when polling, need mutex guard
+
+    TimerQueue               *timerQueue_;
 };
 
 NAMESPACE_ZL_NET_END

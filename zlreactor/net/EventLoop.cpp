@@ -5,6 +5,7 @@
 #include "net/Poller.h"
 #include "base/Timestamp.h"
 #include "base/ZLog.h"
+#include "net/TimerQueue.h"
 using namespace zl::base;
 using namespace zl::thread;
 NAMESPACE_ZL_NET_START
@@ -37,38 +38,69 @@ EventLoop::EventLoop()
     wakeupChannel_ = new Channel(this, wakeupfd_);
     wakeupChannel_->setReadCallback(std::bind(&EventLoop::handleRead, this));
     wakeupChannel_->enableReading();  // ready for read event of wakeupfd_
+
+    timerQueue_ = new TimerQueue(this);
 }
 
 EventLoop::~EventLoop()
 {
-    Safe_Delete(poller_);
+    wakeupChannel_->disableAll();
+    wakeupChannel_->remove();
+    ::close(wakeupfd_);
     Safe_Delete(wakeupChannel_);
+    Safe_Delete(poller_);
 }
 
 void EventLoop::loop()
 {
     running_ = true;
 
-    Timestamp retime;
+    Timestamp now;
     while (running_)
     {
         activeChannels_.clear();
-        retime = poller_->poll_once(10000, activeChannels_);
-        //LOG_INFO("EventLoop::loop [%s][%d]", retime.toString().c_str(), activeChannels_.size());
+
+        int timeoutMs = 0;
+        now = Timestamp::now();
+        Timestamp nextExpired = timerQueue_->getNearestExpiration();
+        if(nextExpired.valid())
+        {
+            
+            double seconds = Timestamp::timediff(nextExpired, now);
+            LOG_INFO("nextExpired.valid() [%s][%s][%lf]", nextExpired.toString().c_str(), now.toString().c_str(), seconds);
+            if(seconds <= 0)
+                timeoutMs = 0;
+            else
+                timeoutMs = seconds * 1000;
+        }
+        else
+        {
+        #if defined(POLL_WAIT_INDEFINITE)
+            timeoutMs = -1;
+        #else
+            timeoutMs = 0;
+        #endif
+        }
+
+        now = poller_->poll_once(timeoutMs, activeChannels_);
+        //LOG_INFO("EventLoop::loop [%s][%d]", now.toString().c_str(), activeChannels_.size());
+
         eventHandling_ = true;
         for (ChannelList::iterator it = activeChannels_.begin(); it != activeChannels_.end(); ++it)
         {
             currentActiveChannel_ = *it;
-            currentActiveChannel_->handleEvent(retime);
+            currentActiveChannel_->handleEvent(now);
         }
         currentActiveChannel_ = NULL;
         eventHandling_ = false;
+
+        timerQueue_->runTimer(now);
 
         callPendingFunctors();    //处理poll等待过程中发生的事件
     }
 }
 
-void EventLoop::stop()
+void EventLoop::quit()
 {
     running_ = false;
     if (!isInLoopThread())
@@ -127,6 +159,23 @@ void EventLoop::queueInLoop(const Functor& func)
     {
         wakeupPoller();
     }
+}
+
+TimerId EventLoop::addTimer(const TimerCallback& cb, const Timestamp& when)
+{
+    return timerQueue_->addTimer(cb, when, 0);
+}
+
+TimerId EventLoop::addTimer(const TimerCallback& cb, double delaySeconds, bool repeat)
+{
+    Timestamp when(Timestamp::now());
+    when += delaySeconds;
+    return timerQueue_->addTimer(cb, when, repeat ? delaySeconds : 0);
+}
+
+void EventLoop::cancelTimer(TimerId id)
+{
+     timerQueue_->cancelTimer(id);
 }
 
 void EventLoop::callPendingFunctors()

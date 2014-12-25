@@ -18,6 +18,7 @@
 NAMESPACE_ZL_NET_START
 
 #define USE_LINUX_EPOLL
+#define POLL_WAIT_INDEFINITE
 
 using zl::base::Timestamp;
 class Socket;

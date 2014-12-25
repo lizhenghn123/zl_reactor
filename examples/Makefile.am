@@ -15,3 +15,5 @@ SUBDIRS                += exception_mangle
 SUBDIRS                += thread_test
 
 SUBDIRS                += blockqueue_test
+
+SUBDIRS                += timer_test
