@@ -4,7 +4,6 @@
 #include "thread/CountDownLatch.h"
 #include "base/StrUtil.h"
 #include "base/ZLog.h"
-using namespace zl::base;
 using zl::thread::Thread;
 NAMESPACE_ZL_NET_START
 

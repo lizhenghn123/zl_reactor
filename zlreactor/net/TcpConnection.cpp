@@ -3,8 +3,6 @@
 #include "base/ZLog.h"
 #include "net/EventLoop.h"
 #include "net/Channel.h"
-
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 void defaultConnectionCallback(const TcpConnectionPtr& conn)

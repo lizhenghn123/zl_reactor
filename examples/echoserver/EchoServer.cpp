@@ -5,7 +5,7 @@
 #include "base/ZLog.h"
 using namespace std;
 using namespace zl::net;
-using namespace zl::base;
+//using namespace zl::base;
 
 class EchoServer
 {
@@ -53,11 +53,11 @@ void EchoServer::onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timesta
 
 int main()
 {
-    zl_log_instance_create("log", "echoserver");
+    zl::base::zl_log_instance_create("log", "echoserver");
     EventLoop loop;
     InetAddress listenAddr("127.0.0.1", 8888);
     EchoServer server(&loop, listenAddr);
     server.start();
     loop.loop();
-    zl_log_instance_destroy();
+    zl::base::zl_log_instance_destroy();
 }

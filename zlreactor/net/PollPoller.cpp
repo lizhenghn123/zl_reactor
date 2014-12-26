@@ -1,7 +1,6 @@
 ﻿#include "net/PollPoller.h"
 #include "net/Channel.h"
 #include "base/ZLog.h"
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 PollPoller::PollPoller(EventLoop *loop)

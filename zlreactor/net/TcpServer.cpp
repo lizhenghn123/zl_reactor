@@ -5,7 +5,6 @@
 #include "net/TcpConnection.h"
 #include "net/EventLoop.h"
 #include "net/EventLoopThreadPool.h"
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 TcpServer::TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::string& server_name/* = "TcpServer"*/)

@@ -2,7 +2,6 @@
 #include "net/EventLoop.h"
 #include "base/ZLog.h"
 #include "net/Channel.h"
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 TcpConnector::TcpConnector(EventLoop *loop, const InetAddress& serverAddr)

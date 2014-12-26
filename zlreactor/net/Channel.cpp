@@ -3,7 +3,6 @@
 #include <assert.h>
 #include "base/ZLog.h"
 #include "net/EventLoop.h"
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 const int Channel::kEventNone  = 0;

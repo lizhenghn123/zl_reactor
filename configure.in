@@ -18,6 +18,7 @@ AC_CONFIG_FILES([Makefile
 				examples/thread_test/Makefile
 				examples/blockqueue_test/Makefile
 				examples/timer_test/Makefile
+				examples/smartassert_test/Makefile
 				tests/Makefile
 				tests/stress_client/Makefile
                 tests/universal_timer/Makefile

@@ -1,7 +1,6 @@
 ﻿#include "net/Timerfd.h"
 #include "base/ZLog.h"
 #include "net/SocketUtil.h"
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
  //创建一个定时器描述符

@@ -11,6 +11,11 @@
 // ***********************************************************************
 #ifndef ZL_STDDEFINE_H
 #define ZL_STDDEFINE_H
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <assert.h>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <list>
@@ -21,11 +26,8 @@
 #include <functional>
 #include <iterator>
 #include <numeric>
-#include <stdint.h>
-#include <assert.h>
-#include <string.h>
-#include <stdio.h>
 #include "OsDefine.h"
+#include "base/SmartAssert.h"
 #ifdef OS_WINDOWS
 #define  _WINSOCKAPI_
 #include <Windows.h>
@@ -72,28 +74,5 @@
             TypeName(const TypeName&);                \
             TypeName& operator=(const TypeName&)      
 #endif
-
-// Run-time assertion
-// #define ZL_NDEBUG
-#ifdef  ZL_NDEBUG
-#define ZL_ASSERT(expr) ((void) 0)
-#define ZL_ASSERTEX(expr, file, lineno, func) ((void) 0)
-#else
-#define ZL_ASSERT(expr)                                    \
-			((void) ((expr) ? 0 :                          \
-		    printf("%s:%d: %s:  Assertion `%s' failed.\n", \
-			__FILE__, __LINE__, __FUNCTION__, #expr)))
-#define ZL_ASSERTEX(expr, file, lineno, func)              \
-	        ((void) ((expr) ? 0 :                          \
-		    printf("%s:%d: %s: Assertion `%s' failed. "    \
-		    "(called from %s:%d:%s)\n",                    \
-		     __FILE__, __LINE__, __FUNCTION__, #expr,      \
-            file, lineno, func)))
-#endif
-
-// Compile-time assertion
-#define ZL_STATIC_ASSERT(expr) ZL_STATIC_ASSERT_IMPL(expr, __FILE__, __LINE__)
-#define ZL_STATIC_ASSERT_IMPL(expr, file, line) typedef char static_assert_fail_on_##file_and_##line[2*((expr)!=0)-1]
-
 
 #endif /* ZL_STDDEFINE_H */

@@ -1,7 +1,6 @@
 ﻿#include "net/SocketUtil.h"
 #include <string.h>
 #include "base/ZLog.h"
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 SocketInitialization  g_socket_init_once;

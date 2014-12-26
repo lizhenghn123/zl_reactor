@@ -6,7 +6,6 @@
 #include "base/Timestamp.h"
 #include "base/ZLog.h"
 #include "net/TimerQueue.h"
-using namespace zl::base;
 using namespace zl::thread;
 NAMESPACE_ZL_NET_START
 

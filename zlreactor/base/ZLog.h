@@ -87,14 +87,14 @@ typedef bool(*zl_log_ext_handler_f)(const char *file, int line, const char *obj,
 void zl_log_set_handler(zl_log_ext_handler_f handler);
 
 
-#define LOG_DEBUG(s, ...)        zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
-#define LOG_INFO(s, ...)         zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
-#define LOG_NOTICE(s, ...)       zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_NOTICE,    s, ##__VA_ARGS__)
-#define LOG_WARN(s, ...)         zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_WARNING,   s, ##__VA_ARGS__)
-#define LOG_ERROR(s, ...)        zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_ERROR,     s, ##__VA_ARGS__)
-#define LOG_CRITICA(s, ...)      zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_CRITICAL,  s, ##__VA_ARGS__)
-#define LOG_ALERT(s, ...)        zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
-#define LOG_EMERGENCY(s, ...)    zl_log(ZL_LOG_MARK, ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
+#define LOG_DEBUG(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
+#define LOG_INFO(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
+#define LOG_NOTICE(s, ...)       zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_NOTICE,    s, ##__VA_ARGS__)
+#define LOG_WARN(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_WARNING,   s, ##__VA_ARGS__)
+#define LOG_ERROR(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ERROR,     s, ##__VA_ARGS__)
+#define LOG_CRITICA(s, ...)      zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_CRITICAL,  s, ##__VA_ARGS__)
+#define LOG_ALERT(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
+#define LOG_EMERGENCY(s, ...)    zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
 
 NAMESPACE_ZL_BASE_END
 #endif /* ZL_ZLOG_H */

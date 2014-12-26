@@ -18,7 +18,6 @@
 #include "thread/Thread.h"
 #include <sys/epoll.h>        // for epoll
 #include <sys/eventfd.h>      // for eventfd
-using namespace zl::base;
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 

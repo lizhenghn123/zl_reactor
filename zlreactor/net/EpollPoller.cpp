@@ -4,7 +4,6 @@
 #include "net/Socket.h"
 #include "net/Channel.h"
 #include "base/ZLog.h"
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 ZL_STATIC_ASSERT(EPOLLIN == POLLIN);

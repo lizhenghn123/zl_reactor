@@ -5,7 +5,6 @@
 #include "base/ZLog.h"
 #include "net/ActiveSocket.h"
 #include "net/InetAddress.h"
-using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 TcpAcceptor::TcpAcceptor(EventLoop *loop, const InetAddress& listenAddr)
@@ -52,7 +51,7 @@ void TcpAcceptor::listen()
 void TcpAcceptor::onAccept(Timestamp now)
 {
     loop_->assertInLoopThread();
-	int count = 0;
+    int count = 0;
     while(count < 100)
     {
         InetAddress peerAddr;
@@ -68,12 +67,18 @@ void TcpAcceptor::onAccept(Timestamp now)
             {
                 LOG_ALERT("TcpAcceptor::OnAccept() no callback , and close the coming connection![%d]", newfd);
             }
-			count ++;
+            count ++;
         }
         else
         {
-            if(errno != EAGAIN)
-                LOG_ALERT("TcpAcceptor::OnAccept() accept connection fail![%d][%d]", newfd, errno);
+            if(errno == EAGAIN || errno == EWOULDBLOCK) //We have processed all incoming  connections.
+            {
+
+            }
+            else
+            {
+                LOG_ALERT("TcpAcceptor::OnAccept() accept connection error![%d][%d]", newfd, errno);
+            }
             //  11 : EAGAIN：套接字处于非阻塞状态，当前没有连接请求。
             //	EBADF：非法的文件描述符。
             //	ECONNABORTED：连接中断。

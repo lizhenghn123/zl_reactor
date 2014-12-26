@@ -3,7 +3,6 @@
 #include "base/StopWatch.h"
 #include "net/EventLoop.h"
 #include "base/ZLog.h"
-using namespace zl::base;
 #include <limits.h>
 NAMESPACE_ZL_NET_START
 
