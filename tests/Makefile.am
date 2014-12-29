@@ -27,3 +27,5 @@ SUBDIRS                += tcpselfconnect2
 SUBDIRS                += PipePairFactory
 
 SUBDIRS                += master_worker_process
+
+SUBDIRS                += socketAcceptThunderingHerd
