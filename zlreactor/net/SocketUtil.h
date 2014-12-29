@@ -127,6 +127,7 @@ public:
 
     static int setNonBlocking(ZL_SOCKET fd, bool nonBlocking = true);
     static int setNoDelay(ZL_SOCKET fd, bool noDelay = true);
+	static int setReuseAddr(ZL_SOCKET fd, bool flag = true);
     static int setSendBuffer(ZL_SOCKET fd, int readSize);
     static int setRecvBuffer(ZL_SOCKET fd, int writeSize);
     static int getSendBuffer(ZL_SOCKET fd);

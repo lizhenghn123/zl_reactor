@@ -9,7 +9,7 @@ int main()
     {
         const static int i = 2;
         //ZL_STATIC_ASSERT(i>3);
-        ZL_STATIC_ASSERT_IMPL(i>3, "fdf", 13);
+        //ZL_STATIC_ASSERT_IMPL(i>3, "fdf", 13);
     }
     {
         int i = 2;

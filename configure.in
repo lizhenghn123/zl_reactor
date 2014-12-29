@@ -32,6 +32,7 @@ AC_CONFIG_FILES([Makefile
                 tests/tcpselfconnect1/Makefile
                 tests/tcpselfconnect2/Makefile
                 tests/PipePairFactory/Makefile
+                tests/master_worker_process/Makefile
                ])
 
 # Checks for programs.
