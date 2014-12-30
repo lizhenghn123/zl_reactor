@@ -41,7 +41,9 @@ public:
         mutex_(),
         notEmpty_(mutex_),
         notFull_(mutex_)
-    {}
+    {
+    }
+
     virtual ~BoundedBlockingQueue()
     {
         stop();
