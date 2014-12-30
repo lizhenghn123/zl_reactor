@@ -198,7 +198,7 @@ void EventLoop::assertInLoopThread() const
     if(!isInLoopThread())
     {
         LOG_ALERT("EventLoop::abortNotInLoopThread - EventLoop [%0x] was created in threadId_ [%d], " 
-            "but current thread id = [%d].", this, currentThreadId_.pid(), this_thread::get_id().pid());
+            "but current thread id = [%d].", this, currentThreadId_.tid(), this_thread::get_id().tid());
         assert("EventLoop::assertInLoopThread()" && "why???");
     }
 }

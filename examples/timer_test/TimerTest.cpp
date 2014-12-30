@@ -15,7 +15,7 @@ EventLoop *g_loop;
 
 void printTid()
 {
-    printf("pid = %d, tid = %ld\n", getpid(), thread::this_thread::get_id().pid());
+    printf("pid = %d, tid = %ld\n", getpid(), thread::this_thread::get_id().tid());
     printf("now %s\n", Timestamp::now().toString().c_str());
 }
 

@@ -30,7 +30,7 @@ void reader_thread()
     {
         if(g_rwMutex.readLock())
         {
-            printf("reader thread[%d] : read one\n", this_thread::get_id().pid());
+            printf("reader thread[%ld] : read one\n", this_thread::get_id().tid());
             g_rwMutex.readUnLock();
         }
         //break;
@@ -43,7 +43,7 @@ void writer_thread()
     {
         if(g_rwMutex.writeLock())
         {
-            printf("writer thread[%ld] : writer one\n", this_thread::get_id().pid());
+            printf("writer thread[%ld] : writer one\n", this_thread::get_id().tid());
             g_rwMutex.writeUnLock();
         }
         //break;

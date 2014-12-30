@@ -122,7 +122,7 @@ public:
         return os;
     }
 
-    unsigned long int pid() const
+    unsigned long int tid() const
     {
         return mId;
     }
