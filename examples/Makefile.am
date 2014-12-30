@@ -19,3 +19,5 @@ SUBDIRS                += blockqueue_test
 SUBDIRS                += timer_test
 
 SUBDIRS                += smartassert_test
+
+SUBDIRS                += reader_writer 
