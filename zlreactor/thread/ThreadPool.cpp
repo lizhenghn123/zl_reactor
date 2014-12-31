@@ -4,7 +4,7 @@
 NAMESPACE_ZL_THREAD_START
 
 ThreadPool::ThreadPool(const std::string& name/* = "ThreadPool"*/)
-    : name_(name), running_(false), mutex_(), cond_(mutex_)
+    : name_(name), running_(false)
 {
 }
 
@@ -34,7 +34,7 @@ void ThreadPool::start(int numThreads)
 void ThreadPool::stop()
 {
     running_ = false;
-    cond_.notify_all();
+    queue_.stop();
     for_each(threads_.begin(), threads_.end(), std::bind(&Thread::join, std::placeholders::_1));
 }
 
@@ -46,9 +46,7 @@ void ThreadPool::run(const Task& task)
     }
     else
     {
-        LockGuard<Mutex> lock(mutex_);
-        queue_.push_back(task);
-        cond_.notify_one();
+        queue_.push(task);
     }
 }
 
@@ -58,7 +56,7 @@ void ThreadPool::executeThread()
     {
         while (running_)
         {
-            Task task(popOne());
+            Task task(queue_.pop());
             if (task)
             {
                 /*bool ret = */task();
@@ -70,24 +68,6 @@ void ThreadPool::executeThread()
         //print("caught exception caught in ThreadPool %s\n", name_.c_str());
         std::abort();
     }
-}
-
-ThreadPool::Task ThreadPool::popOne()
-{
-    LockGuard<Mutex> lock(mutex_);
-    while (queue_.empty() && running_)
-    {
-        cond_.wait();
-    }
-    if(!running_)
-        return Task();
-    Task task;
-    if(!queue_.empty())
-    {
-        task = queue_.front();
-        queue_.pop_front();
-    }
-    return task;
 }
 
 NAMESPACE_ZL_THREAD_END

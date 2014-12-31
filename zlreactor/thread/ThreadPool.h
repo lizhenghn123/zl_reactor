@@ -5,7 +5,7 @@
 // Description      :
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 2014-10-06
+// Last Modified On : 2014-12-31
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -13,8 +13,7 @@
 #define ZL_THREADPOOL_H
 #include "Define.h"
 #include "base/NonCopy.h"
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
+#include "thread/BlockingQueue.h"
 NAMESPACE_ZL_THREAD_START
 
 class Thread;
@@ -22,7 +21,6 @@ class Thread;
 class ThreadPool : NonCopy
 {
 public:
-    //typedef std::function<bool ()> Task;
     typedef std::function<void ()> Task;
 
 public:
@@ -32,19 +30,16 @@ public:
 public:
     void start(int numThreads);
     void stop();
-
     void run(const Task& f);
+    size_t size() const { return queue_.size(); }
 
 private:
     void executeThread();
-    Task popOne();
 
 private:
     std::string           name_;
     bool                  running_;
-    Mutex                 mutex_;
-    Condition             cond_;
-    std::deque<Task>      queue_;
+    BlockingQueue<Task>   queue_;
     std::vector<Thread *> threads_;
 };
 

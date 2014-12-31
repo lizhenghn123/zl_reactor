@@ -29,6 +29,7 @@ public:
     void remove_thread(Thread *thd);
     void join_all();
     size_t size() const;
+
 private:
     mutable Mutex         mutex_;
     std::vector<Thread *>  vecThreads_;

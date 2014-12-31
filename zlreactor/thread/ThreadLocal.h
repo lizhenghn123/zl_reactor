@@ -30,105 +30,105 @@ NAMESPACE_ZL_THREAD_START
 
 
 #ifdef OS_WINDOWS
-template<typename T>
+    template<typename T>
 class ThreadLocal : NonCopy
 {
 public:
-	ThreadLocal()
-	{
-		 tlsKey_ = TlsAlloc();
-	}
+    ThreadLocal()
+    {
+        tlsKey_ = TlsAlloc();
+    }
 
-	~ThreadLocal()
-	{
-		LPVOID p = TlsGetValue(tlsKey_);
-		if(p != NULL)
-		{
-			T *obj = static_cast<T*>(p);
-			delete obj;
-		}
+    ~ThreadLocal()
+    {
+        LPVOID p = TlsGetValue(tlsKey_);
+        if(p != NULL)
+        {
+            T *obj = static_cast<T*>(p);
+            delete obj;
+        }
 
-		TlsFree(tlsKey_);
-	}
+        TlsFree(tlsKey_);
+    }
 
-	T operator()()
-	{
-		T *obj = Get();
-		return *obj;
-	}
+    T operator()()
+    {
+        T *obj = Get();
+        return *obj;
+    }
 
-	T* operator-> () 
-	{
-		return get();
-	}
+    T* operator-> () 
+    {
+        return get();
+    }
 private:
-	T* get()
-	{
-		LPVOID p = TlsGetValue(tlsKey_);
-		if(p == NULL)
-		{
-			T *obj = new T;
-			TlsSetValue(tlsKey_, obj);
-			return obj;
-		}
-		else
-		{
-			return static_cast<T*>(p);
-		}
-	}
+    T* get()
+    {
+        LPVOID p = TlsGetValue(tlsKey_);
+        if(p == NULL)
+        {
+            T *obj = new T;
+            TlsSetValue(tlsKey_, obj);
+            return obj;
+        }
+        else
+        {
+            return static_cast<T*>(p);
+        }
+    }
 private:
-	static DWORD tlsKey_;
+    static DWORD tlsKey_;
 };
 
 template <typename T>
 DWORD  ThreadLocal<T>::tlsKey_ ;
 
 #else
-template<typename T>
+    template<typename T>
 class ThreadLocal : NonCopy
 {
 public:
-	ThreadLocal()
-	{
-		pthread_key_create(&tlsKey_, &ThreadLocal::cleanHook);
-	}
+    ThreadLocal()
+    {
+        pthread_key_create(&tlsKey_, &ThreadLocal::cleanHook);
+    }
 
-	~ThreadLocal()
-	{
-		pthread_key_delete(tlsKey_);
-	}
+    ~ThreadLocal()
+    {
+        pthread_key_delete(tlsKey_);
+    }
 
-	T operator()()
-	{
-		T *obj = get();
-		return *obj;
-	}
+    T operator()()
+    {
+        T *obj = get();
+        return *obj;
+    }
 
-	T* operator->() 
-	{
-		return get();
-	}
-
-private:
-	T* get()
-	{
-		T* obj = static_cast<T*>(pthread_getspecific(tlsKey_));
-		if (obj == NULL) 
-		{
-			T* newObj = new T;
-			pthread_setspecific(tlsKey_, newObj);
-			return newObj;
-		}
-		return obj;
-	}
-	static void cleanHook(void *x)
-	{
-		T* obj = static_cast<T*>(x);
-		delete obj;
-	}
+    T* operator->() 
+    {
+        return get();
+    }
 
 private:
-	pthread_key_t tlsKey_;
+    T* get()
+    {
+        T* obj = static_cast<T*>(pthread_getspecific(tlsKey_));
+        if (obj == NULL) 
+        {
+            T* newObj = new T;
+            pthread_setspecific(tlsKey_, newObj);
+            return newObj;
+        }
+        return obj;
+    }
+    static void cleanHook(void *x)
+    {
+        T* obj = static_cast<T*>(x);
+        delete obj;
+    }
+
+private:
+    pthread_key_t tlsKey_;
 };
 #endif
 

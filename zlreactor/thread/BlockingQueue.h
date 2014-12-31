@@ -5,7 +5,7 @@
 // Description      : 同步阻塞队列，可工作于多线程环境下，可用于线程之间数据存取
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 2014-08-25
+// Last Modified On : 2014-12-31
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -122,7 +122,7 @@ public:
         has_job_.notify_all();
     }
 
-    size_t size()
+    size_t size() const
     {
         LockGuard lock(mutex_);
         return queue_.size();
@@ -170,10 +170,10 @@ private:
     }
 
 protected:
-    bool             stopFlag_;
-    MutexType        mutex_;
-    ConditionType    has_job_;
-    QueueType        queue_;
+    bool              stopFlag_;
+    mutable MutexType mutex_;
+    ConditionType     has_job_;
+    QueueType         queue_;
 };
 
 /* using is not support in VS2010*/
