@@ -66,6 +66,7 @@ void TcpAcceptor::onAccept(Timestamp now)
             else
             {
                 LOG_ALERT("TcpAcceptor::OnAccept() no callback , and close the coming connection![%d]", newfd);
+				SocketUtil::closeSocket(newfd);
             }
             count ++;
         }
