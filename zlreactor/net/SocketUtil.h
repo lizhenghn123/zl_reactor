@@ -122,8 +122,8 @@ public:
 
     static int  connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr);
     static ZL_SOCKET acceptOne(ZL_SOCKET sockfd, struct sockaddr_in *addr);
-    static size_t read(ZL_SOCKET sockfd, void *buf, size_t count);
-    static size_t write(ZL_SOCKET sockfd, const void *buf, size_t count);
+    static ssize_t read(ZL_SOCKET sockfd, void *buf, size_t count);
+    static ssize_t write(ZL_SOCKET sockfd, const void *buf, size_t count);
 
     static int setNonBlocking(ZL_SOCKET fd, bool nonBlocking = true);
     static int setNoDelay(ZL_SOCKET fd, bool noDelay = true);
