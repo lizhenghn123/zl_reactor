@@ -1,6 +1,7 @@
 #include "net/EventLoop.h"
 #include <assert.h>
 #include <sys/eventfd.h>     // for eventfd
+#include <signal.h>          // for ::signal
 #include "net/Channel.h"
 #include "net/Poller.h"
 #include "base/Timestamp.h"
@@ -11,6 +12,17 @@ NAMESPACE_ZL_NET_START
 
 namespace
 {
+    // 如果往已关闭的client socket上继续write时，服务器进程会收到SIGPIPE信号而终止,
+    // 这里简单忽略该信号
+	class IgnoreSigPipe
+    {
+    public:
+	    IgnoreSigPipe()
+        {
+            ::signal(SIGPIPE, SIG_IGN);
+        }
+    }_dont_use_this_class_;
+
     int createEventfd()
     {
         int efd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
