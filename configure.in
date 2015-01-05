@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.63])
 AC_INIT([zlreactor], [1.0], [lizhenghn@gmail.com])
-AC_CONFIG_SRCDIR([3rdparty/ConfigFile.h])
+AC_CONFIG_SRCDIR([zlreactor/Define.h])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE(zlreactor,1.0)
 AC_PROG_LIBTOOL
@@ -20,6 +20,7 @@ AC_CONFIG_FILES([Makefile
 				examples/timer_test/Makefile
 				examples/smartassert_test/Makefile
 				examples/reader_writer/Makefile
+				examples/test_daemon/Makefile
 				tests/Makefile
 				tests/stress_client/Makefile
                 tests/universal_timer/Makefile

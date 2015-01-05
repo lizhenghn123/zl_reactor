@@ -21,3 +21,5 @@ SUBDIRS                += timer_test
 SUBDIRS                += smartassert_test
 
 SUBDIRS                += reader_writer 
+
+SUBDIRS                += test_daemon 

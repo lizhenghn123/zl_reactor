@@ -17,7 +17,7 @@ libzlreactor_la_LIBFLAGS =
 libzlreactor_la_LIBADD =
 
 INCLUDES                   = -I../
-libzlreactor_la_CPPFLAGS = -std=c++0x -fPIC -shared
+libzlreactor_la_CPPFLAGS = -Wall -std=c++0x -fPIC -shared
 #libzlreactor_a_LDFLAGS = -lpthread	
 
 libzlreactor_la_SOURCES = \
@@ -32,6 +32,7 @@ libzlreactor_la_SOURCES = \
 					 base/ZLog.cpp \
 					 base/Demangle.cpp \
 					 base/Exception.cpp \
+					 base/Daemonize.cpp \
 					 thread/Thread.cpp \
 					 thread/ThreadGroup.cpp \
 					 thread/ThreadPool.cpp \
