@@ -107,7 +107,8 @@ Timestamp EpollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
     else
     {
         // error happens, log uncommon ones
-        if (savedErrno != EINTR)
+		// TODO : should return -1 if EINTR, else return 0
+        if (savedErrno != SOCK_ERR_EINTR)
         {
             errno = savedErrno;
             LOG_INFO("EpollPoller::poll_once: error [%d]", savedErrno);

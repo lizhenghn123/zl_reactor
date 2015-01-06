@@ -105,7 +105,7 @@ Timestamp PollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
     }
     else
     {
-        if (savedErrno != EINTR)
+        if (savedErrno != SOCK_ERR_EINTR)
         {
             errno = savedErrno;
             LOG_INFO("EpollPoller::poll_once: error [%d]", errno);
