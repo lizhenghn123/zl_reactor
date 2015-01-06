@@ -26,6 +26,7 @@ class Timestamp
 public:
     Timestamp();
     explicit Timestamp(int64_t ms);
+
 public:
     static Timestamp now();
     static Timestamp invalid();
@@ -35,16 +36,22 @@ public:
          int64_t delta = lhs.microSeconds() - rhs.microSeconds();
          return ZL_TIME_SEC(delta * 1.0);
     }
+    static int64_t  timediffMs(const Timestamp& lhs, const Timestamp& rhs)
+    {
+        int64_t delta = lhs.microSeconds() - rhs.microSeconds();
+        return (delta / 1000);
+    }
+
 public:
     int64_t microSeconds() const
     {
         return microSeconds_;
     }
-    int64_t millSeconds()  const
+    int64_t millSeconds() const
     {
         return microSeconds_ / ZL_MSEC_PER_SEC;
     }
-    int64_t seconds()      const
+    int64_t seconds()     const
     {
         return microSeconds_ / ZL_USEC_PER_SEC;
     }
@@ -85,6 +92,21 @@ inline Timestamp operator+(double seconds, const Timestamp& rhs)
 inline Timestamp operator+=(Timestamp& lhs, double seconds)
 {
     return lhs = lhs + seconds;
+}
+
+inline int64_t operator-(const Timestamp& lhs, const Timestamp& rhs)
+{ 
+    return Timestamp::timediffMs(lhs, rhs);
+}
+
+inline Timestamp operator-(const Timestamp& lhs, double seconds)
+{ 
+    return (lhs + (-seconds));
+}
+
+inline Timestamp operator-=(Timestamp& lhs, double seconds)
+{ 
+    return (lhs = (lhs + (-seconds)));
 }
 
 } // namespace base
