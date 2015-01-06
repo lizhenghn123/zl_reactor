@@ -73,7 +73,7 @@ void TcpServer::removeConnectionInLoop(const TcpConnectionPtr& conn)
     loop_->assertInLoopThread();
     LOG_INFO("TcpServer::removeConnectionInLoop [%d] - %s", conn->fd(), conn->peerAddress().ipPort().c_str());
     size_t n = connections_.erase(conn->fd());
-    UNUSED_STATEMENT(n);
+    ZL_UNUSED(n);
     assert(n == 1);
 
     EventLoop* ioLoop = conn->getLoop();

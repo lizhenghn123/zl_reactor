@@ -63,11 +63,11 @@ bool PollPoller::removeChannel(Channel *channel)
     assert(0 <= idx && idx < static_cast<int>(pollfds_.size()));
 
     const struct pollfd& pfd = pollfds_[idx];
-    UNUSED_STATEMENT(pfd);
+    ZL_UNUSED(pfd);
     assert(pfd.fd == -channel->fd()-1 && pfd.events == channel->events());
 
     size_t n = channelMap_.erase(fd);
-    UNUSED_STATEMENT(n);
+    ZL_UNUSED(n);
     assert(n == 1);
     if ((idx) == static_cast<int>(pollfds_.size()) - 1) // last one
     {

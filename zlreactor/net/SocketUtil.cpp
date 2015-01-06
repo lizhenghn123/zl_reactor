@@ -34,7 +34,7 @@ int SocketUtil::closeSocket(ZL_SOCKET fd)
     if (fd)
     {
         LOG_INFO("closeSocket [%d]", fd);
-        return ::ZL_CLOSE(fd);
+        return ZL_CLOSE(fd);
     }
     return -1;
 }
@@ -82,7 +82,7 @@ ZL_SOCKET SocketUtil::createSocketAndListen(const char *ip, int port, int backlo
 
 int  SocketUtil::connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr)
 {
-    return ::ZL_CONNECT(sockfd, (sockaddr *)&addr, static_cast<socklen_t>(sizeof(addr)));
+    return ZL_CONNECT(sockfd, (sockaddr *)&addr, static_cast<socklen_t>(sizeof(addr)));
 }
 
 ZL_SOCKET SocketUtil::acceptOne(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
@@ -94,26 +94,26 @@ ZL_SOCKET SocketUtil::acceptOne(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
 
 ssize_t SocketUtil::read(ZL_SOCKET sockfd, void *buf, size_t count)
 {
-    return ::ZL_READ(sockfd, buf, count);
+    return ZL_READ(sockfd, buf, count);
 }
 
 ssize_t SocketUtil::write(ZL_SOCKET sockfd, const void *buf, size_t count)
 {
-    return ::ZL_WRITE(sockfd, buf, count);
+    return ZL_WRITE(sockfd, buf, count);
 }
 
 int SocketUtil::setNonBlocking(ZL_SOCKET fd, bool nonBlocking/* = true*/)
 {
 #if defined(OS_LINUX)
-    int flags = fcntl(fd, F_GETFL);
+    int flags = ::fcntl(fd, F_GETFL);
     if(flags < 0)
         return flags;
 
     nonBlocking ? flags |= O_NONBLOCK : flags &= (~O_NONBLOCK);
-    return fcntl(fd, F_SETFL, flags);
+    return ::fcntl(fd, F_SETFL, flags);
 #elif defined(OS_WINDOWS)
     unsigned long ul = nonBlocking ? 1 : 0;
-    int ret = ioctlsocket(fd, FIONBIO, (unsigned long *)&ul);
+    int ret = ::ioctlsocket(fd, FIONBIO, (unsigned long *)&ul);
     return ret;
 #endif
 }
@@ -149,7 +149,7 @@ int SocketUtil::getSendBuffer(ZL_SOCKET fd)
     socklen_t buff_szie = sizeof(socklen_t);
     int optname = 0;
     int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_SNDBUF, &optname, &buff_szie);
-    UNUSED_STATEMENT(ret);
+    ZL_UNUSED(ret);
     assert(ret != -1);
     return optname > 0 ? optname : 0;
 }
@@ -159,7 +159,7 @@ int SocketUtil::getRecvBuffer(ZL_SOCKET fd)
     socklen_t buff_szie = sizeof(socklen_t);
     int optname = 0;
     int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_RCVBUF, &optname, &buff_szie);
-    UNUSED_STATEMENT(ret);
+    ZL_UNUSED(ret);
     assert(ret != -1);
     return optname > 0 ? optname : 0;
 }

@@ -50,7 +50,7 @@ bool Socket::bind(const char *ip, int port)
     }
     sockaddr_.sin_addr.s_addr = nIP;
 
-    int ret = ::ZL_BIND(sockfd_, (struct sockaddr *) &sockaddr_, sizeof(sockaddr_));
+    int ret = ZL_BIND(sockfd_, (struct sockaddr *) &sockaddr_, sizeof(sockaddr_));
     if(ret == -1)
     {
         return false;
@@ -61,7 +61,7 @@ bool Socket::bind(const char *ip, int port)
 bool Socket::bind(const InetAddress& addr)
 {
     sockaddr_ = addr.getSockAddrInet();
-	int ret = ::ZL_BIND(sockfd_, (struct sockaddr *) &sockaddr_, sizeof(sockaddr_));
+	int ret = ZL_BIND(sockfd_, (struct sockaddr *) &sockaddr_, sizeof(sockaddr_));
     if(ret == -1)
     {
         return false;
@@ -76,7 +76,7 @@ bool Socket::listen(int backlog /*= 5*/) const
         return false;
     }
 
-    int ret = ::ZL_LISTEN(sockfd_, backlog);
+    int ret = ZL_LISTEN(sockfd_, backlog);
     if(ret == -1)
     {
         return false;
@@ -87,7 +87,7 @@ bool Socket::listen(int backlog /*= 5*/) const
 bool Socket::accept(Socket& new_socket) const
 {
     int addr_length = sizeof(new_socket.sockaddr_);
-    new_socket.sockfd_ = ::ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, (socklen_t *)&addr_length);
+    new_socket.sockfd_ = ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, (socklen_t *)&addr_length);
 
     if(new_socket.sockfd_ <= 0)
         return false;
@@ -100,7 +100,7 @@ ZL_SOCKET Socket::accept(InetAddress *peerAddr) const
     ZL_SOCKADDR_IN addr;
     ::memset(&addr, 0, sizeof(addr));
     int addr_length = sizeof(addr);
-    ZL_SOCKET connfd = ::ZL_ACCEPT(sockfd_, (sockaddr *)&addr, (socklen_t *)&addr_length);
+    ZL_SOCKET connfd = ZL_ACCEPT(sockfd_, (sockaddr *)&addr, (socklen_t *)&addr_length);
     if (connfd > 0)
     {
         peerAddr->setSockAddrInet(addr);
@@ -115,7 +115,7 @@ int Socket::send(const std::string& data) const
 
 int Socket::send(const char *data, size_t size)const
 {
-    int len = ::ZL_SEND(sockfd_, data, size, 0);
+    int len = ZL_SEND(sockfd_, data, size, 0);
     //if (len == -1)     // error
     //else if (len == 0) // connection is closed
     //else               // ok
@@ -135,9 +135,9 @@ int Socket::recv(std::string& data) const
         }
         else if(len < 0)
         {
-            if(SOCKET_ERROR == SOCKET_ERROR_EAGAIN || SOCKET_ERROR == SOCKET_ERROR_INTERUPT)
+            if(SOCK_ERR_RW_RETRY(SOCKET_ERROR))
                 continue;
-            else if(SOCKET_ERROR == SOCKET_ERROR_WOULDBLOCK)
+            else if(SOCKET_ERROR == SOCK_ERR_EWOULDBLOCK)
                 break;
             else
                 return len; // 发生了错误
@@ -161,7 +161,7 @@ int Socket::recv(char *data, int length, bool complete /*= false */) const
     {
         while(received != length)
         {
-            int len = ::ZL_RECV(sockfd_, (char *)data + received, length - received, 0);
+            int len = ZL_RECV(sockfd_, (char *)data + received, length - received, 0);
             if(len == -1)
             {
                 printf("status == -1, errno == [%d], in Socket::recv\n", errno);
@@ -179,7 +179,7 @@ int Socket::recv(char *data, int length, bool complete /*= false */) const
     }
     else
     {
-        received = ::ZL_RECV(sockfd_, (char *)data, length, 0);
+        received = ZL_RECV(sockfd_, (char *)data, length, 0);
     }
     return received;
 }
@@ -191,7 +191,7 @@ int Socket::sendTo(const std::string& data, int flags, InetAddress& sinaddr)cons
 
 int Socket::sendTo(const char *data, size_t size, int flags, InetAddress& sinaddr)const
 {
-    int len = ::ZL_SENDTO(sockfd_, data, size, flags, sinaddr, sinaddr.addressLength());
+    int len = ZL_SENDTO(sockfd_, data, size, flags, sinaddr, sinaddr.addressLength());
 
     return len;
 }
@@ -216,7 +216,7 @@ int Socket::recvFrom(std::string& data, int flags, InetAddress& sinaddr)const
 int Socket::recvFrom(char *data, int length, int flags, InetAddress& sinaddr)const
 {
     socklen_t slen;
-    int len = ::ZL_RECVFROM(sockfd_, data, length, flags, sinaddr, &slen);
+    int len = ZL_RECVFROM(sockfd_, data, length, flags, sinaddr, &slen);
     if(slen != sinaddr.addressLength())
         throw SocketException("unknown protocol type(in Socket::RecvFrom)");
     return len;
@@ -236,7 +236,7 @@ bool Socket::connect(const std::string& host, int port)
     if(errno == EAFNOSUPPORT)
         return false;
 
-    status = ::ZL_CONNECT(sockfd_, (sockaddr *)&sockaddr_, sizeof(sockaddr_));
+    status = ZL_CONNECT(sockfd_, (sockaddr *)&sockaddr_, sizeof(sockaddr_));
 
     return status == 0 ? true : false;
 }
@@ -245,7 +245,7 @@ void Socket::close()
 {
     if(isValid())
     {
-        ::ZL_CLOSE(sockfd_);
+        ZL_CLOSE(sockfd_);
     }
 }
 
@@ -254,18 +254,18 @@ bool Socket::setBlocking()
 #if defined(OS_WINDOWS)
     unsigned long ul = 0;
 
-    int ret = ioctlsocket(sockfd_, FIONBIO, (unsigned long *)&ul); //设置成阻塞模式
+    int ret = ::ioctlsocket(sockfd_, FIONBIO, (unsigned long *)&ul); //设置成阻塞模式
 
     if(ret == SOCKET_ERROR)
         return false;
 
 #elif defined(OS_LINUX)
-    int flags = fcntl(sockfd_, F_GETFL);
+    int flags = ::fcntl(sockfd_, F_GETFL);
     if(flags < 0)
         return false;
 
     flags &= (~O_NONBLOCK);
-    if(fcntl(sockfd_, F_SETFL, flags) != 0)
+    if(::fcntl(sockfd_, F_SETFL, flags) != 0)
         return false;
 #endif
 
@@ -277,18 +277,18 @@ bool Socket::setNonBlocking()
 #if defined(OS_WINDOWS)
     unsigned long ul = 1;
 
-    int ret = ioctlsocket(sockfd_, FIONBIO, (unsigned long *)&ul);  //设置成非阻塞模式
+    int ret = ::ioctlsocket(sockfd_, FIONBIO, (unsigned long *)&ul);  //设置成非阻塞模式
 
     if(ret == SOCKET_ERROR)
         return false;
 
 #elif defined(OS_LINUX)
-    int flags = fcntl(sockfd_, F_GETFL);
+    int flags = ::fcntl(sockfd_, F_GETFL);
     if(flags < 0)
         return false;
 
     flags |= O_NONBLOCK;
-    if(fcntl(sockfd_, F_SETFL, flags) != 0)
+    if(::fcntl(sockfd_, F_SETFL, flags) != 0)
         return false;
 #endif
 

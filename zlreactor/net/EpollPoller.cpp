@@ -62,7 +62,7 @@ bool EpollPoller::removeChannel(Channel *channel)
     assert(getChannel(fd) == channel && "the remove socket must be already exist");
     assert(channel->isNoneEvent());
     size_t n = channelMap_.erase(fd);
-    UNUSED_STATEMENT(n);
+    ZL_UNUSED(n);
     assert(n == 1);
 
     return update(channel, EPOLL_CTL_DEL);
