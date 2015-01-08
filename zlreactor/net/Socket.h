@@ -116,6 +116,5 @@ public://protected:
     ZL_SOCKADDR_IN  sockaddr_;
 };
 
-
 NAMESPACE_ZL_NET_END
 #endif  /* ZL_SOCKET_H */

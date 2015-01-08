@@ -37,7 +37,7 @@ public:
     typedef std::function<void(Timestamp)> ReadEventCallback;
 
 public:
-    Channel(EventLoop* loop, ZL_SOCKET fd);
+    Channel(EventLoop* loop, int fd);
     ~Channel();
 
     ZL_SOCKET fd() const { return fd_; }
@@ -99,7 +99,7 @@ private:
     static const int kEventWrite;
 
     EventLoop  *loop_;
-    ZL_SOCKET  fd_;
+    int        fd_;       // fd_ may be socket\signal\timerfd
     int        events_;
     int        revents_;  // events of the poller returned
 

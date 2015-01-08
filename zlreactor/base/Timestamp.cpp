@@ -47,7 +47,7 @@ Timestamp::Timestamp(int64_t ms) : microSeconds_(ms)
 #endif
 }
 
-struct tm  *Timestamp::getTm(bool showlocaltime/* = true*/)
+struct tm  *Timestamp::getTm(bool showlocaltime/* = true*/) const
 {
     time_t seconds = static_cast<time_t>(microSeconds_ / ZL_USEC_PER_SEC);
     if(showlocaltime)
@@ -56,7 +56,7 @@ struct tm  *Timestamp::getTm(bool showlocaltime/* = true*/)
         return gmtime(&seconds);
 }
 
-std::string Timestamp::toString(bool showlocaltime/* = true*/)
+std::string Timestamp::toString(bool showlocaltime/* = true*/) const
 {
     struct tm *tm_time = NULL;
     time_t seconds = static_cast<time_t>(microSeconds_ / ZL_USEC_PER_SEC);
@@ -68,7 +68,7 @@ std::string Timestamp::toString(bool showlocaltime/* = true*/)
         tm_time = gmtime(&seconds);
 
     char buf[32] = { 0 };
-	ZL_SNPRINTF(buf, sizeof(buf), "%4d-%02d-%02d %02d:%02d:%02d:%06d", tm_time->tm_year + 1900,
+    ZL_SNPRINTF(buf, sizeof(buf), "%4d-%02d-%02d %02d:%02d:%02d:%06d", tm_time->tm_year + 1900,
               tm_time->tm_mon + 1, tm_time->tm_mday, tm_time->tm_hour, tm_time->tm_min, tm_time->tm_sec, microseconds);
 
     return buf;

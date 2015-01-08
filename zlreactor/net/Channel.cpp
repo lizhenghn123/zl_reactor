@@ -9,7 +9,7 @@ const int Channel::kEventNone  = 0;
 const int Channel::kEventRead  = POLLIN | POLLPRI;
 const int Channel::kEventWrite = POLLOUT;
 
-Channel::Channel(EventLoop* loop, ZL_SOCKET fd)
+Channel::Channel(EventLoop* loop, int fd)
     : loop_(loop), fd_(fd), events_(0), revents_(0)
 {
 }

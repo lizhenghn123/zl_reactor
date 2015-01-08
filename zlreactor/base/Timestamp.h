@@ -61,8 +61,8 @@ public:
         return microSeconds_ > 0;
     }
 
-    struct tm  *getTm(bool showlocaltime = true);
-    std::string toString(bool showlocaltime = true);
+    struct tm  *getTm(bool showlocaltime = true) const;
+    std::string toString(bool showlocaltime = true) const;
 
 private:
     int64_t  microSeconds_;

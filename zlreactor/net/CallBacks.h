@@ -41,5 +41,7 @@ typedef std::function<void (const TcpConnectionPtr&, NetBuffer*, Timestamp)> Mes
 typedef int  TimerId;
 typedef std::function<void ()>  TimerCallback;
 
+typedef std::function<void (int)> SignalCallback;
+
 NAMESPACE_ZL_NET_END
 #endif  /* ZL_CALLBACKS_H */
