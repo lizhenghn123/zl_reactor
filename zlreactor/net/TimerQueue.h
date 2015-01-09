@@ -21,12 +21,10 @@
 #include <unordered_map>
 #include <unordered_set>
 using zl::base::Timestamp;
- 
 NAMESPACE_ZL_NET_START
 
 class Timer;
 class EventLoop;
-
 
 class TimerQueue
 {

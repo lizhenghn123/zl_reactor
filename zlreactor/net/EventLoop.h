@@ -2,7 +2,7 @@
 // Filename         : EventLoop.h
 // Author           : LIZHENG
 // Created          : 2014-10-26
-// Description      : io service, 可管理socket，timer，file等io模式
+// Description      : io service, 可管理socket，timer，signal等io
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2014-10-26
@@ -43,7 +43,7 @@ public:
     //在主线程中运行，如果是其他线程调用，则转为调用queueInLoop
     void runInLoop(const Functor& func);
     
-    //将该异步调用存储，并等待poller返回时再注意调用异步队列中的操作
+    //将该异步调用存储，并等待poller返回时再逐一调用异步队列中的操作
     void queueInLoop(const Functor& func);
 
     TimerId addTimer(const TimerCallback& cb, const Timestamp& when);

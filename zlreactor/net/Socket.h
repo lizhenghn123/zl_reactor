@@ -111,7 +111,7 @@ public:
     std::string    getHostIP();
     std::string    getHost();    // IP:Port
 
-public://protected:
+protected:
     /*const*/ ZL_SOCKET sockfd_;
     ZL_SOCKADDR_IN  sockaddr_;
 };

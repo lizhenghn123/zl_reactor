@@ -12,9 +12,7 @@
 #ifndef ZL_EPOLLPOLLER_H
 #define ZL_EPOLLPOLLER_H
 #include "net/Poller.h"
-
 struct epoll_event;
-
 NAMESPACE_ZL_NET_START
 
 class EpollPoller : public Poller
@@ -47,5 +45,4 @@ private:
 };
 
 NAMESPACE_ZL_NET_END
-
 #endif  /* ZL_EPOLLPOLLER_H */

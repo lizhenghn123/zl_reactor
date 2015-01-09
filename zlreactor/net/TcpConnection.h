@@ -40,17 +40,10 @@ public:
     const InetAddress& peerAddress() const  { return peerAddr_; }
     bool connected() const                  { return state_ == kConnected; }
 
-    void setConnectionCallback(const ConnectionCallback& cb)
-    { connectionCallback_ = cb; }
-
-    void setMessageCallback(const MessageCallback& cb)
-    { messageCallback_ = cb; }
-
-    void setWriteCompleteCallback(const WriteCompleteCallback& cb)
-    { writeCompleteCallback_ = cb; }
-
-    void setCloseCallback(const CloseCallback& cb)
-    { closeCallback_ = cb; }
+    void setConnectionCallback(const ConnectionCallback& cb)       { connectionCallback_ = cb; }
+    void setMessageCallback(const MessageCallback& cb)             { messageCallback_ = cb; }
+    void setWriteCompleteCallback(const WriteCompleteCallback& cb) { writeCompleteCallback_ = cb; }
+    void setCloseCallback(const CloseCallback& cb)                 { closeCallback_ = cb; }
 
     void connectEstablished();   // called when TcpServer accepts a new connection
     void connectDestroyed();     // called when TcpServer has removed me from its map

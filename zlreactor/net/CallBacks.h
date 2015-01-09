@@ -11,7 +11,7 @@
 // ***********************************************************************
 #ifndef ZL_CALLBACKS_H
 #define ZL_CALLBACKS_H
-#include <memory> //for std::shared_ptr
+#include <memory>            //for std::shared_ptr
 #include "base/Timestamp.h"
 NAMESPACE_ZL_NET_START
 
@@ -24,10 +24,7 @@ class NetBuffer;
 using zl::base::Timestamp;
 
 //typedef std::string Buffer;
-//typedef ByteArray  Buffer;
-//typedef ByteArray*  BufferPtr;
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
-//typedef TcpConnection* TcpConnectionPtr;
 
 void defaultConnectionCallback(const TcpConnectionPtr& conn);
 void defaultMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buffer, Timestamp receiveTime);

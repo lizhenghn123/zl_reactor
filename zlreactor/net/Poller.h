@@ -82,7 +82,7 @@ public:
     /*
      * 获取当前存在的连接
      *
-     * @param sock     : 连接socket
+     * @param sock     : socket/timer/signal fd
      * @return socket对应的连接, 如不存在返回NULL
      */
     Channel* getChannel(ZL_SOCKET sock) const;

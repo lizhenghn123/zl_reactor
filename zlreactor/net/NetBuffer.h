@@ -43,13 +43,19 @@ public:
     }
 
     size_t readableBytes() const
-    { return writerIndex_ - readerIndex_; }
+    {
+        return writerIndex_ - readerIndex_;
+    }
 
     size_t writableBytes() const
-    { return buffer_.size() - writerIndex_; }
+    {
+        return buffer_.size() - writerIndex_;
+    }
 
     size_t prependableBytes() const
-    { return readerIndex_; }
+    {
+        return readerIndex_;
+    }
 
     std::string toString() const
     {
@@ -189,7 +195,6 @@ public:    // search
     {
         assert(peek() <= start);
         assert(start <= beginWrite());
-        // FIXME: replace with memmem()?
         const char* crlf = std::search(start, beginWrite(), kCRLF, kCRLF + 2);
         return crlf == beginWrite() ? NULL : crlf;
     }
@@ -219,10 +224,14 @@ public:
     }
 
     char* beginWrite()
-    { return begin() + writerIndex_; }
+    { 
+        return begin() + writerIndex_;
+    }
 
     const char* beginWrite() const
-    { return begin() + writerIndex_; }
+    {
+        return begin() + writerIndex_;
+    }
 
     void hasWritten(size_t len)
     {
@@ -258,10 +267,14 @@ public:
 
 private:
     char* begin()
-    { return &*buffer_.begin(); }
+    {
+        return &*buffer_.begin();
+    }
 
     const char* begin() const
-    { return &*buffer_.begin(); }
+    {
+        return &*buffer_.begin();
+    }
 
     void makeSpace(size_t len)
     {
