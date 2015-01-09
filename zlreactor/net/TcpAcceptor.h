@@ -39,7 +39,6 @@ public:
 
 private:
     void onAccept(Timestamp now);
-    //    void handleRead();
 
 private:
     EventLoop *loop_;
