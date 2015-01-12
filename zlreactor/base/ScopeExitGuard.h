@@ -5,148 +5,54 @@
 // Description      : RAII类，用于资源释放、清理
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 2014-10-01
+// Last Modified On : 2015-01-11
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_SCOPEEXITGUARD_H
 #define ZL_SCOPEEXITGUARD_H
-#include "Define.h"
-NAMESPACE_ZL_BASE_START
+#include <functional>
 
-namespace detail
+#define SCOPEGUARD_LINENAME_CAT(name, line) name##line
+#define SCOPEGUARD_LINENAME(name, line)     SCOPEGUARD_LINENAME_CAT(name, line)
+
+#define ON_SCOPE_EXIT(callback) zl::base::ScopeExitGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)(callback)
+
+namespace zl
 {
-	// Release algorithms (release policies)
-	template < typename T >
-	struct DeletePolicy
-	{
-		void operator()(T handle)
-		{
-			delete (handle);
-		}
-	};
-
-	template <>
-	struct DeletePolicy<FILE*>
-	{
-		void operator()(FILE *handle)
-		{
-			fclose(handle);
-		}
-	};
-
-	template < typename T >
-	struct FreeMemPolicy
-	{
-		void operator()(T handle)
-		{
-			free(handle);
-		}
-	}; 
-
-/*	template < typename T >
-	struct FreeLibraryPolicy
-	{
-		void operator()(T handle)
-		{
-			BOOL suc = ::FreeLibrary(handle);
-			assert(suc);
-		}
-	};*/ 
-}
-
-template <typename HandleT,
-         template< typename > class ReleasePolicyT = detail::DeletePolicy,
-         HandleT NULL_VALUE = 0
-         >
-class ScopeExitGuard : private ReleasePolicyT<HandleT>
+namespace base
 {
-    typedef HandleT	value_type;
 
+class ScopeExitGuard
+{
 public:
-    ScopeExitGuard() : handle_(NULL_VALUE)
+    explicit ScopeExitGuard(std::function<void ()> onExitCallback)
+        : onExitCb_(onExitCallback), dismissed_(false)
     {
-    }
-
-    ScopeExitGuard(const value_type& h) : handle_(h)
-    {
-    }
-
-    ScopeExitGuard(const ScopeExitGuard& h)
-    {
-        cleanup();
-        handle_ = h.handle_;
     }
 
     ~ScopeExitGuard()
     {
-        cleanup();
-    }
-
-    ScopeExitGuard& operator=(const ScopeExitGuard& rhs)
-    {
-        if(&rhs != this)
+        if(!dismissed_)
         {
-            cleanup();
-            handle_ = rhs.handle_;
+            onExitCb_();
         }
-        return (*this);
     }
 
-    value_type& operator=(const value_type& hande)
+    void dismiss()
     {
-        if(hande != handle_)
-        {
-            cleanup();
-            handle_ = hande;
-        }
-        return handle_;
-    }
-
-    value_type& get()
-    {
-        return handle_;
-    }
-
-    const value_type& get() const
-    {
-        return handle_;
-    }
-
-    bool isValid() const
-    {
-        return handle_ != NULL_VALUE;
-    }
-
-    operator bool() const
-    {
-        return isValid();
-    }
-
-    value_type detach()
-    {
-        value_type hHandle = handle_;
-        handle_ = NULL_VALUE;
-        return hHandle;
-    }
-
-    void cleanup()
-    {
-        if (handle_ != NULL_VALUE)
-        {
-            operator()(handle_);
-            handle_ = NULL_VALUE;
-        }
+        dismissed_ = true;
     }
 
 private:
-    value_type handle_;
+    std::function<void()> onExitCb_;
+    bool dismissed_;
+
+private:
+    ScopeExitGuard(ScopeExitGuard const&);
+    ScopeExitGuard& operator=(ScopeExitGuard const&);
 };
 
-
-typedef ScopeExitGuard<FILE*,	detail::FreeMemPolicy>						    ScopeFreeMem;
-typedef ScopeExitGuard<FILE*,	detail::DeletePolicy>						    ScopeCloseFile;
-//typedef ScopeExitGuard<HMODULE,	detail::FreeLibraryPolicy>						ScopeFreeLibrary;
-
-NAMESPACE_ZL_BASE_END
+}
+}
 #endif  /* ZL_SCOPEEXITGUARD_H */

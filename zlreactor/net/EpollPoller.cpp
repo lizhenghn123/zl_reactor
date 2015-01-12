@@ -72,12 +72,16 @@ bool EpollPoller::update(Channel *channel, int operation)
 {
     ZL_SOCKET fd = channel->fd();
     struct epoll_event ev = { 0, { 0 } };
-    ev.events = channel->events();
-    //int events = channel->events();
-    //if(events & kEventRead)   ev.events |= POLLIN;
-    //if(events & kEventWrite)  ev.events |= POLLOUT;
+    //ev.events = channel->events();
+    int events = channel->events();
+    if (events & FDEVENT_IN)  ev.events |= EPOLLIN;
+	if (events & FDEVENT_OUT) ev.events |= EPOLLOUT;
+	ev.events |= EPOLLERR | EPOLLHUP;
+
     if (enableET_)            ev.events |= EPOLLET;
-    ev.data.ptr = channel;
+
+	ev.data.ptr = channel;
+
     if (::epoll_ctl(epollfd_, operation, fd, &ev) < 0)
     {
         LOG_CRITICA("EpollPoller::update error, [socket %d][op %d]", fd, operation);
@@ -125,13 +129,16 @@ void EpollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels)
     {
         Channel *channel = static_cast<Channel*>(events_[i].data.ptr);
         assert(hasChannel(channel) && "the channel must be already exist");
-        //int reevents = kEventNone;
-        //if (events_[i].events & EPOLLIN)  reevents |= kEventRead;
-        //if (events_[i].events & EPOLLOUT) reevents |= kEventWrite;
-        //if (events_[i].events & EPOLLERR) reevents |= kEventError;
-        //if (events_[i].events & EPOLLHUP) reevents |= kEventHup;
-        //channel->set_revents(reevents);
-        channel->set_revents(events_[i].events);
+        
+        //channel->set_revents(events_[i].events);
+		int revents = FDEVENT_NONE;
+		if (events_[i].events & EPOLLIN)    revents |= FDEVENT_IN;
+		if (events_[i].events & EPOLLPRI)   revents |= FDEVENT_PRI;
+		if (events_[i].events & EPOLLOUT)   revents |= FDEVENT_OUT;
+		if (events_[i].events & EPOLLERR)   revents |= FDEVENT_ERR;
+		if (events_[i].events & EPOLLHUP)   revents |= FDEVENT_HUP;
+        channel->set_revents(revents);
+
         activeChannels.push_back(channel);
     }
 }

@@ -20,15 +20,31 @@ NAMESPACE_ZL_NET_START
 class EventLoop;
 using zl::base::Timestamp;
 
-//enum EventType
-//{
-//    kEventNone  = 0,
-//    kEventRead  = 1<<0,       //POLLIN | POLLPRI | POLLRDHUP
-//    kEventWrite = 1<<1,       //POLLOUT
-//    kEventPri   = 1<<2,       //POLLPRI
-//    kEventHup   = 1<<3,       //POLLHUP
-//    kEventError = 1<<4        //POLLERR | POLLNVAL
-//};
+// Event types that can be polled for.  These bits may be set in `events'
+// to indicate the interesting event types; they will appear in `revents'
+// to indicate the status of the file descriptor.  */
+#define FDEVENT_NONE    0x000       /* nothing */
+
+// these are the POLL* values from <bits/poll.h> (linux poll)
+#define FDEVENT_IN		0x001		/* There is data to read.  */
+#define FDEVENT_PRI		0x002		/* There is urgent data to read.  */
+#define FDEVENT_OUT		0x004		/* Writing now will not block.  */
+
+// Event types always implicitly polled for.  These bits need not be set in `events',
+// but they will appear in `revents' to indicate the status of the file descriptor.
+#define FDEVENT_ERR		0x008		/* Error condition.  */
+#define FDEVENT_HUP		0x010		/* Hung up.  */
+#define FDEVENT_NVAL	0x020		/* Invalid polling request.  */
+
+#define FDEVENT_RDHUP   0x2000      /* gnu extendsion */
+
+enum 
+{
+	kEventNone    = FDEVENT_NONE,
+    kEventRead    = FDEVENT_IN | FDEVENT_PRI,
+    kEventWrite   = FDEVENT_OUT,
+	kEventError   = FDEVENT_ERR    
+};
 
 class Channel : zl::NonCopy
 {
@@ -66,7 +82,7 @@ public:
     { return revents_; }
 
     bool isNoneEvent() const
-    { return events_ == Channel::kEventNone; }
+    { return events_ == kEventNone; }
 
     void enableReading()
     { events_ |= kEventRead; update(); }
@@ -94,10 +110,7 @@ private:
     void update();
     void handleEventWithHold(Timestamp receiveTime);
 
-    static const int kEventNone;
-    static const int kEventRead;
-    static const int kEventWrite;
-
+private:
     EventLoop  *loop_;
     int        fd_;       // fd_ may be socket\signal\timerfd
     int        events_;
