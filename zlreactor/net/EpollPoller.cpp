@@ -74,9 +74,9 @@ bool EpollPoller::update(Channel *channel, int operation)
     struct epoll_event ev = { 0, { 0 } };
     //ev.events = channel->events();
     int events = channel->events();
-    if (events & FDEVENT_IN)  ep.events |= EPOLLIN;
-	if (events & FDEVENT_OUT) ep.events |= EPOLLOUT;
-	ep.events |= EPOLLERR | EPOLLHUP;
+    if (events & FDEVENT_IN)  ev.events |= EPOLLIN;
+	if (events & FDEVENT_OUT) ev.events |= EPOLLOUT;
+	ev.events |= EPOLLERR | EPOLLHUP;
 
     if (enableET_)            ev.events |= EPOLLET;
 

@@ -132,12 +132,12 @@ void PollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels) 
             assert(channel && "the channel must be already exist");
 			//channel->set_revents(it->revents);
 			int revents = FDEVENT_NONE;
-			if (it->revents & EPOLLIN)    revents |= FDEVENT_IN;
-			if (it->revents & EPOLLPRI)   revents |= FDEVENT_PRI;
-			if (it->revents & EPOLLOUT)   revents |= FDEVENT_OUT;
-			if (it->revents & EPOLLERR)   revents |= FDEVENT_ERR;
-			if (it->revents & EPOLLHUP)   revents |= FDEVENT_HUP;
-			if (it->revents & EPOLLNVAL)  revents |= FDEVENT_NVAL;  // never happen
+			if (it->revents & POLLIN)    revents |= FDEVENT_IN;
+			if (it->revents & POLLPRI)   revents |= FDEVENT_PRI;
+			if (it->revents & POLLOUT)   revents |= FDEVENT_OUT;
+			if (it->revents & POLLERR)   revents |= FDEVENT_ERR;
+			if (it->revents & POLLHUP)   revents |= FDEVENT_HUP;
+			if (it->revents & POLLNVAL)  revents |= FDEVENT_NVAL;  // never happen
 			channel->set_revents(revents);
             
 			activeChannels.push_back(channel);

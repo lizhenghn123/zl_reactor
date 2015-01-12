@@ -36,13 +36,15 @@ using zl::base::Timestamp;
 #define FDEVENT_HUP		0x010		/* Hung up.  */
 #define FDEVENT_NVAL	0x020		/* Invalid polling request.  */
 
+#define FDEVENT_RDHUP   0x2000      /* gnu extendsion */
+
 enum 
 {
 	kEventNone    = FDEVENT_NONE,
     kEventRead    = FDEVENT_IN | FDEVENT_PRI,
     kEventWrite   = FDEVENT_OUT,
 	kEventError   = FDEVENT_ERR    
-}
+};
 
 class Channel : zl::NonCopy
 {
