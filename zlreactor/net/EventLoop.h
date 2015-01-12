@@ -40,10 +40,12 @@ public:
     void removeChannel(Channel *channel);
     bool hasChannel(Channel *channel);
 
-    //在主线程中运行，如果是其他线程调用，则转为调用queueInLoop
+    /// 在主线程中运行，如果是其他线程调用，则转为调用queueInLoop
+    /// @param func        : 待运行事务
     void runInLoop(const Functor& func);
     
-    //将该异步调用存储，并等待poller返回时再逐一调用异步队列中的操作
+    /// 将该异步调用存储，并等待poller返回时再逐一调用异步队列中的操作
+    /// @param func        : 待运行事务
     void queueInLoop(const Functor& func);
 
     TimerId addTimer(const TimerCallback& cb, const Timestamp& when);
