@@ -18,6 +18,13 @@ bool PollPoller::updateChannel(Channel *channel)
 {
     ZL_SOCKET fd = channel->fd();
     LOG_INFO("PollPoller::updateChannel[%d]", fd);
+	
+    int pevents = FDEVENT_NONE;
+	int events = channel->events();
+    if (events & FDEVENT_IN)  pevents |= POLLIN;
+	if (events & FDEVENT_OUT) pevents |= POLLOUT;
+	pevents |= POLLERR | POLLHUP;
+
     if(channelIter_.find(channel)!=channelIter_.end())    //exist, update
     {
         assert(getChannel(fd) == channel);
@@ -27,7 +34,7 @@ bool PollPoller::updateChannel(Channel *channel)
 
         struct pollfd& pfd = pollfds_[idx];
         assert(pfd.fd == channel->fd() || pfd.fd == -channel->fd()-1);
-        pfd.events = static_cast<short>(channel->events());
+        pfd.events = static_cast<short>(pevents);
         pfd.revents = 0;
         if (channel->isNoneEvent())
         {
@@ -40,7 +47,7 @@ bool PollPoller::updateChannel(Channel *channel)
         assert(getChannel(fd) == NULL);
         struct pollfd pfd;
         pfd.fd = fd;
-        pfd.events = static_cast<short>(channel->events());
+        pfd.events = static_cast<short>(pevents);
         pfd.revents = 0;
         pollfds_.push_back(pfd);
 
@@ -123,8 +130,17 @@ void PollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels) 
             --numEvents;
             Channel *channel = getChannel(it->fd);
             assert(channel && "the channel must be already exist");
-            channel->set_revents(it->revents);
-            activeChannels.push_back(channel);
+			//channel->set_revents(it->revents);
+			int revents = FDEVENT_NONE;
+			if (it->revents & EPOLLIN)    revents |= FDEVENT_IN;
+			if (it->revents & EPOLLPRI)   revents |= FDEVENT_PRI;
+			if (it->revents & EPOLLOUT)   revents |= FDEVENT_OUT;
+			if (it->revents & EPOLLERR)   revents |= FDEVENT_ERR;
+			if (it->revents & EPOLLHUP)   revents |= FDEVENT_HUP;
+			if (it->revents & EPOLLNVAL)  revents |= FDEVENT_NVAL;  // never happen
+			channel->set_revents(revents);
+            
+			activeChannels.push_back(channel);
             //LOG_INFO("PollPoller::fireActiveChannels [%d][%d]", it->fd, it->revents);
         }
     }
