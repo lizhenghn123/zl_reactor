@@ -137,7 +137,6 @@ void EpollPoller::fireActiveChannels(int numEvents, ChannelList& activeChannels)
 		if (events_[i].events & EPOLLOUT)   revents |= FDEVENT_OUT;
 		if (events_[i].events & EPOLLERR)   revents |= FDEVENT_ERR;
 		if (events_[i].events & EPOLLHUP)   revents |= FDEVENT_HUP;
-		if (events_[i].events & EPOLLNVAL)  revents |= FDEVENT_NVAL;  // never happen
         channel->set_revents(revents);
 
         activeChannels.push_back(channel);
