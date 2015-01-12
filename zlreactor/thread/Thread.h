@@ -39,17 +39,17 @@ public:
     bool joinable() const;
     void detach();
 
-    /// Return the thread ID of a thread object.
-    //id get_id() const;
-    // pthread_t pthreadId() const { return pthreadId_; }
     native_thread_handle threadHandle() const
     {
         return threadId_;
     }
+
     const std::string& threadName() const
     {
         return threadName_;
     }
+
+    /// Return the thread ID of a thread object.
     id get_id() const;
 
     static unsigned int hardware_concurrency();
