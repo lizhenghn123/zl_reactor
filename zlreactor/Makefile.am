@@ -36,6 +36,10 @@ libzlreactor_la_SOURCES = \
 					 thread/Thread.cpp \
 					 thread/ThreadGroup.cpp \
 					 thread/ThreadPool.cpp \
+					 net/poller/Poller.cpp \
+					 net/poller/SelectPoller.cpp \
+					 net/poller/PollPoller.cpp \
+					 net/poller/EpollPoller.cpp \
 					 net/Timerfd.cpp \
 					 net/NetUtil.cpp \
 					 net/NetBuffer.cpp \
@@ -44,9 +48,6 @@ libzlreactor_la_SOURCES = \
 					 net/Socket.cpp \
 					 net/ActiveSocket.cpp \
 					 net/PassiveSocket.cpp \
-					 net/Poller.cpp \
-					 net/PollPoller.cpp \
-					 net/EpollPoller.cpp \
 					 net/EventLoop.cpp \
 					 net/EventLoopThreadPool.cpp \
 					 net/Channel.cpp \
