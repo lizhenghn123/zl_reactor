@@ -13,7 +13,9 @@
 #define ZL_SELECTPOLLER_H
 #include "net/poller/Poller.h"
 #include <set>
+#ifdef OS_LINUX
 #include <sys/select.h>
+#endif
 NAMESPACE_ZL_NET_START
 
 class SelectPoller : public Poller
