@@ -13,6 +13,8 @@ zl_reactor
 
 * [libevent](http://libevent.org/)  
 
+* [lighttpd](https://github.com/lizhenghn123/lighttpd1.4)
+
 * [redis](https://github.com/antirez/redis)
 
 * [Schmidt的三篇reactor文献]
