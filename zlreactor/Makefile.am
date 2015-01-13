@@ -21,18 +21,18 @@ libzlreactor_la_CPPFLAGS = -Wall -std=c++0x -fPIC -shared
 #libzlreactor_a_LDFLAGS = -lpthread	
 
 libzlreactor_la_SOURCES = \
-					 base/Base64.cpp \
 					 base/ByteArray.cpp \
 					 base/Date.cpp \
 					 base/DateTimeUtil.cpp \
 					 base/FileUtil.cpp \
-					 base/MD5.cpp \
 					 base/StringHash.cpp \
 					 base/Timestamp.cpp \
 					 base/ZLog.cpp \
 					 base/Demangle.cpp \
 					 base/Exception.cpp \
 					 base/Daemonize.cpp \
+					 utility/Base64.cpp \
+					 utility/Md5.cpp \
 					 thread/Thread.cpp \
 					 thread/ThreadGroup.cpp \
 					 thread/ThreadPool.cpp \
