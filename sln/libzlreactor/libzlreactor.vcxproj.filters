@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="base">
+      <UniqueIdentifier>{b4f548c2-31fb-4950-916c-09f341256a81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thread">
+      <UniqueIdentifier>{d5c5b8df-0917-48ca-a7bf-8901516b9c2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{0667f631-3766-4345-a35a-712f7cea409c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{17a9d861-5bb8-439c-b445-1250f0e6cd24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\poller">
+      <UniqueIdentifier>{fcdcb6ec-9852-42a0-b98f-b34ea2fa033a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\zlreactor\utility\Base64.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\utility\MD5.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\thread\Thread.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\thread\ThreadGroup.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\thread\ThreadPool.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\Date.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\DateTimeUtil.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\Demangle.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\FileUtil.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\StringHash.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\Timestamp.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\ZLog.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\InetAddress.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\NetBuffer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\NetUtil.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\Socket.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\SocketUtil.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\poller\Poller.cpp">
+      <Filter>net\poller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\poller\SelectPoller.cpp">
+      <Filter>net\poller</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\zlreactor\utility\Base64.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\utility\Hex2String.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\utility\MD5.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\utility\UUID.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\Atomic.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\BlockingQueue.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\BlockingQueueWorker.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\BoundedBlockingQueue.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\Condition.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\CountDownLatch.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\FastMutex.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\Mutex.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\RWMutex.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\Semaphore.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\Thread.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\ThreadGroup.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\ThreadLocal.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\thread\ThreadPool.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\Define.h" />
+    <ClInclude Include="..\..\zlreactor\base\Closure.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\Date.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\DateTimeUtil.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\Demangle.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\FileUtil.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\HighPrecisionTime.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\IntrusiveList.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\MathUtil.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\NonCopy.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\ProcessTimeCounter.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\ScopeExitGuard.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\Singleton.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\SmartAssert.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\StlUtil.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\StringHash.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\StrUtil.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\Timestamp.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\ZLog.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\StopWatch.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\CallBacks.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\InetAddress.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\NetBuffer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\NetUtil.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\Socket.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\SocketUtil.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\poller\Poller.h">
+      <Filter>net\poller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\poller\SelectPoller.h">
+      <Filter>net\poller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\OsDefine.h" />
+  </ItemGroup>
+</Project>
