@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zl_reactor", "zl_reactor.vcxproj", "{17690601-DD4F-4754-B315-4BEFC36CE85E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libzlreactor", "libzlreactor\libzlreactor.vcxproj", "{83CD406D-277D-4C9E-B1AD-07C42D36AD40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{47C97639-6D83-4E94-88B7-A00BDC989246}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +11,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{17690601-DD4F-4754-B315-4BEFC36CE85E}.Debug|Win32.ActiveCfg = Debug|Win32
-		{17690601-DD4F-4754-B315-4BEFC36CE85E}.Debug|Win32.Build.0 = Debug|Win32
-		{17690601-DD4F-4754-B315-4BEFC36CE85E}.Release|Win32.ActiveCfg = Release|Win32
-		{17690601-DD4F-4754-B315-4BEFC36CE85E}.Release|Win32.Build.0 = Release|Win32
+		{83CD406D-277D-4C9E-B1AD-07C42D36AD40}.Debug|Win32.ActiveCfg = Debug|Win32
+		{83CD406D-277D-4C9E-B1AD-07C42D36AD40}.Debug|Win32.Build.0 = Debug|Win32
+		{83CD406D-277D-4C9E-B1AD-07C42D36AD40}.Release|Win32.ActiveCfg = Release|Win32
+		{83CD406D-277D-4C9E-B1AD-07C42D36AD40}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

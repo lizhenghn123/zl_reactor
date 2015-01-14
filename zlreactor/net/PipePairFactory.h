@@ -65,17 +65,17 @@ public:
         //fds_[1] = fds_[0];
     }
 
-    size_t write(const void *data, size_t len)
+    ssize_t write(const void *data, size_t len)
     {
         return SocketUtil::write(fds_[1], data, len);
     }
 
-    size_t read(void *buf, size_t size)
+    ssize_t read(void *buf, size_t size)
     {
         return SocketUtil::read(fds_[0], buf, size);
     }
 
-    size_t notify()
+    ssize_t notify()
     {
         char c[1] = {'n'};
         return write(c, 1);
@@ -176,6 +176,7 @@ class SocketPairGenerator
 public:
     int create(int fds[2])
     {
+        //return socketpair2(AF_UNIX, SOCK_STREAM, 0, fds);
         return ::socketpair(AF_UNIX, SOCK_STREAM, 0, fds);
     }
 
@@ -249,41 +250,40 @@ class TcpPairGenerator
 public:
     int create(int fds[2])
     {
-        //return socketpair2(AF_UNIX, SOCK_STREAM, 0, fds);
-		int listenSock = SocketUtil::createSocketAndListen("0.0.0.0", 0, 5);
-		SocketUtil::setNonBlocking(listenSock);
+        int listenSock = SocketUtil::createSocketAndListen("0.0.0.0", 0, 5);
+        SocketUtil::setNonBlocking(listenSock);
 
-		int clientSock = SocketUtil::createSocket();
-		struct sockaddr_in addr = SocketUtil::getLocalAddr(listenSock);
-		SocketUtil::setNonBlocking(clientSock);
+        int clientSock = SocketUtil::createSocket();
+        struct sockaddr_in addr = SocketUtil::getLocalAddr(listenSock);
+        SocketUtil::setNonBlocking(clientSock);
 
-		int ret = SocketUtil::connect(clientSock, addr);   // non-block connect
-		if(ret != 0 && errno != EINPROGRESS) // EINPROGRESS = 115
-		{
-			LOG_ERROR("TcpPairGenerator: connect failed[%d][%d][%d].\n", clientSock, ret, errno);
-			SocketUtil::closeSocket(listenSock);
-			SocketUtil::closeSocket(clientSock);
-			return -1;
-		}
-		
-		struct sockaddr_in addr2;
-		int srvSock = SocketUtil::acceptOne(listenSock, &addr2);
-		if(srvSock < 0 || errno != EINPROGRESS)
-		{
-			LOG_ERROR("TcpPairGenerator: accept failed[%d][%d].\n", srvSock, errno);
-			SocketUtil::closeSocket(listenSock);
-			SocketUtil::closeSocket(clientSock);
-			return -1;
-		}
+        int ret = SocketUtil::connect(clientSock, addr);   // non-block connect
+        if(ret != 0 && errno != SOCK_ERR_EINPROGRESS) // EINPROGRESS = 115
+        {
+            LOG_ERROR("TcpPairGenerator: connect failed[%d][%d][%d].\n", clientSock, ret, errno);
+            SocketUtil::closeSocket(listenSock);
+            SocketUtil::closeSocket(clientSock);
+            return -1;
+        }
 
-		SocketUtil::setNonBlocking(srvSock, false);
-		SocketUtil::setNonBlocking(clientSock, false);
-		fds[0] = srvSock;
-		fds[1] = clientSock;
+        struct sockaddr_in addr2;
+        int srvSock = SocketUtil::acceptOne(listenSock, &addr2);
+        if(srvSock < 0 || errno != EINPROGRESS)
+        {
+            LOG_ERROR("TcpPairGenerator: accept failed[%d][%d].\n", srvSock, errno);
+            SocketUtil::closeSocket(listenSock);
+            SocketUtil::closeSocket(clientSock);
+            return -1;
+        }
 
-		SocketUtil::closeSocket(listenSock);
+        SocketUtil::setNonBlocking(srvSock, false);
+        SocketUtil::setNonBlocking(clientSock, false);
+        fds[0] = srvSock;
+        fds[1] = clientSock;
 
-		return 0;
+        SocketUtil::closeSocket(listenSock);
+
+        return 0;
     }
 };
 

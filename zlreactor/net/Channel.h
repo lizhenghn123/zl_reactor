@@ -43,7 +43,7 @@ enum
 	kEventNone    = FDEVENT_NONE,
     kEventRead    = FDEVENT_IN | FDEVENT_PRI,
     kEventWrite   = FDEVENT_OUT,
-	kEventError   = FDEVENT_ERR    
+	kEventError   = FDEVENT_ERR
 };
 
 class Channel : zl::NonCopy

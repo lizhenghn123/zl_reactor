@@ -19,9 +19,13 @@ NAMESPACE_ZL_NET_START
 
 #define POLL_WAIT_INDEFINITE
 
+#ifdef OS_WINDOWS
+#define USE_POLLER_SELECT
+#else
 #define USE_POLLER_EPOLL
 #define USE_POLLER_SELECT
 #define USE_POLLER_POLL
+#endif
 
 using zl::base::Timestamp;
 class Socket;

@@ -2,7 +2,7 @@
 // Filename         : SignalHandler.h
 // Author           : LIZHENG
 // Created          : 2015-01-07
-// Description      : 
+// Description      : signalfd need linux kernel > 2.6.25
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2015-01-07
