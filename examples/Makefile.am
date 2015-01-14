@@ -25,3 +25,5 @@ SUBDIRS                += reader_writer
 SUBDIRS                += test_daemon 
 
 SUBDIRS                += test_signalfd 
+
+SUBDIRS                += simpleServers

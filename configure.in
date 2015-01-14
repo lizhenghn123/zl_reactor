@@ -22,6 +22,7 @@ AC_CONFIG_FILES([Makefile
 				examples/reader_writer/Makefile
 				examples/test_daemon/Makefile
 				examples/test_signalfd/Makefile
+				examples/simpleServers/Makefile
 				tests/Makefile
 				tests/stress_client/Makefile
                 tests/universal_timer/Makefile
