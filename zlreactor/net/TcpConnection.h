@@ -19,6 +19,7 @@
 #include "net/InetAddress.h"
 #include "net/Socket.h"
 #include "net/NetBuffer.h"
+#include "net/Channel.h"
 #include <memory>     //for enable_shared_from_this
 NAMESPACE_ZL_NET_START
 class Channel;
@@ -44,6 +45,12 @@ public:
     void setMessageCallback(const MessageCallback& cb)             { messageCallback_ = cb; }
     void setWriteCompleteCallback(const WriteCompleteCallback& cb) { writeCompleteCallback_ = cb; }
     void setCloseCallback(const CloseCallback& cb)                 { closeCallback_ = cb; }
+
+    void enableReading()    { channel_->enableReading(); }
+    void disableReading()   { channel_->disableReading(); }
+    void enableWriting()    { channel_->enableWriting(); }
+    void disableWriting()   { channel_->disableWriting(); }
+    void disableAll()       { channel_->disableAll(); }
 
     void connectEstablished();   // called when TcpServer accepts a new connection
     void connectDestroyed();     // called when TcpServer has removed me from its map
