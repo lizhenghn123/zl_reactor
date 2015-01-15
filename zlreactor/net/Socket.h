@@ -2,7 +2,7 @@
 // Filename         : Socket.h
 // Author           : LIZHENG
 // Created          : 2014-07-01
-// Description      : socket的跨平台包装
+// Description      : socket的跨平台包装, 以RAII的方式管理socket fd
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2014-07-01
