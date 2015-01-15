@@ -205,7 +205,7 @@ MAINTAINERCLEANFILES = Makefile.in
 SUBDIRS = test_str_util maxconnection atomic buffer_test \
 	exception_mangle thread_test blockqueue_test timer_test \
 	smartassert_test reader_writer test_daemon test_signalfd \
-	simpleServers
+	simpleServers roundtriptime
 all: all-recursive
 
 .SUFFIXES:
