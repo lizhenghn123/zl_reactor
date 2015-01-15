@@ -63,15 +63,15 @@ typedef int          ssize_t;
 #define ZL_ACCEPT(a,b,c)          ::accept(a,b,c)
 #define ZL_CONNECT(a,b,c)         ::connect(a,b,c)
 #define ZL_CLOSE(a)               ::closesocket(a)
-#define ZL_READ(a,b,c)            ::read(a,b,c)
+#define ZL_READ(a,b,c)            ::recv(a,(char *)b,c,0)
 #define ZL_RECV(a,b,c,d)          ::recv(a, (char *)b, c, d)
 #define ZL_RECVFROM(a,b,c,d,e,f)  ::recvfrom(a, (char *)b, c, d, (sockaddr *)e, (int *)f)
 #define ZL_SELECT(a,b,c,d,e)      ::select(a,b,c,d,e)
 #define ZL_SEND(a,b,c,d)          ::send(a, (const char *)b, (int)c, d)
 #define ZL_SENDTO(a,b,c,d,e,f)    ::sendto(a, (const char *)b, (int)c, d, e, f)
 #define ZL_SENDFILE(a,b,c,d)      ::sendfile(a, b, c, d)
-#define ZL_WRITE(a,b,c)           ::write(a,b,c)
-#define ZL_WRITEV(a,b,c)          ::Writev(b, c)
+#define ZL_WRITE(a,b,c)           ::send(a,(const char *)b,c,0)
+#define ZL_WRITEV(a,b,c)          ::writev(b, c)
 #define ZL_GETSOCKOPT(a,b,c,d,e)  ::getsockopt(a,b,c,(char *)d, (int *)e)
 #define ZL_SETSOCKOPT(a,b,c,d,e)  ::setsockopt(a,b,c,(char *)d, (int)e)
 #define ZL_GETHOSTBYNAME(a)       ::gethostbyname((const char *)a)
@@ -84,19 +84,19 @@ typedef socklen_t    ZL_SOCKLEN;
 
 #define ZL_INVALID_SOCKET         -1
 #define RECV_FLAGS                0
-#define SEND_FLAGS                0
+#define SEND_FLAGS                MSG_NOSIGNAL
 #define SOCKET_ERROR              errno
-#define SOCK_ERR_EINTR            EINTR
-#define SOCK_ERR_EAGAIN           EAGAIN
-#define SOCK_ERR_EINPROGRESS      EINPROGRESS
-#define SOCK_ERR_EWOULDBLOCK      EWOULDBLOCK
-#define SOCK_ERR_ECONNABORTED     ECONNABORTED
-#define SOCK_ERR_ECONNREFUSED     ECONNREFUSED
-#define SOCK_ERR_EBADF            EBADF
-#define SOCK_ERR_EADDRINUSE       EADDRINUSE
-#define SOCK_ERR_NOTSOCK          ENOTSOCK
-#define SOCK_ERR_EINVAL           EINVAL
-#define SOCK_ERR_EMFILE           EMFILE
+#define SOCK_ERR_EINTR            EINTR         // 阻塞的操作被取消阻塞的调用打断
+#define SOCK_ERR_EAGAIN           EAGAIN        // 非阻塞下没有 连接请求/数据可读/数据可写, 不是错误
+#define SOCK_ERR_EINPROGRESS      EINPROGRESS   // 操作正在进行中，一个阻塞的操作正在执行
+#define SOCK_ERR_EWOULDBLOCK      EWOULDBLOCK   // 资源暂时不可用, 通常和EAGAIN一样
+#define SOCK_ERR_ECONNABORTED     ECONNABORTED  // 连接中断
+#define SOCK_ERR_ECONNREFUSED     ECONNREFUSED  // 拒绝连接，一般发生在连接建立时
+#define SOCK_ERR_EBADF            EBADF         // 非法的文件描述符
+#define SOCK_ERR_EADDRINUSE       EADDRINUSE    // 地址已被使用
+#define SOCK_ERR_NOTSOCK          ENOTSOCK      // 文件描述符为文件的文件描述符
+#define SOCK_ERR_EINVAL           EINVAL        // 提供的参数非法
+#define SOCK_ERR_EMFILE           EMFILE        // 达到进程打开文件描述符限制
 
 #define ZL_CREATE_SOCKET(a,b,c)   ::socket(a,b,c)
 #define ZL_BIND(a,b,c)            ::bind(a,b,c)

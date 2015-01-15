@@ -78,6 +78,8 @@ bool zl_log_instance_create(const char *log_dir, const char *log_name,
 
 bool zl_log_instance_destroy();
 
+ZLogPriority zl_log_set_priority(ZLogPriority prio);
+
 bool zl_log(const char *file, int line, ZLogPriority priority, const char *format, ...);
 
 /** Prototype of extended log handler function */

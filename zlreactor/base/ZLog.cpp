@@ -96,6 +96,7 @@ private:
 class ZLog
 {
     friend bool zl_log(const char *file, int line, ZLogPriority priority, const char *format, ...);
+    friend ZLogPriority zl_log_set_priority(ZLogPriority prio);
 
 public:
     ZLog()
@@ -175,6 +176,14 @@ bool zl_log_instance_destroy()
 void zl_log_set_handler(zl_log_ext_handler_f handler)
 {
     g_zlogger->setLogHandler(handler);
+}
+
+ZLogPriority zl_log_set_priority(ZLogPriority prio)
+{
+    ZLogPriority old = g_zlogger->priority_;
+    g_zlogger->priority_ = prio;
+
+    return old;
 }
 
 bool zl_log(const char *file, int line, ZLogPriority priority, const char *format, ...)
@@ -316,7 +325,7 @@ bool ZLogFile::init(const char *log_dir, const char *file_name, size_t max_file_
     return (file_ == NULL ? false : true);
 }
 
-const char *ZLogFile::makeLogFilePath()
+const char* ZLogFile::makeLogFilePath()
 {
     ::memset(curr_log_file_, '\0', MAX_FILE_PATH_LEN);
 	ZL_SNPRINTF(curr_log_file_, MAX_FILE_PATH_LEN, "%s/%s-%d.log", log_dir_, log_file_name_, (int)cur_file_index_);

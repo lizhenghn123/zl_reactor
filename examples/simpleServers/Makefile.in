@@ -36,8 +36,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = echoserver$(EXEEXT)
-subdir = examples/echoserver
+bin_PROGRAMS = simpleServers$(EXEEXT)
+subdir = examples/simpleServers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -49,12 +49,12 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_echoserver_OBJECTS = echoserver-EchoServer.$(OBJEXT)
-echoserver_OBJECTS = $(am_echoserver_OBJECTS)
-echoserver_LDADD = $(LDADD)
-echoserver_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+am_simpleServers_OBJECTS = simpleServers-simpleServers.$(OBJEXT)
+simpleServers_OBJECTS = $(am_simpleServers_OBJECTS)
+simpleServers_LDADD = $(LDADD)
+simpleServers_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(echoserver_LDFLAGS) $(LDFLAGS) -o $@
+	$(CXXFLAGS) $(simpleServers_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -68,8 +68,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(echoserver_SOURCES)
-DIST_SOURCES = $(echoserver_SOURCES)
+SOURCES = $(simpleServers_SOURCES)
+DIST_SOURCES = $(simpleServers_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -189,9 +189,9 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = -I../../zlreactor
-echoserver_CPPFLAGS = -std=c++0x
-echoserver_LDFLAGS = -L../../lib -lzlreactor
-echoserver_SOURCES = EchoServer.cpp
+simpleServers_CPPFLAGS = -std=c++0x
+simpleServers_LDFLAGS = -L../../lib -lzlreactor
+simpleServers_SOURCES = simpleServers.cpp
 all: all-am
 
 .SUFFIXES:
@@ -205,9 +205,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign examples/echoserver/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign examples/simpleServers/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign examples/echoserver/Makefile
+	  $(AUTOMAKE) --foreign examples/simpleServers/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -269,9 +269,9 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-echoserver$(EXEEXT): $(echoserver_OBJECTS) $(echoserver_DEPENDENCIES) 
-	@rm -f echoserver$(EXEEXT)
-	$(echoserver_LINK) $(echoserver_OBJECTS) $(echoserver_LDADD) $(LIBS)
+simpleServers$(EXEEXT): $(simpleServers_OBJECTS) $(simpleServers_DEPENDENCIES) 
+	@rm -f simpleServers$(EXEEXT)
+	$(simpleServers_LINK) $(simpleServers_OBJECTS) $(simpleServers_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -279,7 +279,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/echoserver-EchoServer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simpleServers-simpleServers.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -302,19 +302,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-echoserver-EchoServer.o: EchoServer.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(echoserver_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT echoserver-EchoServer.o -MD -MP -MF $(DEPDIR)/echoserver-EchoServer.Tpo -c -o echoserver-EchoServer.o `test -f 'EchoServer.cpp' || echo '$(srcdir)/'`EchoServer.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/echoserver-EchoServer.Tpo $(DEPDIR)/echoserver-EchoServer.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EchoServer.cpp' object='echoserver-EchoServer.o' libtool=no @AMDEPBACKSLASH@
+simpleServers-simpleServers.o: simpleServers.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(simpleServers_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT simpleServers-simpleServers.o -MD -MP -MF $(DEPDIR)/simpleServers-simpleServers.Tpo -c -o simpleServers-simpleServers.o `test -f 'simpleServers.cpp' || echo '$(srcdir)/'`simpleServers.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/simpleServers-simpleServers.Tpo $(DEPDIR)/simpleServers-simpleServers.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='simpleServers.cpp' object='simpleServers-simpleServers.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(echoserver_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o echoserver-EchoServer.o `test -f 'EchoServer.cpp' || echo '$(srcdir)/'`EchoServer.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(simpleServers_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o simpleServers-simpleServers.o `test -f 'simpleServers.cpp' || echo '$(srcdir)/'`simpleServers.cpp
 
-echoserver-EchoServer.obj: EchoServer.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(echoserver_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT echoserver-EchoServer.obj -MD -MP -MF $(DEPDIR)/echoserver-EchoServer.Tpo -c -o echoserver-EchoServer.obj `if test -f 'EchoServer.cpp'; then $(CYGPATH_W) 'EchoServer.cpp'; else $(CYGPATH_W) '$(srcdir)/EchoServer.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/echoserver-EchoServer.Tpo $(DEPDIR)/echoserver-EchoServer.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EchoServer.cpp' object='echoserver-EchoServer.obj' libtool=no @AMDEPBACKSLASH@
+simpleServers-simpleServers.obj: simpleServers.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(simpleServers_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT simpleServers-simpleServers.obj -MD -MP -MF $(DEPDIR)/simpleServers-simpleServers.Tpo -c -o simpleServers-simpleServers.obj `if test -f 'simpleServers.cpp'; then $(CYGPATH_W) 'simpleServers.cpp'; else $(CYGPATH_W) '$(srcdir)/simpleServers.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/simpleServers-simpleServers.Tpo $(DEPDIR)/simpleServers-simpleServers.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='simpleServers.cpp' object='simpleServers-simpleServers.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(echoserver_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o echoserver-EchoServer.obj `if test -f 'EchoServer.cpp'; then $(CYGPATH_W) 'EchoServer.cpp'; else $(CYGPATH_W) '$(srcdir)/EchoServer.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(simpleServers_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o simpleServers-simpleServers.obj `if test -f 'simpleServers.cpp'; then $(CYGPATH_W) 'simpleServers.cpp'; else $(CYGPATH_W) '$(srcdir)/simpleServers.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

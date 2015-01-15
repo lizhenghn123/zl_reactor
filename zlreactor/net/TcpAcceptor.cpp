@@ -66,29 +66,28 @@ void TcpAcceptor::onAccept(Timestamp now)
             else
             {
                 LOG_ALERT("TcpAcceptor::OnAccept() no callback , and close the coming connection![%d]", newfd);
-				SocketUtil::closeSocket(newfd);
+                SocketUtil::closeSocket(newfd);
             }
             count ++;
         }
         else
         {
-            if(errno == EAGAIN || errno == EWOULDBLOCK) //We have processed all incoming  connections.
+            if(SOCKET_ERROR == SOCK_ERR_EAGAIN || SOCKET_ERROR == SOCK_ERR_EWOULDBLOCK)
             {
-
+                //We have processed all incoming  connections.
+            }
+            else if(SOCKET_ERROR == SOCK_ERR_EMFILE)
+            {
+                // TODO 此时因为达到最大文件描述符而接收失败，因为poller使用的是水平触发模式，
+                // 会导致poller持续通知可读事件，因此造成acceptor频繁去accept，直至进程中关闭了
+                // 其他连接而有空余描述符才停止。这样会导致CPU 100% loop。
+                // 解决方案见 ： http://blog.csdn.net/solstice/article/details/6365666
+                // http://pod.tst.eu/http://cvs.schmorp.de/libev/ev.pod#The_special_problem_of_accept_ing_wh
             }
             else
             {
                 LOG_ALERT("TcpAcceptor::OnAccept() accept connection error![%d][%d]", newfd, errno);
             }
-            //  11 : EAGAIN：套接字处于非阻塞状态，当前没有连接请求。
-            //	EBADF：非法的文件描述符。
-            //	ECONNABORTED：连接中断。
-            //	EINTR：系统调用被信号中断。
-            //	EINVAL：套接字没有处于监听状态，或非法的addrlen参数。
-            //	EMFILE：达到进程打开文件描述符限制。
-            //	ENFILE：达到打开文件数限制。
-            //	ENOTSOCK：文件描述符为文件的文件描述符。
-            //	EOPNOTSUPP：套接字类型不是SOCK_STREAM。
             break;
         }
     }

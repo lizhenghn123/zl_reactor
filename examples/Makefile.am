@@ -4,7 +4,7 @@ SUBDIRS                =
 
 SUBDIRS                += test_str_util
 
-SUBDIRS                += echoserver
+SUBDIRS                += maxconnection
 
 SUBDIRS                += atomic
 
@@ -25,3 +25,5 @@ SUBDIRS                += reader_writer
 SUBDIRS                += test_daemon 
 
 SUBDIRS                += test_signalfd 
+
+SUBDIRS                += simpleServers

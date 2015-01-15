@@ -177,8 +177,8 @@ SA* sockaddr_cast(struct sockaddr_in* addr)
 struct sockaddr_in SocketUtil::getLocalAddr(ZL_SOCKET sockfd)
 {
     struct sockaddr_in localaddr;
-    bzero(&localaddr, sizeof localaddr);
-    socklen_t addrlen = static_cast<socklen_t>(sizeof localaddr);
+    ::memset(&localaddr, 0, sizeof(localaddr));
+    socklen_t addrlen = static_cast<socklen_t>(sizeof(localaddr));
     if (::getsockname(sockfd, sockaddr_cast(&localaddr), &addrlen) < 0)
     {
         printf("sockets::getLocalAddr\"");
@@ -189,7 +189,7 @@ struct sockaddr_in SocketUtil::getLocalAddr(ZL_SOCKET sockfd)
 struct sockaddr_in SocketUtil::getPeerAddr(ZL_SOCKET sockfd)
 {
     struct sockaddr_in peeraddr;
-    bzero(&peeraddr, sizeof peeraddr);
+    ::memset(&peeraddr, 0, sizeof(peeraddr));
     socklen_t addrlen = static_cast<socklen_t>(sizeof peeraddr);
     if (::getpeername(sockfd, sockaddr_cast(&peeraddr), &addrlen) < 0)
     {
@@ -211,7 +211,7 @@ int SocketUtil::getSocketError(ZL_SOCKET sockfd)
     int optval;
     socklen_t optlen = static_cast<socklen_t>(sizeof(optval));
 
-    if (::getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) < 0)
+    if (::getsockopt(sockfd, SOL_SOCKET, SO_ERROR, (char*)&optval, &optlen) < 0)
     {
         return errno;
     }

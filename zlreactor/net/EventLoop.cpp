@@ -14,10 +14,10 @@ namespace
 {
     // 如果往已关闭的client socket上继续write时，服务器进程会收到SIGPIPE信号而终止,
     // 这里简单忽略该信号
-	class IgnoreSigPipe
+    class IgnoreSigPipe
     {
     public:
-	    IgnoreSigPipe()
+        IgnoreSigPipe()
         {
             ::signal(SIGPIPE, SIG_IGN);
         }

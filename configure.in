@@ -11,7 +11,6 @@ AC_CONFIG_FILES([Makefile
                 zlreactor/Makefile
                 examples/Makefile
 				examples/test_str_util/Makefile
-				examples/echoserver/Makefile
 				examples/atomic/Makefile
 				examples/buffer_test/Makefile
 				examples/exception_mangle/Makefile
@@ -22,6 +21,8 @@ AC_CONFIG_FILES([Makefile
 				examples/reader_writer/Makefile
 				examples/test_daemon/Makefile
 				examples/test_signalfd/Makefile
+				examples/simpleServers/Makefile
+				examples/maxconnection/Makefile
 				tests/Makefile
 				tests/stress_client/Makefile
                 tests/universal_timer/Makefile
