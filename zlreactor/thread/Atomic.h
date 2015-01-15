@@ -51,7 +51,7 @@ template <typename T>
 class Atomic
 {
 public:
-    typedef  volatile long atomic_t;
+    typedef  volatile T atomic_t;
 public:
     Atomic()
     {

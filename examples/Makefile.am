@@ -4,7 +4,7 @@ SUBDIRS                =
 
 SUBDIRS                += test_str_util
 
-SUBDIRS                += echoserver
+SUBDIRS                += maxconnection
 
 SUBDIRS                += atomic
 

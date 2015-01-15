@@ -36,8 +36,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = echoserver$(EXEEXT)
-subdir = examples/echoserver
+bin_PROGRAMS = maxconnection$(EXEEXT)
+subdir = examples/maxconnection
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -49,12 +49,12 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_echoserver_OBJECTS = echoserver-EchoServer.$(OBJEXT)
-echoserver_OBJECTS = $(am_echoserver_OBJECTS)
-echoserver_LDADD = $(LDADD)
-echoserver_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+am_maxconnection_OBJECTS = maxconnection-MaxConnection.$(OBJEXT)
+maxconnection_OBJECTS = $(am_maxconnection_OBJECTS)
+maxconnection_LDADD = $(LDADD)
+maxconnection_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(echoserver_LDFLAGS) $(LDFLAGS) -o $@
+	$(CXXFLAGS) $(maxconnection_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -68,8 +68,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(echoserver_SOURCES)
-DIST_SOURCES = $(echoserver_SOURCES)
+SOURCES = $(maxconnection_SOURCES)
+DIST_SOURCES = $(maxconnection_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -189,9 +189,9 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = -I../../zlreactor
-echoserver_CPPFLAGS = -std=c++0x
-echoserver_LDFLAGS = -L../../lib -lzlreactor
-echoserver_SOURCES = EchoServer.cpp
+maxconnection_CPPFLAGS = -std=c++0x
+maxconnection_LDFLAGS = -L../../lib -lzlreactor
+maxconnection_SOURCES = MaxConnection.cpp
 all: all-am
 
 .SUFFIXES:
@@ -205,9 +205,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign examples/echoserver/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign examples/maxconnection/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign examples/echoserver/Makefile
+	  $(AUTOMAKE) --foreign examples/maxconnection/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -269,9 +269,9 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-echoserver$(EXEEXT): $(echoserver_OBJECTS) $(echoserver_DEPENDENCIES) 
-	@rm -f echoserver$(EXEEXT)
-	$(echoserver_LINK) $(echoserver_OBJECTS) $(echoserver_LDADD) $(LIBS)
+maxconnection$(EXEEXT): $(maxconnection_OBJECTS) $(maxconnection_DEPENDENCIES) 
+	@rm -f maxconnection$(EXEEXT)
+	$(maxconnection_LINK) $(maxconnection_OBJECTS) $(maxconnection_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -279,7 +279,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/echoserver-EchoServer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maxconnection-MaxConnection.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -302,19 +302,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-echoserver-EchoServer.o: EchoServer.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(echoserver_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT echoserver-EchoServer.o -MD -MP -MF $(DEPDIR)/echoserver-EchoServer.Tpo -c -o echoserver-EchoServer.o `test -f 'EchoServer.cpp' || echo '$(srcdir)/'`EchoServer.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/echoserver-EchoServer.Tpo $(DEPDIR)/echoserver-EchoServer.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EchoServer.cpp' object='echoserver-EchoServer.o' libtool=no @AMDEPBACKSLASH@
+maxconnection-MaxConnection.o: MaxConnection.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(maxconnection_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT maxconnection-MaxConnection.o -MD -MP -MF $(DEPDIR)/maxconnection-MaxConnection.Tpo -c -o maxconnection-MaxConnection.o `test -f 'MaxConnection.cpp' || echo '$(srcdir)/'`MaxConnection.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/maxconnection-MaxConnection.Tpo $(DEPDIR)/maxconnection-MaxConnection.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MaxConnection.cpp' object='maxconnection-MaxConnection.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(echoserver_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o echoserver-EchoServer.o `test -f 'EchoServer.cpp' || echo '$(srcdir)/'`EchoServer.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(maxconnection_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o maxconnection-MaxConnection.o `test -f 'MaxConnection.cpp' || echo '$(srcdir)/'`MaxConnection.cpp
 
-echoserver-EchoServer.obj: EchoServer.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(echoserver_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT echoserver-EchoServer.obj -MD -MP -MF $(DEPDIR)/echoserver-EchoServer.Tpo -c -o echoserver-EchoServer.obj `if test -f 'EchoServer.cpp'; then $(CYGPATH_W) 'EchoServer.cpp'; else $(CYGPATH_W) '$(srcdir)/EchoServer.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/echoserver-EchoServer.Tpo $(DEPDIR)/echoserver-EchoServer.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EchoServer.cpp' object='echoserver-EchoServer.obj' libtool=no @AMDEPBACKSLASH@
+maxconnection-MaxConnection.obj: MaxConnection.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(maxconnection_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT maxconnection-MaxConnection.obj -MD -MP -MF $(DEPDIR)/maxconnection-MaxConnection.Tpo -c -o maxconnection-MaxConnection.obj `if test -f 'MaxConnection.cpp'; then $(CYGPATH_W) 'MaxConnection.cpp'; else $(CYGPATH_W) '$(srcdir)/MaxConnection.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/maxconnection-MaxConnection.Tpo $(DEPDIR)/maxconnection-MaxConnection.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MaxConnection.cpp' object='maxconnection-MaxConnection.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(echoserver_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o echoserver-EchoServer.obj `if test -f 'EchoServer.cpp'; then $(CYGPATH_W) 'EchoServer.cpp'; else $(CYGPATH_W) '$(srcdir)/EchoServer.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(maxconnection_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o maxconnection-MaxConnection.obj `if test -f 'MaxConnection.cpp'; then $(CYGPATH_W) 'MaxConnection.cpp'; else $(CYGPATH_W) '$(srcdir)/MaxConnection.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
