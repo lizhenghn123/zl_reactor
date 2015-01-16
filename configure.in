@@ -24,6 +24,7 @@ AC_CONFIG_FILES([Makefile
 				examples/simpleServers/Makefile
 				examples/maxconnection/Makefile
 				examples/roundtriptime/Makefile
+				examples/test_tcpclient/Makefile
 				tests/Makefile
 				tests/stress_client/Makefile
                 tests/universal_timer/Makefile
