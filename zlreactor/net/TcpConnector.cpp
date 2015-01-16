@@ -78,8 +78,11 @@ void TcpConnector::connectServer()
 
 void TcpConnector::connectEstablished(ZL_SOCKET sock)
 {
+    LOG_INFO("TcpConnector::connectEstablished : [%d]", sock);
     setState(kConnecting);
-    assert(!TcpConnector_channel_);
+    // assert(!TcpConnector_channel_);
+    if(TcpConnector_channel_)
+        delete TcpConnector_channel_;
     TcpConnector_channel_ = new Channel(loop_, sock);
 
     TcpConnector_channel_->setWriteCallback(std::bind(&TcpConnector::handleWrite, this));
