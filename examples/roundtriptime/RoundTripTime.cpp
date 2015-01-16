@@ -6,6 +6,7 @@
 #include "net/TcpServer.h"
 #include "net/TcpConnection.h"
 #include "net/NetBuffer.h"
+#include "net/NetUtil.h"
 using namespace std;
 using namespace zl;
 using namespace zl::base;
@@ -22,7 +23,7 @@ namespace ts
 void serverConnectionCallback(const TcpConnectionPtr& conn)
 {
     cout << conn->peerAddress().ipPort() << " -> " << conn->localAddress().ipPort()
-         << " is " << (conn->connected() ? "UP" : "DOWN");
+         << " is " << (conn->connected() ? "UP" : "DOWN") << "\n";
 
     if (conn->connected())
     {
@@ -35,12 +36,14 @@ void serverConnectionCallback(const TcpConnectionPtr& conn)
 
 void serverMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buffer, Timestamp receiveTime)
 {
+    static int64_t i = 100;
     int64_t message[2];
     while (buffer->readableBytes() >= frameLen)
     {
         memcpy(message, buffer->peek(), frameLen);
         buffer->retrieve(frameLen);
         message[1] = receiveTime.microSeconds();
+        cout << "server get/send data time : " << message[1] << "\t" << NetUtil::net2Host(message[0]) << "\n";
         conn->send(message, sizeof(message));
     }
 }
@@ -54,18 +57,16 @@ void runServer(uint16_t port)
     server.start();
     loop.loop();
 }
-
 }
 
 namespace tc
 {
-
 TcpConnectionPtr clientConnection;
 
 void clientConnectionCallback(const TcpConnectionPtr& conn)
 {
     cout << conn->peerAddress().ipPort() << " -> " << conn->localAddress().ipPort()
-         << " is " << (conn->connected() ? "UP" : "DOWN");
+         << " is " << (conn->connected() ? "UP" : "DOWN") << "\n";
     if (conn->connected())
     {
         clientConnection = conn;
@@ -88,16 +89,20 @@ void clientMessageCallback(const TcpConnectionPtr&, NetBuffer* buffer, Timestamp
         int64_t their = message[1];
         int64_t back = receiveTime.microSeconds();
         int64_t mine = (back+send)/2;
-        cout << "round trip " << back - send << ", clock error " << their - mine;
+        cout << "client get data time : " << back << "\t" << send << "\t"
+         << "round trip " << back - send << ", clock error " << their - mine << "\n";
     }
 }
 
 void sendMyTime()
 {
+    static int64_t i = 0;
     if (clientConnection)
     {
         int64_t message[2] = { 0, 0 };
-        message[0] = Timestamp::now().microSeconds();
+        Timestamp now = Timestamp::now();
+        message[0] = now.microSeconds();
+        cout << "client send data time : " << message[0] << "\t" << now.toString() <<"\n";
         clientConnection->send(message, sizeof(message));
     }
 }
@@ -110,7 +115,7 @@ void runClient(const char* ip, uint16_t port)
     client.setConnectionCallback(clientConnectionCallback);
     client.setMessageCallback(clientMessageCallback);
     client.connect();
-    loop.addTimer(sendMyTime, 0.2, true);   //启动一个每0.2s运行一次的定时器
+    loop.addTimer(sendMyTime, 1, true);   //启动一个每0.2s运行一次的定时器
     loop.loop();
 }
 
@@ -121,21 +126,20 @@ int main(int argc, char* argv[])
     if(argc < 2)
     {
         printf("-------- test roundtrip --------\n");
-        //printf("Usage:\n%s -s port\n%s ip port\n", argv[0], argv[0]);
-        printf("run server : %s -s <port>", argv[0]);
-        printf("run client : %s <ip> <port>", argv[0]);
-        exit(0);
+        printf("run server : %s -s <port>\n", argv[0]);
+        printf("run client : %s <ip> <port>\n", argv[0]);
+        return 0;
     }
-    if (argc > 2)
+
+    zl::base::zl_log_set_priority(zl::base::ZL_LOG_PRIO_ALERT);
+
+    uint16_t port = static_cast<uint16_t>(atoi(argv[2]));
+    if (strcmp(argv[1], "-s") == 0)
     {
-        uint16_t port = static_cast<uint16_t>(atoi(argv[2]));
-        if (strcmp(argv[1], "-s") == 0)
-        {
-            ts::runServer(port);
-        }
-        else
-        {
-            tc::runClient(argv[1], port);
-        }
+        ts::runServer(port);
+    }
+    else
+    {
+        tc::runClient(argv[1], port);
     }
 }
