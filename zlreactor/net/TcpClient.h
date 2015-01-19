@@ -31,7 +31,7 @@ class Tcpconnection;
 class TcpClient
 {
 public:
-    TcpClient(EventLoop* loop, const InetAddress& serverAddr);
+    TcpClient(EventLoop* loop, const InetAddress& serverAddr, const std::string& clientname = "TcpClient");
     ~TcpClient();
 
 public:
@@ -69,6 +69,8 @@ private:
     bool                   connect_;
 
     TcpConnectionPtr       connection_;
+
+    const std::string      clientName_;
 };
 
 NAMESPACE_ZL_NET_END

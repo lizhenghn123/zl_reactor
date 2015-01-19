@@ -20,12 +20,13 @@ namespace detail
     }
 }
 
-TcpClient::TcpClient(EventLoop* loop, const InetAddress& serverAddr)
+TcpClient::TcpClient(EventLoop* loop, const InetAddress& serverAddr, const std::string& clientname)
     : loop_(loop),
-    connectionCallback_(defaultConnectionCallback),
-    messageCallback_(defaultMessageCallback),
-    retry_(false),
-    connect_(true)
+      connectionCallback_(defaultConnectionCallback),
+      messageCallback_(defaultMessageCallback),
+      retry_(false),
+      connect_(true),
+      clientName_(clientname)
 {
     connector_ = new TcpConnector(loop, serverAddr);
     connector_->setNewConnectionCallback(std::bind(&TcpClient::newConnection, this, std::placeholders::_1));

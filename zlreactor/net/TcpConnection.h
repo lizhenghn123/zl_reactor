@@ -51,6 +51,8 @@ public:
     void enableWriting()    { channel_->enableWriting(); }
     void disableWriting()   { channel_->disableWriting(); }
     void disableAll()       { channel_->disableAll(); }
+    
+    void setNoDelay(bool on)  { socket_->setNoDelay(on); }
 
     void connectEstablished();   // called when TcpServer accepts a new connection
     void connectDestroyed();     // called when TcpServer has removed me from its map
