@@ -43,15 +43,15 @@ void serverMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buffer, Time
         memcpy(message, buffer->peek(), frameLen);
         buffer->retrieve(frameLen);
         message[1] = receiveTime.microSeconds();
-        cout << "server get/send data time : " << message[1] << "\t" << NetUtil::net2Host(message[0]) << "\n";
+        cout << "server get/send data time : " << message[1] << "\t" << message[0] << "\n";
         conn->send(message, sizeof(message));
     }
 }
 
-void runServer(uint16_t port)
+void runServer(const char* ip, uint16_t port)
 {
     EventLoop loop;
-    TcpServer server(&loop, InetAddress(port), "ClockServer");
+    TcpServer server(&loop, InetAddress(ip, port), "ClockServer");
     server.setConnectionCallback(ts::serverConnectionCallback);
     server.setMessageCallback(ts::serverMessageCallback);
     server.start();
@@ -89,8 +89,9 @@ void clientMessageCallback(const TcpConnectionPtr&, NetBuffer* buffer, Timestamp
         int64_t their = message[1];
         int64_t back = receiveTime.microSeconds();
         int64_t mine = (back+send)/2;
-        cout << "client get data time : " << back << "\t" << send << "\t"
-         << "round trip " << back - send << ", clock error " << their - mine << "\n";
+        cout << "client get  data time : " << back << " " <<  receiveTime.toString() << "\t"
+             << "round trip " << back - send << ", clock error " << their - mine << "\n";
+        // 同一台机器上运行server和client，其时间差理论上为0，可结果却不是0，时正时负
     }
 }
 
@@ -101,8 +102,8 @@ void sendMyTime()
     {
         int64_t message[2] = { 0, 0 };
         Timestamp now = Timestamp::now();
-        message[0] = now.microSeconds();
-        cout << "client send data time : " << message[0] << "\t" << now.toString() <<"\n";
+        message[0] = now.microSeconds();  
+        cout << "client send data time : " << message[0] << " " << now.toString() <<"\n"; 
         clientConnection->send(message, sizeof(message));
     }
 }
@@ -115,31 +116,40 @@ void runClient(const char* ip, uint16_t port)
     client.setConnectionCallback(clientConnectionCallback);
     client.setMessageCallback(clientMessageCallback);
     client.connect();
-    loop.addTimer(sendMyTime, 1, true);   //启动一个每0.2s运行一次的定时器
+    loop.addTimer(sendMyTime, 1, true);   //启动一个每1s运行一次的定时器
     loop.loop();
 }
 
 }
 
+void printUsage(int argc, char* argv[])
+{
+    printf("-------- test roundtrip --------\n");
+    printf("run server : %s -s <ip> <port>\n", argv[0]);
+    printf("run client : %s -c <ip> <port>\n", argv[0]);
+	exit(EXIT_FAILURE);
+}
+
 int main(int argc, char* argv[])
 {
-    if(argc < 2)
+    if(argc != 4)
     {
-        printf("-------- test roundtrip --------\n");
-        printf("run server : %s -s <port>\n", argv[0]);
-        printf("run client : %s <ip> <port>\n", argv[0]);
-        return 0;
+        printUsage(argc, argv);
     }
 
     zl::base::zl_log_set_priority(zl::base::ZL_LOG_PRIO_ALERT);
 
-    uint16_t port = static_cast<uint16_t>(atoi(argv[2]));
+    uint16_t port = static_cast<uint16_t>(atoi(argv[3]));
     if (strcmp(argv[1], "-s") == 0)
     {
-        ts::runServer(port);
+        ts::runServer(argv[2], port);
     }
-    else
+    else if (strcmp(argv[1], "-c") == 0)
     {
-        tc::runClient(argv[1], port);
+        tc::runClient(argv[2], port);
     }
+	else
+	{
+		printUsage(argc, argv);
+	}
 }

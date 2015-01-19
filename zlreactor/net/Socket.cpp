@@ -145,8 +145,7 @@ int Socket::recv(std::string& data) const
         }
         else
         {
-            //buf[len] = '\0';
-            data += buf;
+            data.insert(data.end(), buf, buf + len);
             if(len < MAX_RECV_SIZE)   //全部接收完成
                 break;
         }
@@ -205,8 +204,7 @@ int Socket::recvFrom(std::string& data, int flags, InetAddress& sinaddr)const
         int len = recvFrom(buf, MAX_RECV_SIZE, flags, sinaddr);
         if(len == -1 || len == 0)
             break;
-        //buf[len] = '\0';
-        data += buf;
+        data.insert(data.end(), buf, buf + len);
         if(len < MAX_RECV_SIZE)
             break;
     }

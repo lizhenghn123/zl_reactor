@@ -40,7 +40,7 @@ void clientMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buf, Timesta
     //conn->send(msg.data(), msg.size());
 }
 
-void send_data()
+void sendDataByClient()
 {
     static int64_t i = 0;
     if (clientConnection)
@@ -60,7 +60,7 @@ void runClient(const char* ip, uint16_t port)
     client.setConnectionCallback(clientConnectionCallback);
     client.setMessageCallback(clientMessageCallback);
     client.connect();
-    loop.addTimer(send_data, 1, true);   //启动一个每1s运行一次的定时器
+    loop.addTimer(sendDataByClient, 1, true);   //启动一个每1s运行一次的定时器
     loop.loop();
 }
 
