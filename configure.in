@@ -10,23 +10,24 @@ AC_PROG_LIBTOOL
 AC_CONFIG_FILES([Makefile
                 zlreactor/Makefile
                 examples/Makefile
-				examples/test_str_util/Makefile
-				examples/atomic/Makefile
-				examples/buffer_test/Makefile
-				examples/exception_mangle/Makefile
-				examples/thread_test/Makefile
-				examples/blockqueue_test/Makefile
-				examples/timer_test/Makefile
-				examples/smartassert_test/Makefile
-				examples/reader_writer/Makefile
-				examples/test_daemon/Makefile
-				examples/test_signalfd/Makefile
-				examples/simpleServers/Makefile
-				examples/maxconnection/Makefile
-				examples/roundtriptime/Makefile
-				examples/test_tcpclient/Makefile
-				tests/Makefile
-				tests/stress_client/Makefile
+                examples/test_str_util/Makefile
+                examples/atomic/Makefile
+                examples/buffer_test/Makefile
+                examples/exception_mangle/Makefile
+                examples/thread_test/Makefile
+                examples/blockqueue_test/Makefile
+                examples/timer_test/Makefile
+                examples/smartassert_test/Makefile
+                examples/reader_writer/Makefile
+                examples/test_daemon/Makefile
+                examples/test_signalfd/Makefile
+                examples/simpleServers/Makefile
+                examples/maxconnection/Makefile
+                examples/roundtriptime/Makefile
+                examples/test_tcpclient/Makefile
+                examples/twisted_finger/Makefile
+                tests/Makefile
+                tests/stress_client/Makefile
                 tests/universal_timer/Makefile
                 tests/eventfd_epoll/Makefile
                 tests/timerqueue/Makefile
