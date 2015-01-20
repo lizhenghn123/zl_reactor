@@ -35,7 +35,7 @@ TcpConnection::TcpConnection(EventLoop* loop, int sockfd, const InetAddress& loc
 TcpConnection::~TcpConnection()
 {
     LOG_INFO("TcpConnection::~TcpConnection(),[%0x] [%d][%0x][%0x]", this, socket_->fd(), socket_, channel_);
-    assert(state_ == kDisconnected);
+    ZL_ASSERT(state_ == kDisconnected)(state_);
     Safe_Delete(socket_);
     Safe_Delete(channel_);
 }
@@ -114,12 +114,8 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
             }
         }
     }
+    ZL_ASSERT(remaining <= len)(remaining)(len)(socket_->fd());
 
-    if(remaining > len)
-    {
-        LOG_INFO("TcpConnection::sendInLoop [%d], remaining[%d], len[%d]", socket_->fd(), remaining, len);
-    }
-    assert(remaining <= len);
     //如果发送成功且数据尚未发送完毕，则将剩余数据存入缓冲区，并注册该channel上的可写事件
     if (!faultError && remaining > 0)
     {
@@ -157,7 +153,7 @@ void TcpConnection::shutdownInLoop()
 void TcpConnection::connectEstablished()
 {
     loop_->assertInLoopThread();
-    assert(state_ == kConnecting);
+    ZL_ASSERT(state_ == kConnecting)(state_);
     setState(kConnected);
     channel_->enableReading();
 
@@ -245,8 +241,7 @@ void TcpConnection::handleWrite()
 void TcpConnection::handleClose()
 {
     loop_->assertInLoopThread();
-    LOG_INFO("TcpConnection::handleClose fd = %d, state = %d", socket_->fd(), state_);
-    assert(state_ == kConnected || state_ == kDisconnecting);
+    ZL_ASSERT(state_ == kConnected || state_ == kDisconnecting)(state_)(socket_->fd());
     setState(kDisconnected);
     channel_->disableAll();
 
