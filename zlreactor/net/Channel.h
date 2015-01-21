@@ -56,7 +56,7 @@ public:
     Channel(EventLoop* loop, int fd);
     ~Channel();
 
-    ZL_SOCKET fd() const { return fd_; }
+    int fd() const { return fd_; }
 
     EventLoop* ownerLoop() { return loop_; }
 
