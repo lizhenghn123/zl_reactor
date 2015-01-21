@@ -7,4 +7,4 @@ INCLUDES = -I../../zlreactor
 smartAssertTest_CPPFLAGS = -std=c++0x
 smartAssertTest_LDFLAGS = -L../../lib -lzlreactor
 
-smartAssertTest_SOURCES = smartAssertTest.cpp
+smartAssertTest_SOURCES = SmartAssertTest.cpp
