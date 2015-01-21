@@ -7,8 +7,6 @@
 #include "base/FileUtil.h"
 NAMESPACE_ZL_BASE_START
 
-#define MAX_LOG_ENTRY_SIZE 4096      /* 每次log输出的最大大小 */
-#define MAX_FILE_PATH_LEN  1024      /* 日志文件路径最大长度 */
 #define MAX_PRIORITY_NAME_LENGTH 9
 
 #ifdef OS_WINDOWS
@@ -61,6 +59,7 @@ public:
         max_file_count_ = MAX_LOG_FILE_COUNT;
         cur_size_ = cur_file_index_ = 0;
         append_ = true;
+        isThreadSafe_ = true;
         ::memset(log_dir_, 0, MAX_FILE_PATH_LEN);
         ::memset(log_file_name_, 0, MAX_FILE_PATH_LEN);
         ::memset(curr_log_file_, 0, MAX_FILE_PATH_LEN);
@@ -73,12 +72,18 @@ public:
             file_ = NULL;
         }
     }
+
     bool init(const char *log_dir, const char *log_name, size_t max_file_size = MAX_LOG_FILE_SIZE,
               size_t max_file_count = MAX_LOG_FILE_COUNT, bool append = true);
 
     const char *makeLogFilePath();
 
-    bool dumpLog(const char *log_entry, size_t size);
+    void dumpLog(const char *log_entry, size_t size);
+
+    void setThreadSafe(bool safe) { isThreadSafe_ = safe; }
+
+private:
+    void dumpLogWithHold(const char *log_entry, size_t size);
 
 private:
     char               log_dir_[MAX_FILE_PATH_LEN];
@@ -90,6 +95,7 @@ private:
     size_t             cur_size_;
     size_t             cur_file_index_;
     bool               append_;
+    bool               isThreadSafe_;
     zl::thread::Mutex  mutex_;
 };
 
@@ -97,6 +103,7 @@ class ZLog
 {
     friend bool zl_log(const char *file, int line, ZLogPriority priority, const char *format, ...);
     friend ZLogPriority zl_log_set_priority(ZLogPriority prio);
+    friend void zl_log_console_output(bool optval);
 
 public:
     ZLog()
@@ -128,7 +135,7 @@ public:
 
     bool zlog(const char *file, int line, ZLogPriority priority, const char *format, va_list arg_ptr);
 
-private:
+public:
     ZLogOutput            mode_;
     ZLogPriority          priority_;
     ZLogHeader            header_;
@@ -178,12 +185,30 @@ void zl_log_set_handler(zl_log_ext_handler_f handler)
     g_zlogger->setLogHandler(handler);
 }
 
+void zl_log_disable_all()
+{
+    g_zlogger->priority_ = ZL_LOG_PRIO_DISABLE;
+}
+
 ZLogPriority zl_log_set_priority(ZLogPriority prio)
 {
     ZLogPriority old = g_zlogger->priority_;
     g_zlogger->priority_ = prio;
 
     return old;
+}
+
+void zl_log_console_output(bool optval)
+{
+    if(optval)
+        g_zlogger->mode_ = (ZLogOutput)(g_zlogger->mode_ | ZL_LOG_OUTPUT_CONSOLE);
+    else
+        g_zlogger->mode_ = (ZLogOutput)(g_zlogger->mode_ & (~ZL_LOG_OUTPUT_CONSOLE));
+}
+
+void zl_log_thread_safe(bool optval)
+{
+      g_zlogger->log_file_->setThreadSafe(optval);
 }
 
 bool zl_log(const char *file, int line, ZLogPriority priority, const char *format, ...)
@@ -232,8 +257,8 @@ bool ZLog::zlog(const char *file, int line, ZLogPriority priority, const char *f
     size_t max_size = MAX_LOG_ENTRY_SIZE - 2;
     size_t offset = 0;
 
-	zl::base::Timestamp time = zl::base::Timestamp::now();
-	struct tm *result = time.getTm();
+    zl::base::Timestamp time = zl::base::Timestamp::now();
+    struct tm *result = time.getTm();
 
     if (header_ & ZL_LOG_HEADER_DATE)
     {
@@ -243,7 +268,7 @@ bool ZLog::zlog(const char *file, int line, ZLogPriority priority, const char *f
     if (header_ & ZL_LOG_HEADER_TIME)
     {
         offset += ZL_SNPRINTF(log_entry + offset, max_size - offset, "%02d:%02d:%02d:%06d ",
-			result->tm_hour, result->tm_min, result->tm_sec, int(time.microSeconds() % ZL_USEC_PER_SEC));
+            result->tm_hour, result->tm_min, result->tm_sec, int(time.microSeconds() % ZL_USEC_PER_SEC));
     }
     if (header_ & ZL_LOG_HEADER_MARK)
     {
@@ -259,7 +284,11 @@ bool ZLog::zlog(const char *file, int line, ZLogPriority priority, const char *f
         offset += MAX_PRIORITY_NAME_LENGTH;
     }
 
-    offset += vsprintf(log_entry + offset, format, arg_ptr); //vsprintf_s is not support in linux
+    //offset += vsprintf(log_entry + offset, format, arg_ptr); //vsprintf_s is not support in linux
+    int size = vsnprintf(log_entry + offset, MAX_LOG_ENTRY_SIZE - offset, format, arg_ptr);
+    if(size > 0)
+        offset += size;
+
     log_entry[offset++] = '\n';
     log_entry[offset] = '\0';
     if ((mode_ & ZL_LOG_OUTPUT_CONSOLE) == ZL_LOG_OUTPUT_CONSOLE)
@@ -332,10 +361,21 @@ const char* ZLogFile::makeLogFilePath()
     return curr_log_file_;
 }
 
-bool ZLogFile::dumpLog(const char *log_entry, size_t size)
+void ZLogFile::dumpLog(const char *log_entry, size_t size)
 {
-    zl::thread::LockGuard<zl::thread::Mutex> lock(mutex_);
+    if(isThreadSafe_)
+    {
+        zl::thread::LockGuard<zl::thread::Mutex> lock(mutex_);
+        dumpLogWithHold(log_entry, size);
+    }
+    else
+    {
+        dumpLogWithHold(log_entry, size);
+    }
+}
 
+void ZLogFile::dumpLogWithHold(const char *log_entry, size_t size)
+{
     cur_size_ += size;
     if (cur_size_ > max_file_size_)
     {
@@ -347,15 +387,13 @@ bool ZLogFile::dumpLog(const char *log_entry, size_t size)
         file_ = ::fopen(log_file_path, "wb");
         if (!file_)
         {
-            return false;
+            return ;
         }
         cur_size_ = size;
     }
 
     ::fwrite(log_entry, 1, size, file_);
     ::fflush(file_);
-
-    return true;
 }
 
 NAMESPACE_ZL_BASE_END

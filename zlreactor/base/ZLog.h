@@ -16,16 +16,19 @@
 #include <stdlib.h>
 NAMESPACE_ZL_BASE_START
 
-#define MAX_LOG_FILE_SIZE  (10 * 1024 * 1024)    /** 默认每个日志文件大小（MB）*/
+#define MAX_LOG_FILE_SIZE  (100 * 1024 * 1024)   /** 默认每个日志文件大小（MB）*/
 #define MAX_LOG_FILE_COUNT (10)                  /** 默认循环日志文件数量 */
+#define MAX_LOG_ENTRY_SIZE (4096)                /* 每次log输出的最大大小(B) */
+#define MAX_FILE_PATH_LEN  (1024)                /* 日志文件路径最大长度 */
 
-#define ZL_LOG_MARK	 __FILE__,__LINE__           /** 输出格式：文件+行号 */
+#define ZL_LOG_MARK  __FILE__,__LINE__           /** 输出格式：文件+行号 */
 #define ZL_PTR_FMT   "<0x%x>"                    /** 输出格式：指针地址值 */
 #define ZL_STR_FMT   "<%s>"                      /** 输出格式：字符串标识 */
 
 /** Priority of log messages ordered from highest priority to lowest (rfc3164) */
 enum ZLogPriority
 {
+    ZL_LOG_PRIO_DISABLE,     /**< disable all log */
     ZL_LOG_PRIO_EMERGENCY,   /**< system is unusable */
     ZL_LOG_PRIO_ALERT,       /**< action must be taken immediately */
     ZL_LOG_PRIO_CRITICAL,    /**< critical condition */
@@ -80,6 +83,12 @@ bool zl_log_instance_destroy();
 
 ZLogPriority zl_log_set_priority(ZLogPriority prio);
 
+void zl_log_console_output(bool optval);
+
+void zl_log_disable_all();
+
+void zl_log_thread_safe(bool optval);
+
 bool zl_log(const char *file, int line, ZLogPriority priority, const char *format, ...);
 
 /** Prototype of extended log handler function */
@@ -88,6 +97,10 @@ typedef bool(*zl_log_ext_handler_f)(const char *file, int line, const char *obj,
 
 void zl_log_set_handler(zl_log_ext_handler_f handler);
 
+#define LOG_SET_PRIORITY(priority)    zl::base::zl_log_set_priority(priority)
+#define LOG_CONSOLE_OUTPUT(optval)    zl::base::zl_log_console_output(optval)
+#define LOG_DISABLE_ALL               zl::base::zl_log_disable_all()
+#define LOG_THREAD_SAFE(optval)       zl::base::zl_log_thread_safe(optval)
 
 #define LOG_DEBUG(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
 #define LOG_INFO(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
