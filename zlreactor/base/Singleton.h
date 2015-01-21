@@ -22,11 +22,11 @@ NAMESPACE_ZL_START
 
 #define DECLARE_SINGLETON_CLASS(type)  friend class Singleton< type >
 
-template<class T>
+template <class T>
 class Singleton
 {
 public:
-    static T *getInstancePtr()
+    static T* getInstancePtr()
     {
         if(0 == proxy_.instance_)
         {
@@ -44,12 +44,12 @@ public:
         return *(proxy_.instance_);
     }
 
-    static T *createInstance()
+    static T* createInstance()
     {
         return proxy_.createInstance();
     }
 
-    static void	deleteInstance()
+    static void deleteInstance()
     {
         proxy_.deleteInstance();
     }
@@ -58,7 +58,8 @@ private:
     struct Proxy
     {
         Proxy() : instance_(0)
-        {	}
+        {
+        }
 
         ~Proxy()
         {
@@ -69,14 +70,15 @@ private:
             }
         }
 
-        T *createInstance()
+        T* createInstance()
         {
-            if(0 == instance_)
+            T *p = instance_;
+            if(p == 0)
             {
                 zl::thread::LockGuard<zl::thread::Mutex> guard(lock_);
-                if(0 == instance_)
+                if((p = instance_) ==0)
                 {
-                    instance_ = new T;
+                    instance_ = p = new T;
                 }
             }
             return instance_;
@@ -100,7 +102,7 @@ private:
     static Proxy proxy_;
 };
 
-template < typename T >
+template < class T >
 typename Singleton<T>::Proxy Singleton<T>::proxy_;
 
 
