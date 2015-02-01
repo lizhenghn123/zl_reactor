@@ -82,6 +82,7 @@ namespace test_RWMutex   // rwMutex
 
          void writer_thread()
          {
+		     //pthread_setschedprio(pthread_self( ), SCHED_FIFO);  //提高写线程的优先级
              int count = 0;
              while(1)
              {
