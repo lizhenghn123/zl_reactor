@@ -5,7 +5,7 @@
 // Description      : 同步阻塞队列，可工作于多线程环境下，可用于线程之间数据存取
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 2014-12-31
+// Last Modified On : 2015-01-26
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -39,20 +39,27 @@ public:
 
     }
 
-    virtual ~BlockingQueue()
+    ~BlockingQueue()
     {
         stop();
     }
 
 public:
-    virtual void push(const JobType& job)
+    void push(const JobType& job)
     {
         LockGuard lock(mutex_);
         queue_.push(job);
         has_job_.notify_one();
     }
 
-    virtual bool pop(JobType& job)
+    void push(JobType&& job)
+    {
+        LockGuard lock(mutex_);
+        queue_.push(std::move(job));
+        has_job_.notify_one();
+    }
+
+    bool pop(JobType& job)
     {
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
@@ -66,7 +73,7 @@ public:
         return popOne(job, Order());
     }
 
-    virtual JobType pop()
+    JobType pop()
     {
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
@@ -82,15 +89,7 @@ public:
         return job;
     }
 
-    virtual bool try_pop(JobType& job)
-    {
-        LockGuard lock(mutex_);
-        if(queue_.empty() && !stopFlag_)
-            return false;
-        return popOne(job, Order());
-    }
-
-    virtual bool pop(std::vector<JobType>& vec, int pop_size = 1)
+    bool pop(std::vector<JobType>& vec, int pop_size = -1)
     {
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
@@ -101,22 +100,31 @@ public:
         {
             return false;
         }
-        int num = 0;
-        while (num < pop_size)
+
+        if(pop_size <= 0)
+            pop_size = queue_.size();
+
+        JobType job;
+        while (pop_size-- > 0 && !stopFlag_)
         {
-            JobType job;
             if(!popOne(job, Order()))
                 break;
             else
-            {
-                num ++;
                 vec.push_back(job);
-            }
         }
+
         return true;
     }
 
-    virtual void stop()
+    bool try_pop(JobType& job)
+    {
+        LockGuard lock(mutex_);
+        if(queue_.empty() && !stopFlag_)
+            return false;
+        return popOne(job, Order());
+    }
+
+    void stop()
     {
         stopFlag_ = true;
         has_job_.notify_all();
@@ -148,6 +156,8 @@ private:
     //template <>
     bool popOne(JobType& job, tagFIFO tag)
     {
+        if(queue_.empty())
+            return false;
         job = queue_.front();
         queue_.pop();
         return true;
@@ -156,6 +166,8 @@ private:
     //template <>
     bool popOne(JobType& job, tagFILO tag)
     {
+        if(queue_.empty())
+            return false;
         job = queue_.top();
         queue_.pop();
         return true;
@@ -164,6 +176,8 @@ private:
     //template <>
     bool popOne(JobType& job, tagPRIO tag)
     {
+        if(queue_.empty())
+            return false;
         job = queue_.top();
         queue_.pop();
         return true;

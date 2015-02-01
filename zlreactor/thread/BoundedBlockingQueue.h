@@ -5,7 +5,7 @@
 // Description      : 固定大小的同步阻塞队列，可工作于多线程环境下，可用于线程之间数据存取
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 2014-12-31
+// Last Modified On : 2015-01-26
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -29,7 +29,7 @@ class BoundedBlockingQueue : public zl::NonCopy
 {
 public:
     typedef Job                                 JobType;
-    typedef Queue	                            QueueType;
+    typedef Queue                               QueueType;
     typedef zl::thread::Mutex                   MutexType;
     typedef zl::thread::LockGuard<MutexType>    LockGuard;
     typedef zl::thread::Condition               ConditionType;
@@ -44,24 +44,39 @@ public:
     {
     }
 
-    virtual ~BoundedBlockingQueue()
+    ~BoundedBlockingQueue()
     {
         stop();
     }
 
 public:
-    virtual void push(const JobType& job)
+    void push(const JobType& job)
     {
         LockGuard lock(mutex_);
         while(queue_.size() == maxSize_)  // already full
         {
             notFull_.wait();
+            if(stopFlag_)
+                return false;
         }
         queue_.push(job);
         notEmpty_.notify_one();
     }
 
-    virtual bool pop(JobType& job)
+    void push(JobType&& job)
+    {
+        LockGuard lock(mutex_);
+        while(queue_.size() == maxSize_)
+        {
+            notFull_.wait();
+			if(stopFlag_)
+                return false;
+        }
+        queue_.push(std::move(job));
+        notEmpty_.notify_one();
+    }
+
+    bool pop(JobType& job)
     {
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
@@ -77,7 +92,7 @@ public:
         return true;
     }
 
-    virtual JobType pop()
+    JobType pop()
     {
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
@@ -94,7 +109,7 @@ public:
         return job;
     }
 
-    virtual bool pop(std::vector<JobType>& vec, int pop_size = 1)
+    bool pop(std::vector<JobType>& vec, int pop_size = -1)
     {
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
@@ -105,22 +120,23 @@ public:
         {
             return false;
         }
-        int num = 0;
-        while (num < pop_size)
+
+        if(pop_size <= 0)
+             pop_size = queue_.size();
+
+        JobType job;
+        while (pop_size-- > 0 && !stopFlag_)
         {
-            JobType job;
             if(!popOne(job, Order()))
                 break;
             else
-            {
-                num ++;
                 vec.push_back(job);
-            }
         }
+
         return true;
     }
 
-    virtual bool try_pop(JobType& job)
+    bool try_pop(JobType& job)
     {
         LockGuard lock(mutex_);
         if(queue_.empty() || stopFlag_)
@@ -130,7 +146,7 @@ public:
         return true;
     }
 
-    virtual void stop()
+    void stop()
     {
         stopFlag_ = true;
         notFull_.notify_all();
@@ -169,6 +185,8 @@ private:
     //template <>
     bool popOne(JobType& job, tagFIFO tag)
     {
+        if(queue_.empty())
+            return false;
         job = queue_.front();
         queue_.pop();
         return true;
@@ -177,6 +195,8 @@ private:
     //template <>
     bool popOne(JobType& job, tagFILO tag)
     {
+        if(queue_.empty())
+            return false;
         job = queue_.top();
         queue_.pop();
         return true;
@@ -185,6 +205,8 @@ private:
     //template <>
     bool popOne(JobType& job, tagPRIO tag)
     {
+        if(queue_.empty())
+            return false;
         job = queue_.top();
         queue_.pop();
         return true;
