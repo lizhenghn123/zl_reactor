@@ -57,7 +57,7 @@ public:
         {
             notFull_.wait();
             if(stopFlag_)
-                return false;
+                return ;
         }
         queue_.push(job);
         notEmpty_.notify_one();
@@ -70,7 +70,7 @@ public:
         {
             notFull_.wait();
 			if(stopFlag_)
-                return false;
+                return ;
         }
         queue_.push(std::move(job));
         notEmpty_.notify_one();
