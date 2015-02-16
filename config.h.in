@@ -1,5 +1,11 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
+/* machine is bigendian */
+#undef ENDIAN_BIG
+
+/* machine is littleendian */
+#undef ENDIAN_LITTLE
+
 /* Define to 1 if you have the `alarm' function. */
 #undef HAVE_ALARM
 
