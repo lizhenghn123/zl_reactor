@@ -25,12 +25,12 @@ libzlreactor_la_SOURCES = \
 					 base/Date.cpp \
 					 base/DateTimeUtil.cpp \
 					 base/FileUtil.cpp \
-					 base/StringHash.cpp \
 					 base/Timestamp.cpp \
 					 base/ZLog.cpp \
 					 base/Demangle.cpp \
 					 base/Exception.cpp \
 					 base/Daemonize.cpp \
+					 utility/StringHash.cpp \
 					 utility/Base64.cpp \
 					 utility/Md5.cpp \
 					 thread/Thread.cpp \
