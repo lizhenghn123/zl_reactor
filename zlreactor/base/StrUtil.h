@@ -89,19 +89,25 @@ inline void erase(std::string& str, const char& charactor)
 }
 
 /** 判断字符串是否以某一子串为开始 */
-inline bool	startWith(const std::string& str, const std::string& substr)
+inline bool startsWith(const std::string& str, const std::string& substr)
 {
     return str.find(substr) == 0;
 }
 
 /** 判断字符串是否以某一子串为结尾 */
-inline bool endWith(const std::string& str, const std::string& substr)
+inline bool endsWith(const std::string& str, const std::string& substr)
 {
     return str.rfind(substr) == (str.length() - substr.length());
 }
 
+/** 比较两个字符串是否相等 */
+inline bool equals(const std::string& lhs, const std::string& rhs)
+{
+    return (lhs) == (rhs);
+}
+
 /** 比较两个字符串是否相等（忽略大小写） */
-inline bool equalsIgnoreCase(const std::string& lhs, const std::string& rhs)
+inline bool iequals(const std::string& lhs, const std::string& rhs)
 {
     return toLower(lhs) == toLower(rhs);
 }
@@ -146,6 +152,73 @@ inline void split(const std::string& str, std::vector<std::string>& result,
     }
 }
 
+/** 字符串合并 */
+template< typename SequenceSequenceT, typename Range1T>
+inline typename SequenceSequenceT::value_type join(const SequenceSequenceT& Input, const Range1T& Separator)
+{
+    // Define working types
+    typedef typename SequenceSequenceT::value_type ResultT;
+    typedef typename SequenceSequenceT::const_iterator InputIteratorT;
+
+    // Parse input
+     InputIteratorT itBegin = Input.begin();
+     InputIteratorT itEnd = Input.end();
+
+    // Construct container to hold the result
+    ResultT Result;
+
+    // Append first element
+    if(itBegin != itEnd)
+    {
+        Result += *itBegin;
+        ++itBegin;
+    }
+
+    for(; itBegin != itEnd; ++itBegin)
+    {
+        Result += Separator;    // Add separator
+        Result += *itBegin;     // Add element
+    }
+
+    return Result;
+}
+
+template<typename SequenceSequenceT, typename Range1T, typename PredicateT>
+inline typename SequenceSequenceT::value_type 
+    join_if(const SequenceSequenceT& Input, const Range1T& Separator, PredicateT Pred)
+{
+    // Define working types
+    typedef typename SequenceSequenceT::value_type ResultT;
+    typedef typename SequenceSequenceT::const_iterator InputIteratorT;
+
+    // Parse input
+    InputIteratorT itBegin = Input.begin();
+    InputIteratorT itEnd = Input.end();
+
+    // Construct container to hold the result
+    ResultT Result;
+
+    // Roll to the first element that will be added
+    while(itBegin!=itEnd && !Pred(*itBegin)) ++itBegin;
+
+    // Append first element
+    if(itBegin != itEnd)
+    {
+        Result += *itBegin;
+        ++itBegin;
+    }
+
+    for(; itBegin != itEnd; ++itBegin)
+    {
+        if(Pred(*itBegin))
+        {
+            Result += Separator;    // Add separator
+            Result += *itBegin;     // Add element
+        }
+    }
+
+    return Result;
+}
 
 } // namespace base
 } // namespace zl
