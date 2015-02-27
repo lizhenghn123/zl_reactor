@@ -75,4 +75,26 @@
             TypeName& operator=(const TypeName&)      
 #endif
 
+#define USE_TRY_CATCH
+#ifdef  USE_TRY_CATCH
+#define ZL_TRY_BEGIN  try {
+#define ZL_CATCH(x)   } catch (x) {
+#define ZL_CATCH_ALL  } catch (...) {
+#define ZL_CATCH_END  }
+
+#define ZL_RAISE(x)   throw (x)
+#define ZL_RERAISE    throw
+#define ZL_THROWS(x)  throw (x)
+
+#else    // USE_TRY_CATCH
+#define ZL_TRY_BEGIN  {{
+#define ZL_CATCH(x)   } if (0) {
+#define ZL_CATCH_ALL  } if (0) {
+#define ZL_CATCH_END  }}
+
+#define ZL_RAISE(x)   
+#define ZL_RERAISE    
+#define ZL_THROWS(x)  
+#endif    // USE_TRY_CATCH
+
 #endif /* ZL_STDDEFINE_H */
