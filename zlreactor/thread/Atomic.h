@@ -36,13 +36,13 @@
 
 #elif defined(OS_WINDOWS)
 #include <Windows.h>
-#define ATOMIC_ADD(ptr, v)            ::InterlockedIncrement(ptr)
-#define ATOMIC_SUB(ptr, v)            ::InterlockedDecrement(ptr)
+#define ATOMIC_ADD(ptr, v)            ::InterlockedIncrement((long*)ptr)
+#define ATOMIC_SUB(ptr, v)            ::InterlockedDecrement((long*)ptr)
 //#define ATOMIC_ADD_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, v)
 //#define ATOMIC_SUB_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, -v)
-#define ATOMIC_FETCH_AND_ADD(ptr, v)  ::InterlockedExchangeAdd(ptr, v)    /*返回加之前的值*/
-#define ATOMIC_FETCH_AND_SUB(ptr, v)  ::InterlockedExchangeAdd(ptr, -v)
-#define ATOMIC_FETCH(ptr)             ::InterlockedExchangeAdd(ptr, 0)
+#define ATOMIC_FETCH_AND_ADD(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, v)    /*返回加之前的值*/
+#define ATOMIC_FETCH_AND_SUB(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, -v)
+#define ATOMIC_FETCH(ptr)             ::InterlockedExchangeAdd((long*)ptr, 0)
 #endif
 
 NAMESPACE_ZL_THREAD_START

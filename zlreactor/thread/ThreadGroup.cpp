@@ -1,6 +1,6 @@
 #include "thread/ThreadGroup.h"
 #include "thread/Thread.h"
-#include "base/StrUtil.h"
+#include <assert.h>
 NAMESPACE_ZL_THREAD_START
 
 ThreadGroup::ThreadGroup()
@@ -10,50 +10,78 @@ ThreadGroup::ThreadGroup()
 
 ThreadGroup::~ThreadGroup()
 {
-    for(size_t i = 0; i < vecThreads_.size(); ++i)
+    for(auto it=threads_.begin(),end=threads_.end(); it!=end; ++it)
     {
-        delete vecThreads_[i];
+        delete *it;
     }
-    vecThreads_.clear();
+    threads_.clear();
 }
 
-void ThreadGroup::create_thread(std::function<void ()> func, int thread_num/* = 1*/)
+bool ThreadGroup::is_this_thread_in()
 {
+    Thread::id id = this_thread::get_id();
     LockGuard<Mutex> lock(mutex_);
-    for (int i = 0; i < thread_num; ++i)
+    for(auto it=threads_.begin(),end=threads_.end(); it!=end; ++it)
     {
-        std::string thr_name("threadgroup_thread_");
-        thr_name += zl::base::toStr(i);
-        vecThreads_.push_back(new Thread(func, thr_name));
+        if ((*it)->get_id() == id)
+            return true;
     }
+    return false;
 }
 
-void ThreadGroup::add_thread(Thread *thd)
+bool ThreadGroup::is_thread_in(Thread* thrd)
 {
-    LockGuard<Mutex> lock(mutex_);
-    vecThreads_.push_back(thd);
+    if(thrd)
+    {
+        Thread::id id = thrd->get_id();
+        LockGuard<Mutex> lock(mutex_);
+        for(auto it=threads_.begin(),end=threads_.end(); it!=end; ++it)
+        {
+            if ((*it)->get_id() == id)
+                return true;
+        }
+        return false;
+    }
+
+    return false;
+}
+
+void ThreadGroup::add_thread(Thread *thrd)
+{
+    if(thrd)
+    {
+        assert(!is_thread_in(thrd) && "must not add a duplicated thread");
+        LockGuard<Mutex> lock(mutex_);
+        threads_.push_back(thrd);
+    }
 }
 
 void ThreadGroup::remove_thread(Thread *thd)
 {
     LockGuard<Mutex> lock(mutex_);
-    std::vector<Thread *>::iterator it = std::find(vecThreads_.begin(), vecThreads_.end(), thd);
-    if(it != vecThreads_.end())
+    std::vector<Thread *>::iterator it = std::find(threads_.begin(), threads_.end(), thd);
+    if(it != threads_.end())
     {
-        vecThreads_.erase(it);
+        threads_.erase(it);
     }
 }
 
 void ThreadGroup::join_all()
 {
+    assert(!is_this_thread_in() && "trying joining itself");
     LockGuard<Mutex> lock(mutex_);
-    for_each(vecThreads_.begin(), vecThreads_.end(), std::bind(&Thread::join, std::placeholders::_1));
+    //for_each(threads_.begin(), threads_.end(), std::bind(&Thread::join, std::placeholders::_1));
+    for(auto it=threads_.begin(),end=threads_.end(); it!=end; ++it)
+    {
+        if ((*it)->joinable())
+            (*it)->join();
+    }
 }
 
 size_t ThreadGroup::size() const
 {
     LockGuard<Mutex> lock(mutex_);
-    return vecThreads_.size();
+    return threads_.size();
 }
 
 NAMESPACE_ZL_THREAD_END

@@ -47,7 +47,7 @@ Timestamp::Timestamp(int64_t ms) : microSeconds_(ms)
 #endif
 }
 
-struct tm  *Timestamp::getTm(bool showlocaltime/* = true*/) const
+struct tm* Timestamp::getTm(bool showlocaltime/* = true*/) const
 {
     time_t seconds = static_cast<time_t>(microSeconds_ / ZL_USEC_PER_SEC);
     if(showlocaltime)
