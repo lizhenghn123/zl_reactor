@@ -30,6 +30,7 @@ libzlreactor_la_SOURCES = \
 					 base/Demangle.cpp \
 					 base/Exception.cpp \
 					 base/Daemonize.cpp \
+					 base/StringUtil.cpp \
 					 utility/StringHash.cpp \
 					 utility/Base64.cpp \
 					 utility/Md5.cpp \

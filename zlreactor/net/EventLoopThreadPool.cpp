@@ -2,7 +2,7 @@
 #include "net/EventLoop.h"
 #include "thread/Thread.h"
 #include "thread/CountDownLatch.h"
-#include "base/StrUtil.h"
+#include "base/StringUtil.h"
 #include "base/ZLog.h"
 using zl::thread::Thread;
 NAMESPACE_ZL_NET_START
