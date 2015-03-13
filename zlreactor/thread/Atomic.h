@@ -31,18 +31,20 @@
 #define ATOMIC_FETCH_AND_ADD(ptr, v)  __sync_fetch_and_add(ptr, v)
 #define ATOMIC_FETCH_AND_SUB(ptr, v)  __sync_fetch_and_sub(ptr, v)
 #define ATOMIC_FETCH(ptr)             __sync_add_and_fetch(ptr, 0)
-//#define ATOMIC_SET(ptr, v)            __sync_bool_compare_and_swap(ptr, *(ptr), v)
-#define ATOMIC_SET(ptr, v)            __sync_val_compare_and_swap(ptr, *(ptr), v) 
+#define ATOMIC_SET(ptr, v)            __sync_lock_test_and_set(ptr, *(ptr)) 
+#define ATOMIC_CAS(ptr, cmp, v)       __sync_bool_compare_and_swap(ptr, cmp, v)
 
 #elif defined(OS_WINDOWS)
 #include <Windows.h>
-#define ATOMIC_ADD(ptr, v)            ::InterlockedIncrement((long*)ptr)
-#define ATOMIC_SUB(ptr, v)            ::InterlockedDecrement((long*)ptr)
+#define ATOMIC_ADD(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, v)
+#define ATOMIC_SUB(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, -v
 //#define ATOMIC_ADD_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, v)
 //#define ATOMIC_SUB_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, -v)
 #define ATOMIC_FETCH_AND_ADD(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, v)    /*返回加之前的值*/
 #define ATOMIC_FETCH_AND_SUB(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, -v)
 #define ATOMIC_FETCH(ptr)             ::InterlockedExchangeAdd((long*)ptr, 0)
+#define ATOMIC_SET(ptr, v)            ::InterlockedExchange(ptr, *(ptr)) 
+#define ATOMIC_CAS(ptr, cmp, v)       ((cmp) == ::InterlockedCompareExchange(var, *(val), (cmp)))
 #endif
 
 NAMESPACE_ZL_THREAD_START
