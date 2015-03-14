@@ -14,7 +14,7 @@ namespace base
 #endif
      
 
-size_t stringFormatAppendImpl(std::string* dst, const char* format, va_list ap)
+size_t stringFormatAppendImpl(std::string *dst, const char *format, va_list ap)
 {
     char space[1024];    // just try with a small fixed size buffer
 
@@ -57,7 +57,7 @@ size_t stringFormatAppendImpl(std::string* dst, const char* format, va_list ap)
     return result;
 }
 
-size_t stringFormatAppend(std::string* dst, const char* format, ...)
+size_t stringFormatAppend(std::string *dst, const char *format, ...)
 {
     va_list ap;
     va_start(ap, format);
@@ -66,7 +66,7 @@ size_t stringFormatAppend(std::string* dst, const char* format, ...)
     return result;
 }
 
-size_t stringFormat(std::string* dst, const char* format, ...)
+size_t stringFormat(std::string *dst, const char *format, ...)
 {
     va_list ap;
     va_start(ap, format);
@@ -76,7 +76,7 @@ size_t stringFormat(std::string* dst, const char* format, ...)
     return result;
 }
 
-std::string stringFormat(const char* format, ...)
+std::string stringFormat(const char *format, ...)
 {
     va_list ap;
     va_start(ap, format);
@@ -86,9 +86,5 @@ std::string stringFormat(const char* format, ...)
     return result;
 }
 
-int TTTT(int)
-{
-    return 1000;
-}
 } // namespace base
 } // namespace zl

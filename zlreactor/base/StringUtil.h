@@ -30,11 +30,11 @@ inline std::string toStr(const T& t)
 }
 
 /** 格式化字符串 */
-size_t stringFormatAppend(std::string* dst, const char* format, ...);
+size_t stringFormatAppend(std::string *dst, const char* format, ...);
 
-size_t stringFormat(std::string* dst, const char* format, ...);
+size_t stringFormat(std::string *dst, const char* format, ...);
 
-std::string stringFormat(const char* format, ...);
+std::string stringFormat(const char *format, ...);
 
 /** 字符串转为某一类型 */
 template <typename T>
