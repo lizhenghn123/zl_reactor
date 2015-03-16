@@ -62,4 +62,5 @@ libzlreactor_la_SOURCES = \
 					 net/Eventfd.cpp \
 					 net/SignalHandler.cpp \
 					 net/http/HttpKeyValue.cpp \
-					 net/http/HttpRequest.cpp
+					 net/http/HttpRequest.cpp \
+					 net/http/HttpResponse.cpp

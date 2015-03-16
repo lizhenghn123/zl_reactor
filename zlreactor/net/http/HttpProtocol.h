@@ -21,7 +21,7 @@ NAMESPACE_ZL_NET_START
 #define CRLF                  "\r\n"
 #define DOUBLE_CRLF           "\r\n\r\n"
 
-    enum HttpMethod
+enum HttpMethod
 {
     HttpHead    = 0,
     HttpGet     = 1,
