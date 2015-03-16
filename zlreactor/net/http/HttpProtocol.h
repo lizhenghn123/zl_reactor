@@ -1,8 +1,8 @@
-// ***********************************************************************
+﻿// ***********************************************************************
 // Filename         : HttpProtocol.h
 // Author           : LIZHENG
 // Created          : 2014-07-01
-// Description      : HttpЭ�鶨��
+// Description      : Http协议定义
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2014-07-01
