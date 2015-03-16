@@ -89,7 +89,7 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
     size_t remaining = len;
     bool faultError = false;
     // 如果当前连接尚没有注册可写事件（比如直接调用send接口），并且发送缓冲区为空
-    // 就直接发送数据，发送成功则回调写完成实现；
+    // 就直接发送数据，发送成功则回调写完成事件；
     if (!channel_->isWriting() && outputBuffer_.readableBytes() == 0)
     {
         nwrote = socket_->send((const char*)data, len);

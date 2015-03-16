@@ -60,4 +60,6 @@ libzlreactor_la_SOURCES = \
 					 net/Timer.cpp \
 					 net/TimerQueue.cpp \
 					 net/Eventfd.cpp \
-					 net/SignalHandler.cpp
+					 net/SignalHandler.cpp \
+					 net/http/HttpKeyValue.cpp \
+					 net/http/HttpRequest.cpp
