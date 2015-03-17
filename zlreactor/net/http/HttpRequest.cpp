@@ -6,6 +6,7 @@ NAMESPACE_ZL_NET_START
 HttpRequest::HttpRequest()
 {
 }
+
 HttpRequest::HttpRequest(const std::string& header)
 {
     setHeader(header);
@@ -92,36 +93,5 @@ bool HttpRequest::parseDocument()
     return true;
 }
 
-bool HttpRequest::parse()
-{
-    return true;
-}
-bool HttpRequest::parseOption(const std::string& key, const std::string& value)
-{
-    //if( key == "host" )
-    //    setHost( value );
-    //else if( key == "connection" )
-    //    setConnection( value );
-    //else if( key == "accept" )
-    //    setAccept( value );
-    //else if( key == "user-agent" )
-    //    setUserAgent( value );
-    //else if( key == "accept-encoding" )
-    //    setAcceptEncoding( value );
-    //else if( key == "accept-language" )
-    //    setAcceptLanguage( value );
-    //else if( key == "content-type" )
-    //    setContentType( value );
-    //else if( key == "content-length" )
-    //{
-    //    unsigned int v;
-    //    sscanf( value.c_str(), "%ul", &v);
-    //    setContentLength( v );
-    //}
-    //else
-    //    return false;
-
-    return true;
-}
 
 NAMESPACE_ZL_NET_END

@@ -39,21 +39,7 @@ public:
     void setHttpUrl(const std::string& url)  { urlpath_ = url; }
     const std::string& getHttpUrl() const    { return urlpath_; }
 
-    //void setHost(const std::string& host) { host_ = host; }
-    //const std::string& getHost() const { return host_; }
-
-    //void setUserAgent(const std::string& userAgent) { userAgent_ = userAgent; }
-    //const std::string& getUserAgent() { return userAgent_; }
-
-    //void setContentLength(size_t contentLength) { contentLength_ = contentLength; }
-    //size_t getContentLength() const { return document_.length(); }
-
-    //void setContentType(const std::string& contentType) { contentType_ = contentType; }
-    //const std::string& getContentType() const { return contentType_; }
-
 private:
-    bool parse();
-    bool parseOption(const std::string& key, const std::string& value);
     bool parseHeader();
     bool parseDocument();
 
