@@ -14,12 +14,19 @@
 #include "Define.h"
 NAMESPACE_ZL_NET_START
 
-#define HTTP_VERSION_1_0      "HTTP/1.0"
-#define HTTP_VERSION_1_1      "HTTP/1.1"
-#define DEFAULT_HTTP_VERSION  "HTTP/1.1"
-
 #define CRLF                  "\r\n"
 #define DOUBLE_CRLF           "\r\n\r\n"
+
+enum HttpVersion
+{
+    HTTP_VERSION_0_0,
+    HTTP_VERSION_1_0,
+    HTTP_VERSION_1_1
+};
+
+#define HTTP_VERSION_0_0_S      "unknown"
+#define HTTP_VERSION_1_0_S      "HTTP/1.0"
+#define HTTP_VERSION_1_1_S      "HTTP/1.1"
 
 enum HttpMethod
 {
