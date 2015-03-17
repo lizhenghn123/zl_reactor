@@ -20,6 +20,7 @@ class  ZLogFile;
 
 static const char priority_snames[ZL_LOG_PRIO_COUNT][MAX_PRIORITY_NAME_LENGTH + 1] =
 {
+    ""        ,
     "[EMERG]  ",
     "[ALERT]  ",
     "[CRITIC] ",
