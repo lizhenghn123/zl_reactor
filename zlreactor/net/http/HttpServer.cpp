@@ -1,4 +1,7 @@
 ﻿#include "net/http/HttpServer.h"
+#include "base/ZLog.h"
+#include "net/TcpConnection.h"
+using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
 HttpServer::HttpServer(EventLoop *loop, const InetAddress& listenAddr, const string& servername/* = "HttpServer"*/)
@@ -14,12 +17,12 @@ HttpServer::~HttpServer()
 
 void HttpServer::onConnection(const TcpConnectionPtr& conn)
 {
-
+     LOG_INFO("HttpServer::onConnection get one client %d", conn->fd());
 }
 
 void HttpServer::onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp receiveTime)
 {
-
+     LOG_INFO("HttpServer::onConnection recv data [%d][%s]", conn->fd(), buf->toString().c_str());
 }
 
 void HttpServer::onRequest(const TcpConnectionPtr& conn, const HttpRequest& req)

@@ -1,5 +1,5 @@
 ﻿#include "HttpRequest.h"
-#include <regex>
+//#include <regex>
 #include <sstream>
 NAMESPACE_ZL_NET_START
 
@@ -62,20 +62,20 @@ bool HttpRequest::parseHeader()
     //HttpVersion，Client发过来的http协议版本号
     setHttpVersion((token[2] == "HTTP/1.1" ? HttpVersion::HTTP_VERSION_1_1 : HttpVersion::HTTP_VERSION_1_0));
 
-    /* 解析剩余的选项行 */
-    std::regex expr("([a-zA-Z_-]*)\\s?:\\s?(.*)");
-    std::smatch match;
-    std::string request = header_;
-    while(std::regex_search(request, match, expr))
-    {
-        std::string key = match[1].str();
-        std::string value = match[2].str();
-        std::transform(key.begin(), key.end(), key.begin(), ::tolower);
+    ///* 解析剩余的选项行 */
+    //std::regex expr("([a-zA-Z_-]*)\\s?:\\s?(.*)");
+    //std::smatch match;
+    //std::string request = header_;
+    //while(std::regex_search(request, match, expr))
+    //{
+    //    std::string key = match[1].str();
+    //    std::string value = match[2].str();
+    //    std::transform(key.begin(), key.end(), key.begin(), ::tolower);
 
-        headers_.insert(std::make_pair(key, value));
+    //    headers_.insert(std::make_pair(key, value));
 
-        request = match.suffix().str();
-    }
+    //    request = match.suffix().str();
+    //}
 
     return true;
 }

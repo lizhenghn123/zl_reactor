@@ -160,7 +160,7 @@ void EventLoop::runInLoop(const Functor& func)
 
 void EventLoop::queueInLoop(const Functor& func)
 {
-    LOG_INFO("EventLoop[%0x]::runInLoop [%d][%0x]", this, isInLoopThread(), &func);
+    LOG_INFO("EventLoop[%0x]::queueInLoop [%d][%0x]", this, isInLoopThread(), &func);
     {
         LockGuard<Mutex> lock(mutex_);
         pendingFunctors_.push_back(func);

@@ -30,7 +30,7 @@ class TcpServer : zl::NonCopy
 {
 public:
     TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::string& server_name = "TcpServer");
-    ~TcpServer();
+    virtual ~TcpServer();
 
     void setThreadNum(size_t numThreads);
     void start();
@@ -53,7 +53,7 @@ private:
     void removeConnection(const TcpConnectionPtr& conn);
     void removeConnectionInLoop(const TcpConnectionPtr& conn);
 
-private:
+protected:
     typedef std::map<int, TcpConnectionPtr>     ConnectionMap;
     typedef std::vector<EventLoopThreadPool*>   EventLoopList;
     EventLoop             *loop_;         // acceptor eventloop

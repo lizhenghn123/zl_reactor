@@ -27,15 +27,6 @@ public:
     HttpServer(EventLoop *loop, const InetAddress& listenAddr, const string& servername = "HttpServer");
     ~HttpServer();
 
-public:
-    void setServerName(const std::string& name) { serverName_ = name; }
-    const std::string& getServerName() { return serverName_; }
-
-//protected:
-//    virtual bool OnConnect(ClientData client);
-//    virtual int  SendString(ZL_SOCKET socket, const std::string& str);
-//    virtual bool SendResponse(ZL_SOCKET socket, HttpResponse& response);
-
 private:
     void onConnection(const TcpConnectionPtr& conn);
     void onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp receiveTime);
@@ -44,9 +35,6 @@ private:
 private:
     HttpServer(const HttpServer&);
     HttpServer& operator = (const HttpServer&);
-
-private:
-    std::string serverName_;
 };
 
 NAMESPACE_ZL_NET_END
