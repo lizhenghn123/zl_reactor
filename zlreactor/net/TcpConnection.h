@@ -15,6 +15,7 @@
 #include "base/Timestamp.h"
 #include "base/NonCopy.h"
 #include "base/ByteArray.h"
+#include "stl/any.h"
 #include "net/CallBacks.h"
 #include "net/InetAddress.h"
 #include "net/Socket.h"
@@ -46,13 +47,17 @@ public:
     void setWriteCompleteCallback(const WriteCompleteCallback& cb) { writeCompleteCallback_ = cb; }
     void setCloseCallback(const CloseCallback& cb)                 { closeCallback_ = cb; }
 
-    void enableReading()    { channel_->enableReading(); }
-    void disableReading()   { channel_->disableReading(); }
-    void enableWriting()    { channel_->enableWriting(); }
-    void disableWriting()   { channel_->disableWriting(); }
-    void disableAll()       { channel_->disableAll(); }
+    void enableReading()      { channel_->enableReading(); }
+    void disableReading()     { channel_->disableReading(); }
+    void enableWriting()      { channel_->enableWriting(); }
+    void disableWriting()     { channel_->disableWriting(); }
+    void disableAll()         { channel_->disableAll(); }
     
     void setNoDelay(bool on)  { socket_->setNoDelay(on); }
+
+    void setContext(const zl::stl::any& context)  { context_ = context; }
+	const zl::stl::any getContext() const         { return context_; }
+	zl::stl::any* getMutableContext()             { return &context_; }
 
     void connectEstablished();   // called when TcpServer accepts a new connection
     void connectDestroyed();     // called when TcpServer has removed me from its map
@@ -81,6 +86,8 @@ private:
     Channel               *channel_;
     const InetAddress     localAddr_;
     const InetAddress     peerAddr_;
+
+    zl::stl::any          context_;
 
     NetBuffer             inputBuffer_;
     NetBuffer             outputBuffer_; // FIXME: use list<Buffer> as output buffer.
