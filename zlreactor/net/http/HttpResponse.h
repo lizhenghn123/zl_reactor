@@ -15,12 +15,13 @@
 #include "net/http/HttpProtocol.h"
 NAMESPACE_ZL_NET_START
 
+class NetBuffer;
 class HttpRequest;
 
 class HttpResponse
 {
 public:
-    HttpResponse();
+    explicit HttpResponse(bool closeConn = true);
     ~HttpResponse();
 
 public:
@@ -36,8 +37,13 @@ public:
     //{
     //    contentType = _contentType;
     //}
+    void setCloseConnection(bool on)  { closeConnection_ = on; }
+    bool closeConnection() const      { return closeConnection_; }
 
     bool compile();
+
+    void appendToBuffer(NetBuffer* output) const;
+
 protected:
     void readBoby();
 
@@ -45,6 +51,8 @@ private:
     HttpStatusCode       statusCode_;
     string               version_;
     string               serverName_;
+    bool                 closeConnection_;
+    string body_;
     map<string, string>  headers_;
 };
 

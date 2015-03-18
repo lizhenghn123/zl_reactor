@@ -30,16 +30,17 @@ enum HttpVersion
 
 enum HttpMethod
 {
-    HttpHead    = 0,
-    HttpGet     = 1,
-    HttpPost    = 2,
-    HttpPut     = 3,
-    HttpDelete  = 4,
-    HttpTrace   = 5,
-    HttpOptions = 6,
-    HttpConnect = 7,
-    HttpPatch   = 8,
-    HttpMethodNum = 9
+    HttpInvalid = 0,
+    HttpHead    = 1,
+    HttpGet     = 2,
+    HttpPost    = 3,
+    HttpPut     = 4,
+    HttpDelete  = 5,
+    HttpTrace   = 6,
+    HttpOptions = 7,
+    HttpConnect = 8,
+    HttpPatch   = 9,
+    HttpMethodNum = 10
 };
 
 #define ZL_HTTPMETHOD_HEAD_S          "HEAD"

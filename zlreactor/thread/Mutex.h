@@ -18,6 +18,7 @@
 #elif defined(OS_LINUX)
 #include <unistd.h>
 #include <pthread.h>
+#include <errno.h>
 #endif
 
 NAMESPACE_ZL_THREAD_START
@@ -66,7 +67,10 @@ public:
     #ifdef OS_WINDOWS
         InitializeCriticalSection(&mutex_);
     #elif defined(OS_LINUX)
-        pthread_mutex_init(&mutex_, NULL);
+        int res = pthread_mutex_init(&mutex_, NULL);
+	if(res!=0) printf("[%d][%s]\n", errno, strerror(errno));
+    static int i = 0;
+    printf("---mutex create [%d]\n", ++i);
     #endif
     }
 
@@ -87,6 +91,8 @@ public:
     #elif defined(OS_LINUX)
         if(pthread_mutex_lock(&mutex_) != 0)
         {
+		printf("[%d][%s]\n", errno, strerror(errno));
+        perror("mutex lock");
             throw std::exception();
         }
     #endif

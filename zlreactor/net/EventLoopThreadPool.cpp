@@ -49,11 +49,12 @@ void EventLoopThreadPool::start()
         threads_.push_back(thread);
     }
     latch_->wait();
-    //LOG_INFO("EventLoopThreadPool[%0x]::runInLoop [%d]", this, zl::thread::this_thread::get_id().pid());
+    //LOG_INFO("EventLoopThreadPool[%0x]::runInLoop [%d]", this, zl::thread::this_thread::get_id().tid());
 }
 
 void EventLoopThreadPool::runLoop()
 {
+    printf("---------------------\n");
     EventLoop this_loop;
 
     {
@@ -62,7 +63,7 @@ void EventLoopThreadPool::runLoop()
     }
     //zl::thread::this_thread::sleep_for(zl::thread::chrono::seconds(2));
     latch_->countDown();
-    //LOG_INFO("EventLoopThreadPool countDown [%0x]::runInLoop [%d]", this, zl::thread::this_thread::get_id().pid());
+    LOG_INFO("-----EventLoopThreadPool countDown [%0x]::runInLoop [%d]", &this_loop, zl::thread::this_thread::get_id().tid());
     this_loop.loop();
 }
 
@@ -71,8 +72,8 @@ EventLoop* EventLoopThreadPool::getNextLoop()
     assert(started_);
     baseLoop_->assertInLoopThread();
 
-    EventLoop* loop = baseLoop_;
-
+    EventLoop *loop = baseLoop_;
+    return loop;       //使用下面的时候，总是挂在EventLoop：：queueInLoop中的加锁处
     if (!loops_.empty())     // round-robin
     {
         loop = loops_[next_];
@@ -82,7 +83,7 @@ EventLoop* EventLoopThreadPool::getNextLoop()
             next_ = 0;
         }
     }
-
+    LOG_INFO("----EventLoopThreadPool getNextLoop [%0x]", loop);
     return loop;
 }
 

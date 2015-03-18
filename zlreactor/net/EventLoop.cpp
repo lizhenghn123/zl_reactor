@@ -41,7 +41,8 @@ EventLoop::EventLoop()
       currentActiveChannel_(NULL),
       running_(false),
       eventHandling_(false),
-      callingPendingFunctors_(false)
+      callingPendingFunctors_(false),
+      mutex_()
 {
     poller_ = Poller::createPoller(this);
 
@@ -161,8 +162,9 @@ void EventLoop::runInLoop(const Functor& func)
 void EventLoop::queueInLoop(const Functor& func)
 {
     LOG_INFO("EventLoop[%0x]::queueInLoop [%d][%0x]", this, isInLoopThread(), &func);
+    zl::thread::Mutex mutex;
     {
-        LockGuard<Mutex> lock(mutex_);
+        zl::thread::LockGuard<zl::thread::Mutex> lock(mutex);
         pendingFunctors_.push_back(func);
     }
 

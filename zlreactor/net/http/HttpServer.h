@@ -30,7 +30,7 @@ public:
 private:
     void onConnection(const TcpConnectionPtr& conn);
     void onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp receiveTime);
-    void onRequest(const TcpConnectionPtr& conn, const HttpRequest& req);
+    void response(const TcpConnectionPtr& conn, const HttpRequest& req);
 
 private:
     HttpServer(const HttpServer&);
