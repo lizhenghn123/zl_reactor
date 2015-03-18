@@ -61,6 +61,11 @@ public:
         return microSeconds_ > 0;
     }
 
+    void swap(Timestamp& that)
+    {
+        std::swap(microSeconds_, that.microSeconds_);
+    }
+
     struct tm* getTm(bool showlocaltime = true) const;
     std::string toString(bool showlocaltime = true) const;
 

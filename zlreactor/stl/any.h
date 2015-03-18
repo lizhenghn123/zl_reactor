@@ -5,7 +5,7 @@
 // Description      :
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 
+// Last Modified On : 2015-01-18
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -20,23 +20,20 @@ namespace zl
         {
         public:
             any() : content_(0)
-
             {
             }
 
-            any(any& that) : content_(that.clone())
+            any(const any& that) : content_(that.clone())
             {
-
             }
 
             any(any && that) : content_(std::move(that.content_))
             {
-
             }
 
             //创建智能指针时，对于一般的类型，通过std::decay来移除引用和cv符，从而获取原始类型
             template<typename U>
-            any(U && value) : content_(new holder < typename std::decay<U>::type>(std::forward<U>(value)))
+            any(U && value) : content_(new holder <typename std::decay<U>::type>(std::forward<U>(value)))
             {
             }
 
@@ -121,7 +118,7 @@ namespace zl
 
         private:
             template<typename ValueType>
-            friend ValueType any_cast(const any *);
+            friend ValueType* any_cast(any *);
 
         private:
             placeholder *content_;
@@ -132,29 +129,51 @@ namespace zl
             lhs.swap(rhs);
         }
 
-        template<typename ValueType>
-        inline ValueType any_cast(const any * operand)
+        class bad_any_cast :  public std::bad_cast
         {
-            auto derived = static_cast<any::holder<ValueType>*> (operand->content_);
-            return derived->held_;
+        public:
+            virtual const char * what() const throw()
+            {
+                return "zl::bad_any_cast: failed conversion using zl::any_cast";
+            }
+        };
+
+        template<typename ValueType>
+        inline ValueType* any_cast(any * operand)
+        {
+            //any::holder<ValueType>* derived = static_cast<any::holder<ValueType>*> (operand->content_);
+            //return &derived->held_;
+            return  operand && operand->type() == typeid(ValueType)
+                //? &static_cast<any::holder<std::remove_cv<ValueType>::type> *>(operand->content_)->held_
+			    ? &static_cast<any::holder<ValueType>*>(operand->content_)->held_
+                : 0;
         }
 
         template<typename ValueType>
-        inline ValueType any_cast(any * operand)
+        inline const ValueType* any_cast(const any * operand)
         {
-            return zl::stl::any_cast<ValueType>((const any*)(operand));
+            return zl::stl::any_cast<ValueType>(const_cast<any *>(operand));
         }
 
         template<typename ValueType>
         inline ValueType any_cast(any & operand)
         {
-            return zl::stl::any_cast<ValueType>(&operand);
+            //typedef std::remove_reference<ValueType>::type nonref;
+            typedef ValueType nonref;
+
+            nonref * result = any_cast<nonref>(&operand);
+            if(!result)
+                throw bad_any_cast();
+
+            return static_cast<ValueType>(*result);
         }
 
         template<typename ValueType>
         inline ValueType any_cast(const any & operand)
         {
-            return zl::stl::any_cast<ValueType>(&operand);
+            //typedef std::remove_reference<ValueType>::type nonref;
+			typedef ValueType nonref;
+            return any_cast<const nonref &>(const_cast<any &>(operand));
         }
 
     }
