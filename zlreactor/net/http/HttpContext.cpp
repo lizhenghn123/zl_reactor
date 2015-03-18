@@ -1,7 +1,7 @@
 ﻿#include "net/http/HttpContext.h"
 #include "net/NetBuffer.h"
 #include "base/Timestamp.h"
-using namespace zl::base::Timestamp;
+using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 
 bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
@@ -16,11 +16,10 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
     {
         if (context->expectRequestLine())
         {
-            printf("context->expectRequestLine() [%d]\n", context);
             const char* crlf = buf->findCRLF();
             if (crlf)
             {
-                ok = processRequestLine(buf->peek(), crlf, context);  // 解析请求行
+                ok = processRequestLine(buf->peek(), crlf);  // 解析请求行
                 if (ok)
                 {
                     //context->request().setReceiveTime(receiveTime);
@@ -79,7 +78,7 @@ bool HttpContext::processRequestLine(const char* begin, const char* end)
     bool succeed = false;
     const char* start = begin;
     const char* space = std::find(start, end, ' ');
-    HttpRequest& request = request();
+    HttpRequest& request = this->request();
     string method(start, space);
     if (space != end && request.setHttpMethod(method))
     {

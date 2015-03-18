@@ -28,15 +28,7 @@ public:
     void setStatusCode(HttpStatusCode code) { statusCode_ = code; }
     void setHttpVersion(const std::string& httpver) { version_ = httpver; }
     void setServerName(const std::string& name) { serverName_ = name; }
-    //void setConnectionType(const std::string& _connectionType)
-    //{
-    //    connectionType = _connectionType;
-    //}
 
-    //void SetContentType(const std::string& _contentType)
-    //{
-    //    contentType = _contentType;
-    //}
     void setCloseConnection(bool on)  { closeConnection_ = on; }
     bool closeConnection() const      { return closeConnection_; }
 

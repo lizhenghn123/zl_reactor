@@ -64,4 +64,5 @@ libzlreactor_la_SOURCES = \
 					 net/http/HttpKeyValue.cpp \
 					 net/http/HttpRequest.cpp \
 					 net/http/HttpResponse.cpp \
+					 net/http/HttpContext.cpp \
 					 net/http/HttpServer.cpp

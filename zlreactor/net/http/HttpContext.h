@@ -17,6 +17,8 @@
 #include "net/CallBacks.h"
 #include "net/http/HttpProtocol.h"
 #include "net/http/HttpRequest.h"
+#include "base/Timestamp.h"
+using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 class EventLoop;
 class HttpRequest;

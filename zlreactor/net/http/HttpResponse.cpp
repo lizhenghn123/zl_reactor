@@ -70,6 +70,10 @@ void HttpResponse::appendToBuffer(NetBuffer* output) const
     output->write("OK", 2);         //statusMessage_
     output->write("\r\n", 2);
 
+    output->write("Server:");
+    output->write(serverName_);
+    output->write("\r\n");
+
     if (closeConnection_)
     {
         output->write("Connection: close\r\n");
