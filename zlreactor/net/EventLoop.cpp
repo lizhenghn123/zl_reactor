@@ -162,9 +162,8 @@ void EventLoop::runInLoop(const Functor& func)
 void EventLoop::queueInLoop(const Functor& func)
 {
     LOG_INFO("EventLoop[%0x]::queueInLoop [%d][%0x]", this, isInLoopThread(), &func);
-    zl::thread::Mutex mutex;
     {
-        zl::thread::LockGuard<zl::thread::Mutex> lock(mutex);
+        LockGuard<Mutex> lock(mutex_);
         pendingFunctors_.push_back(func);
     }
 

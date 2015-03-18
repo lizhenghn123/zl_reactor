@@ -40,7 +40,7 @@ namespace test_RWMutex   // rwMutex
         }
         ~TestRWMutex()
         {
-            printf("TestRWMutex : readCount = %d\n", readCount_);
+            printf("TestRWMutex : readCount = %d\n", readCount_.value());
         }
         void test()
         {
@@ -95,8 +95,8 @@ namespace test_RWMutex   // rwMutex
              }
          }
     private:
-        MapPtr data_;
-        mutable RWMutex rwMutex_;
+        MapPtr            data_;
+        mutable RWMutex   rwMutex_;
         Atomic<int>       readCount_;
     };
 
@@ -126,7 +126,7 @@ namespace test_Mutex_COW      // mutex + copy on write
         }
         ~TestMutexCow()
         {
-            printf("TestMutexCow : readCount = %d\n", readCount_);
+            printf("TestMutexCow : readCount = %d\n", readCount_.value());
         }
         void test()
         {
