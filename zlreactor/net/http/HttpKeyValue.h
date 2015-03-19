@@ -13,6 +13,7 @@
 #define ZL_HTTPKEYVALUE_H
 #include "Define.h"
 #include "base/Singleton.h"
+#include "HttpProtocol.h"
 NAMESPACE_ZL_NET_START
 
 class HttpKeyValue : public zl::Singleton < HttpKeyValue >
@@ -20,7 +21,7 @@ class HttpKeyValue : public zl::Singleton < HttpKeyValue >
     DECLARE_SINGLETON_CLASS(HttpKeyValue);
 
 public:
-    std::string getReasonDesc(int code);
+    std::string getStatusDesc(HttpStatusCode code);
     std::string getContentType(const std::string& file_type);
 
 private:

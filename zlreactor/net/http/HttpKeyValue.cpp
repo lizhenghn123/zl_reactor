@@ -7,7 +7,7 @@ HttpKeyValue::HttpKeyValue()
     initialise();
 }
 
-std::string HttpKeyValue::getReasonDesc(int code)
+std::string HttpKeyValue::getStatusDesc(HttpStatusCode code)
 {
     auto iter = code_desc_.find(code);
     return iter != code_desc_.end() ? iter->second : "";

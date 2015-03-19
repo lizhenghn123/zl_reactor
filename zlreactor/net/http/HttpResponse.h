@@ -25,26 +25,26 @@ public:
     ~HttpResponse();
 
 public:
-    void setStatusCode(HttpStatusCode code) { statusCode_ = code; }
-    void setHttpVersion(const std::string& httpver) { version_ = httpver; }
-    void setServerName(const std::string& name) { serverName_ = name; }
+    void setStatusCode(HttpStatusCode code)   { statusCode_ = code; }
+    void setVersion(const string& httpver){ version_ = httpver; }
+    void setServerName(const string& name)    { serverName_ = name; }
+    void setContentType(const string& type)   { contentType_ = type; }
+    void setCloseConnection(bool on)          { closeConnection_ = on; }
+    bool closeConnection() const              { return closeConnection_; }
 
-    void setCloseConnection(bool on)  { closeConnection_ = on; }
-    bool closeConnection() const      { return closeConnection_; }
+    void setBody(const string& body)          { body_ = body; }
 
-    bool compile();
+    void addHeader(const string& key, const string& value)  { headers_[key] = value; }
 
-    void appendToBuffer(NetBuffer* output) const;
-
-protected:
-    void readBoby();
+    void compileToBuffer(NetBuffer* output) const;
 
 private:
     HttpStatusCode       statusCode_;
     string               version_;
     string               serverName_;
+    string               contentType_;
     bool                 closeConnection_;
-    string body_;
+    string               body_;
     map<string, string>  headers_;
 };
 

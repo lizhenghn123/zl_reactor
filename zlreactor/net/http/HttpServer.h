@@ -24,8 +24,15 @@ class InetAddress;
 class HttpServer : public TcpServer
 {
 public:
+    typedef std::function<void (const HttpRequest&, HttpResponse*)> HttpCallback;
+public:
     HttpServer(EventLoop *loop, const InetAddress& listenAddr, const string& servername = "HttpServer");
     ~HttpServer();
+
+    void setHttpCallback(const HttpCallback& cb)
+    {
+        httpCallback_ = cb;
+    }
 
 private:
     void onConnection(const TcpConnectionPtr& conn);
@@ -35,6 +42,9 @@ private:
 private:
     HttpServer(const HttpServer&);
     HttpServer& operator = (const HttpServer&);
+
+private:
+    HttpCallback   httpCallback_;
 };
 
 NAMESPACE_ZL_NET_END

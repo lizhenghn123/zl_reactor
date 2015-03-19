@@ -13,19 +13,10 @@ HttpRequest::HttpRequest(const std::string& header)
 
     parseHeader();
 }
-HttpRequest::HttpRequest(const std::string& header, const std::string& document)
-{
-    setHeader(header);
-    setDocument(document);
-
-    parseHeader();
-    parseDocument();
-}
 
 HttpRequest::~HttpRequest()
 {
 }
-
 
 bool HttpRequest::parseHeader()
 {
@@ -49,18 +40,18 @@ bool HttpRequest::parseHeader()
     auto& method = token[0];
     std::transform(method.begin(), method.end(), method.begin(), ::tolower);
     if(strcmp(method.c_str(), "get") == 0)
-        setHttpMethod(HttpMethod::HttpGet);
+        setMethod(HttpMethod::HttpGet);
     else if (strcmp(method.c_str(), "post") == 0)
-        setHttpMethod(HttpMethod::HttpPost);
+        setMethod(HttpMethod::HttpPost);
     else if (strcmp(method.c_str(), "put") == 0)
-        setHttpMethod(HttpMethod::HttpPut);
+        setMethod(HttpMethod::HttpPut);
     else if (strcmp(method.c_str(), "delete") == 0)
-        setHttpMethod(HttpMethod::HttpDelete);
+        setMethod(HttpMethod::HttpDelete);
 
     //location.SetRequestURI(token[1]); //location，即是请求的文件路径
 
     //HttpVersion，Client发过来的http协议版本号
-    setHttpVersion((token[2] == "HTTP/1.1" ? HttpVersion::HTTP_VERSION_1_1 : HttpVersion::HTTP_VERSION_1_0));
+    setVersion((token[2] == "HTTP/1.1" ? HttpVersion::HTTP_VERSION_1_1 : HttpVersion::HTTP_VERSION_1_0));
 
     ///* 解析剩余的选项行 */
     //std::regex expr("([a-zA-Z_-]*)\\s?:\\s?(.*)");
@@ -79,19 +70,5 @@ bool HttpRequest::parseHeader()
 
     return true;
 }
-bool HttpRequest::parseDocument()
-{
-    /* parse post form-data */
-    if( getHttpMethod() == HttpMethod::HttpPost)
-    {
-        printf("%s\n", document_.c_str());
-    }
-    else
-    {
-        return false;
-    }
-    return true;
-}
-
 
 NAMESPACE_ZL_NET_END

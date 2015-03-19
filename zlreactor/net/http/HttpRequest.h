@@ -22,59 +22,46 @@ class HttpRequest
 public:
     HttpRequest();
     HttpRequest(const std::string& header);
-    HttpRequest(const std::string& header, const std::string& document);
     ~HttpRequest();
 
 public:
     void setHeader(const string& header)     { header_ = header; }
-    const std::string& getHeader() const     {  return header_; }
+    const std::string& getHeader() const     { return header_; }
 
-    void setDocument(const string& document) { document_ = document; }
-    const std::string& getDocument() const   { return document_; }
-
-    void setHttpMethod(HttpMethod method)    { method_ = method; }
-    bool setHttpMethod(const string& method)
+    void setMethod(HttpMethod method)        { method_ = method; }
+    bool setMethod(const string& method)
     {
         if (method == "GET")
-        {
             method_ = HttpGet;
-        }
         else if (method == "POST")
-        {
             method_ = HttpPost;
-        }
         else if (method == "HEAD")
-        {
             method_ = HttpHead;
-        }
         else if (method == "PUT")
-        {
             method_ = HttpPut;
-        }
         else if (method == "DELETE")
-        {
             method_ = HttpDelete;
-        }
         else
-        {
             method_ = HttpInvalid;
-        }
         return method_ != HttpInvalid;
     }
+    HttpMethod method() const                { return method_; }
 
-    HttpMethod getHttpMethod()               { return method_; }
+    void setVersion(HttpVersion httpver)     { version_ = httpver; }
+    void setVersion(const string& httpver)
+    {
+        version_ = (httpver == "HTTP/1.1" ? HTTP_VERSION_1_1 : HTTP_VERSION_1_0);
+    }
+    HttpVersion version() const              { return version_; }
 
-    void setHttpVersion(HttpVersion httpver) { version_ = httpver; }
-    HttpVersion getHttpVersion() const       { return version_; }
+    void setPath(const std::string& url)     { urlpath_ = url; }
+    const std::string& path() const          { return urlpath_; }
 
-    void setHttpUrl(const std::string& url)  { urlpath_ = url; }
-    const std::string& getHttpUrl() const    { return urlpath_; }
+    void setQuery(const std::string& url)    { urlpath_ = url; }
+    const std::string& query() const         { return urlpath_; }
 
-    void setHttpQuery(const std::string& url)  { urlpath_ = url; }
-    const std::string& getHttpQuery() const    { return urlpath_; }
-
-    void setReceiveTime(Timestamp t)           { receiveTime_ = t; }
-    Timestamp receiveTime() const              { return receiveTime_; }
+    void setReceiveTime(Timestamp t)         { receiveTime_ = t; }
+    Timestamp receiveTime() const            { return receiveTime_; }
 
     void addHeader(const char* start, const char* colon, const char* end)
     {
@@ -117,7 +104,6 @@ public:
 
 private:
     bool parseHeader();
-    bool parseDocument();
 
 private:
     HttpMethod   method_;
@@ -127,7 +113,6 @@ private:
 
     Timestamp    receiveTime_;
     std::string  header_;
-    std::string  document_;
 
     std::map<string, string> headers_;
 };

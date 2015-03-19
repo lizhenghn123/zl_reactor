@@ -42,12 +42,19 @@ public:
     {
     }
 
+public:
+    bool parseRequest(NetBuffer *buf, Timestamp receiveTime);
+
+public:
     bool expectRequestLine() const { return state_ == kExpectRequestLine; }
     bool expectHeaders() const     { return state_ == kExpectHeaders; }
     bool expectBody() const        { return state_ == kExpectBody; }
     bool gotAll() const            { return state_ == kGotAll; }
     void receiveRequestLine()      { state_ = kExpectHeaders; }
     void receiveHeaders()          { state_ = kGotAll; }  // FIXME
+
+    HttpRequest& request()         { return request_; }
+    const HttpRequest& request() const { return request_; }
 
     void reset()
     {
@@ -56,12 +63,9 @@ public:
         request_.swap(dummy);
     }
 
-    HttpRequest& request()     { return request_; }
-    const HttpRequest& request() const { return request_; }
-
-public:
-    bool parseRequest(NetBuffer *buf, Timestamp receiveTime);
-    bool processRequestLine(const char* begin, const char* end);
+private:
+    bool processRequestLine(const char *begin, const char *end);
+    bool processReqestHeader(const char *begin, const char *end);
 
 private:
     HttpRequestParseState state_;

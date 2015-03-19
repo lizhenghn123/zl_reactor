@@ -4,6 +4,23 @@
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 
+/// parse:
+/// request line     \r\n
+/// request header   \r\n
+///                  \r\n
+/// request body
+// 使用chorme浏览器请求127.0.0.1:8888/index.html时，server收到的http消息头
+// GET /index.html HTTP/1.1
+// Host: 127.0.0.1:8888
+// Connection: keep-alive
+// Cache-Control: max-age=0
+// Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*; q = 0.8
+// User - Agent: Mozilla / 5.0 (Windows NT 6.1; WOW64) AppleWebKit / 537.36 (KHTML, like
+// Gecko) Chrome / 35.0.1916.153 Safari / 537.36
+// Accept - Encoding : gzip, deflate, sdch
+// Accept - Language : zh - CN, zh; q = 0.8
+// RA - Ver: 2.2.22
+// RA - Sid : 7B747245 - 20140622 - 042030 - f79ea7 - 5f07a8
 bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
 {
     static int count = 0;
@@ -73,6 +90,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
     return ok;
 }
 
+/// request line: httpmethod path httpversion
 bool HttpContext::processRequestLine(const char* begin, const char* end)
 {
     bool succeed = false;
@@ -80,7 +98,7 @@ bool HttpContext::processRequestLine(const char* begin, const char* end)
     const char* space = std::find(start, end, ' ');
     HttpRequest& request = this->request();
     string method(start, space);
-    if (space != end && request.setHttpMethod(method))
+    if (space != end && request.setMethod(method))
     {
         start = space+1;
         space = std::find(start, end, ' ');
@@ -90,14 +108,14 @@ bool HttpContext::processRequestLine(const char* begin, const char* end)
             if (question != space)
             {
                 string u(start, question);
-                request.setHttpUrl(u);
+                request.setPath(u);
                 u.assign(question, space);
-                request.setHttpQuery(u);
+                request.setQuery(u);
             }
             else
             {
                 string u(start, question);
-                request.setHttpUrl(u);
+                request.setPath(u);
             }
 
             start = space+1;
@@ -106,11 +124,11 @@ bool HttpContext::processRequestLine(const char* begin, const char* end)
             {
                 if (*(end-1) == '1')
                 {
-                    request.setHttpVersion(HTTP_VERSION_1_1);
+                    request.setVersion(HTTP_VERSION_1_1);
                 }
                 else if (*(end-1) == '0')
                 {
-                    request.setHttpVersion(HTTP_VERSION_1_0);
+                    request.setVersion(HTTP_VERSION_1_0);
                 }
                 else
                 {
@@ -119,8 +137,14 @@ bool HttpContext::processRequestLine(const char* begin, const char* end)
             }
         }
     }
-    printf("-----%d %s %d----\n", request.getHttpMethod(), request.getHttpUrl().c_str(), request.getHttpVersion());
+    printf("-----%d %s %d----\n", request.method(), request.path().c_str(), request.version());
     return succeed;
+}
+
+/// request header
+bool HttpContext::processReqestHeader(const char *begin, const char *end)
+{
+    return true;
 }
 
 NAMESPACE_ZL_NET_END

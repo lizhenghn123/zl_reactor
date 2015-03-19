@@ -7,8 +7,14 @@
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
+void defaultHttpCallback(const HttpRequest& req, HttpResponse *resp)
+{
+    resp->setStatusCode(HttpStatusOk);
+    resp->setCloseConnection(true);
+}
+
 HttpServer::HttpServer(EventLoop *loop, const InetAddress& listenAddr, const string& servername/* = "HttpServer"*/)
-    : TcpServer(loop, listenAddr, servername)
+    : TcpServer(loop, listenAddr, servername), httpCallback_(defaultHttpCallback)
 {
     setConnectionCallback(std::bind(&HttpServer::onConnection, this, std::placeholders::_1));
     setMessageCallback(std::bind(&HttpServer::onMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
@@ -44,25 +50,23 @@ void HttpServer::onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, Timesta
      {
          LOG_INFO("HttpServer::onMessage  parse request over.");
          response(conn, context->request());
-         context->reset();
+         context->reset();  // process request and return response, then reset, for long-connection
      }
 }
 
 void HttpServer::response(const TcpConnectionPtr& conn, const HttpRequest& req)
 {
-    //conn->send("HTTP/1.1 200 OK\r\n\r\n");
-    //conn->send("hello world");
-    //conn->shutdown();
-
     const string& connection = req.getHeader("Connection");
-    bool close = connection == "close" || (req.getHttpVersion() == HTTP_VERSION_1_0 && connection != "Keep-Alive");
+    bool close = connection == "close" || (req.version() == HTTP_VERSION_1_0 && connection != "Keep-Alive");
 
     HttpResponse response(close);
     response.setStatusCode(HttpStatusOk);
     response.setServerName("MyHttpServer");
 
+    httpCallback_(req, &response);    // callback, for init response
+
     NetBuffer buf;
-    response.appendToBuffer(&buf);
+    response.compileToBuffer(&buf);
     printf("[%s]\n", buf.toString().c_str());
     conn->send(&buf);
     

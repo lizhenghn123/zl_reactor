@@ -12,67 +12,25 @@ HttpResponse::~HttpResponse()
 {
 }
 
-bool HttpResponse::compile()
+/// complie:
+/// status line      \r\n
+/// response header  \r\n
+///                  \r\n
+/// response body
+void HttpResponse::compileToBuffer(NetBuffer* output) const
 {
-	//HttpKeyValue *ptable = HttpKeyValue::GetInstancePtr();
+    HttpKeyValue *ptable = HttpKeyValue::getInstancePtr();
 
- //   string header;
- //   header.clear();
-
- //   char status[8];
- //   sprintf(status, "%d", GetStatusCode());
-
- //   /* HttpVer / StatusCode / ReasonPhrase */
- //   header += GetHttpVersion() + " ";
- //   header += string(status) + " ";
-	//header += ptable->GetReasonDesc(GetStatusCode()) + CRLF;
-
- //   /* Server */
-	//header += "Server:" + GetServerName() + CRLF;
-
- //   /* Content-type */
- //   header += "Content-type:" + GetContentType();
-
- //   /* Content-length */
- //   char contentLength[32];
- //   sprintf(contentLength, "%ul", GetContentLength());
-	//header += "Content-length:" + string(contentLength) + CRLF;
-
- //   /* Connection */
-	//header += "Connection:" + GetConnectionType() + CRLF;
-
- //   /* CrLf */
-	//header += CRLF;
-
-	//ReadBoby();
-
-    return true;
-}
-
-void HttpResponse::readBoby()
-{
-	//const std::string filepath = location_.GetPath();
-	//if (!IsFileExist(filepath.c_str()))
-	//	return ;
-
-	//std::string filebuf;
-	//GetFileData(filepath.c_str(), filebuf);
-	//SetDocument(filebuf);
-}
-
-
-void HttpResponse::appendToBuffer(NetBuffer* output) const
-{
-    char buf[32] = {0};
-    snprintf(buf, sizeof buf, "HTTP/1.1 %d ", statusCode_);
+    //status line : HttpVer / StatusCode / ReasonPhrase
+    char buf[128] = {0};
+    snprintf(buf, sizeof(buf), "HTTP/1.1 %d %s\r\n", statusCode_, 
+                ptable->getStatusDesc(statusCode_).c_str());
     printf("------%s-----\n", buf);
     output->write(buf);
-    output->write("OK", 2);         //statusMessage_
-    output->write("\r\n", 2);
 
-    output->write("Server:");
-    output->write(serverName_);
-    output->write("\r\n");
+    // respone headers
+    output->write("Server: ");       output->write(serverName_);   output->write("\r\n");
+    output->write("Content-Type: "); output->write(contentType_);  output->write("\r\n");
 
     if (closeConnection_)
     {
@@ -93,7 +51,8 @@ void HttpResponse::appendToBuffer(NetBuffer* output) const
         output->write("\r\n");
     }
 
-    output->write("\r\n");
+    // response body, maybe
+    output->write("\r\n");       // 
     output->write(body_);
     output->write("hello world", 11);
 
