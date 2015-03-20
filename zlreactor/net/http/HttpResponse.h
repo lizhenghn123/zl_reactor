@@ -26,21 +26,19 @@ public:
 
 public:
     void setStatusCode(HttpStatusCode code)   { statusCode_ = code; }
-    void setVersion(const string& httpver){ version_ = httpver; }
+    void setVersion(HttpVersion ver)          { version_ = ver; }
     void setServerName(const string& name)    { serverName_ = name; }
     void setContentType(const string& type)   { contentType_ = type; }
     void setCloseConnection(bool on)          { closeConnection_ = on; }
     bool closeConnection() const              { return closeConnection_; }
-
     void setBody(const string& body)          { body_ = body; }
-
     void addHeader(const string& key, const string& value)  { headers_[key] = value; }
 
     void compileToBuffer(NetBuffer* output) const;
 
 private:
     HttpStatusCode       statusCode_;
-    string               version_;
+    HttpVersion          version_;
     string               serverName_;
     string               contentType_;
     bool                 closeConnection_;

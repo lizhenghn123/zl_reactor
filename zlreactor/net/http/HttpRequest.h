@@ -25,9 +25,6 @@ public:
     ~HttpRequest();
 
 public:
-    void setHeader(const string& header)     { header_ = header; }
-    const std::string& getHeader() const     { return header_; }
-
     void setMethod(HttpMethod method)        { method_ = method; }
     bool setMethod(const string& method)
     {
@@ -63,22 +60,7 @@ public:
     void setReceiveTime(Timestamp t)         { receiveTime_ = t; }
     Timestamp receiveTime() const            { return receiveTime_; }
 
-    void addHeader(const char* start, const char* colon, const char* end)
-    {
-        string field(start, colon);
-        ++colon;
-        while (colon < end && isspace(*colon))
-        {
-            ++colon;
-        }
-        string value(colon, end);
-        while (!value.empty() && isspace(value[value.size()-1]))
-        {
-            value.resize(value.size()-1);
-        }
-        headers_[field] = value;
-    }
-
+    void addHeader(const string& key, const string& value)  { headers_[key] = value; }
     string getHeader(const string& field) const
     {
         string result;
@@ -89,7 +71,6 @@ public:
         }
         return result;
     }
-
     const std::map<string, string>& headers() const  { return headers_; }
 
     void swap(HttpRequest& that)
@@ -102,17 +83,14 @@ public:
         headers_.swap(that.headers_);
     }
 
-private:
-    bool parseHeader();
+    bool parseHeader(const std::string& header);
 
 private:
     HttpMethod   method_;
     HttpVersion  version_;
     std::string  urlpath_;
     std::string  query_;    // url后面的以?分割的参数
-
     Timestamp    receiveTime_;
-    std::string  header_;
 
     std::map<string, string> headers_;
 };

@@ -57,12 +57,24 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
         {
             printf("context->expectHeaders() [%d]\n", context);
             const char* crlf = buf->findCRLF();
-            if (crlf)
+            if (crlf)    //按行添加消息头中的参数
             {
-                const char* colon = std::find(buf->peek(), crlf, ':'); //一行一行遍历
+                const char *colon = std::find(buf->peek(), crlf, ':'); //一行一行遍历
                 if (colon != crlf)
                 {
-                    context->request().addHeader(buf->peek(), colon, crlf);  //按行添加消息头中的参数
+                    const char *end = crlf;
+                    string field(buf->peek(), colon);
+                    ++colon;
+                    while (colon < end && isspace(*colon))
+                    {
+                        ++colon;
+                    }
+                    string value(colon, end);
+                    while (!value.empty() && isspace(value[value.size()-1]))
+                    {
+                        value.resize(value.size()-1);
+                    }
+                    context->request().addHeader(field, value); 
                 }
                 else
                 {
@@ -91,7 +103,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
 }
 
 /// request line: httpmethod path httpversion
-bool HttpContext::processRequestLine(const char* begin, const char* end)
+bool HttpContext::processRequestLine(const char *begin, const char *end)
 {
     bool succeed = false;
     const char* start = begin;

@@ -9,21 +9,19 @@ HttpRequest::HttpRequest()
 
 HttpRequest::HttpRequest(const std::string& header)
 {
-    setHeader(header);
-
-    parseHeader();
+    parseHeader(header);
 }
 
 HttpRequest::~HttpRequest()
 {
 }
 
-bool HttpRequest::parseHeader()
+bool HttpRequest::parseHeader(const string& header)
 {
     //解析Http消息头的第一行，即请求行，Method Location HttpVer ： GET /index.html HTTP/1.1
     std::vector<std::string> token;
-    auto start = header_.begin();
-    for (auto it = header_.begin(); it != header_.end(); ++it)
+    auto start = header.begin();
+    for (auto it = header.begin(); it != header.end(); ++it)
     {
         if (*it == ' ' || *it == '\r' || *it == '\0')
         {
@@ -48,15 +46,13 @@ bool HttpRequest::parseHeader()
     else if (strcmp(method.c_str(), "delete") == 0)
         setMethod(HttpMethod::HttpDelete);
 
-    //location.SetRequestURI(token[1]); //location，即是请求的文件路径
-
     //HttpVersion，Client发过来的http协议版本号
     setVersion((token[2] == "HTTP/1.1" ? HttpVersion::HTTP_VERSION_1_1 : HttpVersion::HTTP_VERSION_1_0));
 
     ///* 解析剩余的选项行 */
     //std::regex expr("([a-zA-Z_-]*)\\s?:\\s?(.*)");
     //std::smatch match;
-    //std::string request = header_;
+    //std::string request = header;
     //while(std::regex_search(request, match, expr))
     //{
     //    std::string key = match[1].str();
