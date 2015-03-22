@@ -60,23 +60,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
             if (crlf)    //按行添加消息头中的参数
             {
                 const char *colon = std::find(buf->peek(), crlf, ':'); //一行一行遍历
-                if (colon != crlf)
-                {
-                    const char *end = crlf;
-                    string field(buf->peek(), colon);
-                    ++colon;
-                    while (colon < end && isspace(*colon))
-                    {
-                        ++colon;
-                    }
-                    string value(colon, end);
-                    while (!value.empty() && isspace(value[value.size()-1]))
-                    {
-                        value.resize(value.size()-1);
-                    }
-                    context->request().addHeader(field, value); 
-                }
-                else
+                if(!processReqestHeader(buf->peek(), crlf))
                 {
                     // empty line, end of header
                     context->receiveHeaders();     // 消息头解析完成，下一步应该按get/post来区分是否解析消息体
@@ -156,7 +140,28 @@ bool HttpContext::processRequestLine(const char *begin, const char *end)
 /// request header
 bool HttpContext::processReqestHeader(const char *begin, const char *end)
 {
-    return true;
+    const char *colon = std::find(begin, end, ':'); //一行一行遍历
+    if (colon != end)
+    {
+        string field(begin, colon);
+        ++colon;
+        while (colon < end && isspace(*colon))
+        {
+            ++colon;
+        }
+        string value(colon, end);
+        while (!value.empty() && isspace(value[value.size()-1]))
+        {
+            value.resize(value.size()-1);
+        }
+        request_.addHeader(field, value); 
+        return true;
+    }
+    else
+    {
+        // empty line, end of header
+        return false;
+    }
 }
 
 NAMESPACE_ZL_NET_END
