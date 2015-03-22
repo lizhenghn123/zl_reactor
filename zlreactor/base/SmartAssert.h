@@ -73,17 +73,14 @@ static SmartAssert MakeAssert(const char* expr, const char* function, int line, 
     return zl::base::SmartAssert(expr, function, line, file, abortOnExit);
 }
 
-static SmartAssert __dont_use_this__ = MakeAssert(NULL, NULL, 0, 0, false);  //gcc: MakeAssert 定义未使用[-Wunused-function]
+static SmartAssert __dont_use_this__ = MakeAssert(NULL, NULL, 0, 0, false); //gcc: MakeAssert 定义未使用[-Wunused-function]
 
 // run time assert
 #ifndef ENABLE_SMART_ASSERT_MODE
-
 #define ZL_ASSERT(expr)      ((void) 0)
 #define ZL_ASSERTEX(expr, func, lineno , file)   ((void) 0)
 #define ZL_ASSERT_LOG(expr)  ((void) 0)
-
 #else
-
 #define SMART_ASSERT_A(x)        SMART_ASSERT_OP(x, B)
 #define SMART_ASSERT_B(x)        SMART_ASSERT_OP(x, A)
 #define SMART_ASSERT_OP(x, next) SMART_ASSERT_A.printValiable(#x, (x)).SMART_ASSERT_##next
@@ -91,21 +88,23 @@ static SmartAssert __dont_use_this__ = MakeAssert(NULL, NULL, 0, 0, false);  //g
 #define ZL_ASSERT(expr)          \
             if( (expr) ) ;       \
             else zl::base::MakeAssert(#expr, __FUNCTION__, __LINE__, __FILE__, true).SMART_ASSERT_A
-
 #define ZL_ASSERTEX(expr, func, lineno , file) \
             if( (expr) ) ;                     \
             else zl::base::MakeAssert( #expr, func, lineno, file, true).SMART_ASSERT_A
-
 #define ZL_ASSERT_LOG(expr)       \
             if( (expr) ) ;        \
             else zl::base::MakeAssert(#expr, __FUNCTION__, __LINE__, __FILE__, false).SMART_ASSERT_A
-
 #endif
 
 // compile time assert
+#define MACRO_CAT(x, y)     MACRO_DO_CAT(x, y)
+#define MACRO_DO_CAT(x, y)  MACRO_DO_CAT2(x, y)
+#define MACRO_DO_CAT2(x, y) x##y
+#define MACRO_P(x)  #x
+
 #define ZL_STATIC_ASSERT(expr) ZL_STATIC_ASSERT_IMPL(expr, __FILE__, __LINE__)
 #define ZL_STATIC_ASSERT_IMPL(expr, file, line)  \
-                typedef char static_assert_fail_on_##file_and_##line[2 * ((expr) != 0) - 1]
+           typedef char static_assert_fail_on_##file_and_##line[2 * ((expr) != 0) - 1]
 
 }
 }

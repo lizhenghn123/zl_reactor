@@ -6,10 +6,12 @@ using namespace zl::base;
 
 int main()
 {
+//    cout << MACRO_CAT(__FILE__, __LINE__) << "\n";
+//    cout << MACRO_CAT(__FILE__, "ee") << "\n";
     {
         const static int i = 2;
         //ZL_STATIC_ASSERT(i>3);
-        //ZL_STATIC_ASSERT_IMPL(i>3, "fdf", 13);
+        //ZL_STATIC_ASSERT(i>3, "must i>3");
     }
     {
         int i = 2;

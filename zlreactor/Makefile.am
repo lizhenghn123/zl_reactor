@@ -30,6 +30,7 @@ libzlreactor_la_SOURCES = \
 					 base/Demangle.cpp \
 					 base/Exception.cpp \
 					 base/Daemonize.cpp \
+					 base/StringUtil.cpp \
 					 utility/StringHash.cpp \
 					 utility/Base64.cpp \
 					 utility/Md5.cpp \
@@ -59,4 +60,9 @@ libzlreactor_la_SOURCES = \
 					 net/Timer.cpp \
 					 net/TimerQueue.cpp \
 					 net/Eventfd.cpp \
-					 net/SignalHandler.cpp
+					 net/SignalHandler.cpp \
+					 net/http/HttpKeyValue.cpp \
+					 net/http/HttpRequest.cpp \
+					 net/http/HttpResponse.cpp \
+					 net/http/HttpContext.cpp \
+					 net/http/HttpServer.cpp

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <iterator>
-#include "base/StrUtil.h"
+#include "base/StringUtil.h"
 using namespace std;
 
 int main()
@@ -41,6 +41,19 @@ int main()
     zl::base::split(str2, vec, std::string("t"), false); // "d gfh   34 0 -"
     std::copy(vec.begin(), vec.end(), std::ostream_iterator<string>(std::cout, " "));
     cout << "\n";
+
+    string s;
+    zl::base::stringFormat(&s, "%d-%s-%f", 1234, "hello", "43.21");
+    cout << s << "\n";
+
+    s = zl::base::stringFormat("%s-%d\n", "world", 33);
+    cout << s ;
+
+    char data[2000];
+    for(int i=0; i<2000; i++)
+        data[i] = i % 255 + 1;
+    s = zl::base::stringFormat("%s", data);
+    cout << s << "\n";
 
     return 0;
 }

@@ -32,6 +32,14 @@
 #define  _WINSOCKAPI_
 #include <Windows.h>
 #endif
+using std::string;
+using std::vector;
+using std::list;
+using std::queue;
+using std::map;
+using std::set;
+using std::multimap;
+using std::multiset;
 
 #if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus > 199711L || __cplusplus == 201103L
 #define ZL_CXX11_ENABLED 1
