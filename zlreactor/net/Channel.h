@@ -56,51 +56,38 @@ public:
     Channel(EventLoop* loop, int fd);
     ~Channel();
 
-    int fd() const { return fd_; }
+public:
+    int fd() const             { return fd_; }
 
-    EventLoop* ownerLoop() { return loop_; }
+    EventLoop* ownerLoop()     { return loop_; }
 
-    void setReadCallback(const ReadEventCallback& cb)
-    { readCallback_ = cb; }
+    void setReadCallback(const ReadEventCallback& cb) { readCallback_ = cb; }
 
-    void setWriteCallback(const EventCallback& cb)
-    { writeCallback_ = cb; }
+    void setWriteCallback(const EventCallback& cb)    { writeCallback_ = cb; }
 
-    void setCloseCallback(const EventCallback& cb)
-    { closeCallback_ = cb; }
+    void setCloseCallback(const EventCallback& cb)    { closeCallback_ = cb; }
 
-    void setErrorCallback(const EventCallback& cb)
-    { errorCallback_ = cb; }
+    void setErrorCallback(const EventCallback& cb)    { errorCallback_ = cb; }
 
-    int events() const
-    { return events_; }
+    int events() const         { return events_; }
 
-    void set_revents(int revt) // used by pollers, set return events
-    { revents_ = revt; }
+    void set_revents(int revt) { revents_ = revt; }
     
-    int revents() const
-    { return revents_; }
+    int revents() const        { return revents_; }
 
-    bool isNoneEvent() const
-    { return events_ == kEventNone; }
+    void enableReading()       { events_ |= kEventRead; update(); }
 
-    void enableReading()
-    { events_ |= kEventRead; update(); }
+    void disableReading()      { events_ &= ~kEventRead; update(); }
 
-    void disableReading() 
-    { events_ &= ~kEventRead; update(); }
+    void enableWriting()       { events_ |= kEventWrite; update(); }
 
-    void enableWriting() 
-    { events_ |= kEventWrite; update(); }
+    void disableWriting()      { events_ &= ~kEventWrite; update(); }
 
-    void disableWriting() 
-    { events_ &= ~kEventWrite; update(); }
+    void disableAll()          { events_ = kEventNone; update(); }
 
-    void disableAll() 
-    { events_ = kEventNone; update(); }
+    bool isNoneEvent() const   { return events_ == kEventNone; }
 
-    bool isWriting() const
-    { return events_ & kEventWrite; }
+    bool isWriting() const     { return events_ & kEventWrite; }
 
     void handleEvent(Timestamp receiveTime);
     void remove();
