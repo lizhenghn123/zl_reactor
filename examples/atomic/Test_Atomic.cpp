@@ -19,7 +19,8 @@ int main()
 	}
 	{
 		std::cout << "========================================\n";
-		zl::thread::Atomic<int> ato;
+		//zl::thread::Atomic<int> ato;
+        zl::thread::AtomicInt32 ato;
 
 		std::cout << ato.fetchAndInc(2) << "\t" ;
 		std::cout << ato.value() << "\n";

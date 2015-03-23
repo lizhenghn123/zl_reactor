@@ -223,5 +223,9 @@ private:
 #endif
 };
 
+
+typedef Atomic<int>     AtomicInt32;
+typedef Atomic<long>    AtomicInt64;
+
 NAMESPACE_ZL_THREAD_END
 #endif /* ZL_ATOMIC_H */
