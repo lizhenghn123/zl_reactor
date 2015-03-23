@@ -27,6 +27,7 @@ AC_CONFIG_FILES([Makefile
                 examples/roundtriptime/Makefile
                 examples/test_tcpclient/Makefile
                 examples/twisted_finger/Makefile
+                examples/test_httpserver/Makefile
                 tests/Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile
