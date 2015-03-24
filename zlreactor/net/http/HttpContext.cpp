@@ -59,7 +59,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
             const char* crlf = buf->findCRLF();
             if (crlf)    //按行添加消息头中的参数
             {
-                const char *colon = std::find(buf->peek(), crlf, ':'); //一行一行遍历
+                //const char *colon = std::find(buf->peek(), crlf, ':'); //一行一行遍历
                 if(!processReqestHeader(buf->peek(), crlf))
                 {
                     // empty line, end of header

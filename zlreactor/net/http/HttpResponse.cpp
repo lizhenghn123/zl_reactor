@@ -25,8 +25,8 @@ void HttpResponse::compileToBuffer(NetBuffer* output) const
     char buf[128] = {0};
     snprintf(buf, sizeof(buf), "HTTP/1.1 %d %s\r\n", statusCode_, 
                 ptable->getStatusDesc(statusCode_).c_str());
-    printf("------%s-----\n", buf);
-    output->write(buf);
+
+    output->write(buf, strlen(buf));
 
     // respone headers
     output->write("Server: ");       output->write(serverName_);   output->write("\r\n");
@@ -38,13 +38,13 @@ void HttpResponse::compileToBuffer(NetBuffer* output) const
     }
     else
     {
-        snprintf(buf, sizeof buf, "Content-Length: %zd\r\n", body_.size());
-        output->write(buf);
         output->write("Connection: Keep-Alive\r\n");
     }
 
     for (std::map<string, string>::const_iterator it = headers_.begin(); it != headers_.end(); ++it)
     {
+        if(it->second.empty())
+            continue;
         output->write(it->first);
         output->write(": ");
         output->write(it->second);
@@ -52,13 +52,18 @@ void HttpResponse::compileToBuffer(NetBuffer* output) const
     }
 
     // response body, maybe
-    output->write("\r\n");       // 
-    output->write(body_);
-    output->write("hello world", 11);
+    if(!body_.empty())
+    {
+        memset(buf, 0, 128);
+        snprintf(buf, sizeof buf, "Content-Length: %d\r\n", static_cast<int>(body_.size()));
+        output->write(buf, strlen(buf));
 
-    const string s =  output->toString();
-    printf("[[%d][%s]]\n", s.size(), s.c_str());
-    std::cout << s << "\n";
+        output->write("\r\n");    //消息头和消息体之间有一个空行
+        output->write(body_);
+    }
+
+    const string& s =  output->toString();
+    printf("[[%d][\n%s]]\n", (int)s.size(), s.c_str());
 }
 
 NAMESPACE_ZL_NET_END

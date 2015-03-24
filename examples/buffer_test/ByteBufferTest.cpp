@@ -202,4 +202,17 @@ int main()
         assert(buf.findEOL(buf.peek()+90000)  == null);
     }
 
+    {
+        NetBuffer *output = new NetBuffer;
+        char buf[128] = {0};
+        snprintf(buf, sizeof(buf), "HTTP/1.1 %d %s\r\n", 200, "OK");
+        //printf("------%s-----\n", buf);
+        output->write(buf, strlen(buf));
+        
+        // respone headers
+        output->write("Server: ");       output->write("test_myHttpServer");   output->write("\r\n");
+        output->write("Content-Type: "); output->write("text/html");           output->write("\r\n");
+
+        std::cout << output->toString() << "\n";
+    }
 }
