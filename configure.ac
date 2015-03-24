@@ -4,46 +4,9 @@
 AC_PREREQ([2.63])
 AC_INIT([zlreactor], [1.0], [lizhenghn@gmail.com])
 AC_CONFIG_SRCDIR([zlreactor/Define.h])
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([Config.h])
 AM_INIT_AUTOMAKE(zlreactor,1.0)
 AC_PROG_LIBTOOL
-AC_CONFIG_FILES([Makefile
-                zlreactor/Makefile
-                examples/Makefile
-                examples/test_str_util/Makefile
-                examples/atomic/Makefile
-                examples/buffer_test/Makefile
-                examples/test_zlog/Makefile
-                examples/exception_mangle/Makefile
-                examples/thread_test/Makefile
-                examples/blockqueue_test/Makefile
-                examples/timer_test/Makefile
-                examples/smartassert_test/Makefile
-                examples/reader_writer/Makefile
-                examples/test_daemon/Makefile
-                examples/test_signalfd/Makefile
-                examples/simpleServers/Makefile
-                examples/maxconnection/Makefile
-                examples/roundtriptime/Makefile
-                examples/test_tcpclient/Makefile
-                examples/twisted_finger/Makefile
-                examples/test_httpserver/Makefile
-                tests/Makefile
-                tests/stress_client/Makefile
-                tests/universal_timer/Makefile
-                tests/eventfd_epoll/Makefile
-                tests/timerqueue/Makefile
-                tests/timerfd/Makefile
-                tests/epollclient/Makefile
-                tests/epollserver/Makefile
-                tests/signal_handler/Makefile
-                tests/signalfd_epoll/Makefile
-                tests/tcpselfconnect1/Makefile
-                tests/tcpselfconnect2/Makefile
-                tests/PipePairFactory/Makefile
-                tests/master_worker_process/Makefile
-                tests/socketAcceptThunderingHerd/Makefile
-               ])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -96,4 +59,50 @@ fi
 
 AC_C_ENDIAN
 
+
+AC_CONFIG_FILES([Makefile
+                zlreactor/Makefile
+                examples/Makefile
+                examples/test_str_util/Makefile
+                examples/atomic/Makefile
+                examples/buffer_test/Makefile
+                examples/test_zlog/Makefile
+                examples/exception_mangle/Makefile
+                examples/thread_test/Makefile
+                examples/blockqueue_test/Makefile
+                examples/timer_test/Makefile
+                examples/smartassert_test/Makefile
+                examples/reader_writer/Makefile
+                examples/test_daemon/Makefile
+                examples/test_signalfd/Makefile
+                examples/simpleServers/Makefile
+                examples/maxconnection/Makefile
+                examples/roundtriptime/Makefile
+                examples/test_tcpclient/Makefile
+                examples/twisted_finger/Makefile
+                examples/test_httpserver/Makefile
+                tests/Makefile
+                tests/stress_client/Makefile
+                tests/universal_timer/Makefile
+                tests/eventfd_epoll/Makefile
+                tests/timerqueue/Makefile
+                tests/timerfd/Makefile
+                tests/epollclient/Makefile
+                tests/epollserver/Makefile
+                tests/signal_handler/Makefile
+                tests/signalfd_epoll/Makefile
+                tests/tcpselfconnect1/Makefile
+                tests/tcpselfconnect2/Makefile
+                tests/PipePairFactory/Makefile
+                tests/master_worker_process/Makefile
+                tests/socketAcceptThunderingHerd/Makefile
+               ])
+
 AC_OUTPUT
+
+AC_MSG_NOTICE
+AC_MSG_NOTICE([Report:])
+AC_MSG_NOTICE([  zlreactor : 1.0 ])
+AC_MSG_NOTICE([  repository: https://github.com/lizhenghn123/zl_reactor.git ])
+AC_MSG_NOTICE([  author    : lizhenghn@gmail.com ])
+
