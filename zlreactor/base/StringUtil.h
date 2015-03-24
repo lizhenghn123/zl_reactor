@@ -133,7 +133,7 @@ inline void replace(std::string& strSrc, const std::string& strDeliter, const st
     }
 }
 
-/** 字符串分隔，如果有连续的delim，是否插入空串 */
+/** 字符串分隔，insertEmpty : 如果有连续的delim，是否插入空串 */
 inline void split(const std::string& str, std::vector<std::string>& result,
     const std::string& delim = " ", bool insertEmpty = false)
 {
