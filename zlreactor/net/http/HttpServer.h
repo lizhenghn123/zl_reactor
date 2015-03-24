@@ -29,9 +29,20 @@ public:
     HttpServer(EventLoop *loop, const InetAddress& listenAddr, const string& servername = "HttpServer");
     ~HttpServer();
 
+public:
     void setHttpCallback(const HttpCallback& cb)
     {
         httpCallback_ = cb;
+    }
+
+    void setRootDir(const string& dir) 
+    {
+        docRootDir_ = dir;
+    }
+
+    void setDefaultPage(const string& page)
+    {
+        defaultPage_ = page;
     }
 
 private:
@@ -45,6 +56,8 @@ private:
 
 private:
     HttpCallback   httpCallback_;
+    std::string    docRootDir_;
+    std::string    defaultPage_;
 };
 
 NAMESPACE_ZL_NET_END

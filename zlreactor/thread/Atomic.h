@@ -31,7 +31,7 @@
 #define ATOMIC_FETCH_AND_ADD(ptr, v)  __sync_fetch_and_add(ptr, v)
 #define ATOMIC_FETCH_AND_SUB(ptr, v)  __sync_fetch_and_sub(ptr, v)
 #define ATOMIC_FETCH(ptr)             __sync_add_and_fetch(ptr, 0)
-#define ATOMIC_SET(ptr, v)            __sync_lock_test_and_set(ptr, *(ptr)) 
+#define ATOMIC_SET(ptr, v)            __sync_val_compare_and_swap(ptr, *(ptr), v)
 #define ATOMIC_CAS(ptr, cmp, v)       __sync_bool_compare_and_swap(ptr, cmp, v)
 
 #elif defined(OS_WINDOWS)
@@ -222,6 +222,10 @@ private:
     Mutex    mutex_;
 #endif
 };
+
+
+typedef Atomic<int>     AtomicInt32;
+typedef Atomic<long>    AtomicInt64;
 
 NAMESPACE_ZL_THREAD_END
 #endif /* ZL_ATOMIC_H */
