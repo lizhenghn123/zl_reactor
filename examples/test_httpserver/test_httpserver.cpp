@@ -62,6 +62,8 @@ int main()
     HttpServer server(&loop, InetAddress("127.0.0.1", 8888), "myHttpServer");
     server.setThreadNum(2);
     server.setHttpCallback(processHttpRequest);
+    server.setRootDir("webs");
+    server.setDefaultPage("index.hrml");
     server.start();
     loop.loop();
 
