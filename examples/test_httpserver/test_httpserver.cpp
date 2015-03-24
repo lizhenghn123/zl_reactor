@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include "net/EventLoop.h"
 #include "net/http/HttpServer.h"
 #include "net/http/HttpRequest.h"
@@ -11,10 +11,10 @@ bool do_print = true;
 
 void processHttpRequest(const HttpRequest& req, HttpResponse *resp)
 {
-    const string& url = req.path();
+    const string& url = req.path(); 
 
     resp->setServerName("test_myHttpServer");
-
+    
     if (do_print)
     {
         std::cout << "Headers " << req.method() << " " << url << std::endl;
@@ -47,7 +47,7 @@ void processHttpRequest(const HttpRequest& req, HttpResponse *resp)
         resp->setStatusCode(HttpStatusOk);
         resp->setContentType("text/plain");
         resp->addHeader("Server", "test_myHttpServer");
-        resp->setBody("hello world!\n");
+        resp->setBody("hello, world!\n");
     }
     else
     {
@@ -62,6 +62,8 @@ int main()
     HttpServer server(&loop, InetAddress("192.168.14.6", 8888), "myHttpServer");
     server.setThreadNum(2);
     server.setHttpCallback(processHttpRequest);
+    server.setRootDir("webs");
+    server.setDefaultPage("index.hrml");
     server.start();
     loop.loop();
 
