@@ -23,15 +23,11 @@ NAMESPACE_ZL_NET_START
 // RA - Sid : 7B747245 - 20140622 - 042030 - f79ea7 - 5f07a8
 bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
 {
-    static int count = 0;
-    HttpContext *context = this;
-    assert(context);
-    printf("----------------parseRequest------------[%d]\n", ++count);
     bool ok = true;
     bool hasMore = true;
     while (hasMore)
     {
-        if (context->expectRequestLine())
+        if (this->expectRequestLine())
         {
             const char* crlf = buf->findCRLF();
             if (crlf)
@@ -39,9 +35,9 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
                 ok = processRequestLine(buf->peek(), crlf);  // 解析请求行
                 if (ok)
                 {
-                    //context->request().setReceiveTime(receiveTime);
+                    this->request().setReceiveTime(receiveTime);
                     buf->retrieveUntil(crlf + 2);
-                    context->receiveRequestLine();     // 请求行解析完成，下一步要解析消息头中的参数
+                    this->receiveRequestLine();     // 请求行解析完成，下一步要解析消息头中的参数
                 }
                 else
                 {
@@ -53,9 +49,9 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
                 hasMore = false;
             }
         }
-        else if (context->expectHeaders())     // 解析消息头中的参数
+        else if (this->expectHeaders())     // 解析消息头中的参数
         {
-            printf("context->expectHeaders() [%d]\n", context);
+            printf("context->expectHeaders() [%d]\n", this);
             const char* crlf = buf->findCRLF();
             if (crlf)    //按行添加消息头中的参数
             {
@@ -63,10 +59,10 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
                 if(!processReqestHeader(buf->peek(), crlf))
                 {
                     // empty line, end of header
-                    context->receiveHeaders();     // 消息头解析完成，下一步应该按get/post来区分是否解析消息体
-                    hasMore = !context->gotAll();
+                    this->receiveHeaders();     // 消息头解析完成，下一步应该按get/post来区分是否解析消息体
+                    hasMore = !this->gotAll();
                     printf("parse headers [%d]\n", hasMore);
-                    map<string, string> headers = context->request().headers();
+                    map<string, string> headers = this->request().headers();
                     for(map<string, string>::iterator it = headers.begin(); it!=headers.end(); ++it)
                         std::cout << it->first << " : " << it->second << "\n";
                 }
@@ -77,10 +73,9 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
                 hasMore = false;
             }
         }
-        else if (context->expectBody())       // 解析消息体
+        else if (this->expectBody())       // 解析消息体  // FIXME:
         {
-            // FIXME:
-            printf("context->expectBody() [%d]\n", context);
+            printf("context->expectBody() [%d]\n", this);
         }
     }
     return ok;
@@ -89,13 +84,13 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
 /// request line: httpmethod path httpversion
 bool HttpContext::processRequestLine(const char *begin, const char *end)
 {
-    bool succeed = false;
     const char* start = begin;
     const char* space = std::find(start, end, ' ');
     HttpRequest& request = this->request();
     string method(start, space);
     if (space != end && request.setMethod(method))
     {
+        // parse url path
         start = space+1;
         space = std::find(start, end, ' ');
         if (space != end)
@@ -114,53 +109,51 @@ bool HttpContext::processRequestLine(const char *begin, const char *end)
                 request.setPath(u);
             }
 
-            start = space+1;
-            succeed = end-start == 8 && std::equal(start, end-1, "HTTP/1.");
-            if (succeed)
+            // parse http version
+            start = space + 1;
+            if(end - start != 8)  // neither HTTP/1.1 nor HTTP/1.0
             {
-                if (*(end-1) == '1')
-                {
-                    request.setVersion(HTTP_VERSION_1_1);
-                }
-                else if (*(end-1) == '0')
-                {
-                    request.setVersion(HTTP_VERSION_1_0);
-                }
-                else
-                {
-                    succeed = false;
-                }
+                  return false;
             }
+
+            if(std::equal(start, end, "HTTP/1.1"))
+                request.setVersion(HTTP_VERSION_1_1);
+            else if(std::equal(start, end, "HTTP/1.0"))
+                request.setVersion(HTTP_VERSION_1_0);
+
+            return true;
         }
     }
-    printf("-----%d %s %d----\n", request.method(), request.path().c_str(), request.version());
-    return succeed;
+    return false;
 }
 
 /// request header
 bool HttpContext::processReqestHeader(const char *begin, const char *end)
 {
-    const char *colon = std::find(begin, end, ':'); //一行一行遍历
-    if (colon != end)
+    //while(true)    //TODO
     {
-        string field(begin, colon);
-        ++colon;
-        while (colon < end && isspace(*colon))
+        const char *colon = std::find(begin, end, ':'); //一行一行遍历
+        if (colon != end)
         {
+            string field(begin, colon);
             ++colon;
+            while (colon < end && isspace(*colon))
+            {
+                ++colon;
+            }
+            string value(colon, end);
+            while (!value.empty() && isspace(value[value.size()-1]))
+            {
+                value.resize(value.size()-1);
+            }
+            request_.addHeader(field, value);
+            return true;
         }
-        string value(colon, end);
-        while (!value.empty() && isspace(value[value.size()-1]))
+        else
         {
-            value.resize(value.size()-1);
+            // empty line, end of header
+            return false;
         }
-        request_.addHeader(field, value); 
-        return true;
-    }
-    else
-    {
-        // empty line, end of header
-        return false;
     }
 }
 
