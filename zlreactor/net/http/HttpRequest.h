@@ -43,6 +43,7 @@ public:
         return method_ != HttpInvalid;
     }
     HttpMethod method() const                { return method_; }
+    //string methodString() const { return }
 
     void setVersion(HttpVersion httpver)     { version_ = httpver; }
     void setVersion(const string& httpver)

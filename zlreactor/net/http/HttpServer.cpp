@@ -14,7 +14,7 @@ void defaultHttpCallback(const HttpRequest& req, HttpResponse *resp)
 }
 
 HttpServer::HttpServer(EventLoop *loop, const InetAddress& listenAddr, const string& servername/* = "HttpServer"*/)
-    : TcpServer(loop, listenAddr, servername), httpCallback_(defaultHttpCallback)
+    : TcpServer(loop, listenAddr, servername)
 {
     setConnectionCallback(std::bind(&HttpServer::onConnection, this, std::placeholders::_1));
     setMessageCallback(std::bind(&HttpServer::onMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
@@ -63,19 +63,30 @@ void HttpServer::response(const TcpConnectionPtr& conn, const HttpRequest& req)
     response.setStatusCode(HttpStatusOk);
     response.setServerName("MyHttpServer");
 
-    httpCallback_(req, &response);    // callback, for init response
+    methodCallback(req, &response);    // callback, for init response
 
     NetBuffer buf;
     response.compileToBuffer(&buf);
     printf("[%s]\n", buf.toString().c_str());
     conn->send(&buf);
-    
+
     LOG_INFO("HttpServer::response send data [%d]", conn->fd());
-    //if (response.closeConnection())
+    if (response.closeConnection())
     {
         LOG_INFO("HttpServer::response close this[%d]", conn->fd());
         conn->shutdown();
     }
+}
+
+void HttpServer::methodCallback(const HttpRequest& req, HttpResponse *resp)
+{
+     HttpMethod m = req.method();
+     map<HttpMethod, HttpCallback>::iterator it = methodCallback_.find(m);
+     if(it != methodCallback_.end())
+     {
+          assert(it->second);
+          (it->second)(req, resp);
+     }
 }
 
 NAMESPACE_ZL_NET_END
