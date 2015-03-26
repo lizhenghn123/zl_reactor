@@ -21,12 +21,14 @@ class HttpKeyValue : public zl::Singleton < HttpKeyValue >
     DECLARE_SINGLETON_CLASS(HttpKeyValue);
 
 public:
-    std::string getStatusDesc(HttpStatusCode code);
-    std::string getContentType(const std::string& file_type);
+    std::string getStatusDesc(HttpStatusCode code) const;
+    std::string getContentType(const std::string& file_type) const;
+    std::string getMethodStr(HttpMethod method) const;
 
 private:
-    std::map<int, std::string>          code_desc_;
-    std::map<std::string, std::string>  content_type_;
+    std::map<HttpStatusCode, std::string>  code_desc_;
+    std::map<std::string, std::string>     content_type_;
+    std::map<HttpMethod, std::string>      method_str_;
 
 private:
     HttpKeyValue();

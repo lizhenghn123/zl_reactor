@@ -14,6 +14,7 @@
 #include "Define.h"
 #include "base/Timestamp.h"
 #include "net/http/HttpProtocol.h"
+#include "net/http/HttpKeyValue.h"
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 
@@ -43,13 +44,21 @@ public:
         return method_ != HttpInvalid;
     }
     HttpMethod method() const                { return method_; }
-
+    const std::string methodStr() const
+    {
+        return HttpKeyValue::getInstanceRef().getMethodStr(method_);
+    }
+    
     void setVersion(HttpVersion httpver)     { version_ = httpver; }
     void setVersion(const string& httpver)
     {
         version_ = (httpver == "HTTP/1.1" ? HTTP_VERSION_1_1 : HTTP_VERSION_1_0);
     }
     HttpVersion version() const              { return version_; }
+    const std::string versionStr() const
+    {
+        return version_ == HTTP_VERSION_1_1 ? "HTTP/1.1" : "HTTP/1.0";
+    }
 
     void setPath(const std::string& url)     { urlpath_ = url; }
     const std::string& path() const          { return urlpath_; }
@@ -57,10 +66,16 @@ public:
     void setQuery(const std::string& url)    { urlpath_ = url; }
     const std::string& query() const         { return urlpath_; }
 
+    void setBody(const std::string& body)    { body_ = body; }
+    const std::string& body() const          { return body_; }
+
     void setReceiveTime(Timestamp t)         { receiveTime_ = t; }
     Timestamp receiveTime() const            { return receiveTime_; }
 
-    void addHeader(const string& key, const string& value)  { headers_[key] = value; }
+    void addHeader(const string& key, const string& value)
+    { 
+        headers_[key] = value;
+    }
     string getHeader(const string& field) const
     {
         string result;
@@ -88,8 +103,9 @@ public:
 private:
     HttpMethod   method_;
     HttpVersion  version_;
-    std::string  urlpath_;
+    std::string  urlpath_;  // url
     std::string  query_;    // url后面的以?分割的参数
+    std::string  body_;
     Timestamp    receiveTime_;
 
     std::map<string, string> headers_;

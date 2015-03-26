@@ -50,6 +50,7 @@ enum HttpMethod
 #define ZL_HTTPMETHOD_DELETE_S        "DELETE"
 #define ZL_HTTPMETHOD_TRACE_S         "TRACE"
 #define ZL_HTTPMETHOD_OPTIONS_S       "OPTIONS"
+#define ZL_HTTPMETHOD_CONNECT_S       "CONNECT"
 #define ZL_HTTPMETHOD_PATCH_S         "PATCH"
 
 enum HttpHeader
