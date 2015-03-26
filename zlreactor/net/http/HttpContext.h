@@ -51,7 +51,14 @@ public:
     bool expectBody() const        { return state_ == kExpectBody; }
     bool gotAll() const            { return state_ == kGotAll; }
     void receiveRequestLine()      { state_ = kExpectHeaders; }
-    void receiveHeaders()          { state_ = kGotAll; }  // FIXME
+    void receiveHeaders()
+    {
+        if(request_.method() == HttpGet)
+            state_ = kGotAll;
+        else if(request_.method() == HttpPost)
+            state_ = kExpectBody;
+    }
+    void receiveBody()             { state_ = kGotAll; }
 
     HttpRequest& request()         { return request_; }
     const HttpRequest& request() const { return request_; }

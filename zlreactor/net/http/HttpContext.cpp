@@ -1,6 +1,7 @@
 ﻿#include "net/http/HttpContext.h"
 #include "net/NetBuffer.h"
 #include "base/Timestamp.h"
+#include "base/StringUtil.h"
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 
@@ -56,17 +57,19 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
             if (crlf)    //按行添加消息头中的参数
             {
                 //const char *colon = std::find(buf->peek(), crlf, ':'); //一行一行遍历
-                if(!processReqestHeader(buf->peek(), crlf))
+                if(!processReqestHeader(buf->peek(), crlf))  // 消息头解析完成
                 {
                     // empty line, end of header
-                    this->receiveHeaders();     // 消息头解析完成，下一步应该按get/post来区分是否解析消息体
+                    this->receiveHeaders();     //下一步应该按get/post来区分是否解析消息体
                     hasMore = !this->gotAll();
-                    printf("parse headers [%d]\n", hasMore);
+                    printf("parse headers [%d][%d]\n", hasMore, state_);
                     map<string, string> headers = this->request().headers();
                     for(map<string, string>::iterator it = headers.begin(); it!=headers.end(); ++it)
                         std::cout << it->first << " : " << it->second << "\n";
                 }
                 buf->retrieveUntil(crlf + 2);
+                //if(this->expectBody())   // 如果是解析header完成，且需要解析body，过滤掉下面的空白行（\r\n）
+                //     buf->retrieve(2);
             }
             else
             {
@@ -75,7 +78,23 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
         }
         else if (this->expectBody())       // 解析消息体  // FIXME:
         {
-            printf("context->expectBody() [%d]\n", this);
+            int bufsize = static_cast<int>(buf->readableBytes());
+            string value = request_.getHeader("Content-Length");
+            assert(!value.empty());
+            int content_len = zl::base::strTo<int>(value);
+            printf("context->expectBody() [%d][%d][%d]\n", this, bufsize, content_len);
+
+            if(bufsize >= content_len)
+            {
+                this->receiveBody();
+                assert(gotAll());
+                printf("parse all data from request[%d]", state_);
+                hasMore = false;
+            }
+        }
+        else  // gotAll
+        {
+            assert(0 && "There is no more data for receiving");
         }
     }
     return ok;
