@@ -31,15 +31,14 @@ int main()
 
     std::vector<std::string> vec;
     str2 = "ttd gfht t34 0-tt";
-    zl::base::split(str2, vec, std::string("t"), true);   // " d gfh     34 0-"
-
-    std::copy(vec.begin(), vec.end(), std::ostream_iterator<string>(std::cout, " "));
+    zl::base::split(str2, vec, std::string("t"), true);   // **d gfh* *34 0-***
+    std::copy(vec.begin(), vec.end(), std::ostream_iterator<string>(std::cout, "*"));
     cout << "\n";
 
     vec.clear();
     str2 = "ttd gfht t34 0-tt";
-    zl::base::split(str2, vec, std::string("t"), false); // "d gfh   34 0 -"
-    std::copy(vec.begin(), vec.end(), std::ostream_iterator<string>(std::cout, " "));
+    zl::base::split(str2, vec, std::string("t"), false); // d gfh* *34 0-*
+    std::copy(vec.begin(), vec.end(), std::ostream_iterator<string>(std::cout, "*"));
     cout << "\n";
 
     string s;

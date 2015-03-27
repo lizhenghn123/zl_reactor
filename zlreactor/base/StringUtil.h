@@ -29,13 +29,6 @@ inline std::string toStr(const T& t)
     return oss.str();
 }
 
-/** 格式化字符串 */
-size_t stringFormatAppend(std::string *dst, const char* format, ...);
-
-size_t stringFormat(std::string *dst, const char* format, ...);
-
-std::string stringFormat(const char *format, ...);
-
 /** 字符串转为某一类型 */
 template <typename T>
 T strTo(const std::string& str)
@@ -45,6 +38,13 @@ T strTo(const std::string& str)
     iss >> t;
     return t;
 }
+
+/** 格式化字符串 */
+size_t stringFormatAppend(std::string *dst, const char* format, ...);
+
+size_t stringFormat(std::string *dst, const char* format, ...);
+
+std::string stringFormat(const char *format, ...);
 
 /** 将字符串转为小写并返回 */
 inline std::string toLower(const std::string& str)
@@ -148,13 +148,15 @@ inline void split(const std::string& str, std::vector<std::string>& result,
 
         if(!temp.empty())
         {
-            if(insertEmpty)
-                result.push_back("");
             result.push_back(temp);
         }
+        else if(insertEmpty)
+        {
+            result.push_back("");
+        }
+
         if(subend == str.end())
             break;
-
         substart = subend + delim.size();
     }
 }

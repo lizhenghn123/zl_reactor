@@ -9,22 +9,28 @@ using namespace zl::net;
 
 bool do_print = true;
 
-void processHttpRequest(const HttpRequest& req, HttpResponse *resp)
+void printRequestHeaders(const HttpRequest& req)
 {
-    const string& url = req.path(); 
+    if(!do_print)  return;
 
-    resp->setServerName("test_myHttpServer");
+    std::cout << "---------------print request headers---------------\n";
+    std::cout << "Headers " << req.method() << " " << req.path() << std::endl;
     
-    if (do_print)
+    const std::map<string, string> &headers = req.headers();
+    for (map<string, string>::const_iterator it = headers.begin(); it != headers.end(); ++it)
     {
-        std::cout << "Headers " << req.method() << " " << url << std::endl;
-        std::cout << "---------------request headers---------------\n";
-        const std::map<string, string> &headers = req.headers();
-        for (map<string, string>::const_iterator it = headers.begin(); it != headers.end(); ++it)
-        {
-            std::cout << it->first << ": " << it->second << std::endl;
-        }
+        std::cout << it->first << ": " << it->second << std::endl;
     }
+    std::cout << "---------------------------------------------------\n";
+}
+
+void doGet(const HttpRequest& req, HttpResponse *resp)
+{
+    assert(req.method() == HttpGet);
+    const string& url = req.path();
+    resp->setServerName("test_myHttpServer");
+
+    printRequestHeaders(req);
 
     if (url == "/")
     {
@@ -56,14 +62,25 @@ void processHttpRequest(const HttpRequest& req, HttpResponse *resp)
     }
 }
 
+void doPost(const HttpRequest& req, HttpResponse *resp)
+{
+    assert(req.method() == HttpPost);
+    printRequestHeaders(req);
+
+    assert("not implement" && 0);
+}
+
 int main()
 {
     EventLoop loop;
     HttpServer server(&loop, InetAddress("192.168.14.6", 8888), "myHttpServer");
     server.setThreadNum(2);
-    server.setHttpCallback(processHttpRequest);
     server.setRootDir("webs");
-    server.setDefaultPage("index.hrml");
+    server.setDefaultPage("index.html");
+
+    server.setCallback(HttpGet, doGet);
+    server.setCallback(HttpPost, doPost);
+
     server.start();
     loop.loop();
 

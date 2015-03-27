@@ -30,34 +30,31 @@ public:
     ~HttpServer();
 
 public:
-    void setHttpCallback(const HttpCallback& cb)
-    {
-        httpCallback_ = cb;
-    }
+    void setRootDir(const string& dir)     { docRootDir_ = dir; }
+    string rootDir()                       { return docRootDir_; }
 
-    void setRootDir(const string& dir) 
-    {
-        docRootDir_ = dir;
-    }
+    void setDefaultPage(const string& page){ defaultPage_ = page; }
+    string defaultPage()                   { return defaultPage_; }
 
-    void setDefaultPage(const string& page)
+    void setCallback(HttpMethod m, const HttpCallback& cb)
     {
-        defaultPage_ = page;
+        methodCallback_[m] = cb;
     }
 
 private:
     void onConnection(const TcpConnectionPtr& conn);
     void onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp receiveTime);
     void response(const TcpConnectionPtr& conn, const HttpRequest& req);
+    void methodCallback(const HttpRequest& req, HttpResponse *resp);
 
 private:
     HttpServer(const HttpServer&);
     HttpServer& operator = (const HttpServer&);
 
 private:
-    HttpCallback   httpCallback_;
     std::string    docRootDir_;
     std::string    defaultPage_;
+    std::map<HttpMethod, HttpCallback>  methodCallback_;
 };
 
 NAMESPACE_ZL_NET_END

@@ -48,7 +48,7 @@ public:
     {
         return HttpKeyValue::getInstanceRef().getMethodStr(method_);
     }
-    
+
     void setVersion(HttpVersion httpver)     { version_ = httpver; }
     void setVersion(const string& httpver)
     {
