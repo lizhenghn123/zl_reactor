@@ -148,13 +148,15 @@ inline void split(const std::string& str, std::vector<std::string>& result,
 
         if(!temp.empty())
         {
-            if(insertEmpty)
-                result.push_back("");
             result.push_back(temp);
         }
+        else if(insertEmpty)
+        {
+            result.push_back("");
+        }
+
         if(subend == str.end())
             break;
-
         substart = subend + delim.size();
     }
 }
