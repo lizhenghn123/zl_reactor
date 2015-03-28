@@ -37,7 +37,7 @@
 #elif defined(OS_WINDOWS)
 #include <Windows.h>
 #define ATOMIC_ADD(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, v)
-#define ATOMIC_SUB(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, -v
+#define ATOMIC_SUB(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, -v)
 //#define ATOMIC_ADD_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, v)
 //#define ATOMIC_SUB_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, -v)
 #define ATOMIC_FETCH_AND_ADD(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, v)    /*返回加之前的值*/
