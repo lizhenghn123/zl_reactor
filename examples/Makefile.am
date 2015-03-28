@@ -18,6 +18,8 @@ SUBDIRS                += test_CountDownLatch
 
 SUBDIRS                += blockqueue_test
 
+SUBDIRS                += test_eventloop
+
 SUBDIRS                += timer_test
 
 SUBDIRS                += smartassert_test

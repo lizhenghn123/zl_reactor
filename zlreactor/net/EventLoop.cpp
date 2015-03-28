@@ -65,6 +65,7 @@ EventLoop::~EventLoop()
 
 void EventLoop::loop()
 {
+	assertInLoopThread();
     running_ = true;
 
     Timestamp now;
@@ -212,7 +213,7 @@ void EventLoop::assertInLoopThread() const
     {
         LOG_ALERT("EventLoop::abortNotInLoopThread - EventLoop [%0x] was created in threadId_ [%d], " 
             "but current thread id = [%d].", this, currentThreadId_.tid(), this_thread::get_id().tid());
-        assert("EventLoop::assertInLoopThread()" && "why???");
+        assert("EventLoop::assertInLoopThread()" && 0);
     }
 }
 
