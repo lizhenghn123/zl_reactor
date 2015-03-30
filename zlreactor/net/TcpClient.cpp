@@ -9,7 +9,7 @@ NAMESPACE_ZL_NET_START
 
 namespace detail
 {
-    void removeConnection(EventLoop* loop, const TcpConnectionPtr& conn)
+    void removeConnection(EventLoop *loop, const TcpConnectionPtr& conn)
     {
         loop->queueInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
     }
@@ -20,7 +20,7 @@ namespace detail
     }
 }
 
-TcpClient::TcpClient(EventLoop* loop, const InetAddress& serverAddr, const std::string& clientname)
+TcpClient::TcpClient(EventLoop *loop, const InetAddress& serverAddr, const std::string& clientname)
     : loop_(loop),
       connectionCallback_(defaultConnectionCallback),
       messageCallback_(defaultMessageCallback),
