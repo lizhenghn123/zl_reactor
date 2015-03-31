@@ -1,3 +1,5 @@
+CXXFLAGS = -Wall -Werror -g
+
 SUBDIRS = 
 
 SUBDIRS += zlreactor

@@ -1,6 +1,6 @@
 #SUBDIRS= thread utility task_service log net statistic
 
-CXXFLAGS = -Wall -g -O2 -fPIC
+CXXFLAGS =-Wall -Werror -g -O2 -fPIC
 
 #plugindir = ../../lib
 plugindir = ${exec_prefix}/lib
@@ -17,8 +17,8 @@ libzlreactor_la_LIBFLAGS =
 libzlreactor_la_LIBADD =
 
 INCLUDES                   = -I../
-libzlreactor_la_CPPFLAGS = -Wall -std=c++0x -fPIC -shared
-#libzlreactor_a_LDFLAGS = -lpthread	
+libzlreactor_la_CPPFLAGS = -std=c++0x -fPIC -shared
+#libzlreactor_a_LDFLAGS = -lpthread-Werror -Wall	
 
 libzlreactor_la_SOURCES = \
 					 base/ByteArray.cpp \

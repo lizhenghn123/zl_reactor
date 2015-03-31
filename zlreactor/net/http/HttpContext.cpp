@@ -52,7 +52,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
         }
         else if (this->expectHeaders())     // 解析消息头中的参数
         {
-            printf("context->expectHeaders() [%d]\n", this);
+            printf("context->expectHeaders() [%p]\n", this);
             const char* crlf = buf->findCRLF();
             if (crlf)    //按行添加消息头中的参数
             {
@@ -82,7 +82,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
             string value = request_.getHeader("Content-Length");
             assert(!value.empty());
             int content_len = zl::base::strTo<int>(value);
-            printf("context->expectBody() [%d][%d][%d]\n", this, bufsize, content_len);
+            printf("context->expectBody() [%p][%d][%d]\n", this, bufsize, content_len);
 
             if(bufsize >= content_len)
             {
