@@ -83,6 +83,7 @@ AC_CONFIG_FILES([Makefile
                 examples/test_tcpclient/Makefile
                 examples/twisted_finger/Makefile
                 examples/test_httpserver/Makefile
+                examples/test_httprequest_parse/Makefile
                 tests/Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile

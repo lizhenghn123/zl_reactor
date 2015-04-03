@@ -68,6 +68,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
                         std::cout << it->first << " : " << it->second << "\n";
                 }
                 buf->retrieveUntil(crlf + 2);
+                //printf("context->expectHeaders() [%s]", buf->toString().c_str());
                 //if(this->expectBody())   // 如果是解析header完成，且需要解析body，过滤掉下面的空白行（\r\n）
                 //     buf->retrieve(2);
             }
@@ -83,6 +84,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
             assert(!value.empty());
             int content_len = zl::base::strTo<int>(value);
             printf("context->expectBody() [%p][%d][%d]\n", this, bufsize, content_len);
+            printf("context->expectBody() [%s]", buf->toString().c_str());
 
             if(bufsize >= content_len)
             {
@@ -90,6 +92,10 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
                 assert(gotAll());
                 printf("parse all data from request[%d]", state_);
                 hasMore = false;
+            }
+            else  // FIXME : 如果对方发送数据不够，或者有意不再发送数据，会有问题
+            {
+                break;
             }
         }
         else  // gotAll

@@ -41,3 +41,5 @@ SUBDIRS                += twisted_finger
 SUBDIRS                += test_zlog
 
 SUBDIRS                += test_httpserver
+
+SUBDIRS                += test_httprequest_parse
