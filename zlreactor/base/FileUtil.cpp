@@ -113,6 +113,11 @@ long getFileSize(const char *filepath)
 
 bool getFileData(const char *filepath, std::string& buf)
 {
+	return readFile(filepath, buf);
+}
+
+bool  readFile(const char *filepath, std::string& buf)
+{
     FILE *file = fopen(filepath, "rb");
     if(file == NULL)
         return false;
@@ -129,8 +134,7 @@ bool getFileData(const char *filepath, std::string& buf)
     return true;
 }
 
-
-std::string getAppFullPath()
+std::string getBinaryPath()
 {
     const static size_t pathLen = 1024;
     char appFullPath[pathLen] = {0};
@@ -147,9 +151,9 @@ std::string getAppFullPath()
     return "";
 }
 
-std::string getAppFileName()
+std::string getBinaryName()
 {
-    std::string path = getAppFullPath();
+    std::string path = getBinaryPath();
     if(path.empty())
         return path;
 
@@ -164,9 +168,30 @@ std::string getAppFileName()
         path = path.substr(pos + 1);
     pos = path.find_last_of('.');
     if (pos != std::string::npos)
-        path = path.substr( 0, pos );
+        path = path.substr(0, pos);
     return path;
 #endif
 }
 
+std::string getBinaryDir()
+{
+    std::string path = getBinaryPath();
+    if(path.empty())
+        return path;
+
+#ifdef OS_LINUX
+    size_t pos = path.find_last_of("/");
+    if(pos != std::string::npos)
+        path = path.substr(0, pos);
+    return path;
+#else
+    size_t pos = path.find_last_of("\\/:");
+    if (pos != std::string::npos)
+        path = path.substr(0, pos);
+    pos = path.find_last_of('.');
+    if (pos != std::string::npos)
+        path = path.substr( 0, pos );
+    return path;
+#endif
+}
 NAMESPACE_ZL_END

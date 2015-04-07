@@ -24,10 +24,11 @@ bool  isFileExist(const char *filepath);
 long  getFileSize(FILE *file);
 long  getFileSize(const char *filepath);
 bool  getFileData(const char *filepath, std::string& buf);
+bool  readFile(const char *filepath, std::string& buf);
 
-
-std::string getAppFullPath();
-std::string getAppFileName();
+std::string getBinaryPath();
+std::string getBinaryName();
+std::string getBinaryDir();
 
 NAMESPACE_ZL_END
 #endif /* ZL_FILEUTIL_H */
