@@ -43,3 +43,5 @@ SUBDIRS                += test_zlog
 SUBDIRS                += test_httpserver
 
 SUBDIRS                += test_httprequest_parse
+
+SUBDIRS                += test_process_util

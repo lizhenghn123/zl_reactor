@@ -187,6 +187,8 @@ bool  FileUtil::readFile(const char *filepath, std::string& buf)
         size = fread(data, PER_READ_SIZE, 1, file);
         buf += data;
     }
+	if(size > 0)
+		buf += data;
     return true;
 }
 
