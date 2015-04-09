@@ -47,6 +47,7 @@ libzlreactor_la_SOURCES = \
 					 net/NetBuffer.cpp \
 					 net/SocketUtil.cpp \
 					 net/InetAddress.cpp \
+					 net/DomainResolver.cpp \
 					 net/Socket.cpp \
 					 net/ActiveSocket.cpp \
 					 net/PassiveSocket.cpp \
@@ -67,3 +68,7 @@ libzlreactor_la_SOURCES = \
 					 net/http/HttpResponse.cpp \
 					 net/http/HttpContext.cpp \
 					 net/http/HttpServer.cpp
+
+# tests case
+MAINTAINERCLEANFILES   = Makefile.in
+SUBDIRS= net

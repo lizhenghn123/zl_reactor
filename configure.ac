@@ -100,6 +100,8 @@ AC_CONFIG_FILES([Makefile
                 tests/PipePairFactory/Makefile
                 tests/master_worker_process/Makefile
                 tests/socketAcceptThunderingHerd/Makefile
+                zlreactor/net/Makefile
+                zlreactor/net/tests/Makefile
                ])
 
 AC_OUTPUT
