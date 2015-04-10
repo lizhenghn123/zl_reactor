@@ -38,9 +38,9 @@
 #include <Windows.h>
 #define ATOMIC_ADD(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, v)
 #define ATOMIC_SUB(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, -v)
-//#define ATOMIC_ADD_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, v)
+//#define ATOMIC_ADD_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, v)         /*返回加/减之后的值*/
 //#define ATOMIC_SUB_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, -v)
-#define ATOMIC_FETCH_AND_ADD(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, v)    /*返回加之前的值*/
+#define ATOMIC_FETCH_AND_ADD(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, v)    /*返回加/减之前的值（ptr）*/
 #define ATOMIC_FETCH_AND_SUB(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, -v)
 #define ATOMIC_FETCH(ptr)             ::InterlockedExchangeAdd((long*)ptr, 0)
 #define ATOMIC_SET(ptr, v)            ::InterlockedExchange(ptr, *(ptr)) 
