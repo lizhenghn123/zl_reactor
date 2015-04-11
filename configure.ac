@@ -69,7 +69,6 @@ AC_CONFIG_FILES([Makefile
                 zlreactor/net/Makefile
                 zlreactor/net/tests/Makefile
                 examples/Makefile
-                examples/exception_mangle/Makefile
                 examples/reader_writer/Makefile
                 examples/simpleServers/Makefile
                 examples/maxconnection/Makefile
@@ -77,8 +76,6 @@ AC_CONFIG_FILES([Makefile
                 examples/test_tcpclient/Makefile
                 examples/twisted_finger/Makefile
                 examples/test_httpserver/Makefile
-                examples/test_httprequest_parse/Makefile
-                examples/test_process_util/Makefile
                 tests/Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile

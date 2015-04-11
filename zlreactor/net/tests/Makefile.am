@@ -1,6 +1,6 @@
 #CXXFLAGS += -Wall -static -g -O2 -fPIC
 
-bin_PROGRAMS = Timer_test SignalFd_test NetBuffer_test EventLoop_test DomainResolver_test
+bin_PROGRAMS = Timer_test SignalFd_test NetBuffer_test EventLoop_test DomainResolver_test HttpRequestParser_test
 
 INCLUDES = -I../../../zlreactor
 CPPFLAGS = -std=c++0x
@@ -29,4 +29,8 @@ EventLoop_test_SOURCES  = EventLoop_test.cpp
 DomainResolver_test_CPPFLAGS = $(CPPFLAGS)
 DomainResolver_test_LDFLAGS  = $(CPPFLAGS)
 DomainResolver_test_SOURCES  = DomainResolver_test.cpp
+
+HttpRequestParser_test_CPPFLAGS = $(CPPFLAGS)
+HttpRequestParser_test_LDFLAGS  = $(CPPFLAGS)
+HttpRequestParser_test_SOURCES  = HttpRequestParser_test.cpp
 
