@@ -45,7 +45,7 @@ void doGet(const HttpRequest& req, HttpResponse *resp)
         resp->setStatusCode(HttpStatusOk);
         resp->setContentType("image/png");
         string picdata;
-        zl::getFileData("favicon.ico", picdata);
+        zl::readFile("favicon.ico", picdata);
         resp->setBody(picdata);
     }
     else if (url == "/hello")

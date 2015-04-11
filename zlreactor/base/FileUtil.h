@@ -15,19 +15,22 @@
 #include <string>
 NAMESPACE_ZL_START
 
-// ------------------------  file utils  ------------------------
-bool  isDirectory(const char *dir);
+namespace FileUtil
+{
+	string getBinaryPath();
+	string getBinaryName();
+	string getBinaryDir();
 
-bool  createRecursionDir(const char *dir);
+	bool   isDirectory(const char *dir);
+	bool   createRecursionDir(const char *dir);
 
-bool  isFileExist(const char *filepath);
-long  getFileSize(FILE *file);
-long  getFileSize(const char *filepath);
-bool  getFileData(const char *filepath, std::string& buf);
+	bool   isFileExist(const char *filepath);
+	long   getFileSize(FILE *file);
+	long   getFileSize(const char *filepath);
+	bool   readFile(const char *filepath, std::string& buf);
+};
 
-
-std::string getAppFullPath();
-std::string getAppFileName();
+using namespace FileUtil;
 
 NAMESPACE_ZL_END
 #endif /* ZL_FILEUTIL_H */

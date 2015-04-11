@@ -40,7 +40,7 @@ namespace detail
     public:
          GlobalZLog()
          {
-              zl_log_instance_create("log", zl::getAppFileName().c_str());
+              zl_log_instance_create("log", zl::getBinaryName().c_str());
          }
          ~GlobalZLog()
          {

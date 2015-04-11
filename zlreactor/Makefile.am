@@ -1,6 +1,6 @@
 #SUBDIRS= thread utility task_service log net statistic
 
-CXXFLAGS =-Wall -Werror -g -O2 -fPIC
+CXXFLAGS =-Wall -Werror -g -O2 -fPIC -Wno-unused-function
 
 #plugindir = ../../lib
 plugindir = ${exec_prefix}/lib
@@ -31,6 +31,7 @@ libzlreactor_la_SOURCES = \
 					 base/Exception.cpp \
 					 base/Daemonize.cpp \
 					 base/StringUtil.cpp \
+					 base/ProcessUtil.cpp \
 					 utility/StringHash.cpp \
 					 utility/Base64.cpp \
 					 utility/Md5.cpp \
@@ -46,6 +47,7 @@ libzlreactor_la_SOURCES = \
 					 net/NetBuffer.cpp \
 					 net/SocketUtil.cpp \
 					 net/InetAddress.cpp \
+					 net/DomainResolver.cpp \
 					 net/Socket.cpp \
 					 net/ActiveSocket.cpp \
 					 net/PassiveSocket.cpp \
@@ -66,3 +68,10 @@ libzlreactor_la_SOURCES = \
 					 net/http/HttpResponse.cpp \
 					 net/http/HttpContext.cpp \
 					 net/http/HttpServer.cpp
+
+# tests case
+MAINTAINERCLEANFILES   = Makefile.in
+SUBDIRS = 
+SUBDIRS += base
+SUBDIRS += net
+SUBDIRS += thread

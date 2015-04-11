@@ -16,6 +16,9 @@
     <Filter Include="net\poller">
       <UniqueIdentifier>{fcdcb6ec-9852-42a0-b98f-b34ea2fa033a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="net\http">
+      <UniqueIdentifier>{f2ce9e9a-e26b-47b4-a594-8d51a8381023}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\zlreactor\utility\Base64.cpp">
@@ -45,9 +48,6 @@
     <ClCompile Include="..\..\zlreactor\base\FileUtil.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\zlreactor\base\StringHash.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\zlreactor\base\Timestamp.cpp">
       <Filter>base</Filter>
     </ClCompile>
@@ -74,6 +74,69 @@
     </ClCompile>
     <ClCompile Include="..\..\zlreactor\net\poller\SelectPoller.cpp">
       <Filter>net\poller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\ActiveSocket.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\Channel.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\Eventfd.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\EventLoop.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\EventLoopThreadPool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\PassiveSocket.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\SignalHandler.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\TcpAcceptor.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\TcpClient.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\TcpConnection.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\TcpConnector.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\TcpServer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\Timer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\Timerfd.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\TimerQueue.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\http\HttpContext.cpp">
+      <Filter>net\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\http\HttpKeyValue.cpp">
+      <Filter>net\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\http\HttpRequest.cpp">
+      <Filter>net\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\http\HttpResponse.cpp">
+      <Filter>net\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\http\HttpServer.cpp">
+      <Filter>net\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\StringUtil.cpp">
+      <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,12 +237,6 @@
     <ClInclude Include="..\..\zlreactor\base\StlUtil.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\zlreactor\base\StringHash.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\zlreactor\base\StrUtil.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\zlreactor\base\Timestamp.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -214,5 +271,74 @@
       <Filter>net\poller</Filter>
     </ClInclude>
     <ClInclude Include="..\..\zlreactor\OsDefine.h" />
+    <ClInclude Include="..\..\zlreactor\net\ActiveSocket.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\Channel.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\Eventfd.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\EventLoop.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\EventLoopThreadPool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\PassiveSocket.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\PipePairFactory.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\SignalHandler.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\TcpAcceptor.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\TcpClient.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\TcpConnection.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\TcpConnector.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\TcpServer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\Timer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\Timerfd.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\TimerQueue.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\http\HttpContext.h">
+      <Filter>net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\http\HttpKeyValue.h">
+      <Filter>net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\http\HttpProtocol.h">
+      <Filter>net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\http\HttpRequest.h">
+      <Filter>net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\http\HttpResponse.h">
+      <Filter>net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\http\HttpServer.h">
+      <Filter>net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\StringUtil.h">
+      <Filter>base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

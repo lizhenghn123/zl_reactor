@@ -23,7 +23,7 @@
 #endif
 NAMESPACE_ZL_NET_START
 
-class InetAddress : public zl::NonCopy
+class InetAddress
 {
 public:
     explicit InetAddress(uint16_t port = 0);

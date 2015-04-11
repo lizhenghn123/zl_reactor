@@ -62,28 +62,20 @@ AC_C_ENDIAN
 
 AC_CONFIG_FILES([Makefile
                 zlreactor/Makefile
+                zlreactor/base/Makefile
+                zlreactor/base/tests/Makefile
+                zlreactor/thread/Makefile
+                zlreactor/thread/tests/Makefile
+                zlreactor/net/Makefile
+                zlreactor/net/tests/Makefile
                 examples/Makefile
-                examples/test_str_util/Makefile
-                examples/atomic/Makefile
-                examples/buffer_test/Makefile
-                examples/test_zlog/Makefile
-                examples/exception_mangle/Makefile
-                examples/thread_test/Makefile
-                examples/test_CountDownLatch/Makefile
-                examples/blockqueue_test/Makefile
-                examples/test_eventloop/Makefile
-                examples/timer_test/Makefile
-                examples/smartassert_test/Makefile
                 examples/reader_writer/Makefile
-                examples/test_daemon/Makefile
-                examples/test_signalfd/Makefile
                 examples/simpleServers/Makefile
                 examples/maxconnection/Makefile
                 examples/roundtriptime/Makefile
                 examples/test_tcpclient/Makefile
                 examples/twisted_finger/Makefile
                 examples/test_httpserver/Makefile
-                examples/test_httprequest_parse/Makefile
                 tests/Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile
@@ -99,6 +91,7 @@ AC_CONFIG_FILES([Makefile
                 tests/PipePairFactory/Makefile
                 tests/master_worker_process/Makefile
                 tests/socketAcceptThunderingHerd/Makefile
+                tests/bind_tcp_udp/Makefile
                ])
 
 AC_OUTPUT

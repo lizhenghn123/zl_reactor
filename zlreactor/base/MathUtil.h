@@ -15,7 +15,7 @@
 NAMESPACE_ZL_BASE_START
 
 /// 判断一个整数是否是2的幂次方
-    inline bool is_pow2(uint32_t num)
+inline bool is_pow2(uint32_t num)
 {
     return !(num & (num - 1));
 }
