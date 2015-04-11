@@ -71,4 +71,6 @@ libzlreactor_la_SOURCES = \
 
 # tests case
 MAINTAINERCLEANFILES   = Makefile.in
-SUBDIRS= net
+SUBDIRS = 
+SUBDIRS += net
+SUBDIRS += thread

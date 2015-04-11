@@ -6,15 +6,7 @@ SUBDIRS                += test_str_util
 
 SUBDIRS                += maxconnection
 
-SUBDIRS                += atomic
-
 SUBDIRS                += exception_mangle
-
-SUBDIRS                += thread_test
-
-SUBDIRS                += test_CountDownLatch
-
-SUBDIRS                += blockqueue_test
 
 SUBDIRS                += smartassert_test
 
