@@ -72,11 +72,9 @@ AC_CONFIG_FILES([Makefile
                 examples/thread_test/Makefile
                 examples/test_CountDownLatch/Makefile
                 examples/blockqueue_test/Makefile
-                examples/timer_test/Makefile
                 examples/smartassert_test/Makefile
                 examples/reader_writer/Makefile
                 examples/test_daemon/Makefile
-                examples/test_signalfd/Makefile
                 examples/simpleServers/Makefile
                 examples/maxconnection/Makefile
                 examples/roundtriptime/Makefile

@@ -5,6 +5,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libzlreactor", "libzlreacto
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{47C97639-6D83-4E94-88B7-A00BDC989246}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test_httpserver", "test_httpserver", "{35B3B23D-BE2F-4796-952E-EC0A6D989B5D}"
+	ProjectSection(SolutionItems) = preProject
+		..\examples\test_httpserver\test_httpserver.cpp = ..\examples\test_httpserver\test_httpserver.cpp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -18,5 +23,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{35B3B23D-BE2F-4796-952E-EC0A6D989B5D} = {47C97639-6D83-4E94-88B7-A00BDC989246}
 	EndGlobalSection
 EndGlobal
