@@ -62,17 +62,15 @@ AC_C_ENDIAN
 
 AC_CONFIG_FILES([Makefile
                 zlreactor/Makefile
+                zlreactor/base/Makefile
+                zlreactor/base/tests/Makefile
                 zlreactor/thread/Makefile
                 zlreactor/thread/tests/Makefile
                 zlreactor/net/Makefile
                 zlreactor/net/tests/Makefile
                 examples/Makefile
-                examples/test_str_util/Makefile
-                examples/test_zlog/Makefile
                 examples/exception_mangle/Makefile
-                examples/smartassert_test/Makefile
                 examples/reader_writer/Makefile
-                examples/test_daemon/Makefile
                 examples/simpleServers/Makefile
                 examples/maxconnection/Makefile
                 examples/roundtriptime/Makefile
