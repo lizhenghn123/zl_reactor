@@ -67,13 +67,11 @@ AC_CONFIG_FILES([Makefile
                 examples/Makefile
                 examples/test_str_util/Makefile
                 examples/atomic/Makefile
-                examples/buffer_test/Makefile
                 examples/test_zlog/Makefile
                 examples/exception_mangle/Makefile
                 examples/thread_test/Makefile
                 examples/test_CountDownLatch/Makefile
                 examples/blockqueue_test/Makefile
-                examples/test_eventloop/Makefile
                 examples/timer_test/Makefile
                 examples/smartassert_test/Makefile
                 examples/reader_writer/Makefile

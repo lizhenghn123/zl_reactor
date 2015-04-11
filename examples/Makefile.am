@@ -8,8 +8,6 @@ SUBDIRS                += maxconnection
 
 SUBDIRS                += atomic
 
-SUBDIRS                += buffer_test
-
 SUBDIRS                += exception_mangle
 
 SUBDIRS                += thread_test
@@ -17,8 +15,6 @@ SUBDIRS                += thread_test
 SUBDIRS                += test_CountDownLatch
 
 SUBDIRS                += blockqueue_test
-
-SUBDIRS                += test_eventloop
 
 SUBDIRS                += timer_test
 
