@@ -18,10 +18,6 @@ NetBuffer_test_CPPFLAGS = $(CPPFLAGS)
 NetBuffer_test_LDFLAGS  = $(CPPFLAGS)
 NetBuffer_test_SOURCES  = NetBuffer_test.cpp
 
-NetBuffer_test_CPPFLAGS = $(CPPFLAGS)
-NetBuffer_test_LDFLAGS  = $(CPPFLAGS)
-NetBuffer_test_SOURCES  = NetBuffer_test.cpp
-
 EventLoop_test_CPPFLAGS = $(CPPFLAGS)
 EventLoop_test_LDFLAGS  = $(CPPFLAGS)
 EventLoop_test_SOURCES  = EventLoop_test.cpp
