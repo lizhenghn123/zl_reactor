@@ -2,13 +2,14 @@
 #include <cstdio>
 #include <fstream>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #ifdef OS_WINDOWS
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi")
 #else
 #include <unistd.h>
 #include <dirent.h>
-#include <sys/stat.h>
 #endif
 NAMESPACE_ZL_START
 
@@ -164,12 +165,17 @@ long FileUtil::getFileSize(FILE *file)
 
 long FileUtil::getFileSize(const char *filepath)
 {
-    FILE *file = fopen(filepath, "rb");
-    if(file == NULL)
+#ifdef OS_WINDOWS
+    struct _stat st;       // see : https://msdn.microsoft.com/en-us/library/14h5k7ff.aspx
+    if(_stat(filepath, &st) != 0)
         return -1;
-    long fileSize = getFileSize(file);
-    fclose(file);
-    return fileSize;
+    return st.st_size;
+#else
+    struct stat st;
+    if (::stat(filepath, &st) != 0)
+        return -1;
+    return st.st_size;
+#endif
 }
 
 bool  FileUtil::readFile(const char *filepath, std::string& buf)
