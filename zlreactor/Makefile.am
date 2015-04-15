@@ -24,6 +24,7 @@ libzlreactor_la_SOURCES = \
 					 base/ByteArray.cpp \
 					 base/Date.cpp \
 					 base/DateTimeUtil.cpp \
+					 base/File.cpp \
 					 base/FileUtil.cpp \
 					 base/Timestamp.cpp \
 					 base/ZLog.cpp \
