@@ -13,16 +13,21 @@
 #define ZL_PROCESSUTIL_H
 #include "Define.h"
 #include "base/Timestamp.h"
-
 #include <string>
 using zl::base::Timestamp;
+#ifdef OS_WINDOWS
+typedef unsigned long pid_t;
+#endif
+
 NAMESPACE_ZL_START
 
 namespace ProcessUtil
 {
     /// process id of current process.
-    pid_t pid();
+    pid_t  pid();
     string pidString();
+    string procname();
+    string procname(const string& stat);
 
     uid_t uid();
     uid_t euid();
@@ -36,10 +41,7 @@ namespace ProcessUtil
 
     int clockTicksPerSecond();
     int pageSize();
-
     string hostname();
-    string procname();
-    string procname(const string& stat);
 
     /// read /proc/self/status
     string procStatus();

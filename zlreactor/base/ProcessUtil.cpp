@@ -50,7 +50,11 @@ namespace ProcessUtil
 {
     pid_t pid()
     {
+	#ifdef OS_WINDOWS
+		return ::GetCurrentProcessId();
+	#else
         return ::getpid();
+	#endif
     }
 
     string pidString()
@@ -58,6 +62,44 @@ namespace ProcessUtil
         char buf[32];
         snprintf(buf, sizeof(buf), "%d", pid());
         return buf;
+    }
+
+    string procname()
+    {
+        //return procname(procStat());
+        string name;
+        char buf[512] = {0};
+    #ifdef OS_WINDOWS
+        if (::GetModuleFileNameA(NULL, buf, 512) > 0)
+            name = buf;
+        std::string::size_type pos = name.rfind("\\");
+        if (pos != std::string::npos)
+            name = name.substr(pos+1, std::string::npos);
+        pos = name.rfind(".");
+        if (pos != std::string::npos)
+            name = name.substr(0, pos-0);
+    #else
+        sprintf(buf, "/proc/%d/cmdline", (int)getpid());
+        readFile(buf, name);
+        std::string::size_type pos = name.rfind("/");
+        if (pos != std::string::npos)
+        {
+            name = name.substr(pos+1, std::string::npos);
+        }
+    #endif
+        return name;
+    }
+
+    string procname(const string& stat)
+    {
+        string name;
+        size_t lp = stat.find('(');
+        size_t rp = stat.rfind(')');
+        if (lp != string::npos && rp != string::npos && lp < rp)
+        {
+            name = stat.substr(lp+1, (rp-lp-1));
+        }
+        return name;
     }
 
     uid_t uid()
@@ -117,23 +159,6 @@ namespace ProcessUtil
         {
             return "unknownhost";
         }
-    }
-
-    string procname()
-    {
-        return procname(procStat());
-    }
-
-    string procname(const string& stat)
-    {
-        string name;
-        size_t lp = stat.find('(');
-        size_t rp = stat.rfind(')');
-        if (lp != string::npos && rp != string::npos && lp < rp)
-        {
-            name = stat.substr(lp+1, (rp-lp-1));
-        }
-        return name;
     }
 
     string procStatus()
