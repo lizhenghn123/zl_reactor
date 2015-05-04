@@ -5,7 +5,7 @@
 // Description      : timerfd need linux kernel > 2.6.25
 //                    Linux下基于基于文件描述符的定时器接口，通过fd的可读事件进行超时通知，能够用于select/poll
 // Last Modified By : LIZHENG
-// Last Modified On : 2014-11-23
+// Last Modified On : 2015-05-04
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -17,15 +17,33 @@
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 
-//创建一个定时器描述符
-int createTimerfd(int clockid = CLOCK_MONOTONIC, int flags = TFD_NONBLOCK | TFD_CLOEXEC);
+typedef int Timerfd;
 
+class TimerfdHandler
+{
+public:
+    TimerfdHandler(int clockid = CLOCK_MONOTONIC, int flags = TFD_NONBLOCK | TFD_CLOEXEC);
+    ~TimerfdHandler();
 
-//设置新的超时时间
-void resetTimerfd(int timerfd, Timestamp expiration);
+public:
+    /// 返回定时器描述符
+    Timerfd   fd() { return timerfd_; }
 
-//从时间文件描述符获得当前有多少个定时器超时并返回
-uint64_t readTimerfd(int timerfd, Timestamp now);
+    /// 设置新的超时时间(绝对时间)以及定时器循环间隔(<=0 表示只定时一次), 单位：微秒
+    void      resetTimerfd(Timestamp expiration, int interval_us = 0);
+
+    /// 设置新的超时时间(相对时间)以及定时器循环间隔(<=0 表示只定时一次), 单位：微秒
+    void      resetTimerfd(uint64_t next_expire_us, int interval_us = 0);
+
+    /// 获得当前有多少个定时器超时
+    uint64_t  read(uint64_t *howmany);
+
+    /// 停止定时器
+    void      stop();
+
+private:
+    Timerfd timerfd_;
+};
 
 NAMESPACE_ZL_NET_END
 #endif  /* ZL_TIMERFD_H */
