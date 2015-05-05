@@ -6,8 +6,6 @@ SUBDIRS                += universal_timer
 
 SUBDIRS                += stress_client
 
-SUBDIRS                += eventfd_epoll
-
 SUBDIRS                += timerqueue
 
 SUBDIRS                += timerfd
@@ -17,8 +15,6 @@ SUBDIRS                += epollclient
 SUBDIRS                += epollserver
 
 SUBDIRS                += signal_handler
-
-SUBDIRS                += signalfd_epoll
 
 SUBDIRS                += tcpselfconnect1
 

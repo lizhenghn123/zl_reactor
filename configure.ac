@@ -79,13 +79,11 @@ AC_CONFIG_FILES([Makefile
                 tests/Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile
-                tests/eventfd_epoll/Makefile
                 tests/timerqueue/Makefile
                 tests/timerfd/Makefile
                 tests/epollclient/Makefile
                 tests/epollserver/Makefile
                 tests/signal_handler/Makefile
-                tests/signalfd_epoll/Makefile
                 tests/tcpselfconnect1/Makefile
                 tests/tcpselfconnect2/Makefile
                 tests/PipePairFactory/Makefile

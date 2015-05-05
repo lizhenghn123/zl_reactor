@@ -181,7 +181,7 @@ struct sockaddr_in SocketUtil::getLocalAddr(ZL_SOCKET sockfd)
     socklen_t addrlen = static_cast<socklen_t>(sizeof(localaddr));
     if (::getsockname(sockfd, sockaddr_cast(&localaddr), &addrlen) < 0)
     {
-        printf("sockets::getLocalAddr\"");
+        printf("sockets::getLocalAddr");
     }
     return localaddr;
 }
@@ -193,7 +193,7 @@ struct sockaddr_in SocketUtil::getPeerAddr(ZL_SOCKET sockfd)
     socklen_t addrlen = static_cast<socklen_t>(sizeof peeraddr);
     if (::getpeername(sockfd, sockaddr_cast(&peeraddr), &addrlen) < 0)
     {
-        printf("sockets::getPeerAddr\"");
+        printf("sockets::getPeerAddr");
     }
     return peeraddr;
 }

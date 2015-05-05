@@ -2,11 +2,12 @@
 #include <assert.h>
 #include <sys/eventfd.h>     // for eventfd
 #include <signal.h>          // for ::signal
-#include "net/Channel.h"
-#include "net/poller/Poller.h"
 #include "base/Timestamp.h"
 #include "base/ZLog.h"
+#include "net/Channel.h"
+#include "net/poller/Poller.h"
 #include "net/TimerQueue.h"
+#include "net/Eventfd.h"
 using namespace zl::thread;
 NAMESPACE_ZL_NET_START
 
@@ -22,18 +23,6 @@ namespace
             ::signal(SIGPIPE, SIG_IGN);
         }
     }_dont_use_this_class_;
-
-    int createEventfd()
-    {
-        int efd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
-        if (efd < 0)
-        {
-            LOG_ALERT("create eventfd failed when EventLoop::EventLoop");
-            assert(efd);
-        }
-        LOG_INFO("EventLoop::createEventfd [%d]", efd);
-        return efd;
-    }
 }
 
 EventLoop::EventLoop()
@@ -46,9 +35,10 @@ EventLoop::EventLoop()
 {
     poller_ = Poller::createPoller(this);
 
-    wakeupfd_ = createEventfd();
-    wakeupChannel_ = new Channel(this, wakeupfd_);
-    wakeupChannel_->setReadCallback(std::bind(&EventLoop::handleRead, this));
+    wakeupfd_ = new EventfdHandler();
+    wakeupChannel_ = new Channel(this, wakeupfd_->fd());
+    //wakeupChannel_->setReadCallback(std::bind(&EventLoop::handleRead, this));
+    wakeupChannel_->setReadCallback(std::bind(&EventfdHandler::read, wakeupfd_, static_cast<uint64_t*>(NULL)));
     wakeupChannel_->enableReading();  // ready for read event of wakeupfd_
 
     timerQueue_ = new TimerQueue(this);
@@ -58,7 +48,7 @@ EventLoop::~EventLoop()
 {
     wakeupChannel_->disableAll();
     wakeupChannel_->remove();
-    ::close(wakeupfd_);
+    Safe_Delete(wakeupfd_);
     Safe_Delete(wakeupChannel_);
     Safe_Delete(poller_);
 }
@@ -220,20 +210,10 @@ void EventLoop::assertInLoopThread() const
 void EventLoop::wakeupPoller()
 {
     uint64_t value = 1;
-    size_t n = SocketUtil::write(wakeupfd_, &value, sizeof(value));
+    ssize_t n = wakeupfd_->write(value);
     if (n != sizeof(value))
     {
         LOG_ERROR("EventLoop::wakeupPoller() wakeupfd_ write error[%d][%d]", n, errno);
-    }
-}
-
-void EventLoop::handleRead()
-{
-    uint64_t value = 0;
-    size_t n = SocketUtil::read(wakeupfd_, &value, sizeof(value));
-    if (n != sizeof(value)) //always return 8 byte
-    {
-        LOG_ERROR("EventLoop::handleRead() wakeupfd_ read error[%d][%d]", n, errno);
     }
 }
 

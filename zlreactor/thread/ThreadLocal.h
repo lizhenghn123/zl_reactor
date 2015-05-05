@@ -30,7 +30,7 @@ NAMESPACE_ZL_THREAD_START
 
 
 #ifdef OS_WINDOWS
-    template<typename T>
+template<typename T>
 class ThreadLocal : NonCopy
 {
 public:
@@ -51,18 +51,23 @@ public:
         TlsFree(tlsKey_);
     }
 
+public:
     T operator()()
     {
-        T *obj = Get();
-        return *obj;
+        return *get();
     }
 
-    T* operator-> () 
+    T& operator*() 
+    {
+        return *get();
+    }
+
+    T* operator->() 
     {
         return get();
     }
-private:
-    T* get()
+
+    T* get() const
     {
         LPVOID p = TlsGetValue(tlsKey_);
         if(p == NULL)
@@ -76,15 +81,27 @@ private:
             return static_cast<T*>(p);
         }
     }
+
+	T* release()
+	{
+		T *obj = static_cast<T*>(TlsGetValue(tlsKey_));
+		TlsSetValue(tlsKey_, NULL);
+		return obj;
+	}
+
+	void reset(T *p = NULL)
+	{
+		T *obj = static_cast<T*>(TlsGetValue(tlsKey_));
+		delete obj;
+		TlsSetValue(tlsKey_, p);
+	}
+
 private:
-    static DWORD tlsKey_;
+    DWORD tlsKey_;
 };
 
-template <typename T>
-DWORD  ThreadLocal<T>::tlsKey_ ;
-
 #else
-    template<typename T>
+template<typename T>
 class ThreadLocal : NonCopy
 {
 public:
@@ -95,13 +112,21 @@ public:
 
     ~ThreadLocal()
     {
+		T *p = get();
+		if(p)
+			delete p;
         pthread_key_delete(tlsKey_);
     }
 
+public:
     T operator()()
     {
-        T *obj = get();
-        return *obj;
+        return *get();
+    }
+
+    T& operator*() 
+    {
+        return *get();
     }
 
     T* operator->() 
@@ -109,8 +134,7 @@ public:
         return get();
     }
 
-private:
-    T* get()
+    T* get() const
     {
         T* obj = static_cast<T*>(pthread_getspecific(tlsKey_));
         if (obj == NULL) 
@@ -121,10 +145,27 @@ private:
         }
         return obj;
     }
+
+	T* release()
+	{
+		T *obj = get();
+		pthread_setspecific(tlsKey_, NULL);
+		return obj;
+	}
+
+	void reset(T *p = NULL)
+	{
+		T *obj = get();
+		delete obj;
+		obj = NULL;
+		pthread_setspecific(tlsKey_, p);
+	}
+
     static void cleanHook(void *x)
     {
         T* obj = static_cast<T*>(x);
         delete obj;
+		obj = NULL;
     }
 
 private:
