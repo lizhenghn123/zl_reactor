@@ -80,7 +80,6 @@ AC_CONFIG_FILES([Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile
                 tests/timerqueue/Makefile
-                tests/timerfd/Makefile
                 tests/epollclient/Makefile
                 tests/epollserver/Makefile
                 tests/signal_handler/Makefile
