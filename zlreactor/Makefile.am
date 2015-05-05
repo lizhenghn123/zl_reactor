@@ -43,7 +43,6 @@ libzlreactor_la_SOURCES = \
 					 net/poller/SelectPoller.cpp \
 					 net/poller/PollPoller.cpp \
 					 net/poller/EpollPoller.cpp \
-					 net/Timerfd.cpp \
 					 net/NetUtil.cpp \
 					 net/NetBuffer.cpp \
 					 net/SocketUtil.cpp \
@@ -63,7 +62,8 @@ libzlreactor_la_SOURCES = \
 					 net/Timer.cpp \
 					 net/TimerQueue.cpp \
 					 net/Eventfd.cpp \
-					 net/SignalHandler.cpp \
+					 net/Timerfd.cpp \
+					 net/Signalfd.cpp \
 					 net/http/HttpKeyValue.cpp \
 					 net/http/HttpRequest.cpp \
 					 net/http/HttpResponse.cpp \
