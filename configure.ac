@@ -84,7 +84,6 @@ AC_CONFIG_FILES([Makefile
                 tests/epollclient/Makefile
                 tests/epollserver/Makefile
                 tests/signal_handler/Makefile
-                tests/signalfd_epoll/Makefile
                 tests/tcpselfconnect1/Makefile
                 tests/tcpselfconnect2/Makefile
                 tests/PipePairFactory/Makefile

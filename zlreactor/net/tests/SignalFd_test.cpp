@@ -4,16 +4,27 @@
 	Mail        : lizhenghn@gmail.com
 	Created Time: 2015年01月07日 星期三 15时39分22秒
  ************************************************************************/
-
 #include <iostream>
 #include <unistd.h>
 #include <signal.h>
 #include "net/EventLoop.h"
-#include "net/SignalHandler.h"
+#include "net/Channel.h"
+#include "net/Signalfd.h"
+#include "base/ZLog.h"
+#include <sys/epoll.h>
+#include <unordered_map>
+#include <sys/signalfd.h>
 using namespace std;
 using namespace zl;
 using namespace zl::net;
 
+/******
+#include <sys/signalfd.h>
+int signalfd(int fd, const sigset_t *mask, int flags);
+把信号集与fd关联起来，第一个参数为-1表示新建一个signalfd，不是-1并且是一个合法的signalfd表示向其添加新的信号。
+
+当fd不是-1并且是一个合法的signalfd时，有问题，我还没搞明白。
+******/
 void signal_handler(int sig)
 {
 	switch(sig)
@@ -45,25 +56,62 @@ void signal_handler(int sig)
 		break;		
 	}
 }
+  
+void test_signalfd()
+{
+	LOG_INFO("----------------test_signalfd----------------");
+	LOG_INFO("----------------[SIGINT %d][SIGQUIT %d]----------------", SIGINT, SIGQUIT);
+	SignalfdHandler sfd;
+	sfd.addSigHandler(SIGINT, signal_handler);
+	sfd.addSigHandler(SIGQUIT, signal_handler);
+	sfd.registerAll(0);   // block
+
+	sfd.wait();  // sync loop-wait
+}
+
+class Test_Signalfd
+{
+public:
+	Test_Signalfd(EventLoop *loop)
+	{
+		loop_ = loop;
+		signalfd_ = new SignalfdHandler; 
+		signalfd_->addSigHandler(SIGINT, signal_handler);
+		signalfd_->addSigHandler(SIGQUIT, signal_handler);
+		signalfd_->registerAll(SFD_NONBLOCK | SFD_CLOEXEC);  // must set nonblock
+
+		sfdChannel_ = new Channel(loop, signalfd_->fd());
+		sfdChannel_->setReadCallback(std::bind(&Test_Signalfd::handleRead, this));
+		sfdChannel_->enableReading();
+	}
+	~Test_Signalfd()
+	{
+		sfdChannel_->disableAll();
+		delete sfdChannel_;
+		delete signalfd_;
+	}
+	void handleRead()
+	{
+		int sig = signalfd_->readSig();
+	}
+	 
+private:
+	EventLoop       *loop_;
+	Channel         *sfdChannel_;
+	SignalfdHandler *signalfd_;
+};
+
+
+void test_signalfd_poll()
+{
+	EventLoop loop;
+	Test_Signalfd ts(&loop);
+	loop.loop();
+}
 
 int main()
 {
-	EventLoop loop;	
-	SignalHandler sigHandler(&loop);
-	
-	sigHandler.setSigHandler(SIGINT, std::bind(signal_handler, std::placeholders::_1));
-	sigHandler.setSigHandler(SIGHUP, std::bind(signal_handler, std::placeholders::_1));
-	sigHandler.setSigHandler(SIGQUIT, std::bind(signal_handler, std::placeholders::_1));
-	sigHandler.setSigHandler(SIGSEGV, std::bind(signal_handler, std::placeholders::_1));
-	sigHandler.setSigHandler(SIGPIPE, std::bind(signal_handler, std::placeholders::_1));
-	sigHandler.setSigHandler(SIGALRM, std::bind(signal_handler, std::placeholders::_1));
-	sigHandler.setSigHandler(SIGCHLD, std::bind(signal_handler, std::placeholders::_1));
-    sigHandler.registerAll();	
+    //test_signalfd();
 
-    sigHandler.removeSig(SIGALRM);
-
-	loop.loop();
-    printf("main loop exits");
+    test_signalfd_poll();
 }
-
-

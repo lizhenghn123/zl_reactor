@@ -6,12 +6,10 @@
 
 NAMESPACE_ZL_NET_START
 
-SignalfdHandler::SignalfdHandler(int flags/* = SFD_NONBLOCK | SFD_CLOEXEC*/)
+SignalfdHandler::SignalfdHandler()
     : signalFd_(-1)
 {
-    isRunning_ = true;
-
-    signalFd_ = createSignalfd(flags);
+    isReady_ = false;
 }
 
 SignalfdHandler::~SignalfdHandler()
@@ -46,13 +44,6 @@ Signalfd SignalfdHandler::createSignalfd(int flags)
 
 void SignalfdHandler::addSigHandler(int sig, const SignalCallback& handler)
 {
-    if(!haveSignal(sig))
-    {
-        sigaddset(&mask_, sig);
-        int r = ::signalfd(signalFd_, &mask_, 0);
-        assert(r == signalFd_);
-
-    }
     sigHanhlers_[sig] = handler;
 }
 
@@ -66,6 +57,43 @@ void SignalfdHandler::removeSig(int sig)
 bool SignalfdHandler::haveSignal(int sig)
 {
 	return sigHanhlers_.find(sig) != sigHanhlers_.end() ? true : false;
+}
+
+void SignalfdHandler::registerAll(int flags/* = SFD_NONBLOCK | SFD_CLOEXEC*/)
+{
+    if(signalFd_ > 0 && isReady_ == true)
+        return;
+
+	sigset_t mask;
+	sigemptyset(&mask);
+	for (SigHandlerMap::iterator iter = sigHanhlers_.begin(); iter != sigHanhlers_.end(); ++iter)
+	{
+		sigaddset(&mask, iter->first);
+	}
+
+	// 阻塞信号以使得它们不被默认的处理试方式处理
+	if (sigprocmask(SIG_BLOCK, &mask, NULL) == -1)
+	{
+		perror("sigprocmask");
+	}
+
+	signalFd_ = signalfd(-1, &mask, flags);
+    if(signalFd_ < 0)
+    {
+        LOG_ERROR("signalfd create failure");
+		switch(errno)
+		{
+		case EBADF:     //fd 文件描述符不是一个有效的文件描述符
+		case EINVAL:    //flags 无效； 或者，在 2.6.26 及其前，flags 非零
+		case EMFILE:    //达到单个进程打开的文件描述上限
+		case ENFILE:    //达到可打开文件个数的系统全局上限 
+		case ENODEV:    //不能挂载（内部）匿名结点设备
+		case ENOMEM:    //没有足够的内存来创建新的 signalfd 文件描述符
+		break;
+		}
+    }
+
+    isReady_ = true;
 }
 
 int SignalfdHandler::readSig()
@@ -96,7 +124,7 @@ int SignalfdHandler::readSig()
 void SignalfdHandler::wait()
 {
     LOG_INFO("SignalfdHandler::wait()");
-	while (isRunning_)
+	while (isReady_)
 	{
         readSig();
 	}
