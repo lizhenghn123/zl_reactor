@@ -3,11 +3,12 @@
 #include "thread/Thread.h"
 #include <dirent.h>
 #include <pwd.h>
-#include <stdio.h> // snprintf
+#include <stdio.h>         // snprintf
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/resource.h>
 #include <sys/times.h>
+#include <sys/prctl.h>    // prctl
 NAMESPACE_ZL_START
 
 namespace
@@ -198,6 +199,7 @@ namespace ProcessUtil
 
     int maxOpenFiles()
     {
+        // return getdtablesize();
         struct rlimit rl;
         if (::getrlimit(RLIMIT_NOFILE, &rl))
         {
@@ -244,5 +246,22 @@ namespace ProcessUtil
         return result;
     }
 
+    bool enableCoreDump(bool enabled/* = true*/, int core_file_size/* = -1*/)
+    {
+        if (enabled)
+        {
+            struct rlimit rlim;
+            rlim.rlim_cur = (core_file_size < 0)? RLIM_INFINITY: core_file_size;
+            rlim.rlim_max = rlim.rlim_cur;
+
+            if (-1 == ::setrlimit(RLIMIT_CORE, &rlim))
+                return false;
+        }       
+        
+        if (-1 == ::prctl(PR_SET_DUMPABLE, enabled ? 1 : 0))
+            return false;
+
+        return true;
+    }
 }
 NAMESPACE_ZL_END

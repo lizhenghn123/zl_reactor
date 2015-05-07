@@ -18,23 +18,35 @@ NAMESPACE_ZL_BASE_START
 class Exception : public std::exception
 {
 public:
-    explicit Exception(const char* errinfo);
-    explicit Exception(const std::string& errinfo);
+    explicit Exception(const char *errinfo);
+    Exception(const char *filename, int linenumber, const char *errinfo);
+    Exception(const char *filename, int linenumber, const std::string& errinfo);
     virtual ~Exception() throw();
 
-    virtual const char* what() const throw()
+    virtual const char *what() const throw()
     {
         return errmsg_.c_str();
     }
-
+    
     const char* stack_trace() const throw()
     {
         return callStack_.c_str();
     }
 
+    const char* filename() const throw()
+    {
+        return filename_.c_str();
+    }
+
+    int line() const throw()
+    {
+        return line_;
+    }
 private:
     void trace_stack();
 
+    int line_;
+    std::string filename_;
     std::string errmsg_;
     std::string callStack_;
 };
