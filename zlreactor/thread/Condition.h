@@ -50,9 +50,29 @@ public:
     void wait()
     {
     #ifdef OS_WINDOWS
-        SleepConditionVariableCS(&condition_, mutex_.getMutex(), INFINITE);
+        (void)SleepConditionVariableCS(&condition_, mutex_.getMutex(), INFINITE);
     #elif defined(OS_LINUX)
-        pthread_cond_wait(&condition_, mutex_.getMutex());
+        (void)pthread_cond_wait(&condition_, mutex_.getMutex());
+    #endif
+    }
+
+    /// returns true only iff time out
+    bool timed_wait(int millisecond)
+    {
+        assert(millisecond >= 0);
+    #ifdef OS_WINDOWS
+        return SleepConditionVariableCS(&condition_, mutex_.getMutex(), millisecond);
+    #elif defined(OS_LINUX)
+        struct timespec abstime;
+        (void)clock_gettime(CLOCK_REALTIME, &abstime);
+        abstime.tv_sec  += millisecond / 1000;
+        abstime.tv_nsec += (millisecond % 1000) * 1000000;  // 1 us = 1000000 ns
+        while(abstime.tv_nsec >= 1000000000L)
+        {
+            ++abstime.tv_sec;
+            abstime.tv_nsec %= 1000000000L;
+        }
+        return ETIMEDOUT == pthread_cond_timedwait(&condition_, mutex_.getMutex(), &abstime);
     #endif
     }
 

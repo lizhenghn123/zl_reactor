@@ -1,6 +1,6 @@
 #CXXFLAGS += -Wall -static -g -O2 -fPIC
 
-bin_PROGRAMS = ZLog_test SmartAssert_test StringUtil_test Daemon_test Exception_Demangle_test ProcessUtil_test
+bin_PROGRAMS = ZLog_test SmartAssert_test StringUtil_test Daemon_test Exception_Demangle_test ProcessUtil_test Timestamp_test
 
 INCLUDES = -I../../../zlreactor
 CPPFLAGS = -std=c++0x
@@ -29,3 +29,6 @@ Exception_Demangle_test_SOURCES  = Exception_Demangle_test.cpp
 ProcessUtil_test_CPPFLAGS = $(CPPFLAGS)
 ProcessUtil_test_LDFLAGS  = $(CPPFLAGS)
 ProcessUtil_test_SOURCES  = ProcessUtil_test.cpp
+
+Timestamp_test_LDFLAGS  = $(CPPFLAGS) -lrt
+Timestamp_test_SOURCES    = Timestamp_test.cpp

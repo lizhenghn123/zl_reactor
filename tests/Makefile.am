@@ -8,8 +8,6 @@ SUBDIRS                += stress_client
 
 SUBDIRS                += timerqueue
 
-SUBDIRS                += timerfd
-
 SUBDIRS                += epollclient
 
 SUBDIRS                += epollserver

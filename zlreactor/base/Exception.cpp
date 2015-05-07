@@ -4,12 +4,28 @@
 #include "base/Demangle.h"
 NAMESPACE_ZL_BASE_START
 
-Exception::Exception(const char* errinfo) : errmsg_(errinfo)
+Exception::Exception(const char* errinfo)
+    : line_(0),
+      filename_("unknown"),
+      errmsg_(errinfo)
+      
 {
     trace_stack();
 }
 
-Exception::Exception(const std::string& errinfo) : errmsg_(errinfo)
+Exception::Exception(const char *filename, int linenumber, const char* errinfo)
+    : line_(linenumber),
+      filename_(filename),
+      errmsg_(errinfo)
+      
+{
+    trace_stack();
+}
+
+Exception::Exception(const char *filename, int linenumber, const std::string& errinfo)
+    : line_(linenumber),
+      filename_(filename),
+      errmsg_(errinfo)
 {
     trace_stack();
 }

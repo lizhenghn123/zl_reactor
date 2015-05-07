@@ -69,6 +69,11 @@ namespace ProcessUtil
 
     int numThreads();
     std::vector<pid_t> threads();
+
+    /// 设置是否允许当前进程生成coredump文件
+    /// enabled = true, 启用codedump; core_file_size < 0 , 不限制coredump文件大小
+    /// return true iff set success, false otherwise
+    bool enableCoreDump(bool enabled = true, int core_file_size = -1);
 }
 
 using namespace ProcessUtil;
