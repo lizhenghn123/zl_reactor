@@ -35,7 +35,7 @@ TcpServer::~TcpServer()
 
 void TcpServer::setThreadNum(size_t numThreads)
 {
-    if(numThreads <= 0)
+    if(numThreads < 0)
         numThreads = zl::thread::Thread::hardware_concurrency();
     evloopThreadPool_->setThreadNum(numThreads);
 }

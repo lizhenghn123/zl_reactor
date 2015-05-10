@@ -73,6 +73,12 @@ private:
     int64_t  microSeconds_;
 };
 
+inline std::ostream& operator<<(std::ostream& out, const Timestamp& ts)
+{
+    out << ts.toString();
+    return out;
+}
+
 inline bool operator<(const Timestamp& lhs, const Timestamp& rhs)
 {
     return lhs.microSeconds() < rhs.microSeconds();
