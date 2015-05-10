@@ -50,7 +50,7 @@ public:
     void queueInLoop(const Functor& func);
 
     TimerId addTimer(const TimerCallback& cb, const Timestamp& when);
-    TimerId addTimer(const TimerCallback& cb, double delaySeconds, bool repeat = true);
+    TimerId addTimer(const TimerCallback& cb, double delaySeconds, bool repeat = false);
     void    cancelTimer(TimerId id);
 
     bool isRunning() { return running_; }

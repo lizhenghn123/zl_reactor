@@ -169,7 +169,7 @@ TimerId EventLoop::addTimer(const TimerCallback& cb, const Timestamp& when)
     return timerQueue_->addTimer(cb, when, 0);
 }
 
-TimerId EventLoop::addTimer(const TimerCallback& cb, double delaySeconds, bool repeat/* = true*/)
+TimerId EventLoop::addTimer(const TimerCallback& cb, double delaySeconds, bool repeat/* = false*/)
 {
     Timestamp when(Timestamp::now());
     when += delaySeconds;
