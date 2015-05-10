@@ -24,7 +24,7 @@ EventLoopThreadPool::~EventLoopThreadPool()
     }
 }
 
-void EventLoopThreadPool::setThreadNum(int numThreads)
+void EventLoopThreadPool::setMultiReactorThreads(int numThreads)
 {
     ZL_ASSERT(numThreads >=0)(numThreads);
     if(numThreads < 0)
@@ -35,8 +35,8 @@ void EventLoopThreadPool::setThreadNum(int numThreads)
 
 void EventLoopThreadPool::start()
 {
-    if(latch_ == NULL)
-        setThreadNum(-1);
+    if(latch_ == NULL || numThreads_ < 0)
+        setMultiReactorThreads(-1);
 
     assert(!started_);
     started_ = true;

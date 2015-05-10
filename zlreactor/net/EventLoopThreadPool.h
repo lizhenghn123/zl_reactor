@@ -35,7 +35,7 @@ public:
 
     std::vector<EventLoop*> getAllLoops() { return loops_; }
 
-    void setThreadNum(int numThreads);
+    void setMultiReactorThreads(int numThreads);
     void start();
     bool isStart() { return started_; }
     EventLoop* getNextLoop();

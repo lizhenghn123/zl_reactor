@@ -39,7 +39,7 @@ EchoServer::EchoServer(EventLoop* loop, const InetAddress& listenAddr)
 
 void EchoServer::start()
 {
-    server_.setThreadNum(4);
+    server_.setMultiReactorThreads(4);
     server_.start();
 }
 
