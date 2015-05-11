@@ -36,7 +36,7 @@ void EventLoopThreadPool::setMultiReactorThreads(int numThreads)
 void EventLoopThreadPool::start()
 {
     if(latch_ == NULL || numThreads_ < 0)
-        setMultiReactorThreads(-1);
+        setMultiReactorThreads(0);
 
     assert(!started_);
     started_ = true;
