@@ -4,6 +4,7 @@
 #include "net/TcpConnection.h"
 #include "net/TcpConnector.h"
 #include "net/SocketUtil.h"
+#include "base/ZLog.h"
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 
@@ -63,6 +64,7 @@ void TcpClient::stop()
 
 void TcpClient::newConnection(int sockfd)
 {
+    LOG_INFO("TcpClient::newConnection [%d]", sockfd);
     loop_->assertInLoopThread();
     InetAddress peerAddr(SocketUtil::getPeerAddr(sockfd));
     InetAddress localAddr(SocketUtil::getLocalAddr(sockfd));

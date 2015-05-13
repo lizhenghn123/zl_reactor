@@ -17,3 +17,5 @@ SUBDIRS                += test_httpserver
 SUBDIRS                += maxconnection
 
 SUBDIRS                += idleconnection
+
+SUBDIRS                += echo

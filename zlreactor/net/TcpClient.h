@@ -17,6 +17,7 @@
 #include "net/CallBacks.h"
 #include "net/InetAddress.h"
 #include "base/NonCopy.h"
+#include "TcpConnection.h"
 using zl::base::Timestamp;
 using zl::thread::Mutex;
 
@@ -36,6 +37,11 @@ public:
 
 public:
     EventLoop* getLoop() const { return loop_; }
+    ZL_SOCKET fd() const
+    {
+        assert(connection_);
+        return connection_->fd();
+    }
 
     void setConnectionCallback(const ConnectionCallback& cb)
     { connectionCallback_ = cb; }

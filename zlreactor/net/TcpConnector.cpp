@@ -89,6 +89,7 @@ void TcpConnector::connectEstablished(ZL_SOCKET sock)
     TcpConnector_channel_->setErrorCallback(std::bind(&TcpConnector::handleError, this));
 
     TcpConnector_channel_->enableWriting();
+    LOG_INFO("TcpConnector::connectEstablished : [%d]", sock);
 }
 
 void TcpConnector::stop()
@@ -119,6 +120,7 @@ ZL_SOCKET TcpConnector::disableChannel()
 //连接远端socket成功
 void TcpConnector::handleWrite()
 {
+    LOG_INFO("TcpConnector::handleWrite : [%d]", TcpConnector_channel_->fd());
     if (state_ == kConnecting) //连接建立时注册Channel可写事件，此时响应可写，将socket返回，并禁用Channel
     {
         ZL_SOCKET sockfd = disableChannel();
