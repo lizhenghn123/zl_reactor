@@ -7,7 +7,7 @@ NAMESPACE_ZL_NET_START
 TcpConnector::TcpConnector(EventLoop *loop, const InetAddress& serverAddr)
     : state_(kDisconnected), connect_(false), 
       loop_(loop), serverAddr_(serverAddr),
-      TcpConnector_channel_(NULL)
+      connChannel_(NULL)
 {
 
 }
@@ -80,15 +80,15 @@ void TcpConnector::connectEstablished(ZL_SOCKET sock)
 {
     LOG_INFO("TcpConnector::connectEstablished : [%d]", sock);
     setState(kConnecting);
-    // assert(!TcpConnector_channel_);
-    if(TcpConnector_channel_)
-        delete TcpConnector_channel_;
-    TcpConnector_channel_ = new Channel(loop_, sock);
+    // assert(!connChannel_);
+    if(connChannel_)
+        delete connChannel_;
 
-    TcpConnector_channel_->setWriteCallback(std::bind(&TcpConnector::handleWrite, this));
-    TcpConnector_channel_->setErrorCallback(std::bind(&TcpConnector::handleError, this));
+    connChannel_ = new Channel(loop_, sock);
+    connChannel_->setWriteCallback(std::bind(&TcpConnector::handleWrite, this));
+    connChannel_->setErrorCallback(std::bind(&TcpConnector::handleError, this));
 
-    TcpConnector_channel_->enableWriting();
+    connChannel_->enableWriting();
     LOG_INFO("TcpConnector::connectEstablished : [%d]", sock);
 }
 
@@ -111,16 +111,16 @@ void TcpConnector::stopInLoop()
 
 ZL_SOCKET TcpConnector::disableChannel()
 {
-    TcpConnector_channel_->disableAll();   // 从poller中移除，不再关注任何事件
-    TcpConnector_channel_->remove();
-    ZL_SOCKET sockfd = TcpConnector_channel_->fd();
+    connChannel_->disableAll();   // 从poller中移除，不再关注任何事件
+    connChannel_->remove();
+    ZL_SOCKET sockfd = connChannel_->fd();
     return sockfd;
 }
 
 //连接远端socket成功
 void TcpConnector::handleWrite()
 {
-    LOG_INFO("TcpConnector::handleWrite : [%d]", TcpConnector_channel_->fd());
+    LOG_INFO("TcpConnector::handleWrite : [%d]", connChannel_->fd());
     if (state_ == kConnecting) //连接建立时注册Channel可写事件，此时响应可写，将socket返回，并禁用Channel
     {
         ZL_SOCKET sockfd = disableChannel();
@@ -156,7 +156,7 @@ void TcpConnector::handleWrite()
 
 void TcpConnector::handleError()
 {
-    LOG_ERROR("TcpConnector::handleError(): fd = [%d], state = [%d]", TcpConnector_channel_->fd(), state_);
+    LOG_ERROR("TcpConnector::handleError(): fd = [%d], state = [%d]", connChannel_->fd(), state_);
     if (state_ == kConnecting)
     {
         ZL_SOCKET sockfd = disableChannel();
