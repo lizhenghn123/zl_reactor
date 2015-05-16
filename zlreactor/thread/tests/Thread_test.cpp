@@ -264,45 +264,6 @@ namespace threadpool_usage
     }
 }
 
-namespace thread_tls
-{
-    class TestTLS
-    {
-    public:
-        TestTLS() 
-        {
-            num = -1; 
-            cout << "TestTLS : [" << this << "] " << num << "\n"; 
-        }
-        ~TestTLS()
-        {
-            cout << "~TestTLS : [" << this << "] " << num << "\n"; 
-        }
-        void set(int n)      { num = n; }
-        void plus(int n)     { num +=n; }
-        void print() { cout << "plus : [" << this << "] " << num << "\n"; }
-    private:
-        int num;
-    };
-
-    ThreadLocal<TestTLS> g_tls;
-
-    void testTLS()
-    {
-        g_tls->plus(100);
-        g_tls->print();
-    }
-    void test_threadtls()
-    {
-        g_tls->set(10);
-        g_tls->print();
-
-        Thread t1(testTLS);
-        t1.join();
-
-        g_tls->print();
-    }
-}
 int main()
 {
     cout << "test_threadusage1------------------------------\n";
@@ -314,9 +275,6 @@ int main()
     cout << "test_threadpoll------------------------------\n";
   //  threadpool_usage::test_threadpoll();
 
-    cout << "test_threadtls------------------------------\n";
-   // thread_tls::test_threadtls();
-    
     getchar();
     return 0;
 }

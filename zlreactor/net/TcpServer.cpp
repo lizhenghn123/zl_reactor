@@ -33,11 +33,11 @@ TcpServer::~TcpServer()
     }
 }
 
-void TcpServer::setThreadNum(size_t numThreads)
+void TcpServer::setMultiReactorThreads(size_t numThreads)
 {
-    if(numThreads <= 0)
+    if(numThreads < 0)
         numThreads = zl::thread::Thread::hardware_concurrency();
-    evloopThreadPool_->setThreadNum(numThreads);
+    evloopThreadPool_->setMultiReactorThreads(numThreads);
 }
 
 void TcpServer::start()

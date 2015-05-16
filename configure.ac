@@ -72,10 +72,11 @@ AC_CONFIG_FILES([Makefile
                 examples/reader_writer/Makefile
                 examples/simpleServers/Makefile
                 examples/maxconnection/Makefile
+                examples/idleconnection/Makefile
                 examples/roundtriptime/Makefile
-                examples/test_tcpclient/Makefile
                 examples/twisted_finger/Makefile
                 examples/test_httpserver/Makefile
+                examples/echo/Makefile
                 tests/Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile

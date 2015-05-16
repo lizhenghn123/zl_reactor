@@ -62,7 +62,7 @@ private:
     bool                       connect_;
     EventLoop                  *loop_;
     const InetAddress&         serverAddr_;
-    Channel                    *TcpConnector_channel_;
+    Channel                    *connChannel_;
     NewConnectionCallback      newConnCallBack_;
 };
 

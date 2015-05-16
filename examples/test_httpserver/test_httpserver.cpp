@@ -74,7 +74,7 @@ int main()
 {
     EventLoop loop;
     HttpServer server(&loop, InetAddress("192.168.14.6", 8888), "myHttpServer");
-    server.setThreadNum(2);
+    server.setMultiReactorThreads(2);
     server.setRootDir("webs");
     server.setDefaultPage("index.html");
 

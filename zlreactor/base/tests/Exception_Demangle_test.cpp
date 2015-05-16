@@ -84,17 +84,17 @@ void test_demangle()
 
 class Bar
 {
- public:
-  void test()
-  {
-    throw Exception("oops");
-  }
+public:
+	void test()
+	{
+		throw Exception("oops");
+	}
 };
 
 void foo()
 {
-  Bar b;
-  b.test();
+	Bar b;
+	b.test();
 }
 
 void test_exception()
@@ -107,15 +107,16 @@ void test_exception()
     {
     	std::cout << e.what() << "\n" << e.stack_trace() << "\n-------------\n";
     }
-   try
-  {
-    foo();
-  }
-  catch (const Exception& ex)
-  {
-    printf("reason: %s\n", ex.what());
-    printf("stack trace: %s\n", ex.stack_trace());
-  }
+	
+	try
+	{
+		foo();
+	}
+	catch (const Exception& ex)
+	{
+		printf("reason: %s\n", ex.what());
+		printf("stack trace: %s\n", ex.stack_trace());
+	}
 }
 
 int main(void)

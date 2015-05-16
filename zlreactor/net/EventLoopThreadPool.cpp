@@ -24,9 +24,10 @@ EventLoopThreadPool::~EventLoopThreadPool()
     }
 }
 
-void EventLoopThreadPool::setThreadNum(int numThreads)
+void EventLoopThreadPool::setMultiReactorThreads(int numThreads)
 {
-    if(numThreads <= 0)
+    ZL_ASSERT(numThreads >=0)(numThreads);
+    if(numThreads < 0)
         numThreads = zl::thread::Thread::hardware_concurrency();
     numThreads_ = numThreads;
     latch_ = new zl::thread::CountDownLatch(numThreads_);
@@ -34,8 +35,8 @@ void EventLoopThreadPool::setThreadNum(int numThreads)
 
 void EventLoopThreadPool::start()
 {
-    if(latch_ == NULL)
-        setThreadNum(-1);
+    if(latch_ == NULL || numThreads_ < 0)
+        setMultiReactorThreads(0);
 
     assert(!started_);
     started_ = true;
@@ -49,7 +50,7 @@ void EventLoopThreadPool::start()
         threads_.push_back(thread);
     }
     latch_->wait();
-    //LOG_INFO("EventLoopThreadPool[%0x]::runInLoop [%d]", this, zl::thread::this_thread::get_id().pid());
+    LOG_INFO("EventLoopThreadPool[%0x]::started [%ld][%d]", this, zl::thread::this_thread::get_id().tid(), numThreads_);
 }
 
 void EventLoopThreadPool::runLoop()
@@ -62,7 +63,7 @@ void EventLoopThreadPool::runLoop()
     }
     //zl::thread::this_thread::sleep_for(zl::thread::chrono::seconds(2));
     latch_->countDown();
-    //LOG_INFO("EventLoopThreadPool countDown [%0x]::runInLoop [%d]", this, zl::thread::this_thread::get_id().pid());
+    LOG_INFO("EventLoopThreadPool countDown [%0x]::runInLoop [%ld]", this, zl::thread::this_thread::get_id().tid());
     this_loop.loop();
 }
 

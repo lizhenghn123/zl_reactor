@@ -32,7 +32,7 @@ public:
     TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::string& server_name = "TcpServer");
     virtual ~TcpServer();
 
-    void setThreadNum(size_t numThreads);
+    void setMultiReactorThreads(size_t numThreads);
     void start();
 
 public:
