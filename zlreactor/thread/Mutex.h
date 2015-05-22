@@ -57,6 +57,34 @@ public:
     }
 };
 
+class SpinMutex
+{
+public:
+    SpinMutex()
+    {
+        lock_ = 0;
+    }
+
+    ~SpinMutex()
+    {
+    } 
+
+    void lock()
+    {
+        while(__sync_lock_test_and_set(&lock_, 1))
+        {
+        }
+    }
+
+    void unlock()
+    {
+        __sync_lock_release(&lock_);
+    }
+
+private:
+    volatile int lock_;
+};
+
 class Mutex
 {
     DISALLOW_COPY_AND_ASSIGN(Mutex);
