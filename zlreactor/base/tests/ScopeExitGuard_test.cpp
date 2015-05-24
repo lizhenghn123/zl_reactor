@@ -1,5 +1,4 @@
 #include <iostream>
-#include <Windows.h>
 #include <assert.h>
 #include "base/ScopeExitGuard.h"
 using namespace std;
@@ -74,12 +73,12 @@ void test_scopeexitguard()
         //std::function<void ()> func =std::bind(fclose, file);   // error
         //std::function<void()> func = [&] { fclose(file); };     // ok
         FILE *file = fopen("f.log", "w");
-        ScopeExitGuard<> seg([&] { fclose(file); });
+        ScopeExitGuard seg([&] { fclose(file); });
         fwrite("123", 1, 3, file);
     }
     {
         int *p = new int;
-        ScopeExitGuard<> seg([&] { delete p; p = NULL; });
+        ScopeExitGuard seg([&] { delete p; p = NULL; });
         *p = 5;
     }
     {
@@ -99,14 +98,13 @@ void test_scopeexitguard()
         int *p3 = new int(33333);
         {
             std::function<int(int*,int)> hhhh = std::bind(deletep3, p3, *p3);
-            ScopeExitGuard< std::function<int(int*,int)> > seg(std::bind(deletep3, p3, *p3));
             auto scope = makeScopeExitGuard(std::bind(deletep3, p3, *p3));
         }
     }
     {
         test *p = new test;
         //ON_SCOPE_EXIT([&] { delete p; p = NULL; });
-        ScopeExitGuard<> seg(std::bind(safe_delete, p));
+        ScopeExitGuard seg(std::bind(safe_delete, p));
         p->process(true);
         throw;
     }
@@ -118,7 +116,7 @@ void test_rollback()
     while(1)
     {
         test t;
-        ScopeExitGuard<> onFailureRollback([&] { t.reset(); });
+        ScopeExitGuard onFailureRollback([&] { t.reset(); });
         if(t.process(false) == false) // fail
             break;
         onFailureRollback.dismiss();
@@ -128,7 +126,7 @@ void test_rollback()
     while(1)
     {
         test t;
-        ScopeExitGuard<> onFailureRollback([&] { t.reset(); });
+        ScopeExitGuard onFailureRollback([&] { t.reset(); });
         if(t.process(true) == false) // fail
             break;
         onFailureRollback.dismiss();
