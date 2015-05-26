@@ -17,3 +17,5 @@ SUBDIRS                += maxconnection
 SUBDIRS                += idleconnection
 
 SUBDIRS                += echo
+
+SUBDIRS                += thread_bench 
