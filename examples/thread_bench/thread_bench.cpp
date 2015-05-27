@@ -34,7 +34,7 @@ void thread_bench(int thread_num)
         //trd.detach();
     }    
     Timestamp end = Timestamp::now();
-    printf("create %d threads costs %f us\n", thread_num, Timestamp::timediff(end, start));
+    printf("create %d threads costs %f us\n", thread_num, Timestamp::timeDiff(end, start));
 }
 
 void process_bench(int process_num)
@@ -53,7 +53,7 @@ void process_bench(int process_num)
         }
     }    
     Timestamp end = Timestamp::now();
-    printf("create %d process costs %f us\n", process_num, Timestamp::timediff(end, start));
+    printf("create %d process costs %f us\n", process_num, Timestamp::timeDiff(end, start));
     
 }
 

@@ -31,7 +31,7 @@ void test_bench1()
 	
 	printf("%s\n", stamps.front().toString().c_str());
 	printf("%s\n", stamps.back().toString().c_str());
-	printf("elapsed %f s\n", Timestamp::timediff(stamps.back(), stamps.front()));
+	printf("elapsed %f s\n", Timestamp::timeDiff(stamps.back(), stamps.front()));
 
 	int increments[100] = { 0 };
 	int64_t start = stamps.front().microSeconds();

@@ -69,7 +69,7 @@ void EventLoop::loop()
         if(nextExpired.valid())
         {
             
-            double seconds = Timestamp::timediff(nextExpired, now);
+            double seconds = Timestamp::timeDiff(nextExpired, now);
             LOG_INFO("nextExpired.valid() [%s][%s][%lf]", nextExpired.toString().c_str(), now.toString().c_str(), seconds);
             if(seconds <= 0)
                 timeoutMs = 0;
