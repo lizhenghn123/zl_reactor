@@ -31,15 +31,10 @@ struct ThreadImplDataInfo
             // Uncaught exceptions will terminate the application (default behavior according to C++11)
             std::terminate();
         }
+
         // The thread is no longer executing
-        if(thread_->notAThread == false)     // this thread is alive now, set no-alive
-        {
-            LockGuard<Mutex> lock(thread_->threadMutex_);
-            thread_->notAThread = true;
-        }
-        else              // this thread is detached 
-        {
-        }
+        LockGuard<Mutex> lock(thread_->threadMutex_);
+        thread_->notAThread = true;
     }
 };
 
@@ -58,7 +53,10 @@ void *StartThread(void *aArg)
 Thread::Thread(const ThreadFunc& func, const std::string& name/* = unknown*/)
     : threadId_(0), threadFunc_(func), threadName_(name), notAThread(true)
 {
+    LockGuard<Mutex> lock(threadMutex_);
+
     ThreadImplDataInfo *data = new ThreadImplDataInfo(threadFunc_, this, threadId_);
+
     // Create the thread
 #if defined(OS_WINDOWS)
     threadId_ = (HANDLE) _beginthreadex(0, 0, StartThread, (void *)data, 0, &win32ThreadID_);

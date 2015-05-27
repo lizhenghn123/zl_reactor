@@ -207,7 +207,7 @@ struct ChargenProtocolServer
     void printThroughput()
     {
         Timestamp endTime = Timestamp::now();
-        double time = Timestamp::timediff(endTime, startTime_);
+        double time = Timestamp::timeDiff(endTime, startTime_);
         printf("%4.3f MiB/s\n", static_cast<double>(transferred_)/time/1024/1024);
         transferred_ = 0;
         startTime_ = endTime;

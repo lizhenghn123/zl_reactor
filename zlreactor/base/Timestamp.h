@@ -31,14 +31,17 @@ public:
     static Timestamp now();
     static Timestamp invalid();
 
-    static double  timediff(const Timestamp& lhs, const Timestamp& rhs)
+    /// return seconds
+    static double  timeDiff(const Timestamp& end, const Timestamp& start)
     {
-         int64_t delta = lhs.microSeconds() - rhs.microSeconds();
+         int64_t delta = end.microSeconds() - start.microSeconds();
          return ZL_TIME_SEC(delta * 1.0);
     }
-    static int64_t  timediffMs(const Timestamp& lhs, const Timestamp& rhs)
+
+    /// return millseconds
+    static int64_t  timeDiffMs(const Timestamp& end, const Timestamp& start)
     {
-        int64_t delta = lhs.microSeconds() - rhs.microSeconds();
+        int64_t delta = end.microSeconds() - start.microSeconds();
         return (delta / 1000);
     }
 
@@ -108,9 +111,9 @@ inline Timestamp operator+=(Timestamp& lhs, double seconds)
     return lhs = lhs + seconds;
 }
 
-inline int64_t operator-(const Timestamp& lhs, const Timestamp& rhs)
+inline int64_t operator-(const Timestamp& end, const Timestamp& start)
 { 
-    return Timestamp::timediffMs(lhs, rhs);
+    return Timestamp::timeDiff(end, start);
 }
 
 inline Timestamp operator-(const Timestamp& lhs, double seconds)

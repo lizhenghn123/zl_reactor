@@ -70,7 +70,7 @@ void TimerQueue::deleteTimerWithHold(Timer * timer)
 uint64_t howMuchTimeFromNow(Timestamp when)
 {
     Timestamp now(Timestamp::now());
-    return Timestamp::timediff(when, now) * 100000;
+    return Timestamp::timeDiff(when, now) * 100000;
 }
 
 /*定时器延迟时间线程*/

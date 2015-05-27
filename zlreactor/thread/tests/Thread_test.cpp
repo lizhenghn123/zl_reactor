@@ -267,7 +267,7 @@ namespace threadpool_usage
 int main()
 {
     cout << "test_threadusage1------------------------------\n";
-    //thread_usage1::test_threadusage();
+    thread_usage1::test_threadusage();
 
     cout << "test_threadusage2------------------------------\n";
     thread_usage2::test_threadusage();
@@ -275,6 +275,8 @@ int main()
     cout << "test_threadpoll------------------------------\n";
   //  threadpool_usage::test_threadpoll();
 
+    printf("###### GAME OVER ######\n");
+    printf("wait all threads terminate, please input any thing to exit....");
     getchar();
     return 0;
 }

@@ -135,7 +135,7 @@ namespace ProcessUtil
 
     int64_t elapsedTime()
     {
-        return Timestamp::timediffMs(Timestamp::now(), g_startTime);
+        return Timestamp::timeDiffMs(Timestamp::now(), g_startTime);
     }
 
     int clockTicksPerSecond()

@@ -2,7 +2,7 @@
 
 bin_PROGRAMS = Timer_test NetBuffer_test DomainResolver_test HttpRequestParser_test \
                Eventfd_test Timerfd_test Signalfd_test \
-			   TcpClient_test EventLoop_test EventLoopThreadPool_test 
+			   TcpAcceptor_test TcpClient_test EventLoop_test EventLoopThreadPool_test 
 
 INCLUDES = -I../../../zlreactor
 CPPFLAGS = -std=c++0x
@@ -28,7 +28,10 @@ Eventfd_test_SOURCES   = Eventfd_test.cpp
 Timerfd_test_SOURCES   = Timerfd_test.cpp
 Signalfd_test_SOURCES  = Signalfd_test.cpp
 
+TcpAcceptor_test_SOURCES = TcpAcceptor_test.cpp
+
 TcpClient_test_SOURCES  = TcpClient_test.cpp
 
 EventLoop_test_SOURCES  = EventLoop_test.cpp
+
 EventLoopThreadPool_test_SOURCES = EventLoopThreadPool_test.cpp

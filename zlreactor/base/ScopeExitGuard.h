@@ -15,7 +15,6 @@
 
 #define SCOPEGUARD_LINENAME_CAT(name, line) name##line
 #define SCOPEGUARD_LINENAME(name, line)     SCOPEGUARD_LINENAME_CAT(name, line)
-
 #define ON_SCOPE_EXIT(callback) zl::base::ScopeExitGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)(callback)
 
 namespace zl
@@ -28,6 +27,12 @@ class ScopeExitGuard
 public:
     explicit ScopeExitGuard(std::function<void ()> onExitCallback)
         : onExitCb_(onExitCallback), dismissed_(false)
+    {
+    }
+
+    ScopeExitGuard(ScopeExitGuard&& rhs)
+        : onExitCb_(std::move(rhs.onExitCb_))
+        , dismissed_(rhs.dismissed_)
     {
     }
 
@@ -52,6 +57,12 @@ private:
     ScopeExitGuard(ScopeExitGuard const&);
     ScopeExitGuard& operator=(ScopeExitGuard const&);
 };
+
+template <typename F>
+ScopeExitGuard makeScopeExitGuard(F&& f)
+{
+    return ScopeExitGuard(std::forward<F>(f));
+}
 
 }
 }

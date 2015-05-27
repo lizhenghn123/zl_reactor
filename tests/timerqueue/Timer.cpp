@@ -35,7 +35,7 @@ void Timer::wait()
         return ;
     Timestamp now = Timestamp::now();
 
-    int64_t milliseconds = static_cast<int64_t>(Timestamp::timediff(when_, now) * 1000);
+    int64_t milliseconds = static_cast<int64_t>(Timestamp::timeDiff(when_, now) * 1000);
     zl::thread::this_thread::sleep_for(zl::thread::chrono::milliseconds(milliseconds));
 }
 
@@ -76,13 +76,13 @@ Timestamp Timer::expires_from_now(size_t millsec_time)
 size_t Timer::expires_from_now() const
 {
      Timestamp now = Timestamp::now();
-     return Timestamp::timediff(when_, now);
+     return Timestamp::timeDiff(when_, now);
 }
 
 size_t Timer::cancel()
 {
     timerQueue_->deleteTimer(this);
-    return Timestamp::timediff(when_, Timestamp::now());
+    return Timestamp::timeDiff(when_, Timestamp::now());
 }
 
 NAMESPACE_ZL_NET_END
