@@ -7,7 +7,7 @@
 #include <uuid/uuid.h>  // need -luuid
 #endif
 
-NAMESPACE_ZL_BASE_START
+NAMESPACE_ZL_UTIL_START
 
 std::string createUuid()
 {
@@ -37,5 +37,5 @@ std::string createUuid()
     return buf;
 }
 
-NAMESPACE_ZL_BASE_END
+NAMESPACE_ZL_UTIL_END
 #endif  /* ZL_UUID_H */

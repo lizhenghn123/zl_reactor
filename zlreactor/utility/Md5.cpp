@@ -32,7 +32,7 @@ documentation and/or software.
 #include "utility/Md5.h"
 #include <stdio.h>
 #include <string.h>
-NAMESPACE_ZL_BASE_START
+NAMESPACE_ZL_UTIL_START
 
 // Constants for MD5Transform routine.
 #define S11 7
@@ -366,4 +366,4 @@ std::ostream& operator<<(std::ostream& out, MD5 md5)
 }
 //////////////////////////////
 
-NAMESPACE_ZL_BASE_END
+NAMESPACE_ZL_UTIL_END

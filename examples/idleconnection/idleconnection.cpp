@@ -122,7 +122,7 @@ void EchoServer::onTimer()
 		if (conn)
 		{
 			Node node = iterMap_[conn.get()];
-			int64_t timeMs = now - node.lastReceiveTime_;  // millseconds
+            int64_t timeMs = Timestamp::timeDiffMs(now, node.lastReceiveTime_);  // mill seconds
 			if (timeMs > maxIdleMillSeconds_)
 			{
 				if (conn->connected())

@@ -1,5 +1,5 @@
 #ifndef JENKINS_HASH_H
-#define    JENKINS_HASH_H
+#define JENKINS_HASH_H
 
 #ifdef    __cplusplus
 extern "C" {

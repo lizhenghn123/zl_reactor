@@ -116,8 +116,8 @@ public:
                 return false;
             }
 
-            double eplase_seconds = Timestamp::timeDiff(Timestamp::now(), now);
-            timeoutMs -= static_cast<int>(eplase_seconds * 1000);
+            int64_t ms = Timestamp::timeDiffMs(Timestamp::now(), now);
+            timeoutMs -= ms;
             if(timeoutMs <= 0)
             {
                 return false;

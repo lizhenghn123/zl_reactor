@@ -130,7 +130,7 @@ void test_bench3(int flag = 0)
 {
 	const static int max_count = 1000 * 10;
 	const static int max_loop  = 100;
-	vector<int> times;
+	vector<int64_t> times;
 	times.reserve(max_loop);
 	
 	Timestamp now(Timestamp::now());	
@@ -168,7 +168,7 @@ void test_bench3(int flag = 0)
 	for(int i = 0 ; i < max_loop; i++)
 	{
 		sum += times[i];
-		printf("%ld ", times[i]);
+		printf(PRId64" ", times[i]);
 	}
 	printf("\naverage : %f\n", sum * 1.0 / max_loop);
 }
