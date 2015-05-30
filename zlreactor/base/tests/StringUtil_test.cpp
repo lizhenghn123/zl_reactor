@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <list>
 #include <iterator>
+#include <string.h>
 #include "base/StringUtil.h"
 using namespace std;
 
@@ -41,6 +43,11 @@ int main()
     std::copy(vec.begin(), vec.end(), std::ostream_iterator<string>(std::cout, "*"));
     cout << "\n";
 
+    cout << zl::base::join(vec, "##") << "\n";
+
+    list<string> ls={"hello", "world", "github"};
+    cout << zl::base::join(ls, "-") << "\n";
+
     string s;
     zl::base::stringFormat(&s, "%d-%s-%f", 1234, "hello", "43.21");
     cout << s << "\n";
@@ -48,9 +55,10 @@ int main()
     s = zl::base::stringFormat("%s-%d\n", "world", 33);
     cout << s ;
 
-    char data[2000];
-    for(int i=0; i<2000; i++)
-        data[i] = i % 255 + 1;
+    char data[20];
+    ::memset(data, 0, 20);
+    for(int i=0; i<20; i++)
+        data[i] = i % 200 + 1;
     s = zl::base::stringFormat("%s", data);
     cout << s << "\n";
 
