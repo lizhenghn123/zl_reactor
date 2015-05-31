@@ -46,15 +46,6 @@ public:
     void unlock()
     {
     }
-
-#ifdef	OS_WINDOWS
-    CRITICAL_SECTION* getMutex()
-#elif defined(OS_LINUX)
-    pthread_mutex_t* getMutex()
-#endif
-    {
-        return NULL;
-    }
 };
 
 class SpinMutex
