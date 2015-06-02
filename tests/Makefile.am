@@ -25,3 +25,5 @@ SUBDIRS                += master_worker_process
 SUBDIRS                += socketAcceptThunderingHerd
 
 SUBDIRS                += bind_tcp_udp
+
+SUBDIRS                += backtrace_test

@@ -91,6 +91,7 @@ AC_CONFIG_FILES([Makefile
                 tests/master_worker_process/Makefile
                 tests/socketAcceptThunderingHerd/Makefile
                 tests/bind_tcp_udp/Makefile
+                tests/backtrace_test/Makefile
                ])
 
 AC_OUTPUT
