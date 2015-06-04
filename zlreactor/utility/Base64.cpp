@@ -2,30 +2,44 @@
 #include <string.h>
 NAMESPACE_ZL_UTIL_START
 
-static int base64EncodeImpl(const char *src, int len, std::string& dst);
-static int base64DecodeImpl(const char *src, int len, std::string& dst);
+static size_t base64EncodeImpl(const char *src, size_t len, std::string& dst);
+static size_t base64DecodeImpl(const char *src, size_t len, std::string& dst);
 
-static const char base_CODE[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-int base64Encode(const char *src, int len, char *dst)
+size_t base64Encode(const char *src, size_t len, char *dst)
 {
     std::string dest;
     int size = base64EncodeImpl(src, len, dest);
-    ::memcpy(dst, dest.c_str(), size);
+    //strncpy(dst, dest.data(), size);
+    ::memcpy(dst, dest.data(), size);
     return size;
 }
 
-int base64Encode(const char *src, int len, std::string& dst)
+size_t base64Encode(const char *src, size_t len, std::string& dst)
 {
     return base64EncodeImpl(src, len, dst);
 }
 
-int base64Encode(const std::string& src, std::string& dst)
+size_t base64Encode(const std::string& src, std::string& dst)
 {
     return base64EncodeImpl(src.data(), src.size(), dst);
 }
 
-int base64Decode(const char *src, size_t len, char *dst)
+std::string    base64Encode(const char *src, size_t len)
+{
+    std::string dst;
+    base64EncodeImpl(src, len, dst);
+    return dst;
+}
+
+std::string    base64Encode(const std::string& src)
+{
+    std::string dst;
+    base64EncodeImpl(src.data(), src.size(), dst);
+    return dst;
+}
+
+
+size_t base64Decode(const char *src, size_t len, char *dst)
 {
     std::string dest;
     int size = base64DecodeImpl(src, len, dest);
@@ -33,104 +47,119 @@ int base64Decode(const char *src, size_t len, char *dst)
     return size;
 }
 
-int base64Decode(const char *src, int len, std::string& dst)
+size_t base64Decode(const char *src, size_t len, std::string& dst)
 {
     return base64DecodeImpl(src, len, dst);
 }
 
-int base64Decode(const std::string& src, std::string& dst)
+size_t base64Decode(const std::string& src, std::string& dst)
 {
     return base64DecodeImpl(src.data(), src.size(), dst);
 }
 
-
-//计算密文索引
-inline char GetCharIndex(char c)
+std::string    base64Decode(const char *src, size_t len)
 {
-    if((c >= 'A') && (c <= 'Z'))
-        return c - 'A';
-    else if((c >= 'a') && (c <= 'z'))
-        return c - 'a' + 26;
-    else if((c >= '0') && (c <= '9'))
-        return c - '0' + 52;
-    else if(c == '+')
-        return 62;
-    else if(c == '/')
-        return 63;
-    else if(c == '=')
-        return 0;
-
-    return 0;
+    std::string dst;
+    base64DecodeImpl(src, len, dst);
+    return dst;
 }
 
-static int base64EncodeImpl(const char *src, int len, std::string& dst)
+std::string    base64Decode(const std::string& src)
 {
-    dst.resize(len * 2);
-    int idx = 0, dstLen = 0;
+    std::string dst;
+    base64DecodeImpl(src.data(), src.size(), dst);
+    return dst;
+}
 
-    while(len > 0)
+
+static size_t base64EncodeImpl(const char *src, size_t len, std::string& dst)
+{
+    //编码表
+    static const char EncodeTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    unsigned char Tmp[4] = { 0 };
+    int LineLength = 0;
+    for (int i = 0; i<(int)(len / 3); i++)
     {
-        dst[idx++] = base_CODE[(src[0] >> 2) & 0x3F];	//右移两位，与00111111是防止溢出，自加
-        if(len > 2)	//够3个字符
+        Tmp[1] = *src++;
+        Tmp[2] = *src++;
+        Tmp[3] = *src++;
+        dst += EncodeTable[Tmp[1] >> 2];
+        dst += EncodeTable[((Tmp[1] << 4) | (Tmp[2] >> 4)) & 0x3F];
+        dst += EncodeTable[((Tmp[2] << 2) | (Tmp[3] >> 6)) & 0x3F];
+        dst += EncodeTable[Tmp[3] & 0x3F];
+        if (LineLength += 4, LineLength == 76) { dst += "\r\n"; LineLength = 0; }
+    }
+    //对剩余数据进行编码
+    int Mod = len % 3;
+    if (Mod == 1)
+    {
+        Tmp[1] = *src++;
+        dst += EncodeTable[(Tmp[1] & 0xFC) >> 2];
+        dst += EncodeTable[((Tmp[1] & 0x03) << 4)];
+        dst += "==";
+    }
+    else if (Mod == 2)
+    {
+        Tmp[1] = *src++;
+        Tmp[2] = *src++;
+        dst += EncodeTable[(Tmp[1] & 0xFC) >> 2];
+        dst += EncodeTable[((Tmp[1] & 0x03) << 4) | ((Tmp[2] & 0xF0) >> 4)];
+        dst += EncodeTable[((Tmp[2] & 0x0F) << 2)];
+        dst += "=";
+    }
+
+    return dst.size();
+}
+
+static size_t base64DecodeImpl(const char *src, size_t len, std::string& dst)
+{
+    //解码表
+    static const char DecodeTable[] =
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        62, // '+'
+        0, 0, 0,
+        63, // '/'
+        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, // '0'-'9'
+        0, 0, 0, 0, 0, 0, 0,
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+        13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, // 'A'-'Z'
+        0, 0, 0, 0, 0, 0,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+        39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, // 'a'-'z'
+    };
+
+    int nValue = 0;
+    size_t i = 0;
+    while (i < len)
+    {
+        if (*src != '\r' && *src != '\n')
         {
-            dst[idx++] = base_CODE[((src[0] & 3) << 4) | (src[1] >> 4)];
-            dst[idx++] = base_CODE[((src[1] & 0xF) << 2) | (src[2] >> 6)];
-            dst[idx++] = base_CODE[src[2] & 0x3F];
-        }
-        else
-        {
-            switch(len)	//追加“=”
+            nValue = DecodeTable[*src++] << 18;
+            nValue += DecodeTable[*src++] << 12;
+            dst += (nValue & 0x00FF0000) >> 16;
+            if (*src != '=')
             {
-                case 1:
-                    dst[idx++] = base_CODE[(src[0] & 3) << 4 ];
-                    dst[idx++] = '=';
-                    dst[idx++] = '=';
-                    break;
-                case 2:
-                    dst[idx++] = base_CODE[((src[0] & 3) << 4) | (src[1] >> 4)];
-                    dst[idx++] = base_CODE[((src[1] & 0x0F) << 2) | (src[2] >> 6)];
-                    dst[idx++] = '=';
-                    break;
+                nValue += DecodeTable[*src++] << 6;
+                dst += (nValue & 0x0000FF00) >> 8;
+                if (*src != '=')
+                {
+                    nValue += DecodeTable[*src++];
+                    dst += nValue & 0x000000FF;
+                }
             }
+            i += 4;
         }
-
-        src += 3;
-        len -= 3;
-        dstLen += 4;
-    }
-    dst[idx++] = 0;
-    return dstLen;
-}
-
-static int base64DecodeImpl(const char *src, int len, std::string& dst)
-{
-    int vLen = 0;
-    if(len % 4)		//base64编码长度必定是4的倍数，包括'='
-    {
-        dst[0] = '\0';
-        return -1;
+        else   // 回车换行,跳过
+        {
+            src++;
+            i++;
+        }
     }
 
-    dst.resize(len);
-    int idx = 0;
-    char lpCode[4];
-    while(len > 2)		//不足三个字符，忽略
-    {
-        lpCode[0] = GetCharIndex(src[0]);
-        lpCode[1] = GetCharIndex(src[1]);
-        lpCode[2] = GetCharIndex(src[2]);
-        lpCode[3] = GetCharIndex(src[3]);
-
-        dst[idx++] = (lpCode[0] << 2) | (lpCode[1] >> 4);
-        dst[idx++] = (lpCode[1] << 4) | (lpCode[2] >> 2);
-        dst[idx++] = (lpCode[2] << 6) | (lpCode[3]);
-
-        src += 4;
-        len -= 4;
-        vLen += 3;
-    }
-
-    return vLen;
+    return dst.size();
 }
 
 NAMESPACE_ZL_UTIL_END
