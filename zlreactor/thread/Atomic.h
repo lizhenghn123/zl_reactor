@@ -2,28 +2,18 @@
 // Filename         : Atomic.h
 // Author           : LIZHENG
 // Created          : 2014-08-21
-// Description      : 原子操作计数器, 不建议在Windows平台下使用（未测试）
+// Description      : 原子操作计数器,
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 2014-08-21
+// Last Modified On : 2015-05-31
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_ATOMIC_H
 #define ZL_ATOMIC_H
 #include "Define.h"
-#include "thread/Mutex.h"
 #ifdef OS_LINUX
 #include <pthread.h>
-#include <unistd.h>  //for usleep
-#include <assert.h>
-#include <stdlib.h>
-#include <sched.h>
-#include <linux/unistd.h>
-#include <sys/syscall.h>
-#include <linux/types.h>
-#include <sys/time.h>
-
 #define ATOMIC_ADD(ptr, v)            __sync_add_and_fetch(ptr, v)
 #define ATOMIC_SUB(ptr, v)            __sync_sub_and_fetch(ptr, v)
 #define ATOMIC_ADD_AND_FETCH(ptr, v)  __sync_add_and_fetch(ptr, v)
@@ -38,12 +28,12 @@
 #include <Windows.h>
 #define ATOMIC_ADD(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, v)
 #define ATOMIC_SUB(ptr, v)            ::InterlockedExchangeAdd((long*)ptr, -v)
-//#define ATOMIC_ADD_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, v)         /*返回加/减之后的值*/
-//#define ATOMIC_SUB_AND_FETCH(ptr, v)  ::InterlockedExchangeAdd(ptr, -v)
 #define ATOMIC_FETCH_AND_ADD(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, v)    /*返回加/减之前的值（ptr）*/
 #define ATOMIC_FETCH_AND_SUB(ptr, v)  ::InterlockedExchangeAdd((long*)ptr, -v)
+//#define ATOMIC_ADD_AND_FETCH(ptr, v)  ATOMIC_FETCH_AND_ADD(ptr, v) + v
+//#define ATOMIC_SUB_AND_FETCH(ptr, v)  ATOMIC_FETCH_AND_SUB(ptr, -v) - v
 #define ATOMIC_FETCH(ptr)             ::InterlockedExchangeAdd((long*)ptr, 0)
-#define ATOMIC_SET(ptr, v)            ::InterlockedExchange(ptr, *(ptr)) 
+#define ATOMIC_SET(ptr, v)            ::InterlockedExchange((long*)ptr, v) 
 #define ATOMIC_CAS(ptr, cmp, v)       ((cmp) == ::InterlockedCompareExchange(var, *(val), (cmp)))
 #endif
 
@@ -53,98 +43,112 @@ template <typename T>
 class Atomic
 {
 public:
-    typedef  volatile T atomic_t;
-public:
     Atomic()
     {
-    #ifdef OS_LINUX
-        ATOMIC_SET(&atomic_, 0);
-    #else
-        LockGuard<Mutex> lock(mutex_);
-        atomic_ = 0;
-    #endif
+		ATOMIC_SET(&atomic_, 0);
     }
+
 public:
-    inline atomic_t inc(T n = 1)
+    void add(T n = 1)
     {
-        return ATOMIC_ADD(&atomic_, n);
+        ATOMIC_ADD(&atomic_, n);
     }
-    inline atomic_t incAndFetch(T n = 1)
-    {
+
+	T getAndAdd(T n)
+	{
+		return ATOMIC_FETCH_AND_ADD(&atomic_, n);
+	}
+
+	T addAndGet(T n)
+	{
+		//return ATOMIC_FETCH_AND_ADD(&atomic_, n) + n;   // This is OK!
+		//return getAndAdd(n) + n;                        // This is OK!
+	#ifdef OS_LINUX
+		return ATOMIC_ADD_AND_FETCH(&atomic_, n);
+	#else
+		return ATOMIC_FETCH_AND_ADD(&atomic_, n) + n;
+	#endif
+	}
+
+	void sub(T n = 1)
+	{
+		ATOMIC_SUB(&atomic_, n);
+	}
+
+	T getAndSub(T n)
+	{
+		return ATOMIC_FETCH_AND_SUB(&atomic_, n);
+	}
+
+	T subAndGet(T n)
+	{
+		//return ATOMIC_FETCH_AND_SUB(&atomic_, n) - n;   // This is OK!
+		//return getAndSub(n) - n;                        // This is OK!
     #ifdef OS_LINUX
-        return ATOMIC_ADD_AND_FETCH(&atomic_, n);
+		return ATOMIC_SUB_AND_FETCH(&atomic_, n);
     #else
-        LockGuard<Mutex> lock(mutex_);
-        atomic_ += n;
-        return atomic_;
+		return ATOMIC_FETCH_AND_SUB(&atomic_, n) + n;
     #endif
-    }
-    inline atomic_t fetchAndInc(T n = 1)
-    {
-        return ATOMIC_FETCH_AND_ADD(&atomic_, n);
-    }
-    inline atomic_t dec(T n = 1)
-    {
-        return ATOMIC_SUB(&atomic_, n);
-    }
-    inline atomic_t decAndFetch(T n = 1)
-    {
-    #ifdef OS_LINUX
-        return ATOMIC_SUB_AND_FETCH(&atomic_, n);
-    #else
-        LockGuard<Mutex> lock(mutex_);
-        atomic_ -= n;
-        return atomic_;
-    #endif
-    }
-    inline atomic_t fetchAndDec(T n = 1)
-    {
-        return ATOMIC_FETCH_AND_SUB(&atomic_, n);
-    }
-    inline atomic_t value()
+	}
+
+	T increment()
+	{
+		return addAndGet(1);
+	}
+
+	T decrement()
+	{
+		return addAndGet(-1);
+	}
+
+    T value()
     {
         return ATOMIC_FETCH(&atomic_);
-        return ATOMIC_FETCH_AND_ADD(&atomic_, 0);
     }
+
 public:
-    atomic_t operator++()
+    T operator++()
     {
-        return inc(1);
+		return addAndGet(1);
     }
-    atomic_t operator--()
+
+    T operator--()
     {
-        return dec(1);
+        return subAndGet(1);
     }
-    atomic_t operator++(int)
+
+    T operator++(int)
     {
-        return fetchAndInc(1);
+        return getAndAdd(1);
     }
-    atomic_t operator--(int)
+
+    T operator--(int)
     {
-        return fetchAndDec(1);
+        return getAndSub(1);
     }
-    atomic_t operator+=(T num)
+
+    T operator+=(T n)
     {
-        return incAndFetch(num);
+		return addAndGet(n);
     }
-    atomic_t operator-=(T num)
+
+    T operator-=(T num)
     {
-        return decAndFetch(num);
+		return subAndGet(num);
     }
+
     bool operator==(T value)
     {
         return (value() == value);
     }
-    operator atomic_t() const
+
+    operator T()
     {
-        return atomic_;
+		return value();
     }
 
 private:
-    atomic_t atomic_;
-#ifdef OS_WINDOWS
-    Mutex    mutex_;
-#endif
+    volatile T  atomic_;
 };
 
 template<>
@@ -153,79 +157,43 @@ class Atomic<bool>
 public:
     Atomic()
     {
-    #ifdef OS_LINUX
         ATOMIC_SET(&atomic_, 0);
-    #else
-        LockGuard<Mutex> lock(mutex_);
-        atomic_ = 0;
-    #endif
     }
 
     Atomic(bool value)
     {
-    #ifdef OS_LINUX
         ATOMIC_SET(&atomic_, value ? 1 : 0);
-    #else
-        LockGuard<Mutex> lock(mutex_);
-        atomic_ = value;
-    #endif
     }
 
     Atomic& operator=(bool value)
     {
-    #ifdef OS_LINUX
         ATOMIC_SET(&atomic_, value ? 1 : 0);
-    #else
-        LockGuard<Mutex> lock(mutex_);
-        atomic_ = value;
-    #endif
         return *this;
     }
 
     bool clear()     // set false
     {
-    #ifdef OS_LINUX
          return ATOMIC_SET(&atomic_, 0);
-    #else
-         LockGuard<Mutex> lock(mutex_);
-         int oldvalue = atomic_;
-         atomic_ = 0;
-         return oldvalue;
-    #endif
     }
 
     bool test_and_set()  //set true and return old value
     {  
-    #ifdef OS_LINUX
         return ATOMIC_SET(&atomic_, 1);
-    #else
-        LockGuard<Mutex> lock(mutex_);
-        int oldvalue = atomic_;
-        atomic_ = 1;
-        return oldvalue;
-    #endif
     }
 
     operator bool()
     {
-    #ifdef OS_LINUX
         return ATOMIC_FETCH(&atomic_);
-    #else
-        LockGuard<Mutex> lock(mutex_);
-        return atomic_;
-    #endif
     }
 
 private:
     volatile int  atomic_;
-#ifdef OS_WINDOWS
-    Mutex    mutex_;
-#endif
 };
 
 
-typedef Atomic<int>     AtomicInt32;
-typedef Atomic<long>    AtomicInt64;
+typedef Atomic<int32_t>     AtomicInt32;
+typedef Atomic<int64_t>     AtomicInt64;
+typedef Atomic<bool>        AtomicBool;
 
 NAMESPACE_ZL_THREAD_END
 #endif /* ZL_ATOMIC_H */

@@ -213,12 +213,12 @@ private:
     }
 
 protected:
-    bool               stopFlag_;
-    int                maxSize_;
-    mutable MutexType  mutex_;
-    ConditionType      notEmpty_;
-    ConditionType      notFull_;
-    QueueType          queue_;
+    bool                    stopFlag_;
+    int                     maxSize_;
+    mutable MutexType       mutex_;
+    ConditionType           notEmpty_;
+    ConditionType           notFull_;
+    QueueType               queue_;
 };
 
 /* using is not support in VS2010*/

@@ -12,6 +12,39 @@
 #include <errno.h>
 #include <assert.h>
 
+class Fork
+{
+public:
+    Fork() : pid_(::fork())
+    {
+        if (pid_ < 0)
+            throw ;
+    }
+    ~Fork()
+    {
+        if (pid_)
+            wait();
+    }
+
+    pid_t pid() const     { return pid_; }
+    bool parent() const   { return pid_ > 0; }
+    bool child() const    { return !parent(); }
+    void setNowait()      { pid_ = 0; }
+    int wait(int options = 0)
+    {
+        int status;
+        ::waitpid(pid_, &status, options);
+        pid_ = 0;
+        return status;
+    }
+
+private:
+    Fork(const Fork&);
+    Fork& operator= (const Fork&);
+
+    pid_t pid_;
+};
+
 // 一个通用的watcher-woker多进程模型，亦称 prefork模型
 // 
 // see : https://github.com/lighttpd/lighttpd1.4/blob/master/src/server.c

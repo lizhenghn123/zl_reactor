@@ -26,6 +26,10 @@
 #include <functional>
 #include <iterator>
 #include <numeric>
+#include <stdint.h>
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>           // printf("%"PRId64"\n", (int64_t)value);  
+#undef __STDC_FORMAT_MACROS
 #include "OsDefine.h"
 #include "base/SmartAssert.h"
 #ifdef OS_WINDOWS

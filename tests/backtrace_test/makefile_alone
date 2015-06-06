@@ -1,0 +1,12 @@
+CC=g++
+CFLAGS=-g -O0
+LDFLAGS=-rdynamic
+
+backtrace_test:backtrace_test.o
+	$(CC) $(LDFLAGS) -o $@ $^
+
+%.o:%.cpp
+	$(CC) $(CFLAGS) -c -o $@ $^
+
+clean:
+	rm -f backtrace_test *.o

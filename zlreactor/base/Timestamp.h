@@ -38,11 +38,17 @@ public:
          return ZL_TIME_SEC(delta * 1.0);
     }
 
-    /// return millseconds
+    /// return mill seconds
     static int64_t  timeDiffMs(const Timestamp& end, const Timestamp& start)
     {
         int64_t delta = end.microSeconds() - start.microSeconds();
         return (delta / 1000);
+    }
+
+    /// return micro seconds
+    static int64_t  timeDiffUs(const Timestamp& end, const Timestamp& start)
+    {
+        return end.microSeconds() - start.microSeconds();
     }
 
 public:
@@ -95,6 +101,12 @@ inline bool operator==(const Timestamp& lhs, const Timestamp& rhs)
     return lhs.microSeconds() == rhs.microSeconds();
 }
 
+/// return micro seconds
+inline int64_t operator-(const Timestamp& end, const Timestamp& start)
+{ 
+    return end.microSeconds() - start.microSeconds();
+}
+
 inline Timestamp operator+(const Timestamp& lhs, double seconds)
 {
     long delta = seconds * ZL_USEC_PER_SEC;
@@ -109,11 +121,6 @@ inline Timestamp operator+(double seconds, const Timestamp& rhs)
 inline Timestamp operator+=(Timestamp& lhs, double seconds)
 {
     return lhs = lhs + seconds;
-}
-
-inline int64_t operator-(const Timestamp& end, const Timestamp& start)
-{ 
-    return Timestamp::timeDiff(end, start);
 }
 
 inline Timestamp operator-(const Timestamp& lhs, double seconds)

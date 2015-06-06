@@ -34,7 +34,7 @@ public:
     typedef zl::thread::Condition               ConditionType;
 
 public:
-    BlockingQueue() : stopFlag_(false), mutex_(), has_job_(mutex_)
+    BlockingQueue() : stopFlag_(false), mutex_(), hasJob_(mutex_)
     {
 
     }
@@ -49,14 +49,14 @@ public:
     {
         LockGuard lock(mutex_);
         queue_.push(job);
-        has_job_.notify_one();
+        hasJob_.notify_one();
     }
 
     void push(JobType&& job)
     {
         LockGuard lock(mutex_);
         queue_.push(std::move(job));
-        has_job_.notify_one();
+        hasJob_.notify_one();
     }
 
     bool pop(JobType& job)
@@ -64,7 +64,7 @@ public:
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
         {
-            has_job_.wait();
+            hasJob_.wait();
         }
         if(stopFlag_)
         {
@@ -78,7 +78,7 @@ public:
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
         {
-            has_job_.wait();
+            hasJob_.wait();
         }
         if(stopFlag_)
         {
@@ -94,7 +94,7 @@ public:
         LockGuard lock(mutex_);
         while(queue_.empty() && !stopFlag_)
         {
-            has_job_.wait();
+            hasJob_.wait();
         }
         if(stopFlag_)
         {
@@ -127,7 +127,7 @@ public:
     void stop()
     {
         stopFlag_ = true;
-        has_job_.notify_all();
+        hasJob_.notify_all();
     }
 
     size_t size() const
@@ -184,10 +184,10 @@ private:
     }
 
 protected:
-    bool              stopFlag_;
-    mutable MutexType mutex_;
-    ConditionType     has_job_;
-    QueueType         queue_;
+    bool                   stopFlag_;
+    mutable MutexType      mutex_;
+    ConditionType          hasJob_;
+    QueueType              queue_;
 };
 
 /* using is not support in VS2010*/
