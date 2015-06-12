@@ -33,6 +33,7 @@ libzlreactor_la_SOURCES = \
 					 base/Daemonize.cpp \
 					 base/StringUtil.cpp \
 					 base/ProcessUtil.cpp \
+					 base/LogFile.cpp \
 					 utility/StringHash.cpp \
 					 utility/Base64.cpp \
 					 utility/Md5.cpp \

@@ -1,6 +1,8 @@
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include "base/ZLog.h"
+using namespace std;
 using namespace zl::base;
 
 void test_bench()
@@ -23,8 +25,10 @@ void test_bench()
 int main()
 {
     LOG_CONSOLE_OUTPUT(false);
-    LOG_THREAD_SAFE(false);
-
-    test_bench();
+    //    LOG_THREAD_SAFE(false);
+    LOG_NOTICE("2334444");
+    LOG_NOTICE("###############");
+    cout << __FILE__ << "\n";
+    //test_bench();
     return 0;
 }
