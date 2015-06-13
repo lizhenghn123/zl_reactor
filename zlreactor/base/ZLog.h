@@ -65,42 +65,62 @@ enum ZLogMasking
     ZL_LOG_MASKING_ENCRYPTED = 0x02   /**< encrypt private data */
 };
 
-
-bool zl_log_instance_create(ZLogOutput mode = ZL_LOG_OUTPUT_DEFAULT,  ZLogHeader header = ZL_LOG_HEADER_DEFAULT,
-                            ZLogPriority priority = ZL_LOG_PRIO_INFO, ZLogMasking mask = ZL_LOG_MASKING_COMPLETE);
-
-bool zl_log_instance_destroy();
-
-ZLogPriority zl_log_set_priority(ZLogPriority prio);
-
-void zl_log_console_output(bool optval);
-
-void zl_log_disable_all();
-
-void zl_log_thread_safe(bool optval);
-
-bool zl_log(const char *file, int line, ZLogPriority priority, const char *format, ...);
-
 /** Prototype of extended log handler function */
-typedef void(*zl_log_ext_handler_f)(const char* msg, int len);
+typedef void(*log_ext_handler_f)(const char* msg, int len);
 
-void zl_log_set_handler(zl_log_ext_handler_f handler);
+class Logger
+{
+public:
+    Logger();
+    ~Logger();
+
+public:
+    static bool              init(ZLogOutput mode = ZL_LOG_OUTPUT_DEFAULT, ZLogHeader header = ZL_LOG_HEADER_DEFAULT,
+                                  ZLogPriority priority = ZL_LOG_PRIO_INFO, ZLogMasking mask = ZL_LOG_MASKING_COMPLETE);
+
+    static void              setLogHandler(log_ext_handler_f handler);
+    static ZLogPriority      setLogPriority(ZLogPriority prio);
+    static void              setConsoleOutput(bool optval = true);
+    static void              disableLog();
+    static ZLogPriority      logPriority();
+
+    static bool              log(const char *file, int line, ZLogPriority priority, const char *format, ...);
+
+private:
+    static ZLogOutput            mode_;
+    static ZLogPriority          priority_;
+    static ZLogHeader            header_;
+    static ZLogMasking           masking_;
+    static log_ext_handler_f     ext_handler_;
+
+private:
+    Logger(const Logger&);
+    Logger& operator=(const Logger&);
+};
 
 
-#define LOG_SET_PRIORITY(priority)    zl::base::zl_log_set_priority(priority)
-#define LOG_CONSOLE_OUTPUT(optval)    zl::base::zl_log_console_output(optval)
-#define LOG_DISABLE_ALL               zl::base::zl_log_disable_all()
-#define LOG_THREAD_SAFE(optval)       zl::base::zl_log_thread_safe(optval)
+#define LOG_SET_LOGHANDLER(handler)   zl::base::Logger::setLogHandler(handler)
+#define LOG_SET_PRIORITY(priority)    zl::base::Logger::setLogPriority(priority)
+#define LOG_CONSOLE_OUTPUT(optval)    zl::base::Logger::setConsoleOutput(optval)
+#define LOG_DISABLE_ALL               zl::base::Logger::disableLog()
 
-#define LOG_DEBUG(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
-#define LOG_INFO(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
-#define LOG_NOTICE(s, ...)       zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_NOTICE,    s, ##__VA_ARGS__)
-#define LOG_WARN(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_WARNING,   s, ##__VA_ARGS__)
-#define LOG_ERROR(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ERROR,     s, ##__VA_ARGS__)
-#define LOG_CRITICA(s, ...)      zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_CRITICAL,  s, ##__VA_ARGS__)
-#define LOG_ALERT(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
-#define LOG_EMERGENCY(s, ...)    zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
+#define LOG_DEBUG(s, ...)        zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
+#define LOG_INFO(s, ...)         zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
+#define LOG_NOTICE(s, ...)       zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_NOTICE,    s, ##__VA_ARGS__)
+#define LOG_WARN(s, ...)         zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_WARNING,   s, ##__VA_ARGS__)
+#define LOG_ERROR(s, ...)        zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ERROR,     s, ##__VA_ARGS__)
+#define LOG_CRITICA(s, ...)      zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_CRITICAL,  s, ##__VA_ARGS__)
+#define LOG_ALERT(s, ...)        zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
+#define LOG_EMERGENCY(s, ...)    zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
 
+//#define LOG_DEBUG(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
+//#define LOG_INFO(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
+//#define LOG_NOTICE(s, ...)       zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_NOTICE,    s, ##__VA_ARGS__)
+//#define LOG_WARN(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_WARNING,   s, ##__VA_ARGS__)
+//#define LOG_ERROR(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ERROR,     s, ##__VA_ARGS__)
+//#define LOG_CRITICA(s, ...)      zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_CRITICAL,  s, ##__VA_ARGS__)
+//#define LOG_ALERT(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
+//#define LOG_EMERGENCY(s, ...)    zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
 NAMESPACE_ZL_BASE_END
 
 #endif /* ZL_ZLOG_H */

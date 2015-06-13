@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     }
     printf("now, the server can hold max connection is [%d]\n", maxConnections);
 
-    zl::base::zl_log_set_priority(zl::base::ZL_LOG_PRIO_ALERT);
+    zl::base::Logger::setLogPriority(zl::base::ZL_LOG_PRIO_ALERT);
 
     EventLoop loop;
     InetAddress listenAddr("127.0.0.1", 8888);

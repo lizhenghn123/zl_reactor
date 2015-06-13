@@ -170,8 +170,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    zl::base::zl_log_set_priority(zl::base::ZL_LOG_PRIO_NOTICE);
-    //zl::base::zl_log_set_priority(zl::base::ZL_LOG_PRIO_DEBUG);
+    zl::base::Logger::setLogPriority(zl::base::ZL_LOG_PRIO_NOTICE);
 
     EventLoop loop;
     InetAddress listenAddr("127.0.0.1", 8888);
