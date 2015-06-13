@@ -53,8 +53,8 @@ enum ZLogOutput
 {
     ZL_LOG_OUTPUT_NONE    = 0x00,     /**< disable logging */
     ZL_LOG_OUTPUT_CONSOLE = 0x01,     /**< enable console output */
-    ZL_LOG_OUTPUT_FILE    = 0x02,     /**< enable log file output */
-    ZL_LOG_OUTPUT_DEFAULT = ZL_LOG_OUTPUT_CONSOLE | ZL_LOG_OUTPUT_FILE
+    //ZL_LOG_OUTPUT_FILE    = 0x02,     /**< enable log file output */
+    ZL_LOG_OUTPUT_DEFAULT = ZL_LOG_OUTPUT_CONSOLE/* | ZL_LOG_OUTPUT_FILE*/
 };
 
 /** Masking mode of private data */
@@ -78,7 +78,7 @@ public:
     static bool              init(ZLogOutput mode = ZL_LOG_OUTPUT_DEFAULT, ZLogHeader header = ZL_LOG_HEADER_DEFAULT,
                                   ZLogPriority priority = ZL_LOG_PRIO_INFO, ZLogMasking mask = ZL_LOG_MASKING_COMPLETE);
 
-    static void              setLogHandler(log_ext_handler_f handler);
+    static log_ext_handler_f setLogHandler(log_ext_handler_f handler);
     static ZLogPriority      setLogPriority(ZLogPriority prio);
     static void              setConsoleOutput(bool optval = true);
     static void              disableLog();
@@ -87,11 +87,11 @@ public:
     static bool              log(const char *file, int line, ZLogPriority priority, const char *format, ...);
 
 private:
-    static ZLogOutput            mode_;
-    static ZLogPriority          priority_;
-    static ZLogHeader            header_;
-    static ZLogMasking           masking_;
-    static log_ext_handler_f     ext_handler_;
+    static ZLogOutput        mode_;          /// 只设定是否在屏幕上输出
+    static ZLogPriority      priority_;
+    static ZLogHeader        header_;
+    static ZLogMasking       masking_;
+    static log_ext_handler_f ext_handler_;   /// 重定向输出，注意不应该是屏幕输出，默认一直屏幕输出
 
 private:
     Logger(const Logger&);
@@ -113,14 +113,5 @@ private:
 #define LOG_ALERT(s, ...)        zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
 #define LOG_EMERGENCY(s, ...)    zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
 
-//#define LOG_DEBUG(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
-//#define LOG_INFO(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
-//#define LOG_NOTICE(s, ...)       zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_NOTICE,    s, ##__VA_ARGS__)
-//#define LOG_WARN(s, ...)         zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_WARNING,   s, ##__VA_ARGS__)
-//#define LOG_ERROR(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ERROR,     s, ##__VA_ARGS__)
-//#define LOG_CRITICA(s, ...)      zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_CRITICAL,  s, ##__VA_ARGS__)
-//#define LOG_ALERT(s, ...)        zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
-//#define LOG_EMERGENCY(s, ...)    zl::base::zl_log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
 NAMESPACE_ZL_BASE_END
-
 #endif /* ZL_ZLOG_H */

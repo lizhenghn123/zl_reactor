@@ -24,11 +24,18 @@ void test_bench()
 
 int main()
 {
-    LOG_CONSOLE_OUTPUT(false);
-    //LOG_THREAD_SAFE(false);
-    LOG_NOTICE("2334444");
+    LOG_CONSOLE_OUTPUT(true);
+    LOG_DEBUG("This is a LOG_DEBUG msg!");
+    LOG_INFO("This is a LOG_INFO msg!");
+    LOG_NOTICE("This is a LOG_NOTICE msg!");
+    LOG_WARN("This is a LOG_WARN msg!");
+    LOG_ERROR("This is a LOG_ERROR msg!");
+    LOG_CRITICA("This is a LOG_CRITICA msg!");
+    LOG_ALERT("This is a LOG_ALERT msg!");
+    LOG_EMERGENCY("This is a LOG_EMERGENCY msg!");
     LOG_NOTICE("###############");
     cout << __FILE__ << "\n";
+
     //test_bench();
     return 0;
 }
