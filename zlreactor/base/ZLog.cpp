@@ -4,11 +4,11 @@
 #include <string>
 #include "base/Timestamp.h"
 #include "base/FileUtil.h"
-
+#include "base/LogFile.h"
 NAMESPACE_ZL_BASE_START
 
 #define MAX_PRIORITY_NAME_LENGTH   (9)
-#define MAX_LOG_ENTRY_SIZE          (4096)                /* 每次log输出的最大大小(B) */
+#define MAX_LOG_ENTRY_SIZE         (4096)                /* 每次log输出的最大大小(B) */
 
 static const char priority_snames[ZL_LOG_PRIO_COUNT][MAX_PRIORITY_NAME_LENGTH + 1] =
 {
@@ -25,7 +25,7 @@ static const char priority_snames[ZL_LOG_PRIO_COUNT][MAX_PRIORITY_NAME_LENGTH + 
 
 namespace detail
 {
-    void defaultConsoleOutput(const char* msg, int len)
+    void defaultConsoleOutput(const char* msg, size_t len)
     {
         size_t n = fwrite(msg, 1, len, stdout);
         (void)n;
@@ -54,10 +54,10 @@ Logger::~Logger()
 
 bool Logger::init(ZLogOutput mode, ZLogHeader header, ZLogPriority priority, ZLogMasking mask)
 {
-    mode_ = mode;
     header_ = header;
     priority_ = priority;
     masking_ = mask;
+    setOutputMode(mode);
     return true;
 }
 
@@ -81,6 +81,21 @@ void Logger::setConsoleOutput(bool optval/* = true*/)
         mode_ = (ZLogOutput)(mode_ | ZL_LOG_OUTPUT_CONSOLE);
     else
         mode_ = (ZLogOutput)(mode_ & (~ZL_LOG_OUTPUT_CONSOLE));
+}
+
+void Logger::setOutputMode(ZLogOutput mode)
+{
+    mode_ = mode;
+    //if (mode_ & ZL_LOG_OUTPUT_FILE)
+    //{
+    //    if (!logFile_)
+    //        logFile_ = new LogFile;
+    //    ext_handler_ = std::bind(&LogFile::dumpLog, logFile_);
+    //}
+    //else if (mode_ & ZL_LOG_OUTPUT_ASYNC_FILE)
+    //{
+    //    //ext_handler_ = ;
+    //}
 }
 
 void Logger::disableLog()
@@ -142,7 +157,6 @@ bool Logger::log(const char *file, int line, ZLogPriority priority, const char *
 
     if ((mode_ & ZL_LOG_OUTPUT_CONSOLE) == ZL_LOG_OUTPUT_CONSOLE)
     {
-        //::fwrite(log_entry, offset, 1, stdout);
         detail::defaultConsoleOutput(log_entry, offset);
     }
 

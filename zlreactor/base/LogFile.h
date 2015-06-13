@@ -5,7 +5,7 @@
 // Description      : 
 //
 // Last Modified By : LIZHENG
-// Last Modified On : 2015-06-12
+// Last Modified On : 2015-06-13
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -19,23 +19,22 @@ NAMESPACE_ZL_BASE_START
 #define MAX_LOG_FILE_COUNT (10)                  /** 默认循环日志文件数量 */
 #define MAX_FILE_PATH_LEN  (1024)                /* 日志文件路径最大长度 */
 
-class ZLogFile
+class LogFile
 {
 public:
-    ZLogFile(const char *log_name = NULL, const char *log_dir = NULL, bool threadSafe = true, size_t max_file_size = MAX_LOG_FILE_SIZE,
+    LogFile(const char *log_name = NULL, const char *log_dir = NULL, bool threadSafe = true, size_t max_file_size = MAX_LOG_FILE_SIZE,
         size_t max_file_count = MAX_LOG_FILE_COUNT, bool append = true);
 
-    ~ZLogFile();
+    ~LogFile();
 
-    const char *makeLogFilePath();
+    void setThreadSafe(bool safe);
 
     void dumpLog(const char *log_entry, size_t size);
-
-    void setThreadSafe(bool safe) { isThreadSafe_ = safe; }
 
 private:
     void init(const char *log_name, const char *log_dir, size_t max_file_size, size_t max_file_count, bool append);
     void dumpLogWithHold(const char *log_entry, size_t size);
+    const char *makeLogFilePath();
 
 private:
     char               log_dir_[MAX_FILE_PATH_LEN];

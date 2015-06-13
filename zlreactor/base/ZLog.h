@@ -51,10 +51,11 @@ enum ZLogHeader
 /** Mode of log output */
 enum ZLogOutput
 {
-    ZL_LOG_OUTPUT_NONE    = 0x00,     /**< disable logging */
-    ZL_LOG_OUTPUT_CONSOLE = 0x01,     /**< enable console output */
-    //ZL_LOG_OUTPUT_FILE    = 0x02,     /**< enable log file output */
-    ZL_LOG_OUTPUT_DEFAULT = ZL_LOG_OUTPUT_CONSOLE/* | ZL_LOG_OUTPUT_FILE*/
+    ZL_LOG_OUTPUT_NONE       = 0x00,     /**< disable logging */
+    ZL_LOG_OUTPUT_CONSOLE    = 0x01,     /**< enable console output */
+//    ZL_LOG_OUTPUT_FILE       = 0x02,     /**< enable log file output */
+//    ZL_LOG_OUTPUT_ASYNC_FILE = 0x04,     /**< enable log file(async) output */
+    ZL_LOG_OUTPUT_DEFAULT    = ZL_LOG_OUTPUT_CONSOLE/* | ZL_LOG_OUTPUT_FILE*/
 };
 
 /** Masking mode of private data */
@@ -65,8 +66,11 @@ enum ZLogMasking
     ZL_LOG_MASKING_ENCRYPTED = 0x02   /**< encrypt private data */
 };
 
+class LogFile;
+
 /** Prototype of extended log handler function */
-typedef void(*log_ext_handler_f)(const char* msg, int len);
+//typedef void(*log_ext_handler_f)(const char* msg, size_t len);
+typedef std::function<void(const char* msg, size_t len)> log_ext_handler_f;
 
 class Logger
 {
@@ -80,6 +84,7 @@ public:
 
     static log_ext_handler_f setLogHandler(log_ext_handler_f handler);
     static ZLogPriority      setLogPriority(ZLogPriority prio);
+    static void              setOutputMode(ZLogOutput mode);
     static void              setConsoleOutput(bool optval = true);
     static void              disableLog();
     static ZLogPriority      logPriority();
@@ -91,8 +96,8 @@ private:
     static ZLogPriority      priority_;
     static ZLogHeader        header_;
     static ZLogMasking       masking_;
-    static log_ext_handler_f ext_handler_;   /// 重定向输出，注意不应该是屏幕输出，默认一直屏幕输出
-
+    static log_ext_handler_f ext_handler_;   /// 重定向输出，注意不应该是屏幕输出，默认一直屏幕输出, 此回调不应该是阻塞的！
+    //static LogFile*          logFile_;
 private:
     Logger(const Logger&);
     Logger& operator=(const Logger&);
