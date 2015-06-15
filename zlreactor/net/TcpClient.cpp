@@ -4,7 +4,7 @@
 #include "net/TcpConnection.h"
 #include "net/TcpConnector.h"
 #include "net/SocketUtil.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 using namespace zl::base;
 NAMESPACE_ZL_NET_START
 

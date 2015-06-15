@@ -2,7 +2,7 @@
 #include "net/TcpServer.h"
 #include "net/TcpConnection.h"
 #include "net/EventLoop.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 #include "thread/Atomic.h"
 using namespace std;
 using namespace zl::net;

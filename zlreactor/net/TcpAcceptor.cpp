@@ -2,7 +2,7 @@
 #include "net/Socket.h"
 #include "net/Channel.h"
 #include "net/EventLoop.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 #include "net/ActiveSocket.h"
 #include "net/InetAddress.h"
 NAMESPACE_ZL_NET_START

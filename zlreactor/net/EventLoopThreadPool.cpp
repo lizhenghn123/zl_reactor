@@ -3,7 +3,7 @@
 #include "thread/Thread.h"
 #include "thread/CountDownLatch.h"
 #include "base/StringUtil.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 using zl::thread::Thread;
 NAMESPACE_ZL_NET_START
 

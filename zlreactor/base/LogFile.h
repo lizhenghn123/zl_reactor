@@ -37,14 +37,14 @@ private:
     const char *makeLogFilePath();
 
 private:
-    char               log_dir_[MAX_FILE_PATH_LEN];
-    char               log_file_name_[MAX_FILE_PATH_LEN];
-    char               curr_log_file_[MAX_FILE_PATH_LEN];
+    char               logDir_[MAX_FILE_PATH_LEN];
+    char               logFileName_[MAX_FILE_PATH_LEN];
+    char               currLogFileName_[MAX_FILE_PATH_LEN];
     FILE               *file_;
-    size_t             max_file_size_;
-    size_t             max_file_count_;
-    size_t             cur_size_;
-    size_t             cur_file_index_;
+    size_t             maxFileSize_;
+    size_t             maxFileCount_;
+    size_t             curSize_;
+    size_t             curFileIndex_;
     bool               isThreadSafe_;
     zl::thread::Mutex  *mutex_;
 };

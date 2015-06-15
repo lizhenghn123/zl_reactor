@@ -6,7 +6,7 @@
 #include "thread/Thread.h"
 #include "thread/CountDownLatch.h"
 #include "base/StringUtil.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 using namespace std;
 using namespace zl;
 using namespace zl::thread;

@@ -13,7 +13,7 @@
 #include "net/NetBuffer.h"
 #include "net/TcpConnection.h"
 #include "net/TcpClient.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 #include "EchoServer.h"
 #include "EchoClient.h"
 

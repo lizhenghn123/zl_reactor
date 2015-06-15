@@ -138,6 +138,9 @@
     <ClCompile Include="..\..\zlreactor\base\StringUtil.cpp">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\LogFile.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\zlreactor\utility\Base64.h">
@@ -338,6 +341,9 @@
       <Filter>net\http</Filter>
     </ClInclude>
     <ClInclude Include="..\..\zlreactor\base\StringUtil.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\LogFile.h">
       <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
