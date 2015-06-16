@@ -2,20 +2,24 @@
 #include "base/FileUtil.h"
 NAMESPACE_ZL_BASE_START
 
-LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/, bool threadSafe/* = true*/, 
-                    size_t max_file_size/* = MAX_LOG_FILE_SIZE*/, size_t max_file_count/* = MAX_LOG_FILE_COUNT*/, bool append/* = true*/)
-    : mutex_(threadSafe ? new thread::Mutex : NULL)
+LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/, bool threadSafe/* = true*/, int flushInterval/* = 3*/,
+                int flushCount/* = 1024*/, size_t max_file_size/* = MAX_LOG_FILE_SIZE*/, size_t max_file_count/* = MAX_LOG_FILE_COUNT*/, bool append/* = true*/)
+    : flushInterval_(flushInterval),
+      flushCount_(flushCount),
+      maxFileSize_(max_file_size <= 0 ? MAX_LOG_FILE_SIZE : max_file_size),
+      maxFileCount_(max_file_count <= 0 ? MAX_LOG_FILE_COUNT : max_file_count),
+      mutex_(threadSafe ? new thread::Mutex : NULL)
 {
     file_ = NULL;
-    maxFileSize_ = MAX_LOG_FILE_SIZE;
-    maxFileCount_ = MAX_LOG_FILE_COUNT;
+    count_ = 0;
+    lastFlush_ = 0;
     curSize_ = curFileIndex_ = 0;
     isThreadSafe_ = threadSafe;
     ::memset(logDir_, 0, MAX_FILE_PATH_LEN);
     ::memset(logFileName_, 0, MAX_FILE_PATH_LEN);
     ::memset(currLogFileName_, 0, MAX_FILE_PATH_LEN);
 
-    init(log_dir, log_name, max_file_size, max_file_count, append);
+    init(log_dir, log_name, append);
     assert((isThreadSafe_ && mutex_) || (!isThreadSafe_ && !mutex_));
 }
 
@@ -43,7 +47,7 @@ void LogFile::setThreadSafe(bool optval)
     }
 }
 
-void LogFile::init(const char *log_name, const char *log_dir, size_t max_file_size, size_t max_file_count, bool append)
+void LogFile::init(const char *log_name, const char *log_dir, bool append)
 {
     if (!log_name)
         log_name = zl::getBinaryName().c_str();
@@ -54,9 +58,6 @@ void LogFile::init(const char *log_name, const char *log_dir, size_t max_file_si
     ::memcpy(logDir_, log_dir, strlen(log_dir) + 1);
     curFileIndex_ = 0;
     curSize_ = 0;
-
-    maxFileSize_ = (max_file_size <= 0 ? MAX_LOG_FILE_SIZE : max_file_size);
-    maxFileCount_ = (max_file_count <= 0 ? MAX_LOG_FILE_COUNT : max_file_count);
 
     if (!zl::isDirectory(logDir_))
         zl::createRecursionDir(log_dir);
@@ -94,13 +95,6 @@ void LogFile::init(const char *log_name, const char *log_dir, size_t max_file_si
     file_ = fopen(log_file_path, append == true ? "ab" : "wb");
 }
 
-const char* LogFile::makeLogFilePath()
-{
-    ::memset(currLogFileName_, '\0', MAX_FILE_PATH_LEN);
-    ZL_SNPRINTF(currLogFileName_, MAX_FILE_PATH_LEN, "%s/%s-%d.log", logDir_, logFileName_, (int)curFileIndex_);
-    return currLogFileName_;
-}
-
 void LogFile::dumpLog(const char *log_entry, size_t size)
 {
     if (isThreadSafe_)
@@ -120,7 +114,7 @@ void LogFile::dumpLogWithHold(const char *log_entry, size_t size)
     if (curSize_ > maxFileSize_)
     {
         ::fclose(file_);    // 关闭当前日志文件
-        curFileIndex_++;  // 寻找下一日志文件
+        curFileIndex_++;    // 寻找下一日志文件
         curFileIndex_ %= maxFileCount_;
 
         const char *log_file_path = makeLogFilePath();
@@ -130,10 +124,34 @@ void LogFile::dumpLogWithHold(const char *log_entry, size_t size)
             return;
         }
         curSize_ = size;
+        count_ = 0;
     }
 
     ::fwrite(log_entry, 1, size, file_);
+    count_ ++;
+    if(count_ > flushCount_)
+    {
+        count_ = 0;
+        time_t now = ::time(NULL);
+        if(now - lastFlush_ > flushInterval_)
+        {
+            lastFlush_ = now;
+            flush();
+        }
+    }
+}
+
+void LogFile::flush()
+{
     ::fflush(file_);
+    //::fwrite_unlocked(log_entry, 1, size, file_);
+}
+
+const char* LogFile::makeLogFilePath()
+{
+    ::memset(currLogFileName_, '\0', MAX_FILE_PATH_LEN);
+    ZL_SNPRINTF(currLogFileName_, MAX_FILE_PATH_LEN, "%s/%s-%d.log", logDir_, logFileName_, curFileIndex_);
+    return currLogFileName_;
 }
 
 NAMESPACE_ZL_BASE_END

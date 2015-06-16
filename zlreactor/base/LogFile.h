@@ -22,8 +22,8 @@ NAMESPACE_ZL_BASE_START
 class LogFile
 {
 public:
-    LogFile(const char *log_name = NULL, const char *log_dir = NULL, bool threadSafe = true, size_t max_file_size = MAX_LOG_FILE_SIZE,
-        size_t max_file_count = MAX_LOG_FILE_COUNT, bool append = true);
+    LogFile(const char *log_name = NULL, const char *log_dir = NULL, bool threadSafe = true, int flushInterval = 3, // second
+          int flushCount = 1024, size_t max_file_size = MAX_LOG_FILE_SIZE, size_t max_file_count = MAX_LOG_FILE_COUNT, bool append = true);
 
     ~LogFile();
 
@@ -32,20 +32,26 @@ public:
     void dumpLog(const char *log_entry, size_t size);
 
 private:
-    void init(const char *log_name, const char *log_dir, size_t max_file_size, size_t max_file_count, bool append);
+    void init(const char *log_name, const char *log_dir, bool append);
     void dumpLogWithHold(const char *log_entry, size_t size);
     const char *makeLogFilePath();
+    void flush();
 
 private:
     char               logDir_[MAX_FILE_PATH_LEN];
     char               logFileName_[MAX_FILE_PATH_LEN];
     char               currLogFileName_[MAX_FILE_PATH_LEN];
+    const int          flushInterval_;   /// seconds
+    const int          flushCount_;
+    const size_t       maxFileSize_;
+    const int          maxFileCount_;
+
     FILE               *file_;
-    size_t             maxFileSize_;
-    size_t             maxFileCount_;
+    int                count_;
     size_t             curSize_;
-    size_t             curFileIndex_;
+    int                curFileIndex_;
     bool               isThreadSafe_;
+    time_t             lastFlush_;
     zl::thread::Mutex  *mutex_;
 };
 

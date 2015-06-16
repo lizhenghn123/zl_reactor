@@ -29,7 +29,7 @@ namespace detail
     {
         size_t n = fwrite(msg, 1, len, stdout);
         (void)n;
-        fflush(stdout);
+        //fflush(stdout);
     }
 
     void defaultFlush()
