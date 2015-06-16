@@ -17,7 +17,7 @@ libzlreactor_la_LIBFLAGS =
 libzlreactor_la_LIBADD =
 
 INCLUDES                   = -I../
-libzlreactor_la_CPPFLAGS = -std=c++0x -fPIC -shared
+libzlreactor_la_CPPFLAGS =-O2 -std=c++0x -fPIC -shared
 #libzlreactor_a_LDFLAGS = -lpthread-Werror -Wall	
 
 libzlreactor_la_SOURCES = \
@@ -34,6 +34,7 @@ libzlreactor_la_SOURCES = \
 					 base/ProcessUtil.cpp \
 					 base/Logger.cpp \
 					 base/LogFile.cpp \
+					 base/AsyncLogger.cpp \
 					 utility/StringHash.cpp \
 					 utility/Base64.cpp \
 					 utility/Md5.cpp \
