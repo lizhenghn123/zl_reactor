@@ -11,7 +11,7 @@ Created Time: 2015年05月12日 星期二 19时44分29秒
 #include "net/NetBuffer.h"
 #include "net/TcpConnection.h"
 #include "base/Timestamp.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 #include <string>
 #include <memory>
 using namespace std;

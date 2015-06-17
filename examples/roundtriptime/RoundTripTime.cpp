@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <stdio.h>
-#include "base/ZLog.h"
+#include "base/Logger.h"
 #include "net/EventLoop.h"
 #include "net/TcpClient.h"
 #include "net/TcpServer.h"
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
         printUsage(argc, argv);
     }
 
-    zl::base::zl_log_set_priority(zl::base::ZL_LOG_PRIO_ALERT);
+    zl::base::Logger::setLogPriority(zl::base::ZL_LOG_PRIO_ALERT);
 
     uint16_t port = static_cast<uint16_t>(atoi(argv[3]));
     if (strcmp(argv[1], "-s") == 0)
