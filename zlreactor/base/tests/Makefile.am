@@ -5,7 +5,7 @@ bin_PROGRAMS = Logger_test SmartAssert_test StringUtil_test Daemon_test Exceptio
 
 INCLUDES = -I../../../zlreactor
 CPPFLAGS = -std=c++0x -O2
-LDFLAGS  = -O2 -L../../../lib -lzlreactor -lrt
+LDFLAGS  = -O2 -L../../../lib -lzlreactor
 
 Logger_test_SOURCES  = Logger_test.cpp
 
