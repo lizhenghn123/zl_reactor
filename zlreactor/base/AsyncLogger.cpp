@@ -35,7 +35,7 @@ AsyncLogger::~AsyncLogger()
 
 void AsyncLogger::start()
 {
-    LOG_SET_LOGHANDLER(std::bind(&AsyncLogger::output, &logger, std::placeholders::_1, std::placeholders::_2));
+    LOG_SET_LOGHANDLER(std::bind(&AsyncLogger::output, this, std::placeholders::_1, std::placeholders::_2));
     latch_->wait();
 }
 
