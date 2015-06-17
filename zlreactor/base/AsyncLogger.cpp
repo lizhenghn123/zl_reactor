@@ -35,6 +35,7 @@ AsyncLogger::~AsyncLogger()
 
 void AsyncLogger::start()
 {
+    LOG_SET_LOGHANDLER(std::bind(&AsyncLogger::output, &logger, std::placeholders::_1, std::placeholders::_2));
     latch_->wait();
 }
 
@@ -67,7 +68,6 @@ void AsyncLogger::output(const char* data, size_t len)
     }
 }
 
-
 void AsyncLogger::logThread()
 {
     isRunning_ = true;
@@ -77,7 +77,6 @@ void AsyncLogger::logThread()
 
     while(isRunning_)
     {
-        //printf("111111111111\n");
         {
             thread::LockGuard<thread::Mutex> lock(*mutex_);
             if (buffers_.empty())
