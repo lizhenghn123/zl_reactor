@@ -1,13 +1,15 @@
 #CXXFLAGS += -Wall -static -g -O2 -fPIC
 
 bin_PROGRAMS = Logger_test SmartAssert_test StringUtil_test Daemon_test Exception_Demangle_test ProcessUtil_test Timestamp_test ScopeExitGuard_test \
-			   StlUtil_test
+			   StlUtil_test AsyncLogger_test
 
 INCLUDES = -I../../../zlreactor
 CPPFLAGS = -std=c++0x -O2
-LDFLAGS  = -O2 -L../../../lib -lzlreactor
+LDFLAGS  = -O2 -L../../../lib -lzlreactor -lrt
 
 Logger_test_SOURCES  = Logger_test.cpp
+
+AsyncLogger_test_SOURCES  = AsyncLogger_test.cpp
 
 SmartAssert_test_SOURCES  = SmartAssert_test.cpp
 

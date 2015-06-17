@@ -13,6 +13,7 @@
 #define ZL_ASYNCLOGGER_H
 #include "Define.h"
 #include <vector>
+#include <memory>
 namespace zl
 {
 namespace thread
@@ -25,42 +26,75 @@ namespace thread
 }
 NAMESPACE_ZL_BASE_START
 
+template <size_t SIZE>
 class LogBuffer
 {
 public:
     LogBuffer()
     {
-        
+        current_ = 0;
     }
+    //template <size_t SIZE>
+    //LogBuffer(LogBuffer<SIZE> &buf)
+    //{
+    //    cout << ".....\n";
+    //}
+    //LogBuffer& operator=(const LogBuffer<SIZE>&)
+    //{
+    //    return *this;
+    //}
     LogBuffer(const char* data, size_t len)
     {
-        data_.resize(len);
-        ::memcpy(&*data_.begin(), data, len);
+        current_ = 0;
+        append(data, len);
     }
     void append(const char* data, size_t len)
     {
-        ::memcpy(&*data_.begin(), data, len);
+        if (current_ + len < SIZE)
+        {
+            ::memcpy(data_ + current_, data, len);
+            current_ += len;
+        }
+        else
+        {
+            ::memcpy(data_ + current_, data, SIZE - current_);
+            current_ = SIZE;
+        }
     }
-    size_t size()
+    void reset()
     {
-        return data_.size();
+        current_ = 0;
+    }
+    size_t size() const
+    {
+        return current_;
+    }
+    size_t avail() const
+    {
+        return SIZE - current_;
+    }
+    const char* data() const
+    {
+        return data_;
+    }
+    std::string asString() const
+    {
+        return std::string(data_, current_);
     }
     void swap(LogBuffer &buf)
     {
         std::swap(data_, buf.data_);
-    }
-    const char* data()
-    {
-        return data_.data();
+        std::swap(current_, buf.current_);
     }
 private:
-    std::vector<char> data_;
+    size_t  current_;
+    char    data_[SIZE];
 };
 
 class AsyncLogger
 {
 public:
-    AsyncLogger(size_t maxBufferSize = 4096, size_t maxIntevalSecond = 3);
+    explicit AsyncLogger(int flushInterval = 3);
     ~AsyncLogger();
 
     void start();
@@ -71,16 +105,21 @@ private:
     void logThread();
 
 private:
+    typedef LogBuffer<4096 * 100>      Buffer;
+    typedef std::unique_ptr<Buffer>    BufferPtr;
+
     bool                        isRunning_;
     thread::Mutex               *mutex_;
     thread::Condition           *condition_;
     thread::CountDownLatch      *latch_;
     thread::Thread              *thread_;
 
+    int                         flushInterval_;     /// seconds
     size_t                      maxBufferSize_;
     size_t                      currentBufferSize_;
-    LogBuffer                   currentBuffer_;
-    LogBuffer                   remainBuffer_;
+    BufferPtr                   currentBuffer_;
+    BufferPtr                   remainBuffer_;
+    std::vector<BufferPtr>      buffers_;
 };
 
 NAMESPACE_ZL_BASE_END

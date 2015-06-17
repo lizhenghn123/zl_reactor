@@ -31,11 +31,12 @@ public:
 
     void dumpLog(const char *log_entry, size_t size);
 
+    void flush();
+
 private:
     void init(const char *log_name, const char *log_dir, bool append);
     void dumpLogWithHold(const char *log_entry, size_t size);
     const char *makeLogFilePath();
-    void flush();
 
 private:
     char               logDir_[MAX_FILE_PATH_LEN];

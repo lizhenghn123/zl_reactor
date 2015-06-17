@@ -110,7 +110,7 @@ ZLogPriority Logger::logPriority()
 
 bool Logger::log(const char *file, int line, ZLogPriority priority, const char *format, ...)
 {
-    if (priority > priority_ && ((mode_ & ZL_LOG_OUTPUT_CONSOLE) == ZL_LOG_OUTPUT_NONE || !ext_handler_))
+    if (priority > priority_ || ((mode_ & ZL_LOG_OUTPUT_CONSOLE) == ZL_LOG_OUTPUT_NONE && !ext_handler_))
     {
         return true;
     }
