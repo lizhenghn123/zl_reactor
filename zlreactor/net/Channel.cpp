@@ -1,7 +1,7 @@
 #include "net/Channel.h"
 #include <sstream>
 #include <assert.h>
-#include "base/ZLog.h"
+#include "base/Logger.h"
 #include "net/EventLoop.h"
 NAMESPACE_ZL_NET_START
 

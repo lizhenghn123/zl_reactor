@@ -1,6 +1,6 @@
 #include "net/TcpConnector.h"
 #include "net/EventLoop.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 #include "net/Channel.h"
 NAMESPACE_ZL_NET_START
 

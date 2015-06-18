@@ -2,7 +2,7 @@
 #include "net/TcpServer.h"
 #include "net/TcpConnection.h"
 #include "net/EventLoop.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 #include "thread/Atomic.h"
 using namespace std;
 using namespace zl::net;
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     }
     printf("now, the server can hold max connection is [%d]\n", maxConnections);
 
-    zl::base::zl_log_set_priority(zl::base::ZL_LOG_PRIO_ALERT);
+    zl::base::Logger::setLogPriority(zl::base::ZL_LOG_PRIO_ALERT);
 
     EventLoop loop;
     InetAddress listenAddr("127.0.0.1", 8888);

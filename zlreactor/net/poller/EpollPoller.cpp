@@ -3,7 +3,7 @@
 #include <sys/epoll.h>
 #include "net/Socket.h"
 #include "net/Channel.h"
-#include "base/ZLog.h"
+#include "base/Logger.h"
 NAMESPACE_ZL_NET_START
 
 ZL_STATIC_ASSERT(EPOLLIN == POLLIN);
