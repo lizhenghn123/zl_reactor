@@ -47,17 +47,16 @@ public:
 
     // Socket Settings
     /** Enable/disable Block Socket */
-    bool           setBlocking();
-    bool           setNonBlocking();
+    bool           setNonBlocking(bool on = true);
 
     /** Enable/disable TCP_NODELAY(enable/disable Nagle's algorithm) */
-    bool           setNoDelay(bool flag = true);
+    bool           setNoDelay(bool on = true);
 
     /** Enable/disable SO_REUSEADDR(TIME_WAIT) */
-    bool           setReuseAddr(bool flag = true);
+    bool           setReuseAddr(bool on = true);
 
     /** Enable/disable SO_KEEPALIVE */
-    bool           setKeepAlive(bool flag = true);
+    bool           setKeepAlive(bool on = true);
 
     /** Set/Get SO_SNDBUF */
     bool           setSendBuffer(int size);

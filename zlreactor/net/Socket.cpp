@@ -247,12 +247,12 @@ void Socket::close()
     }
 }
 
-bool Socket::setBlocking()
+bool Socket::setNonBlocking(bool on /*= true*/)
 {
 #if defined(OS_WINDOWS)
-    unsigned long ul = 0;
+    unsigned long ul = on ? 1 : 0;
 
-    int ret = ::ioctlsocket(sockfd_, FIONBIO, (unsigned long *)&ul); //设置成阻塞模式
+    int ret = ::ioctlsocket(sockfd_, FIONBIO, (unsigned long *)&ul);
 
     if(ret == SOCKET_ERROR)
         return false;
@@ -262,7 +262,7 @@ bool Socket::setBlocking()
     if(flags < 0)
         return false;
 
-    flags &= (~O_NONBLOCK);
+    on ? flags |= O_NONBLOCK : flags &= (~O_NONBLOCK);
     if(::fcntl(sockfd_, F_SETFL, flags) != 0)
         return false;
 #endif
@@ -270,44 +270,21 @@ bool Socket::setBlocking()
     return true;
 }
 
-bool Socket::setNonBlocking()
+bool Socket::setNoDelay(bool on /*= true*/)
 {
-#if defined(OS_WINDOWS)
-    unsigned long ul = 1;
-
-    int ret = ::ioctlsocket(sockfd_, FIONBIO, (unsigned long *)&ul);  //设置成非阻塞模式
-
-    if(ret == SOCKET_ERROR)
-        return false;
-
-#elif defined(OS_LINUX)
-    int flags = ::fcntl(sockfd_, F_GETFL);
-    if(flags < 0)
-        return false;
-
-    flags |= O_NONBLOCK;
-    if(::fcntl(sockfd_, F_SETFL, flags) != 0)
-        return false;
-#endif
-
-    return true;
-}
-
-bool Socket::setNoDelay(bool flag /*= true*/)
-{
-    int optval = flag ? 1 : 0;
+    int optval = on ? 1 : 0;
     return setOpt(IPPROTO_TCP, TCP_NODELAY, (char *)&optval, sizeof(optval));
 }
 
-bool Socket::setReuseAddr(bool flag /*= true*/)
+bool Socket::setReuseAddr(bool on /*= true*/)
 {
-    int optval = flag ? 1 : 0;
+    int optval = on ? 1 : 0;
     return setOpt(SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
 }
 
-bool Socket::setKeepAlive(bool flag /*= true*/)
+bool Socket::setKeepAlive(bool on /*= true*/)
 {
-    int optval = flag ? 1 : 0;
+    int optval = on ? 1 : 0;
     return setOpt(SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval));
 }
 
@@ -398,7 +375,7 @@ bool Socket::setOpt(int level, int name, char *value, int len)
 {
     assert(value != NULL);
     assert(len > 0);
-    return ZL_SETSOCKOPT(sockfd_, level, name, value, len) == 0;
+    return ZL_SETSOCKOPT(sockfd_, level, name, value, static_cast<socklen_t>(len)) == 0;
 }
 
 bool  Socket::getOpt(int level, int optname, int& optval)

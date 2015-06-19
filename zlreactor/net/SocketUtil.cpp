@@ -128,10 +128,16 @@ int SocketUtil::setNoDelay(ZL_SOCKET fd, bool noDelay/* = true*/)
     return ZL_SETSOCKOPT(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&optval, sizeof(optval));
 }
 
-int SocketUtil::setReuseAddr(ZL_SOCKET fd, bool flag /*= true*/)
+int SocketUtil::setReuseAddr(ZL_SOCKET fd, bool resue /*= true*/)
 {
-    int optval = flag ? 1 : 0;
-    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
+    int optval = resue ? 1 : 0;
+    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+}
+
+int setKeepAlive(ZL_SOCKET fd, bool alive /*= true*/)
+{
+    int optval = alive ? 1 : 0;
+    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval));
 }
 
 int SocketUtil::setSendBuffer(ZL_SOCKET fd, int readSize)

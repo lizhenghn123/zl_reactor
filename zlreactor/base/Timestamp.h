@@ -109,7 +109,7 @@ inline int64_t operator-(const Timestamp& end, const Timestamp& start)
 
 inline Timestamp operator+(const Timestamp& lhs, double seconds)
 {
-    long delta = seconds * ZL_USEC_PER_SEC;
+    int64_t delta = seconds * ZL_USEC_PER_SEC;
     return Timestamp(lhs.microSeconds() + delta);
 }
 
