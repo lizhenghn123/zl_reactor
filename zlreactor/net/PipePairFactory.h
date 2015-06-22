@@ -267,7 +267,7 @@ public:
         }
 
         struct sockaddr_in addr2;
-        int srvSock = SocketUtil::acceptOne(listenSock, &addr2);
+        int srvSock = SocketUtil::accept(listenSock, &addr2);
         if(srvSock < 0 || errno != EINPROGRESS)
         {
             LOG_ERROR("TcpPairGenerator: accept failed[%d][%d].\n", srvSock, errno);

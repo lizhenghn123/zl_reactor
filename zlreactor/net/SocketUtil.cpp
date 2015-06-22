@@ -85,10 +85,10 @@ int  SocketUtil::connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr)
     return ZL_CONNECT(sockfd, (sockaddr *)&addr, static_cast<socklen_t>(sizeof(addr)));
 }
 
-ZL_SOCKET SocketUtil::acceptOne(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
+ZL_SOCKET SocketUtil::accept(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
 {
-    int addrlen = sizeof(*addr);
-    ZL_SOCKET connfd = ZL_ACCEPT(sockfd, (sockaddr *)addr, (socklen_t *)&addrlen);
+    socklen_t addrlen = static_cast<socklen_t>(sizeof(*addr));
+    ZL_SOCKET connfd = ZL_ACCEPT(sockfd, (sockaddr *)addr, &addrlen);
     return connfd;
 }
 

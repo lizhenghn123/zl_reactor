@@ -169,7 +169,7 @@ public:
     static void shutdownWrite(ZL_SOCKET sockfd);
 
     static int  connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr);
-    static ZL_SOCKET acceptOne(ZL_SOCKET sockfd, struct sockaddr_in *addr);
+    static ZL_SOCKET accept(ZL_SOCKET sockfd, struct sockaddr_in *addr);
     static ssize_t read(ZL_SOCKET sockfd, void *buf, size_t count);
     static ssize_t write(ZL_SOCKET sockfd, const void *buf, size_t count);
 

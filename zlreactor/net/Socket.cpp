@@ -86,8 +86,8 @@ bool Socket::listen(int backlog /*= 5*/) const
 
 bool Socket::accept(Socket& new_socket) const
 {
-    int addr_length = sizeof(new_socket.sockaddr_);
-    new_socket.sockfd_ = ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, (socklen_t *)&addr_length);
+    socklen_t addr_length = static_cast<socklen_t>(sizeof(new_socket.sockaddr_));
+    new_socket.sockfd_ = ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, &addr_length);
 
     if(new_socket.sockfd_ <= 0)
         return false;
@@ -99,8 +99,8 @@ ZL_SOCKET Socket::accept(InetAddress *peerAddr) const
 {
     ZL_SOCKADDR_IN addr;
     ::memset(&addr, 0, sizeof(addr));
-    int addr_length = sizeof(addr);
-    ZL_SOCKET connfd = ZL_ACCEPT(sockfd_, (sockaddr *)&addr, (socklen_t *)&addr_length);
+    socklen_t addr_length = static_cast<socklen_t>(sizeof(addr));
+    ZL_SOCKET connfd = ZL_ACCEPT(sockfd_, (sockaddr *)&addr, &addr_length);
     if (connfd > 0)
     {
         peerAddr->setSockAddrInet(addr);
