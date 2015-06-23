@@ -51,8 +51,6 @@ libzlreactor_la_SOURCES = \
 					 net/InetAddress.cpp \
 					 net/DomainResolver.cpp \
 					 net/Socket.cpp \
-					 net/ActiveSocket.cpp \
-					 net/PassiveSocket.cpp \
 					 net/EventLoop.cpp \
 					 net/EventLoopThreadPool.cpp \
 					 net/Channel.cpp \

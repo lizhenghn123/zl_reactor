@@ -16,7 +16,6 @@
 #include <sstream>
 #include <algorithm>
 #include <functional>
-
 namespace zl{
 namespace base{
 

@@ -168,6 +168,7 @@ public:
     static void shutDown(ZL_SOCKET fd);
     static void shutdownWrite(ZL_SOCKET sockfd);
 
+    static int  bind(ZL_SOCKET sockfd, const char *ip, int port);
     static int  connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr);
     static ZL_SOCKET accept(ZL_SOCKET sockfd, struct sockaddr_in *addr);
     static ssize_t read(ZL_SOCKET sockfd, void *buf, size_t count);
@@ -190,23 +191,7 @@ public:
     static int getSocketError(ZL_SOCKET sockfd);
 };
 
-namespace
-{
-    class SocketInitialization
-    {
-    public:
-        SocketInitialization()
-        {
-            SocketUtil::socketInitialise();
-        }
-        ~SocketInitialization()
-        {
-            SocketUtil::socketCleanup();
-        }
-    };
 
-    extern  SocketInitialization  g_socket_init_once;
-}
 
 NAMESPACE_ZL_NET_END
 

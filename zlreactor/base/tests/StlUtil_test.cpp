@@ -9,12 +9,7 @@
 #include "base/StlUtil.h"
 using namespace std;
 using namespace zl;
-
-inline char* stringAsArray(std::string* str)
-{
-    // DO NOT USE const_cast<char*>(str->data())!
-    return str->empty() ? NULL : &*str->begin();
-}
+using namespace zl::base;
 
 class Int
 {

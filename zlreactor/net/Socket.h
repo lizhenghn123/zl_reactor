@@ -32,12 +32,14 @@ class Socket
 public:
     explicit Socket(ZL_SOCKET fd);
     Socket(ZL_SOCKET fd, ZL_SOCKADDR_IN sockAddr);
-    virtual ~Socket();
+    ~Socket();
+
 public:
     // Server Initialization
     bool           bind(const char *ip, int port);
     bool           bind(const InetAddress& addr); 
     bool           listen(int backlog = 5) const;
+    ZL_SOCKET      accept(ZL_SOCKADDR_IN* peerAddr) const;
     ZL_SOCKET      accept(InetAddress *peerAddr) const;
     bool           accept(Socket& new_socket) const;
     void           close();
@@ -96,12 +98,12 @@ public:
     {
         return sockfd_ != ZL_INVALID_SOCKET;
     }
-    const          ZL_SOCKET& fd()const
+    const ZL_SOCKET& fd() const
     {
         return sockfd_;
     }
 
-    const ZL_SOCKADDR_IN addr()
+    const ZL_SOCKADDR_IN addr() const
     {
         return sockaddr_;
     }
@@ -110,6 +112,19 @@ public:
     std::string    getHostIP();
     std::string    getHost();    // IP:Port
 
+    //template < typename T >
+    //Socket& operator<< (const T& t)
+    //{
+        // t must be pod
+    //    send(&t, sizeof(t));
+    //}
+
+    //template < typename T >
+    //Socket& operator>> (const T& t)
+    //{
+    //    // t must be pod
+    //    recv(&t, sizeof(t));
+    //}
 protected:
     /*const*/ ZL_SOCKET sockfd_;
     ZL_SOCKADDR_IN  sockaddr_;
