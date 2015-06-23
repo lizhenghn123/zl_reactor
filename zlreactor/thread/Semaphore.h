@@ -21,7 +21,6 @@
 #include <pthread.h>
 #include <semaphore.h>
 #endif
-
 NAMESPACE_ZL_THREAD_START
 
 class Semaphore : public zl::NonCopy

@@ -12,7 +12,6 @@ namespace base
 #else
 #define VADUP(aq, ap)    va_copy(backup_ap, ap)
 #endif
-     
 
 size_t stringFormatAppendImpl(std::string *dst, const char *format, va_list ap)
 {

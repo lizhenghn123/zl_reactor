@@ -14,15 +14,20 @@
 
 namespace zl
 {
-    class NonCopy
+    namespace base
     {
-    protected:
-        NonCopy() {}
-        ~NonCopy() {}
-    private:
-        NonCopy(const NonCopy&);
-        const NonCopy& operator=(const NonCopy&);
-    };
+        class NonCopy
+        {
+        protected:
+            NonCopy() {}
+            ~NonCopy() {}
+        private:
+            NonCopy(const NonCopy&);
+            const NonCopy& operator=(const NonCopy&);
+        };
+    }
+
+    using base::NonCopy;
 }
 
 #endif /* ZL_NONCOPY_H */

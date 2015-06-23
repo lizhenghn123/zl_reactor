@@ -16,7 +16,7 @@
 #include "thread/Condition.h"
 NAMESPACE_ZL_THREAD_START
 
-class CountDownLatch : NonCopy
+class CountDownLatch : zl::NonCopy
 {
 public:
     explicit CountDownLatch(int count)
