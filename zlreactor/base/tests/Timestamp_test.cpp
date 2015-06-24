@@ -168,9 +168,9 @@ void test_bench3(int flag = 0)
 	for(int i = 0 ; i < max_loop; i++)
 	{
 		sum += times[i];
-		printf(PRId64" ", times[i]);
+		printf("%"PRId64" ", times[i]);
 	}
-	printf("\naverage : %f\n", sum * 1.0 / max_loop);
+	printf("\naverage : %f\n", sum * 1.0 / (max_loop*max_count));
 }
 
 int main(int argc, char* argv[])

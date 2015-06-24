@@ -15,7 +15,6 @@
 #include "net/CallBacks.h"
 #include <sys/signalfd.h>
 #include <unordered_map>
-#include <memory>
 NAMESPACE_ZL_NET_START
 
 typedef int Signalfd;
@@ -29,10 +28,10 @@ public:
 public:
     Signalfd fd() { return signalFd_; }
 
-	void addSigHandler(int sig, const SignalCallback& handler);
+    void addSigHandler(int sig, const SignalCallback& handler);
 
     void removeSig(int sig);
-	
+
     bool haveSignal(int sig);
 
     /// must call registerAll after addSigHandler
@@ -50,12 +49,12 @@ private:
     Signalfd createSignalfd(int flags);
 
 private:
-	typedef std::unordered_map<int, SignalCallback>  SigHandlerMap;
-	
+    typedef std::unordered_map<int, SignalCallback>  SigHandlerMap;
+
     bool             isReady_;
-	Signalfd         signalFd_;
+    Signalfd         signalFd_;
     sigset_t         mask_; 
-	SigHandlerMap    sigHanhlers_;
+    SigHandlerMap    sigHanhlers_;
 };
 
 NAMESPACE_ZL_NET_END

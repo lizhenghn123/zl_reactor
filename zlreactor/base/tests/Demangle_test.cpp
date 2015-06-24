@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include "base/Demangle.h"
-#include "base/Exception.h"
 using namespace std;
 using namespace zl::base;
 
@@ -82,50 +81,10 @@ void test_demangle()
     demangle_name("_ZN3FooD1Ev");
 }
 
-class Bar
-{
-public:
-	void test()
-	{
-		throw Exception("oops");
-	}
-};
-
-void foo()
-{
-	Bar b;
-	b.test();
-}
-
-void test_exception()
-{
-    try
-    {
-        //throw Exception("test_exception");
-    }
-    catch (Exception& e)
-    {
-    	std::cout << e.what() << "\n" << e.stack_trace() << "\n-------------\n";
-    }
-	
-	try
-	{
-		foo();
-	}
-	catch (const Exception& ex)
-	{
-		printf("reason: %s\n", ex.what());
-		printf("stack trace: %s\n", ex.stack_trace());
-	}
-}
-
 int main(void)
 {
     std::cout << "========== test demangle ==========\n";
     test_demangle();
-
-    std::cout << "========== test exception ==========\n";
-    test_exception();
 
     return 0;
 }
