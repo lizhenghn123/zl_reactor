@@ -13,7 +13,6 @@
 #define ZL_BLOCKINGQUEUE_H
 #include "Define.h"
 #include <queue>
-#include <stack>
 #include "thread/Mutex.h"
 #include "thread/Condition.h"
 

@@ -191,8 +191,5 @@ public:
     static int getSocketError(ZL_SOCKET sockfd);
 };
 
-
-
 NAMESPACE_ZL_NET_END
-
 #endif  /* ZL_SOCKETUTIL_H */
