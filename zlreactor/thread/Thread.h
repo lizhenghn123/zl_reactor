@@ -19,6 +19,8 @@ NAMESPACE_ZL_THREAD_START
 #if defined(OS_WINDOWS)
 typedef HANDLE native_thread_handle;
 #else
+#include <unistd.h>
+#include <errno.h>
 typedef pthread_t native_thread_handle;
 #endif
 
@@ -218,7 +220,7 @@ namespace this_thread
     #if defined(OS_WINDOWS)
         Sleep(int(double(aTime.count()) * (1000.0 * _Period::_as_double()) + 0.5));
     #else
-        usleep(int(double(aTime.count()) * (1000000.0 * _Period::_as_double()) + 0.5));
+        while(usleep(int(double(aTime.count()) * (1000000.0 * _Period::_as_double()) + 0.5)) != 0 && errno == EINTR);
     #endif
     }
 

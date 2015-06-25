@@ -63,9 +63,9 @@ public:
         struct timeval tv;
         gettimeofday(&tv, NULL);
         int64_t usec = tv.tv_usec + timeoutMs * 1000LL;
-        ts->tv_sec = tv.tv_sec + usec / 1000000;
-        ts->tv_nsec = (usec % 1000000) * 1000;
-        return sem_timedwait(sem, &ts);
+        ts.tv_sec = tv.tv_sec + usec / 1000000;
+        ts.tv_nsec = (usec % 1000000) * 1000;
+        return sem_timedwait(sem, &ts) == 0;
     #endif
     }
 
@@ -81,9 +81,7 @@ public:
     bool post(long rc = 1)
     {
     #ifdef OS_WINDOWS
-        if(::ReleaseSemaphore(sem_, rc, NULL))
-            return true;
-        return false;
+        return ::ReleaseSemaphore(sem_, rc, NULL);
     #elif defined(OS_LINUX)
         return sem_post(&sem_) == 0;
     #endif
