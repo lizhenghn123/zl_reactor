@@ -12,7 +12,7 @@
 #ifndef ZL_STLUTIL_H
 #define ZL_STLUTIL_H
 #include "Define.h"
-NAMESPACE_ZL_START
+NAMESPACE_ZL_BASE_START
 
 /// 通过swap技巧释放stl容器占用的内存，clear() or reserve() 未必真正释放内存
 template<class T>
@@ -36,7 +36,7 @@ void clearIfBig(T *v, size_t limit = 1 << 20)
 /// 用于将stl vector传递给c接口调用
 template<typename T>
 inline T* vectorAsArray(std::vector<T> *v)
-{
+{ 
 # ifdef NDEBUG
 	return &*v->begin();
 # else   // v 为空时如果直接&*v->begin()会coredump
@@ -52,6 +52,18 @@ inline const T* vectorAsArray(const std::vector<T> *v)
 # else
 	return v->empty() ? NULL : &*v->begin();
 # endif
+}
+
+/// 用于将stl string传递给c接口调用
+inline char* stringAsArray(std::string* v)
+{
+    // DO NOT USE const_cast<char*>(v->data())!
+    return v->empty() ? NULL : &*v->begin();
+}
+
+inline const char* stringAsArray(const std::string* v)
+{
+    return v->empty() ? NULL : &*v->begin();
 }
 
 /// 使用一对迭代器，删除每个迭代器所指向的指针
@@ -174,5 +186,5 @@ private:
 	Container *container_;
 };
 
-NAMESPACE_ZL_END
+NAMESPACE_ZL_BASE_END
 #endif  /* ZL_STLUTIL_H */

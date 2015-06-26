@@ -18,7 +18,7 @@
 NAMESPACE_ZL_THREAD_START
 class Thread;
 
-class ThreadGroup : NonCopy
+class ThreadGroup : zl::NonCopy
 {
 public:
     ThreadGroup();
@@ -29,8 +29,7 @@ public:
     Thread* create_thread(F threadfunc, const std::string& thrd_name="")
     {
         Thread *trd = new Thread(threadfunc, thrd_name);
-        LockGuard<Mutex> lock(mutex_);
-        threads_.push_back(trd);
+        add_thread(trd);
         return trd;
     }
 

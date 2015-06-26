@@ -14,15 +14,6 @@
 #include "Define.h"
 #include "base/NonCopy.h"
 #include "thread/Mutex.h"
-#ifdef OS_LINUX
-#include <unistd.h>
-#include <pthread.h>
-#include <errno.h>
-#elif defined(OS_WINDOWS)
-#define OS_WINDOWS
-#include <Windows.h>
-#endif
-
 NAMESPACE_ZL_THREAD_START
 
 class Condition : public zl::NonCopy

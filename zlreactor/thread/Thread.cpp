@@ -146,7 +146,7 @@ Thread::id Thread::get_id() const
 Thread::id this_thread::get_id()
 {
 #if defined(OS_WINDOWS)
-    return Thread::id((unsigned long int) GetCurrentThreadId());
+    return Thread::id(static_cast<unsigned long int>(GetCurrentThreadId()));
 #else
     return Thread::id(pthread_self());
 #endif

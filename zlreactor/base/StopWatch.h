@@ -82,11 +82,11 @@ private:
     }
     static void getTimeOfDay(struct timeval *tv, void *tz)
     {
-#ifdef OS_LINUX
+    #ifdef OS_LINUX
         gettimeofday(tv, NULL);
-#elif defined(OS_WINDOWS)
+    #elif defined(OS_WINDOWS)
         typedef unsigned __int64 uint64;
-#define EPOCHFILETIME (116444736000000000ULL)
+    #define EPOCHFILETIME (116444736000000000ULL)
         FILETIME ft;
         LARGE_INTEGER li;
         uint64 tt;
@@ -97,7 +97,7 @@ private:
         tt = (li.QuadPart - EPOCHFILETIME) / 10;
         tv->tv_sec = tt / 1000000;
         tv->tv_usec = tt % 1000000;
-#endif
+    #endif
     }
 private:
     struct timeval      start_time;

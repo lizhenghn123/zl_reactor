@@ -19,15 +19,16 @@ NAMESPACE_ZL_THREAD_START
 #if defined(OS_WINDOWS)
 typedef HANDLE native_thread_handle;
 #else
+#include <unistd.h>
+#include <errno.h>
 typedef pthread_t native_thread_handle;
 #endif
 
 class Thread : zl::NonCopy
 {
 public:
-    typedef std::function<void ()> ThreadFunc;
-
     class id;
+    typedef std::function<void ()> ThreadFunc;
 
 public:
     explicit Thread(const ThreadFunc& func, const std::string& name = "unknown");
@@ -72,7 +73,6 @@ private:
 class Thread::id
 {
 public:
-    /// Default constructor.
     /// The default constructed ID is that of thread without a thread of execution.
     id() : mId(0) {};
 
@@ -152,7 +152,8 @@ namespace chrono
 {
     /// Duration template class. This class provides enough functionality to
     /// implement @c this_thread::sleep_for().
-    template <class _Rep, class _Period = ratio<1> > class duration
+    template < class _Rep, class _Period = ratio<1> >
+    class duration
     {
     private:
         _Rep rep_;
@@ -187,16 +188,21 @@ namespace this_thread
     /// Return the thread ID of the calling thread.
     Thread::id get_id();
 
+    inline int tid()
+    {
+        return static_cast<int>(get_id().tid());
+    }
+
     /// Yield execution to another thread.
     /// Offers the operating system the opportunity to schedule another thread
     /// that is ready to run on the current processor.
     inline void yield()
     {
-#if defined(OS_WINDOWS)
+    #if defined(OS_WINDOWS)
         Sleep(0);
-#else
+    #else
         sched_yield();
-#endif
+    #endif
     }
 
     /// Blocks the calling thread for a period of time.
@@ -208,13 +214,24 @@ namespace this_thread
     /// @endcode
     /// @note Supported duration types are: nanoseconds, microseconds,
     /// milliseconds, seconds, minutes and hours.
-    template <class _Rep, class _Period> void sleep_for(const chrono::duration<_Rep, _Period>& aTime)
+    template <class _Rep, class _Period>
+    void sleep_for(const chrono::duration<_Rep, _Period>& aTime)
     {
-#if defined(OS_WINDOWS)
+    #if defined(OS_WINDOWS)
         Sleep(int(double(aTime.count()) * (1000.0 * _Period::_as_double()) + 0.5));
-#else
-        usleep(int(double(aTime.count()) * (1000000.0 * _Period::_as_double()) + 0.5));
-#endif
+    #else
+        while(usleep(int(double(aTime.count()) * (1000000.0 * _Period::_as_double()) + 0.5)) != 0 && errno == EINTR);
+    #endif
+    }
+
+    inline void sleep(uint32_t millsecond)
+    {
+    //#if defined(OS_WINDOWS)
+    //    Sleep(millsecond);
+    //#else
+    //    usleep(millsecond / 1000);
+    //#endif
+        sleep_for(chrono::milliseconds(millsecond));
     }
 }
 

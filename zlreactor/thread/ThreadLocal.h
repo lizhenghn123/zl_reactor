@@ -31,7 +31,7 @@ NAMESPACE_ZL_THREAD_START
 
 #ifdef OS_WINDOWS
 template<typename T>
-class ThreadLocal : NonCopy
+class ThreadLocal : zl::NonCopy
 {
 public:
     ThreadLocal()

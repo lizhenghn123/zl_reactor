@@ -18,7 +18,7 @@ NAMESPACE_ZL_THREAD_START
 
 class Thread;
 
-class ThreadPool : NonCopy
+class ThreadPool : zl::NonCopy
 {
 public:
     typedef std::function<void ()> Task;

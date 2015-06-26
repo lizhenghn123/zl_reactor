@@ -29,6 +29,8 @@ public:
 public:
     int fd() { return eventfd_; }
 
+    void notify() { write(1); }
+
     ssize_t write(uint64_t value = 1);
 
     ssize_t read(uint64_t *value = NULL);

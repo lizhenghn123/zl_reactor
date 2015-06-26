@@ -3,7 +3,21 @@
 #include "base/Logger.h"
 NAMESPACE_ZL_NET_START
 
-SocketInitialization  g_socket_init_once;
+namespace
+{
+    class SocketInitialization
+    {
+    public:
+        SocketInitialization()
+        {
+            SocketUtil::socketInitialise();
+        }
+        ~SocketInitialization()
+        {
+            SocketUtil::socketCleanup();
+        }
+    }g_socket_init_once ;
+}
 
 int SocketUtil::socketInitialise()
 {
@@ -51,17 +65,27 @@ void SocketUtil::shutdownWrite(ZL_SOCKET sockfd)
 
 ZL_SOCKET SocketUtil::createSocketAndListen(const char *ip, int port, int backlog)
 {
-    ZL_SOCKET sockfd = ZL_CREATE_SOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    ZL_SOCKET sockfd = SocketUtil::createSocket();
     if(sockfd < 0) return sockfd;
-    setNonBlocking(sockfd, true);
 
+    int ret = SocketUtil::bind(sockfd, ip, port);
+    if (ret < 0) return ret;
+
+    ret = ZL_LISTEN(sockfd, backlog);
+    if (ret < 0) return ret;
+
+    return sockfd;
+}
+
+int  SocketUtil::bind(ZL_SOCKET sockfd, const char *ip, int port)
+{
     ZL_SOCKADDR_IN  sockaddr;
     ::memset(&sockaddr, 0, sizeof(sockaddr));
     sockaddr.sin_family = AF_INET;
     sockaddr.sin_port = htons(port);
+    //sockaddr_.sin_addr.s_addr = INADDR_ANY;
     int nIP = 0;
-    if(!ip || '\0' == *ip || 0 == strcmp(ip, "0")
-        || 0 == strcmp(ip, "0.0.0.0") || 0 == strcmp(ip, "*"))
+    if (!ip || '\0' == *ip || 0 == strcmp(ip, "0") || 0 == strcmp(ip, "0.0.0.0") || 0 == strcmp(ip, "*"))
     {
         nIP = htonl(INADDR_ANY);
     }
@@ -71,13 +95,7 @@ ZL_SOCKET SocketUtil::createSocketAndListen(const char *ip, int port, int backlo
     }
     sockaddr.sin_addr.s_addr = nIP;
 
-    int res = ZL_BIND(sockfd, (struct sockaddr *) &sockaddr, sizeof(sockaddr));
-    if(res < 0) return res;
-
-    res = ZL_LISTEN(sockfd, backlog);
-    if(res < 0) return res;
-
-    return sockfd;
+    return ZL_BIND(sockfd, (struct sockaddr *) &sockaddr, sizeof(sockaddr));
 }
 
 int  SocketUtil::connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr)
@@ -85,10 +103,10 @@ int  SocketUtil::connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr)
     return ZL_CONNECT(sockfd, (sockaddr *)&addr, static_cast<socklen_t>(sizeof(addr)));
 }
 
-ZL_SOCKET SocketUtil::acceptOne(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
+ZL_SOCKET SocketUtil::accept(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
 {
-    int addrlen = sizeof(*addr);
-    ZL_SOCKET connfd = ZL_ACCEPT(sockfd, (sockaddr *)addr, (socklen_t *)&addrlen);
+    socklen_t addrlen = static_cast<socklen_t>(sizeof(*addr));
+    ZL_SOCKET connfd = ZL_ACCEPT(sockfd, (sockaddr *)addr, &addrlen);
     return connfd;
 }
 

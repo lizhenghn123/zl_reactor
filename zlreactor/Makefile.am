@@ -31,6 +31,7 @@ libzlreactor_la_SOURCES = \
 					 base/Exception.cpp \
 					 base/Daemonize.cpp \
 					 base/StringUtil.cpp \
+					 base/Process.cpp \
 					 base/ProcessUtil.cpp \
 					 base/Logger.cpp \
 					 base/LogFile.cpp \
@@ -51,8 +52,6 @@ libzlreactor_la_SOURCES = \
 					 net/InetAddress.cpp \
 					 net/DomainResolver.cpp \
 					 net/Socket.cpp \
-					 net/ActiveSocket.cpp \
-					 net/PassiveSocket.cpp \
 					 net/EventLoop.cpp \
 					 net/EventLoopThreadPool.cpp \
 					 net/Channel.cpp \

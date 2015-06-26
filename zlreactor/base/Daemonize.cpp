@@ -1,5 +1,6 @@
 ﻿#include "base/Daemonize.h"
 #include <stdio.h>
+#include <assert.h>
 #include <unistd.h>
 #include <signal.h>     // for kill
 #include <errno.h>
@@ -19,24 +20,34 @@ static int initDaemon(int nochdir = 1, int noclose = 0);
 static int checkPid(const char *pidfile);
 static int writePid(const char *pidfile);
 
-int createDaemonize(const char *pidfile, int nochdir/* = 1*/, int noclose/* = 0*/)
+int createDaemonize(int nochdir/* = 1*/, int noclose/* = 0*/, const char *pidfile/* = 0*/)
 {
-    int pid = checkPid(pidfile);
-    if (pid)
+    int pid = 0;
+    if (pidfile)
     {
-        fprintf(stderr, "The process is already running, pid = %d.\n", pid);
-        exit(1);
+        int pid = checkPid(pidfile);
+        if (pid)
+        {
+            fprintf(stderr, "The process is already running, pid = %d.\n", pid);
+            return -1;
+        }
     }
 
     if (initDaemon(nochdir, noclose) != 0)
     {
         fprintf(stderr, "Now daemonize failed.\n");
-        exit(1);
+        return -1;
     }
 
-    pid = writePid(pidfile);
-
-    return (pid == 0) ? 1 : 0;
+    if (pidfile)
+    {
+        pid = writePid(pidfile);
+    }
+    else
+    {
+        pid = ::getpid();
+    }
+    return pid;
 }
 
 int exitDaemonize(const char *pidfile)
@@ -86,21 +97,21 @@ static int initDaemon(int nochdir/* = 1*/, int noclose/* = 0*/)
 static int checkPid(const char *pidfile)
 {
     if(pidfile == NULL)
-        return 0;
+        return -1;
 
     FILE *f = fopen(pidfile,"r");
     if (f == NULL)
-        return 0;
+        return -1;
 
     int pid = 0;
     int n = fscanf(f,"%d", &pid);
     fclose(f);
 
     if (n !=1 || pid == 0 || pid == ::getpid())
-        return 0;
+        return -1;
 
     if (kill(pid, 0) && errno == ESRCH)
-        return 0;
+        return -1;
 
     return pid;
 }
@@ -108,20 +119,20 @@ static int checkPid(const char *pidfile)
 static int writePid(const char *pidfile)
 {
     if(pidfile == NULL)
-        return 0;
+        return -1;
 
     int fd = ::open(pidfile, O_RDWR|O_CREAT, 0644);
     if (fd == -1)
     {
         fprintf(stderr, "Now create %s failed.\n", pidfile);
-        return 0;
+        return -1;
     }
 
     FILE *file = ::fdopen(fd, "r+");
     if (file == NULL)
     {
         fprintf(stderr, "Now open %s failed.\n", pidfile);
-        return 0;
+        return -1;
     }
 
     int pid = 0;
@@ -137,7 +148,7 @@ static int writePid(const char *pidfile)
         {
             fprintf(stderr, "Now lock pidfile failed, lock is held by pid %d.\n", pid);
         }
-        return 0;
+        return -1;
     }
 
     pid = ::getpid();
@@ -145,7 +156,7 @@ static int writePid(const char *pidfile)
     {
         fprintf(stderr, "Now write pid %d to %s failed.\n", pid, pidfile);
         ::close(fd);
-        return 0;
+        return -1;
     }
     fflush(file);
 

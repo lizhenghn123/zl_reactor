@@ -45,7 +45,7 @@ class Atomic
 public:
     Atomic()
     {
-		ATOMIC_SET(&atomic_, 0);
+        ATOMIC_SET(&atomic_, 0);
     }
 
 public:
@@ -54,52 +54,52 @@ public:
         ATOMIC_ADD(&atomic_, n);
     }
 
-	T getAndAdd(T n)
-	{
-		return ATOMIC_FETCH_AND_ADD(&atomic_, n);
-	}
+    T getAndAdd(T n)
+    {
+        return ATOMIC_FETCH_AND_ADD(&atomic_, n);
+    }
 
-	T addAndGet(T n)
-	{
-		//return ATOMIC_FETCH_AND_ADD(&atomic_, n) + n;   // This is OK!
-		//return getAndAdd(n) + n;                        // This is OK!
-	#ifdef OS_LINUX
-		return ATOMIC_ADD_AND_FETCH(&atomic_, n);
-	#else
-		return ATOMIC_FETCH_AND_ADD(&atomic_, n) + n;
-	#endif
-	}
-
-	void sub(T n = 1)
-	{
-		ATOMIC_SUB(&atomic_, n);
-	}
-
-	T getAndSub(T n)
-	{
-		return ATOMIC_FETCH_AND_SUB(&atomic_, n);
-	}
-
-	T subAndGet(T n)
-	{
-		//return ATOMIC_FETCH_AND_SUB(&atomic_, n) - n;   // This is OK!
-		//return getAndSub(n) - n;                        // This is OK!
+    T addAndGet(T n)
+    {
+        //return ATOMIC_FETCH_AND_ADD(&atomic_, n) + n;   // This is OK!
+        //return getAndAdd(n) + n;                        // This is OK!
     #ifdef OS_LINUX
-		return ATOMIC_SUB_AND_FETCH(&atomic_, n);
+        return ATOMIC_ADD_AND_FETCH(&atomic_, n);
     #else
-		return ATOMIC_FETCH_AND_SUB(&atomic_, n) + n;
+        return ATOMIC_FETCH_AND_ADD(&atomic_, n) + n;
     #endif
-	}
+    }
 
-	T increment()
-	{
-		return addAndGet(1);
-	}
+    void sub(T n = 1)
+    {
+        ATOMIC_SUB(&atomic_, n);
+    }
 
-	T decrement()
-	{
-		return addAndGet(-1);
-	}
+    T getAndSub(T n)
+    {
+        return ATOMIC_FETCH_AND_SUB(&atomic_, n);
+    }
+
+    T subAndGet(T n)
+    {
+        //return ATOMIC_FETCH_AND_SUB(&atomic_, n) - n;   // This is OK!
+        //return getAndSub(n) - n;                        // This is OK!
+    #ifdef OS_LINUX
+        return ATOMIC_SUB_AND_FETCH(&atomic_, n);
+    #else
+        return ATOMIC_FETCH_AND_SUB(&atomic_, n) + n;
+    #endif
+    }
+
+    T increment()
+    {
+        return addAndGet(1);
+    }
+
+    T decrement()
+    {
+        return addAndGet(-1);
+    }
 
     T value()
     {
@@ -109,7 +109,7 @@ public:
 public:
     T operator++()
     {
-		return addAndGet(1);
+        return addAndGet(1);
     }
 
     T operator--()
@@ -129,22 +129,26 @@ public:
 
     T operator+=(T n)
     {
-		return addAndGet(n);
+        return addAndGet(n);
     }
 
-    T operator-=(T num)
+    T operator-=(T n)
     {
-		return subAndGet(num);
+        return subAndGet(n);
     }
 
-    bool operator==(T value)
+    void operator=(T n)
     {
-        return (value() == value);
+        ATOMIC_SET(&atomic_, n);
+    }
+    bool operator==(T n)
+    {
+        return (value() == n);
     }
 
     operator T()
     {
-		return value();
+        return value();
     }
 
 private:
@@ -173,12 +177,17 @@ public:
 
     bool clear()     // set false
     {
-         return ATOMIC_SET(&atomic_, 0);
+        return ATOMIC_SET(&atomic_, 0);
     }
 
     bool test_and_set()  //set true and return old value
-    {  
+    {
         return ATOMIC_SET(&atomic_, 1);
+    }
+
+    bool value()
+    {
+        return ATOMIC_FETCH(&atomic_);
     }
 
     operator bool()

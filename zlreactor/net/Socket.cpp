@@ -84,10 +84,18 @@ bool Socket::listen(int backlog /*= 5*/) const
     return true;
 }
 
+ZL_SOCKET Socket::accept(ZL_SOCKADDR_IN* peerAddr) const
+{
+    ::memset(&peerAddr, 0, sizeof(peerAddr));
+    socklen_t addr_length = sizeof(peerAddr);
+    ZL_SOCKET connfd = ZL_ACCEPT(sockfd_, (sockaddr *)peerAddr, &addr_length);
+    return connfd;
+}
+
 bool Socket::accept(Socket& new_socket) const
 {
-    int addr_length = sizeof(new_socket.sockaddr_);
-    new_socket.sockfd_ = ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, (socklen_t *)&addr_length);
+    socklen_t addr_length = static_cast<socklen_t>(sizeof(new_socket.sockaddr_));
+    new_socket.sockfd_ = ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, &addr_length);
 
     if(new_socket.sockfd_ <= 0)
         return false;
@@ -99,8 +107,8 @@ ZL_SOCKET Socket::accept(InetAddress *peerAddr) const
 {
     ZL_SOCKADDR_IN addr;
     ::memset(&addr, 0, sizeof(addr));
-    int addr_length = sizeof(addr);
-    ZL_SOCKET connfd = ZL_ACCEPT(sockfd_, (sockaddr *)&addr, (socklen_t *)&addr_length);
+    socklen_t addr_length = static_cast<socklen_t>(sizeof(addr));
+    ZL_SOCKET connfd = ZL_ACCEPT(sockfd_, (sockaddr *)&addr, &addr_length);
     if (connfd > 0)
     {
         peerAddr->setSockAddrInet(addr);
@@ -249,24 +257,7 @@ void Socket::close()
 
 bool Socket::setNonBlocking(bool on /*= true*/)
 {
-#if defined(OS_WINDOWS)
-    unsigned long ul = on ? 1 : 0;
-
-    int ret = ::ioctlsocket(sockfd_, FIONBIO, (unsigned long *)&ul);
-
-    if(ret == SOCKET_ERROR)
-        return false;
-
-#elif defined(OS_LINUX)
-    int flags = ::fcntl(sockfd_, F_GETFL);
-    if(flags < 0)
-        return false;
-
-    on ? flags |= O_NONBLOCK : flags &= (~O_NONBLOCK);
-    if(::fcntl(sockfd_, F_SETFL, flags) != 0)
-        return false;
-#endif
-
+    SocketUtil::setNonBlocking(sockfd_, on);
     return true;
 }
 
@@ -397,7 +388,7 @@ short Socket::getHostPort()
 std::string Socket::getHostIP()
 {
     char ip[256], tmp[256];
-    ZL_SNPRINTF(ip, 128, "%s", inet_ntop(AF_INET, &sockaddr_.sin_addr, tmp, 256));
+    ZL_SNPRINTF(ip, 256, "%s", inet_ntop(AF_INET, &sockaddr_.sin_addr, tmp, 256));
     return std::string(ip);
 }
 
@@ -407,6 +398,5 @@ std::string Socket::getHost()
     ZL_SNPRINTF(host, 256, "%s:%d", inet_ntop(AF_INET, &sockaddr_.sin_addr, ip, 256), ntohs(sockaddr_.sin_port));
     return std::string(host);
 }
-
 
 NAMESPACE_ZL_NET_END
