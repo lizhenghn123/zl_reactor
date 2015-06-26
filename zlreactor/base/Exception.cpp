@@ -1,7 +1,9 @@
 ﻿#include "base/Exception.h"
 #include <execinfo.h>
 #include <stdlib.h>
+#ifdef DO_NAME_DEMANGLE
 #include "base/Demangle.h"
+#endif
 NAMESPACE_ZL_BASE_START
 
 Exception::Exception(const char* errinfo)
