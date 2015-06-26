@@ -1,7 +1,7 @@
 #CXXFLAGS += -Wall -static -g -O2 -fPIC
 
 bin_PROGRAMS = Logger_test SmartAssert_test StringUtil_test Daemon_test Demangle_test ProcessUtil_test Timestamp_test ScopeExitGuard_test \
-			   StlUtil_test AsyncLogger_test Exception_test
+			   StlUtil_test AsyncLogger_test Exception_test Process_test
 
 INCLUDES = -I../../../zlreactor
 CPPFLAGS = -std=c++0x -O2
@@ -25,6 +25,8 @@ Exception_test_SOURCES       = Exception_test.cpp
 ProcessUtil_test_CPPFLAGS    = $(CPPFLAGS)
 ProcessUtil_test_LDFLAGS     = $(CPPFLAGS)
 ProcessUtil_test_SOURCES     = ProcessUtil_test.cpp
+
+Process_test_SOURCES         = Process_test.cpp
 
 Timestamp_test_LDFLAGS       = $(CPPFLAGS) -lrt
 Timestamp_test_SOURCES       = Timestamp_test.cpp

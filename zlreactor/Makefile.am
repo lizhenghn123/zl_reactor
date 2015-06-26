@@ -31,6 +31,7 @@ libzlreactor_la_SOURCES = \
 					 base/Exception.cpp \
 					 base/Daemonize.cpp \
 					 base/StringUtil.cpp \
+					 base/Process.cpp \
 					 base/ProcessUtil.cpp \
 					 base/Logger.cpp \
 					 base/LogFile.cpp \
