@@ -24,6 +24,14 @@ typedef HANDLE native_thread_handle;
 typedef pthread_t native_thread_handle;
 #endif
 
+#if !defined(_TTHREAD_CPP11_) && !defined(thread_local)
+#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__SUNPRO_CC) || defined(__IBMCPP__)
+#define thread_local __thread
+#else
+#define thread_local __declspec(thread)
+#endif
+#endif
+
 class Thread : zl::NonCopy
 {
 public:

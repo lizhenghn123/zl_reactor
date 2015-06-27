@@ -10,14 +10,6 @@ using namespace std;
 using namespace zl;
 using namespace zl::thread;
 
-#if !defined(_TTHREAD_CPP11_) && !defined(thread_local)
-#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__SUNPRO_CC) || defined(__IBMCPP__)
-#define thread_local __thread
-#else
-#define thread_local __declspec(thread)
-#endif
-#endif
-
 namespace thread_usage1
 {
 // Thread function: Thread ID

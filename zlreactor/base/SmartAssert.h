@@ -13,6 +13,7 @@
 #define ZL_SMARTASSERT_H
 #include <string>
 #include <sstream>
+#include <stdlib.h>
 namespace zl
 {
 namespace base
