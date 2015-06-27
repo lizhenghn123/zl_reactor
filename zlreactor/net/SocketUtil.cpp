@@ -152,10 +152,50 @@ int SocketUtil::setReuseAddr(ZL_SOCKET fd, bool resue /*= true*/)
     return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
 }
 
-int setKeepAlive(ZL_SOCKET fd, bool alive /*= true*/)
+int SocketUtil::setKeepAlive(ZL_SOCKET fd, bool alive /*= true*/)
 {
     int optval = alive ? 1 : 0;
     return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval));
+}
+
+int SocketUtil::setSendTimeout(ZL_SOCKET fd, long long timeoutMs)
+{
+    struct timeval tv;
+    tv.tv_sec = timeoutMs / 1000;
+    tv.tv_usec = (timeoutMs % 1000) * 1000;
+
+    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) == -1;
+}
+
+int SocketUtil::getSendTimeout(ZL_SOCKET fd, long long *timeoutMs)
+{
+    struct timeval tv;
+    if (ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) == 0)
+    {
+        *timeoutMs = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+        return 0;
+    }
+    return -1;
+}
+
+int SocketUtil::setRecvTimeout(ZL_SOCKET fd, long long timeoutMs)
+{
+    struct timeval tv;
+    tv.tv_sec = timeoutMs / 1000;
+    tv.tv_usec = (timeoutMs % 1000) * 1000;
+
+    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) == -1;
+}
+
+int SocketUtil::getRecvTimeout(ZL_SOCKET fd, long long* timeoutMs)
+{
+    struct timeval tv;
+    if (ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) == 0)
+    {
+        *timeoutMs = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+        return 0;
+    }
+    return -1;
 }
 
 int SocketUtil::setSendBuffer(ZL_SOCKET fd, int readSize)
@@ -163,29 +203,34 @@ int SocketUtil::setSendBuffer(ZL_SOCKET fd, int readSize)
     return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_SNDBUF, &readSize, sizeof(readSize));
 }
 
+int SocketUtil::getSendBuffer(ZL_SOCKET fd, int* readSize)
+{
+    socklen_t buff_szie = sizeof(socklen_t);
+    return ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_SNDBUF, readSize, &buff_szie);
+}
+
 int SocketUtil::setRecvBuffer(ZL_SOCKET fd, int writeSize)
 {
     return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_RCVBUF, &writeSize, sizeof(writeSize));
 }
 
-int SocketUtil::getSendBuffer(ZL_SOCKET fd) 
+int SocketUtil::getRecvBuffer(ZL_SOCKET fd, int* writeSize)
 {
     socklen_t buff_szie = sizeof(socklen_t);
-    int optname = 0;
-    int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_SNDBUF, &optname, &buff_szie);
-    ZL_UNUSED(ret);
-    assert(ret != -1);
-    return optname > 0 ? optname : 0;
+    return ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_RCVBUF, writeSize, &buff_szie);
 }
 
-int SocketUtil::getRecvBuffer(ZL_SOCKET fd)
+int SocketUtil::setOpt(ZL_SOCKET fd, int level, int name, char *value, int len)
 {
-    socklen_t buff_szie = sizeof(socklen_t);
-    int optname = 0;
-    int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_RCVBUF, &optname, &buff_szie);
-    ZL_UNUSED(ret);
-    assert(ret != -1);
-    return optname > 0 ? optname : 0;
+    assert(value != NULL);
+    assert(len > 0);
+    return ZL_SETSOCKOPT(fd, level, name, value, static_cast<socklen_t>(len));
+}
+
+int  SocketUtil::getOpt(ZL_SOCKET fd, int level, int optname, int& optval)
+{
+    ZL_SOCKLEN optlen = sizeof(optval);
+    return ZL_GETSOCKOPT(fd, level, optname, &optval, &optlen);
 }
 
 typedef struct sockaddr SA;

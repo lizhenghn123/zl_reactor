@@ -179,10 +179,18 @@ public:
     static int setReuseAddr(ZL_SOCKET fd, bool resue = true);
     static int setKeepAlive(ZL_SOCKET fd, bool alive = true);
 
+    static int setSendTimeout(ZL_SOCKET fd, long long timeoutMs);
+    static int getSendTimeout(ZL_SOCKET fd, long long* timeoutMs);
+    static int setRecvTimeout(ZL_SOCKET fd, long long timeoutMs);
+    static int getRecvTimeout(ZL_SOCKET fd, long long* timeoutMs);
+
     static int setSendBuffer(ZL_SOCKET fd, int readSize);
+    static int getSendBuffer(ZL_SOCKET fd, int* readSize);
     static int setRecvBuffer(ZL_SOCKET fd, int writeSize);
-    static int getSendBuffer(ZL_SOCKET fd);
-    static int getRecvBuffer(ZL_SOCKET fd);
+    static int getRecvBuffer(ZL_SOCKET fd, int* writeSize);
+
+    static int setOpt(ZL_SOCKET fd, int level, int name, char *value, int len);
+    static int getOpt(ZL_SOCKET fd, int level, int optname, int& optval);
 
     static struct sockaddr_in getLocalAddr(ZL_SOCKET sockfd);
     static struct sockaddr_in getPeerAddr(ZL_SOCKET sockfd);
