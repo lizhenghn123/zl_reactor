@@ -57,8 +57,8 @@ int main()
 
     char data[20];
     ::memset(data, 0, 20);
-    for(int i=0; i<20; i++)
-        data[i] = i % 200 + 1;
+    for(char c = 'A'; c < 'A' + 20 - 1; c++)
+        data[c - 'A'] = c;
     s = zl::base::stringFormat("%s", data);
     cout << s << "\n";
 
