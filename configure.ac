@@ -98,6 +98,11 @@ AC_OUTPUT
 
 AC_MSG_NOTICE
 AC_MSG_NOTICE([Report:])
+AC_MSG_NOTICE([ ______     ____  _____    _    ____ _____ ___  ____    ])
+AC_MSG_NOTICE([|__  / |   |  _ \| ____|  / \  / ___|_   _/ _ \|  _ \   ])
+AC_MSG_NOTICE([  / /| |   | |_) |  _|   / _ \| |     | || | | | |_) |  ])
+AC_MSG_NOTICE([ / /_| |___|  _ <| |___ / ___ \ |___  | || |_| |  _ <   ])
+AC_MSG_NOTICE([/____|_____|_| \_\_____/_/   \_\____| |_| \___/|_| \_\  ])
 AC_MSG_NOTICE([  zlreactor : 1.0 ])
 AC_MSG_NOTICE([  repository: https://github.com/lizhenghn123/zl_reactor.git ])
 AC_MSG_NOTICE([  author    : lizhenghn@gmail.com ])
