@@ -96,6 +96,8 @@ AC_CONFIG_FILES([Makefile
 
 AC_OUTPUT
 
+cp Config.h zlreactor
+
 AC_MSG_NOTICE
 AC_MSG_NOTICE([Report:])
 AC_MSG_NOTICE([ ______     ____  _____    _    ____ _____ ___  ____    ])
