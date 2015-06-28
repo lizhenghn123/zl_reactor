@@ -4,9 +4,6 @@
 // Created          : 2015-03-04
 // Description      :
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-01-18
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_STL_ANY_H

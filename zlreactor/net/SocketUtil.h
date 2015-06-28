@@ -4,9 +4,6 @@
 // Created          : 2014-09-17
 // Description      : socket辅助宏定义、工具函数
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-01-06
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_SOCKETUTIL_H

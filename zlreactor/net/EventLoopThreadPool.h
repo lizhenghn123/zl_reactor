@@ -4,9 +4,6 @@
 // Created          : 2014-11-07
 // Description      : 
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-11-07
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_EVENTLOOPTHREADPOOL_H

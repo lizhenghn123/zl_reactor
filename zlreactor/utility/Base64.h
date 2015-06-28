@@ -4,9 +4,6 @@
 // Created          : 2014-09-16
 // Description      : Base64 ±à½âÂë
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-06-04
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_BASE64_H

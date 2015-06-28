@@ -4,9 +4,6 @@
 // Created          : 2014-09-23
 // Description      : 字符串的多种hash计算
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-23
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_STRINGHASH_H

@@ -4,8 +4,6 @@
 // Created          : 2014-11-23
 // Description      : timerfd need linux kernel > 2.6.25
 //                    Linux下基于基于文件描述符的定时器接口，通过fd的可读事件进行超时通知，能够用于select/poll
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-05-04
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************

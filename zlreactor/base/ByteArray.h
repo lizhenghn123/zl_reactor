@@ -4,9 +4,6 @@
 // Created          : 2014-09-19
 // Description      : 二进制字节流
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-22
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_BYTEARRAY_H

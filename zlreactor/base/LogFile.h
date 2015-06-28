@@ -4,9 +4,6 @@
 // Created          : 2015-06-12
 // Description      : 
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-06-13
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_LOGFILE_H

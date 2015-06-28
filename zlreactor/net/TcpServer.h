@@ -4,9 +4,6 @@
 // Created          : 2014-10-31
 // Description      : 
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-10-31
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_TCPSERVER_H

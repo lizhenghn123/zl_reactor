@@ -4,9 +4,6 @@
 // Created          : 2014-05-16
 // Description      : 条件变量在Windows及Linux平台下的封装
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-08-25
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_CONTDITION_H

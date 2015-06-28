@@ -4,9 +4,6 @@
 // Created          : 2014-09-04
 // Description      : Refer : http://tinythreadpp.bitsnbites.eu/
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-04
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_THREAD_H

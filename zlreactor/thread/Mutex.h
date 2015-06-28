@@ -4,9 +4,6 @@
 // Created          : 2014-05-16
 // Description      : 互斥锁在Windows及Linux平台下的封装
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-06-24
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_MUTEX_H

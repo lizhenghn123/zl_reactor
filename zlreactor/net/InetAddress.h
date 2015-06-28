@@ -4,9 +4,6 @@
 // Created          : 2014-09-06
 // Description      : InetAddress的跨平台包装
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-06
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_INETADDRESS_H

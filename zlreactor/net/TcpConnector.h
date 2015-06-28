@@ -4,9 +4,6 @@
 // Created          : 2014-10-26
 // Description      : 客户端连接器，连接远程Socket
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-12-22
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_TCPCONNECTOR_H

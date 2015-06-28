@@ -4,9 +4,6 @@
 // Created          : 2014-07-01
 // Description      : 平台定义
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-06-21
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_OSDEFINE_H

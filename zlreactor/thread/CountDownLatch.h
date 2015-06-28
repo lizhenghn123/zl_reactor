@@ -4,9 +4,6 @@
 // Created          : 2014-06-08
 // Description      : 同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-08-25
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_COUNTDOWNLATCH_H

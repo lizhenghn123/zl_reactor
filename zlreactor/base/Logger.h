@@ -4,9 +4,6 @@
 // Created          : 2014-07-13
 // Description      : 日志类,可设置日志级别\输出格式\输出类型\重定向输出
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-06-12
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_ZLOG_H

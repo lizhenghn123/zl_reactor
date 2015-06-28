@@ -132,6 +132,18 @@ void test_rollback()
         onFailureRollback.dismiss();
         break;
     }
+    //cout << "===========rollback 3===========\n";
+    // something like this
+    // classB *b = new classB;
+    // ScopeExitGuard onSuccessRollback([&] { delete b;});
+    // if(!init1(b))
+    //     return NULL;
+    // if(!init2(b))
+    //     return NULL;
+    // if(!init3(b) || !init4(b))
+    //     return NULL;
+    // onSuccessRollback.dismiss();   // dismiss, 不会再删除指针b
+    // return b;
 }
 
 int main()

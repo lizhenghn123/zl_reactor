@@ -4,9 +4,6 @@
 // Created          : 2014-08-21
 // Description      : 原子操作计数器,
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-05-31
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_ATOMIC_H

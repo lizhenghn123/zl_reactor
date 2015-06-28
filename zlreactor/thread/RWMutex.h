@@ -4,9 +4,6 @@
 // Created          : 2014-12-14
 // Description      : 读写锁在Windows及Linux平台下的封装
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-12-14
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_RWMUTEX_H

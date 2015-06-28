@@ -4,9 +4,6 @@
 // Created          : 2014-06-16
 // Description      : 支持整数/浮点数，可以双向迭代
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-03-08
-// 
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_STL_RENGE_H

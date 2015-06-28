@@ -4,9 +4,6 @@
 // Created          : 2015-04-09
 // Description      : 
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-04-09
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_DOMAINRESOLVER_H

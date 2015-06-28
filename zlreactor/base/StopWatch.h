@@ -4,9 +4,6 @@
 // Created          : 2014-04-28
 // Description      : 高精度计时器
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-05-14
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_STOPWTACH_H

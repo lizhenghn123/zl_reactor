@@ -4,9 +4,6 @@
 // Created          : 2014-06-08
 // Description      : 固定大小的同步阻塞队列，可工作于多线程环境下，可用于线程之间数据存取
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-01-26
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_BOUNDEDBLOCKINGQUEUE_H

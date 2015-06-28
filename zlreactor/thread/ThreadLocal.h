@@ -8,9 +8,6 @@
 // http://blog.sina.com.cn/s/blog_a0d7d6bd01017n79.html
 // http://www.cs.wustl.edu/~schmidt/PDF/TSS-pattern.pdf
 // http://en.cppreference.com/w/cpp/language/storage_duration
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-10-07
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_THREADLOCAL_H

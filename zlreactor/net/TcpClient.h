@@ -4,9 +4,6 @@
 // Created          : 2014-11-06
 // Description      :
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-11-06
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_TCPCLIENT_H

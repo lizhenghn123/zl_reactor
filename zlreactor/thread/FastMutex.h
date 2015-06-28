@@ -4,9 +4,6 @@
 // Created          : 2014-12-17
 // Description      : Refer : http://tinythreadpp.bitsnbites.eu/
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-12-17
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_FASTMUTEX_H
