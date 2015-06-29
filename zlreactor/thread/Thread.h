@@ -45,6 +45,9 @@ public:
     bool joinable() const;
     void detach();
 
+    /// Return the thread ID of a thread object.
+    id get_id() const;
+
     native_thread_handle threadHandle() const
     {
         return threadId_;
@@ -54,9 +57,6 @@ public:
     {
         return threadName_;
     }
-
-    /// Return the thread ID of a thread object.
-    id get_id() const;
 
     static unsigned int hardware_concurrency();
 
@@ -193,9 +193,16 @@ namespace this_thread
     /// Return the thread ID of the calling thread.
     Thread::id get_id();
 
+    extern thread_local int g_currentTid;
+    void cacheThreadTid();
+
+    /// return thread id of kernel
     inline int tid()
     {
-        return static_cast<int>(get_id().tid());
+        if (g_currentTid == 0)
+            cacheThreadTid();
+
+        return g_currentTid;
     }
 
     /// Yield execution to another thread.

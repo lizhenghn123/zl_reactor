@@ -3,6 +3,7 @@
 #include <process.h>
 #else
 #include <unistd.h>
+#include <syscall.h>
 #endif
 
 NAMESPACE_ZL_THREAD_START
@@ -143,13 +144,35 @@ Thread::id Thread::get_id() const
 //------------------------------------------------------------------------------
 // this_thread
 //------------------------------------------------------------------------------
-Thread::id this_thread::get_id()
+namespace this_thread
 {
-#if defined(OS_WINDOWS)
-    return Thread::id(static_cast<unsigned long int>(GetCurrentThreadId()));
-#else
-    return Thread::id(pthread_self());
-#endif
+    thread_local int g_currentTid = 0;
+
+    int gettid()
+    {
+    #if defined(OS_WINDOWS)
+        return static_cast<int>(::GetCurrentThreadId());
+    #else
+        return static_cast<int>(::syscall(SYS_gettid));
+    #endif
+    }
+
+    void cacheThreadTid()
+    {
+        if (g_currentTid == 0)
+        {
+            g_currentTid = gettid();
+        }
+    }
+
+    Thread::id get_id()
+    {
+    #if defined(OS_WINDOWS)
+        return Thread::id(static_cast<unsigned long int>(::GetCurrentThreadId()));
+    #else
+        return Thread::id(pthread_self());
+    #endif
+    }
 }
 
 NAMESPACE_ZL_THREAD_END
