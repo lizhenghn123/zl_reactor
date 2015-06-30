@@ -32,10 +32,6 @@ struct ThreadImplDataInfo
             // Uncaught exceptions will terminate the application (default behavior according to C++11)
             std::terminate();
         }
-
-        // The thread is no longer executing
-        LockGuard<Mutex> lock(thread_->threadMutex_);
-        thread_->notAThread = true;
     }
 };
 
@@ -52,9 +48,12 @@ void *StartThread(void *aArg)
 }
 
 Thread::Thread(const ThreadFunc& func, const std::string& name/* = unknown*/)
-    : threadId_(0), threadFunc_(func), threadName_(name), notAThread(true)
+    : threadId_(0)
+    , threadFunc_(func)
+    , threadName_(name)
+    , notAThread_(true)
+    , joined_(false)
 {
-    LockGuard<Mutex> lock(threadMutex_);
 
     ThreadImplDataInfo *data = new ThreadImplDataInfo(threadFunc_, this, threadId_);
 
@@ -70,8 +69,7 @@ Thread::Thread(const ThreadFunc& func, const std::string& name/* = unknown*/)
         delete data;
         abort();
     }
-    // The thread is now alive
-    notAThread = false;
+    notAThread_ = false;  // The thread is now alive
 }
 
 Thread::~Thread()
@@ -80,36 +78,36 @@ Thread::~Thread()
         std::terminate();
 }
 
+bool Thread::joinable() const
+{
+    return !joined_ && !notAThread_;
+}
+
 void Thread::join()
 {
     if(joinable())
     {
-#if defined(OS_WINDOWS)
+    #if defined(OS_WINDOWS)
         WaitForSingleObject(threadId_, INFINITE);
         CloseHandle(threadId_);
-#else
+    #else
         pthread_join(threadId_, NULL);
-#endif
+    #endif
+        joined_ = true;
     }
-}
-
-bool Thread::joinable() const
-{
-    LockGuard<Mutex> lock(threadMutex_);
-    return !notAThread;
 }
 
 void Thread::detach()
 {
-    LockGuard<Mutex> lock(threadMutex_);
-    if(!notAThread)
+    // It's not use joinable(), so iff you call detach() more than once, then terimnate
+    if (!joined_/*joinable()*/)
     {
-#if defined(OS_WINDOWS)
+    #if defined(OS_WINDOWS)
         CloseHandle(threadId_);
-#else
+    #else
         pthread_detach(threadId_);
-#endif
-        notAThread = true;
+    #endif
+        notAThread_ = true;
     }
 }
 

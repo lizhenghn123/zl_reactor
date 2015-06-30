@@ -40,13 +40,12 @@ public:
     ~Thread();
 
 public:
-    void start();
     void join();
-    bool joinable() const;
     void detach();
 
-    /// Return the thread ID of a thread object.
-    id get_id() const;
+    bool joinable() const;
+    
+    id get_id() const;  /// Return the thread ID of a thread object.
 
     native_thread_handle threadHandle() const
     {
@@ -65,8 +64,8 @@ private:
     native_thread_handle   threadId_;
     ThreadFunc             threadFunc_;
     std::string            threadName_;
-    mutable Mutex          threadMutex_;     ///< Serializer for access to the thread private data.
-    bool                   notAThread;       ///< True if this object is not a thread of execution.
+    bool                   notAThread_;     ///< True iff this object is not a thread of execution
+	bool                   joined_;         ///< True iff this thread called join 
 #if defined(OS_WINDOWS)
     unsigned int           win32ThreadID_;  ///< Unique thread ID (filled out by _beginthreadex).
 #endif

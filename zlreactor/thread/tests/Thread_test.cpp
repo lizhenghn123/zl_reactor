@@ -206,7 +206,6 @@ void exec_testt(void *arg)
 
 void test_threadusage()
 {
-    // Test 9: detach,  这个在windows下有问题, 因为t释放时，其回调函数并没有结束
     {
         Thread t(std::bind(thread_usage1::ThreadDetach, 43), "d");
         t.detach();
@@ -268,7 +267,7 @@ int main()
   //  threadpool_usage::test_threadpoll();
 
     printf("###### GAME OVER ######\n");
-    printf("wait all threads terminate, please input any thing to exit....");
+    printf("wait all threads exit, please input any thing to exit....\n");
     getchar();
     return 0;
 }

@@ -58,19 +58,18 @@ namespace threadid_test
     void test_threadid()
     {
         {
-            //Thread t(std::bind(ThreadIDs));
-            //t.join();
+            Thread t(std::bind(ThreadIDs));
+            t.join();
         }
         cout << "----------------------\n";
 
         {
             Thread t(std::bind(ThreadDetach, 43), "d");
             t.detach();
-            //t.join();
             cout << " Detached from thread." << "\n";
         }
         cout << "----------------------\n";
-        return;
+
         {
             test_four();
             cout << "#####\n";
@@ -87,7 +86,6 @@ int main()
 
     threadid_test::test_threadid();
 
-    //this_thread::sleep(3000);
     this_thread::sleep_for(chrono::milliseconds(3000));
 
     cout << "main   id=" << this_thread::get_id() << ", tid=" << this_thread::tid() << ", tid=" << gettid() << "\n";
