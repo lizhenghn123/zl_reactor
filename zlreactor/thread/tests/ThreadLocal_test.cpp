@@ -1,10 +1,4 @@
-/*************************************************************************
-	File Name   : ThreadLocal_test.cpp
-	Author      : LIZHENG
-	Mail        : lizhenghn@gmail.com
-	Created Time: Sun 10 May 2015 03:15:05 PM CST
- ************************************************************************/
-#include<iostream>
+#include <iostream>
 #include "thread/Thread.h"
 #include "thread/Mutex.h"
 #include "thread/Condition.h"
@@ -15,44 +9,31 @@ using namespace std;
 using namespace zl;
 using namespace zl::thread;
 
-#if !defined(_TTHREAD_CPP11_) && !defined(thread_local)
-#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__SUNPRO_CC) || defined(__IBMCPP__)
-#define thread_local __thread
-#else
-#define thread_local __declspec(thread)
-#endif
-#endif
-
 namespace thread_tls1
 {
+    thread_local int gLocalVar = 0;
 
-thread_local int gLocalVar;
-// Thread function: Thread-local storage
-void ThreadTLS()
-{
-    gLocalVar = 2;
-    cout << "My gLocalVar is " << gLocalVar << ".\n";
-}
+    void ThreadTLS(int op)
+    {
+        gLocalVar += op;
+        cout << "[" << this_thread::tid() <<"]Thread gLocalVar is " << gLocalVar << ".\n";
+    }
 
-void test_threadtls()
-{
-    // Clear the TLS variable (it should keep this value after all threads are finished).
-    gLocalVar = 1;
-    cout << "Main gLocalVar is " << gLocalVar << ".\n";
+    void test_threadtls()
+    {
+        // Clear the TLS variable (it should keep this value after all threads are finished).
+        gLocalVar = 1;
+        cout << "[" << this_thread::tid() << "]Main   gLocalVar is " << gLocalVar << ".\n";
 
-    // Start child thread that modifies gLocalVar
-    Thread t1(ThreadTLS);
-    t1.join();
+        // Start child thread that modifies gLocalVar
+        Thread t1(std::bind(ThreadTLS, 99));
+        t1.join();   // cout 99, not 99 + 1
 
-    Thread t2(ThreadTLS);
-    t2.join();
+        Thread t2(std::bind(ThreadTLS, 9999));
+        t2.join();   // cout 9999, not 9999+1
 
-    // Check if the TLS variable has changed
-    if (gLocalVar == 1)
-        cout << "Main gLocalID was not changed by the child thread - OK!" << "\n";
-    else
-        cout << "Main gLocalID was changed by the child thread - FAIL!" << "\n";
-}
+        assert(gLocalVar == 1);
+    }
 }
 
 namespace thread_tls2
@@ -60,18 +41,18 @@ namespace thread_tls2
     class TestTLS
     {
     public:
-        TestTLS() 
+        TestTLS()
         {
-            num = -1; 
-            cout << "TestTLS : [" << this << "] " << num << "\n"; 
+            num = -1;
+            cout << "TestTLS : [" << this << "] " << num << "\n";
         }
         ~TestTLS()
         {
-            cout << "~TestTLS : [" << this << "] " << num << "\n"; 
+            cout << "~TestTLS : [" << this << "] " << num << "\n";
         }
         void set(int n)      { num = n; }
-        void plus(int n)     { num +=n; }
-        void print() { cout << "plus : [" << this << "] " << num << "\n"; }
+        void plus(int n)     { num += n; }
+        void print() { cout << "print : [" << this << "] " << num << "\n"; }
     private:
         int num;
     };
@@ -91,7 +72,7 @@ namespace thread_tls2
         Thread t1(std::bind(testTLS, 23));
         t1.join();
 
-        Thread t2(std::bind(testTLS, 12));
+        Thread t2(std::bind(testTLS, 100));
         t2.join();
 
         g_tls->print();
@@ -105,11 +86,12 @@ void test()
     cout << "#######################################\n";
     thread_tls2::test_threadtls();
 }
+
 int main()
 {
     cout << "###### test thread local ######\n";
-    test();    
-    
+    test();
+
     cout << "###### GAME OVER ######\n";
     cout << "please input any char for exiting.\n";
     getchar();
