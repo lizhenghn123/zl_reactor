@@ -1,13 +1,19 @@
 #include <iostream>
+#include <string>
 #include "net/EventLoop.h"
 #include "net/http/HttpServer.h"
 #include "net/http/HttpRequest.h"
 #include "net/http/HttpResponse.h"
 #include "base/FileUtil.h"
+#include "base/Logger.h"
 using namespace std;
 using namespace zl::net;
 
-bool do_print = true;
+// ab -k -n 10000 -c 2000 http://127.0.0.1:8888/index.html
+
+bool do_print = false;
+
+HttpServer* g_httpserver;
 
 void printRequestHeaders(const HttpRequest& req)
 {
@@ -23,6 +29,8 @@ void printRequestHeaders(const HttpRequest& req)
     }
     std::cout << "---------------------------------------------------\n";
 }
+
+std::string g_indexData;
 
 void doGet(const HttpRequest& req, HttpResponse *resp)
 {
@@ -55,6 +63,22 @@ void doGet(const HttpRequest& req, HttpResponse *resp)
         resp->addHeader("Server", "test_myHttpServer");
         resp->setBody("hello, world!\n");
     }
+    else if (url == "/index.html")
+    {
+        resp->setStatusCode(HttpStatusOk);
+        resp->setContentType("text/plain");
+        if (0)   // 每一次都从本地路径读取
+        {
+            string path(g_httpserver->rootDir() + url);
+            string data;
+            zl::FileUtil::readFile(path.c_str(), data);
+            resp->setBody(data);
+        }
+        else    // 提前预读取
+        {
+            resp->setBody(g_indexData);
+        }
+    }
     else
     {
         resp->setStatusCode(HttpStatusNotFound);
@@ -72,14 +96,21 @@ void doPost(const HttpRequest& req, HttpResponse *resp)
 
 int main()
 {
+    LOG_DISABLE_ALL;
+
     EventLoop loop;
-    HttpServer server(&loop, InetAddress("192.168.14.6", 8888), "myHttpServer");
-    server.setMultiReactorThreads(2);
-    server.setRootDir("webs");
+    HttpServer server(&loop, InetAddress("127.0.0.1", 8888), "myHttpServer");
+    //server.setMultiReactorThreads(2);
+    server.setRootDir("/var/www/html");
     server.setDefaultPage("index.html");
 
     server.setCallback(HttpGet, doGet);
     server.setCallback(HttpPost, doPost);
+
+    g_httpserver = &server;
+
+    string path(g_httpserver->rootDir() + "/index.html");
+    zl::FileUtil::readFile(path.c_str(), g_indexData);
 
     server.start();
     loop.loop();

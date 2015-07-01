@@ -4,9 +4,6 @@
 // Created          : 2014-09-26
 // Description      : I/O MultiPlexing 抽象接口
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-26
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_POLLER_H
@@ -39,7 +36,7 @@ public:
     typedef std::map<ZL_SOCKET, Channel *>  ChannelMap;
 
 public:
-    Poller(EventLoop *loop);
+    explicit Poller(EventLoop *loop);
     virtual ~Poller();
 
     /// 根据各种宏定义及操作系统区分创建可用的backends

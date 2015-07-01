@@ -64,11 +64,10 @@ void EventLoop::loop()
         activeChannels_.clear();
 
         int timeoutMs = 0;
-        now = Timestamp::now();
         Timestamp nextExpired = timerQueue_->getNearestExpiration();
         if(nextExpired.valid())
         {
-            
+            now = Timestamp::now();
             double seconds = Timestamp::timeDiff(nextExpired, now);
             LOG_INFO("nextExpired.valid() [%s][%s][%lf]", nextExpired.toString().c_str(), now.toString().c_str(), seconds);
             if(seconds <= 0)

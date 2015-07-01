@@ -62,8 +62,8 @@ void HttpResponse::compileToBuffer(NetBuffer* output) const
         output->write(body_);
     }
 
-    const string& s =  output->toString();
-    printf("[[%d][\n%s]]\n", (int)s.size(), s.c_str());
+    //const string& s =  output->toString();
+    //printf("[[%d][\n%s]]\n", (int)s.size(), s.c_str());
 }
 
 NAMESPACE_ZL_NET_END
