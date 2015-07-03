@@ -12,11 +12,8 @@
 #include "Define.h"
 #include <assert.h>
 #include "base/NonCopy.h"
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
-#include <process.h>
 #else
 #include <pthread.h>
 #endif

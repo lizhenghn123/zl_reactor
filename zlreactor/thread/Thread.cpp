@@ -2,7 +2,6 @@
 #if defined(OS_WINDOWS)
 #include <process.h>
 #else
-#include <unistd.h>
 #include <syscall.h>
 #endif
 

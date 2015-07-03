@@ -42,7 +42,7 @@ enum ZLogHeader
     ZL_LOG_HEADER_PRIORITY = 0x04,    /**< enable priority name output */
     ZL_LOG_HEADER_MARK     = 0x08,    /**< enable file:line mark output */
     ZL_LOG_HEADER_THREAD   = 0x10,    /**< enable thread identifier output */
-    ZL_LOG_HEADER_DEFAULT  = ZL_LOG_HEADER_DATE | ZL_LOG_HEADER_TIME | ZL_LOG_HEADER_PRIORITY
+    ZL_LOG_HEADER_DEFAULT  = ZL_LOG_HEADER_DATE | ZL_LOG_HEADER_TIME | ZL_LOG_HEADER_PRIORITY | ZL_LOG_HEADER_THREAD
 };
 
 /** Mode of log output */

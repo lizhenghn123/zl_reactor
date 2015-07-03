@@ -5,6 +5,7 @@
 #include "base/Timestamp.h"
 #include "base/FileUtil.h"
 #include "base/LogFile.h"
+#include "thread/Thread.h"
 NAMESPACE_ZL_BASE_START
 
 #define MAX_PRIORITY_NAME_LENGTH   (9)
@@ -145,7 +146,7 @@ bool Logger::log(const char *file, int line, ZLogPriority priority, const char *
     }
     if (header_ & ZL_LOG_HEADER_THREAD)
     {
-        //offset += ZL_SNPRINTF(log_entry + offset, max_size - offset, "%05lu ", ::gettid());
+        offset += ZL_SNPRINTF(log_entry + offset, max_size - offset, "[%d] ", thread::this_thread::tid());
     }
 
     int size = vsnprintf(log_entry + offset, max_size - offset, format, arg_ptr);

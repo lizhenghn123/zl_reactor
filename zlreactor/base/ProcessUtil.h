@@ -4,16 +4,15 @@
 // Created          : 2015-04-07
 // Description      : 进程相关信息获取函数
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-04-08
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_PROCESSUTIL_H
 #define ZL_PROCESSUTIL_H
 #include "Define.h"
-#include "base/Timestamp.h"
+#include <unistd.h>
 #include <string>
+#include "base/Timestamp.h"
+
 using zl::base::Timestamp;
 #ifdef OS_WINDOWS
 typedef unsigned long pid_t;

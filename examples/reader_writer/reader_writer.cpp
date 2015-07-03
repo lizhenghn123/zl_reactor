@@ -10,6 +10,7 @@
 #include <memory>      // for share_ptr
 #include "Define.h"
 #include "thread/Thread.h"
+#include "thread/Mutex.h"
 #include "thread/RWMutex.h"
 #include "thread/Atomic.h"
 using namespace std;

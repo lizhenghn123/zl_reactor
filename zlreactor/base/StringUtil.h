@@ -4,9 +4,6 @@
 // Created          : 2014-08-16
 // Description      : 字符串辅助函数
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-03-12
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_STRING_UTIL_H

@@ -9,6 +9,7 @@
 #include <sys/resource.h>
 #include <sys/times.h>
 #include <sys/prctl.h>    // prctl
+#include <syscall.h>
 NAMESPACE_ZL_START
 
 namespace
