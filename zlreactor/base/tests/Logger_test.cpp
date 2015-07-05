@@ -88,7 +88,6 @@ void bench(int type)
     Timestamp start(Timestamp::now());
     for (int i = 0; i < max_loop; ++i)
     {
-        //LOG_NOTICE("Hello 0123456789 abcdefghijklmnopqrstuvwxyz [%s][%d]", (kLongLog ? longStr.c_str() : ""), 1234);
         LOG_NOTICE(data);
     }
     Timestamp end(Timestamp::now());

@@ -4,9 +4,6 @@
 // Created          : 2014-05-16
 // Description      : 互斥锁在Windows及Linux平台下的封装
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-06-24
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_MUTEX_H
@@ -77,18 +74,34 @@ public:
 
     void lock()
     {
+    #ifdef OS_WINDOWS
+        while (::InterlockedExchange(&lock_, TRUE))
+        {
+            
+        }
+    #elif defined(OS_LINUX)
         while(__sync_lock_test_and_set(&lock_, 1))
         {
+            
         }
+    #endif
     }
 
     void unlock()
     {
+    #ifdef OS_WINDOWS
+        ::InterlockedExchange(&lock_, FALSE);
+    #elif defined(OS_LINUX)
         __sync_lock_release(&lock_);
+    #endif
     }
 
 private:
+#ifdef OS_WINDOWS
+    BOOL lock_;
+#elif defined(OS_LINUX)
     volatile int lock_;
+#endif
 };
 
 class Mutex

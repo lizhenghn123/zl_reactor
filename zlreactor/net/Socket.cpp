@@ -263,82 +263,57 @@ bool Socket::setNonBlocking(bool on /*= true*/)
 
 bool Socket::setNoDelay(bool on /*= true*/)
 {
-    int optval = on ? 1 : 0;
-    return setOpt(IPPROTO_TCP, TCP_NODELAY, (char *)&optval, sizeof(optval));
+    return SocketUtil::setNoDelay(sockfd_, on) == 0;
 }
 
 bool Socket::setReuseAddr(bool on /*= true*/)
 {
-    int optval = on ? 1 : 0;
-    return setOpt(SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
+    return SocketUtil::setReuseAddr(sockfd_, on) == 0;
 }
 
 bool Socket::setKeepAlive(bool on /*= true*/)
 {
-    int optval = on ? 1 : 0;
-    return setOpt(SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval));
+    return SocketUtil::setKeepAlive(sockfd_, on) == 0;
 }
 
 bool Socket::setSendBuffer(int size)
 {
-    return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size)) == 0;
+    return SocketUtil::setSendBuffer(sockfd_, size) == 0;
 }
       
-bool Socket::getSendBuffer(int& size)
+bool Socket::getSendBuffer(int* size)
 {
-    return (ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size)) == 0);
+    return SocketUtil::getSendBuffer(sockfd_, size) == 0;
 }
 
 bool Socket::setRecvBuffer(int size)
 {
-    return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size)) == 0;
+    return SocketUtil::setRecvBuffer(sockfd_, size) == 0;
 }
 
-bool Socket::getRecvBuffer(int& size)
+bool Socket::getRecvBuffer(int* size)
 {
-    return (ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size)) == 0);
+    return SocketUtil::getRecvBuffer(sockfd_, size) == 0;
 }
 
-bool Socket::setSendTimeout(int sendTimeoutSec, int sendTimeoutUsec/* = 0*/)
+bool Socket::setSendTimeout(long long timeoutMs)
 {
-    struct timeval time;
-    time.tv_sec = sendTimeoutSec;
-    time.tv_usec = sendTimeoutUsec;
-
-    return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDTIMEO, &time, sizeof(struct timeval)) == 0;
+    return SocketUtil::setSendTimeout(sockfd_, timeoutMs) == 0;
 }
 
-bool Socket::getSendTimeout(int& sendTimeoutSec, int& sendTimeoutUsec)
+bool Socket::getSendTimeout(long long* timeoutMs)
 {
-    struct timeval time;
-    if(ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_SNDTIMEO, &time, sizeof(struct timeval)) == 0)
-    {
-        sendTimeoutSec = time.tv_sec;
-        sendTimeoutUsec = time.tv_usec;
-        return true;
-    }
-    return false;
+    return SocketUtil::getSendTimeout(sockfd_, timeoutMs) == 0;
 }
 
-bool Socket::setReceiveTimeout(int recvTimeoutSec, int recvTimeoutUsec/* = 0*/)
+bool Socket::setRecvTimeout(long long timeoutMs)
 {
-    struct timeval time;
-    time.tv_sec = recvTimeoutSec;
-    time.tv_usec = recvTimeoutUsec;
-
-    return ZL_SETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVTIMEO, &time, sizeof(struct timeval)) == 0;
+    return SocketUtil::setRecvTimeout(sockfd_, timeoutMs) == 0;
 }
 
-bool Socket::getReceiveTimeout(int& recvTimeoutSec, int& recvTimeoutUsec)
+bool Socket::getRecvTimeout(long long* timeoutMs)
 {
-    struct timeval time;
-    if(ZL_GETSOCKOPT(sockfd_, SOL_SOCKET, SO_RCVTIMEO, &time, sizeof(struct timeval)) == 0)
-    {
-        recvTimeoutSec = time.tv_sec;
-        recvTimeoutUsec = time.tv_usec;
-        return true;
-    }
-    return false;
+    return SocketUtil::getRecvTimeout(sockfd_, timeoutMs) == 0;
 }
 
 bool Socket::setLinger(bool enable, int waitTimeSec /*= 5*/)
@@ -360,22 +335,6 @@ bool Socket::getLinger(bool& enable, int& waitTimeSec)
         return true;
     }
     return false;
-}
-
-bool Socket::setOpt(int level, int name, char *value, int len)
-{
-    assert(value != NULL);
-    assert(len > 0);
-    return ZL_SETSOCKOPT(sockfd_, level, name, value, static_cast<socklen_t>(len)) == 0;
-}
-
-bool  Socket::getOpt(int level, int optname, int& optval)
-{
-    ZL_SOCKLEN optlen = sizeof(optval);
-
-    if(ZL_GETSOCKOPT(sockfd_, level, optname, &optval, &optlen) < 0)
-        return false;
-    return true;
 }
 
 short Socket::getHostPort()

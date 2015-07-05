@@ -4,9 +4,6 @@
 // Created          : 2014-09-24
 // Description      : 与进程相关的性能统计工具
 //                  
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-24
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_PROCESSTIMECOUNTER_H

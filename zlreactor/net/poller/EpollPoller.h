@@ -4,9 +4,6 @@
 // Created          : 2014-09-26
 // Description      : I/O MultiPlexing 的 epoll 实现
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-26
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_EPOLLPOLLER_H
@@ -18,7 +15,7 @@ NAMESPACE_ZL_NET_START
 class EpollPoller : public Poller
 {
 public:
-    EpollPoller(EventLoop *loop, bool enableET = false);
+    explicit EpollPoller(EventLoop *loop, bool enableET = false);
 
     ~EpollPoller();
 

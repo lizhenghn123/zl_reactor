@@ -52,7 +52,7 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
         }
         else if (this->expectHeaders())     // 解析消息头中的参数
         {
-            printf("context->expectHeaders() [%p]\n", this);
+            //printf("context->expectHeaders() [%p]\n", this);
             const char* crlf = buf->findCRLF();
             if (crlf)    //按行添加消息头中的参数
             {
@@ -62,10 +62,10 @@ bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
                     // empty line, end of header
                     this->receiveHeaders();     //下一步应该按get/post来区分是否解析消息体
                     hasMore = !this->gotAll();
-                    printf("parse headers [%d][%d]\n", hasMore, state_);
-                    map<string, string> headers = this->request().headers();
-                    for(map<string, string>::iterator it = headers.begin(); it!=headers.end(); ++it)
-                        std::cout << it->first << " : " << it->second << "\n";
+                    //printf("parse headers [%d][%d]\n", hasMore, state_);
+                    //const map<string, string>& headers = this->request().headers();
+                    //for(map<string, string>::const_iterator it = headers.begin(); it!=headers.end(); ++it)
+                    //    printf("HttpContext::parseRequest headers [%s = %s]\n", it->first.c_str(), it->second.c_str());
                 }
                 buf->retrieveUntil(crlf + 2);
                 //printf("context->expectHeaders() [%s]", buf->toString().c_str());

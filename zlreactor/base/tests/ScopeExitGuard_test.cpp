@@ -1,5 +1,6 @@
 #include <iostream>
 #include <assert.h>
+#include <exception>
 #include "base/ScopeExitGuard.h"
 using namespace std;
 using namespace zl::base;
@@ -102,43 +103,80 @@ void test_scopeexitguard()
         }
     }
     {
-        test *p = new test;
-        //ON_SCOPE_EXIT([&] { delete p; p = NULL; });
-        ScopeExitGuard seg(std::bind(safe_delete, p));
-        p->process(true);
-        throw;
+        try
+        {
+            test *p = new test;
+            //ON_SCOPE_EXIT([&] { delete p; p = NULL; });
+            ScopeExitGuard seg(std::bind(safe_delete, p));
+            p->process(true);
+            throw std::exception();
+        }
+        catch(...)
+        {
+            cout << "get exception, now p must be deconstruct!!!\n";
+        }
     }
 }
 
-void test_rollback()
+namespace test_rb
 {
-    cout << "===========rollback 1===========\n";
-    while(1)
+    bool init1(test *t) { return true; }
+    bool init2(test *t) { return true; }
+    bool init3(test *t) { return true; }
+    bool init4(test *t) { return true; }
+
+    test* getOneofTestInstance()
     {
-        test t;
-        ScopeExitGuard onFailureRollback([&] { t.reset(); });
-        if(t.process(false) == false) // fail
-            break;
-        onFailureRollback.dismiss();
-        break;
+        test *t = new test;
+        ScopeExitGuard onSuccessRollback([&] { delete t; t = NULL; });
+
+        if(!init1(t))     // init1 failure
+            return NULL;  // 直接return，t 会自动析构
+        if(!init2(t))     // init2 failure
+            return NULL;
+        if(!init3(t) || !init4(t))  // init3 or init4 failure
+            return NULL;
+
+        // now t must be available
+        onSuccessRollback.dismiss(); // dismiss， t不会析构，直接返回
+        return t;
     }
-    cout << "===========rollback 2===========\n";
-    while(1)
+    void test_rollback()
     {
-        test t;
-        ScopeExitGuard onFailureRollback([&] { t.reset(); });
-        if(t.process(true) == false) // fail
+        cout << "===========rollback 1===========\n";
+        while(1)
+        {
+            test t;
+            ScopeExitGuard onFailureRollback([&] { t.reset(); });
+            if(t.process(false) == false) // fail
+                break;
+            onFailureRollback.dismiss();
             break;
-        onFailureRollback.dismiss();
-        break;
+        }
+        cout << "===========rollback 2===========\n";
+        while(1)
+        {
+            test t;
+            ScopeExitGuard onFailureRollback([&] { t.reset(); });
+            if(t.process(true) == false) // fail
+                break;
+            onFailureRollback.dismiss();
+            break;
+        }
+
+        cout << "===========rollback 3===========\n";
+        test *t = getOneofTestInstance();
+        ScopeExitGuard autodeleter([&] { delete t; t = NULL; });
+        // do something for t
     }
 }
+
 
 int main()
 {
     test_scopeexitguard();
 
-    test_rollback();
+    test_rb::test_rollback();
 
     return 0;
 }

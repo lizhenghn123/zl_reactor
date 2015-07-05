@@ -3,31 +3,21 @@
 // Filename         : ThreadLocal.h
 // Author           : LIZHENG
 // Created          : 2014-10-07
-// Description      : Thread Local Storage(TLS)  似乎不能正常释放（比如在线程中使用该类）
-// http://blog.csdn.net/evilswords/article/details/8191230
-// http://blog.sina.com.cn/s/blog_a0d7d6bd01017n79.html
-// http://www.cs.wustl.edu/~schmidt/PDF/TSS-pattern.pdf
-// http://en.cppreference.com/w/cpp/language/storage_duration
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-10-07
-//
+// Description      : Thread Local Storage(TLS)
+// 
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_THREADLOCAL_H
 #define ZL_THREADLOCAL_H
 #include "Define.h"
+#include <assert.h>
 #include "base/NonCopy.h"
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
-#include <stdio.h>
 #ifdef OS_WINDOWS
 #include <Windows.h>
-#include <process.h>
 #else
 #include <pthread.h>
 #endif
 NAMESPACE_ZL_THREAD_START
-
 
 #ifdef OS_WINDOWS
 template<typename T>
@@ -37,12 +27,13 @@ public:
     ThreadLocal()
     {
         tlsKey_ = TlsAlloc();
+        assert(tlsKey_ != TLS_OUT_OF_INDEXES);
     }
 
     ~ThreadLocal()
     {
         LPVOID p = TlsGetValue(tlsKey_);
-        if(p != NULL)
+        if (p != NULL)
         {
             T *obj = static_cast<T*>(p);
             delete obj;
@@ -57,12 +48,12 @@ public:
         return *get();
     }
 
-    T& operator*() 
+    T& operator*()
     {
         return *get();
     }
 
-    T* operator->() 
+    T* operator->()
     {
         return get();
     }
@@ -70,7 +61,7 @@ public:
     T* get() const
     {
         LPVOID p = TlsGetValue(tlsKey_);
-        if(p == NULL)
+        if (p == NULL)
         {
             T *obj = new T;
             TlsSetValue(tlsKey_, obj);
@@ -82,19 +73,19 @@ public:
         }
     }
 
-	T* release()
-	{
-		T *obj = static_cast<T*>(TlsGetValue(tlsKey_));
-		TlsSetValue(tlsKey_, NULL);
-		return obj;
-	}
+    T* release()
+    {
+        T *obj = static_cast<T*>(TlsGetValue(tlsKey_));
+        TlsSetValue(tlsKey_, NULL);
+        return obj;
+    }
 
-	void reset(T *p = NULL)
-	{
-		T *obj = static_cast<T*>(TlsGetValue(tlsKey_));
-		delete obj;
-		TlsSetValue(tlsKey_, p);
-	}
+    void reset(T *p = NULL)
+    {
+        T *obj = static_cast<T*>(TlsGetValue(tlsKey_));
+        delete obj;
+        TlsSetValue(tlsKey_, p);
+    }
 
 private:
     DWORD tlsKey_;
@@ -102,7 +93,7 @@ private:
 
 #else
 template<typename T>
-class ThreadLocal : NonCopy
+class ThreadLocal : zl::NonCopy
 {
 public:
     ThreadLocal()
@@ -112,9 +103,9 @@ public:
 
     ~ThreadLocal()
     {
-		T *p = get();
-		if(p)
-			delete p;
+        T *p = get();
+        if (p)
+            delete p;
         pthread_key_delete(tlsKey_);
     }
 
@@ -124,12 +115,12 @@ public:
         return *get();
     }
 
-    T& operator*() 
+    T& operator*()
     {
         return *get();
     }
 
-    T* operator->() 
+    T* operator->()
     {
         return get();
     }
@@ -137,35 +128,36 @@ public:
     T* get() const
     {
         T* obj = static_cast<T*>(pthread_getspecific(tlsKey_));
-        if (obj == NULL) 
+        if (!obj)
         {
             T* newObj = new T;
             pthread_setspecific(tlsKey_, newObj);
-            return newObj;
+            obj = newObj;
         }
         return obj;
     }
 
-	T* release()
-	{
-		T *obj = get();
-		pthread_setspecific(tlsKey_, NULL);
-		return obj;
-	}
+    T* release()
+    {
+        T *obj = get();
+        pthread_setspecific(tlsKey_, NULL);
+        return obj;
+    }
 
-	void reset(T *p = NULL)
-	{
-		T *obj = get();
-		delete obj;
-		obj = NULL;
-		pthread_setspecific(tlsKey_, p);
-	}
+    void reset(T *p = 0)
+    {
+        T *obj = get();
+        delete obj;
+        obj = 0;
+        pthread_setspecific(tlsKey_, p);
+    }
 
+private:
     static void cleanHook(void *x)
     {
         T* obj = static_cast<T*>(x);
         delete obj;
-		obj = NULL;
+        obj = 0;
     }
 
 private:

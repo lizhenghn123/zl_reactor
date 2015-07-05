@@ -10,14 +10,6 @@ using namespace std;
 using namespace zl;
 using namespace zl::thread;
 
-#if !defined(_TTHREAD_CPP11_) && !defined(thread_local)
-#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__SUNPRO_CC) || defined(__IBMCPP__)
-#define thread_local __thread
-#else
-#define thread_local __declspec(thread)
-#endif
-#endif
-
 namespace thread_usage1
 {
 // Thread function: Thread ID
@@ -214,7 +206,6 @@ void exec_testt(void *arg)
 
 void test_threadusage()
 {
-    // Test 9: detach,  这个在windows下有问题, 因为t释放时，其回调函数并没有结束
     {
         Thread t(std::bind(thread_usage1::ThreadDetach, 43), "d");
         t.detach();
@@ -276,7 +267,7 @@ int main()
   //  threadpool_usage::test_threadpoll();
 
     printf("###### GAME OVER ######\n");
-    printf("wait all threads terminate, please input any thing to exit....");
+    printf("wait all threads exit, please input any thing to exit....\n");
     getchar();
     return 0;
 }

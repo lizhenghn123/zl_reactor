@@ -4,9 +4,6 @@
 // Created          : 2015-06-15
 // Description      : 
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-06-16
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_ASYNCLOGGER_H

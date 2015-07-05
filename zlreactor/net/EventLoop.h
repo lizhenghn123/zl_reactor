@@ -4,9 +4,6 @@
 // Created          : 2014-10-26
 // Description      : io service, 可管理socket，timer，signal等io
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-10-26
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_EVENTLOOP_H

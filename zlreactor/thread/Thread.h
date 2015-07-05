@@ -4,9 +4,6 @@
 // Created          : 2014-09-04
 // Description      : Refer : http://tinythreadpp.bitsnbites.eu/
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-04
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_THREAD_H
@@ -24,6 +21,14 @@ typedef HANDLE native_thread_handle;
 typedef pthread_t native_thread_handle;
 #endif
 
+#if !defined(_TTHREAD_CPP11_) && !defined(thread_local)
+#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__SUNPRO_CC) || defined(__IBMCPP__)
+#define thread_local __thread
+#else
+#define thread_local __declspec(thread)
+#endif
+#endif
+
 class Thread : zl::NonCopy
 {
 public:
@@ -35,10 +40,12 @@ public:
     ~Thread();
 
 public:
-    void start();
     void join();
-    bool joinable() const;
     void detach();
+
+    bool joinable() const;
+    
+    id get_id() const;  /// Return the thread ID of a thread object.
 
     native_thread_handle threadHandle() const
     {
@@ -50,9 +57,6 @@ public:
         return threadName_;
     }
 
-    /// Return the thread ID of a thread object.
-    id get_id() const;
-
     static unsigned int hardware_concurrency();
 
 private:
@@ -60,8 +64,8 @@ private:
     native_thread_handle   threadId_;
     ThreadFunc             threadFunc_;
     std::string            threadName_;
-    mutable Mutex          threadMutex_;     ///< Serializer for access to the thread private data.
-    bool                   notAThread;       ///< True if this object is not a thread of execution.
+    bool                   notAThread_;     ///< True iff this object is not a thread of execution
+	bool                   joined_;         ///< True iff this thread called join 
 #if defined(OS_WINDOWS)
     unsigned int           win32ThreadID_;  ///< Unique thread ID (filled out by _beginthreadex).
 #endif
@@ -188,9 +192,16 @@ namespace this_thread
     /// Return the thread ID of the calling thread.
     Thread::id get_id();
 
+    extern thread_local int g_currentTid;
+    void cacheThreadTid();
+
+    /// return thread id of kernel
     inline int tid()
     {
-        return static_cast<int>(get_id().tid());
+        if (g_currentTid == 0)
+            cacheThreadTid();
+
+        return g_currentTid;
     }
 
     /// Yield execution to another thread.

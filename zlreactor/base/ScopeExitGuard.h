@@ -4,9 +4,6 @@
 // Created          : 2014-10-01
 // Description      : RAII类，用于资源释放、清理
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-01-11
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_SCOPEEXITGUARD_H

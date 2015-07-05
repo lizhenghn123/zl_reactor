@@ -4,15 +4,13 @@
 // Created          : 2014-09-18
 // Description      : 增强版的Assert实现
 // 
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-01-11
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_SMARTASSERT_H
 #define ZL_SMARTASSERT_H
 #include <string>
 #include <sstream>
+#include <stdlib.h>
 namespace zl
 {
 namespace base

@@ -4,9 +4,6 @@
 // Created          : 2014-07-01
 // Description      : Http协议定义
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-07-01
-// 
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_HTTPPROTOCOL_H

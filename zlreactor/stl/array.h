@@ -4,9 +4,6 @@
 // Created          : 2015-03-03
 // Description      :
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_STL_ARRAY_H

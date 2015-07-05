@@ -4,9 +4,6 @@
 // Created          : 2014-12-22
 // Description      :
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-12-22
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_TIMERQUEUE_H

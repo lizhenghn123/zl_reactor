@@ -4,9 +4,6 @@
 // Created          : 2014-07-02
 // Description      : 
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-03-16
-// 
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_HTTPKEYVALUE_H

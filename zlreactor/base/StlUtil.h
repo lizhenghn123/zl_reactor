@@ -4,9 +4,6 @@
 // Created          : 2014-10-17
 // Description      : stl辅助工具函数
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-05-30
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_STLUTIL_H

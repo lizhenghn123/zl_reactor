@@ -4,9 +4,6 @@
 // Created          : 2014-10-17
 // Description      :
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-10-23
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_FILEUTIL_H

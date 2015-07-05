@@ -4,9 +4,6 @@
 // Created          : 2014-09-17
 // Description      : 网络相关工具类
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-09-17
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_NETUTIL_H

@@ -4,9 +4,6 @@
 // Created          : 2014-05-16
 // Description      : 工作调度，工作在阻塞队列(BlockingQueue 或者 BoundedBlockingQueue)上面
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-06-24
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_BLOCKQUEUEWORKER_H

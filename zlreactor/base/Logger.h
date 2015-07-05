@@ -4,9 +4,6 @@
 // Created          : 2014-07-13
 // Description      : 日志类,可设置日志级别\输出格式\输出类型\重定向输出
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-06-12
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_ZLOG_H
@@ -45,7 +42,7 @@ enum ZLogHeader
     ZL_LOG_HEADER_PRIORITY = 0x04,    /**< enable priority name output */
     ZL_LOG_HEADER_MARK     = 0x08,    /**< enable file:line mark output */
     ZL_LOG_HEADER_THREAD   = 0x10,    /**< enable thread identifier output */
-    ZL_LOG_HEADER_DEFAULT  = ZL_LOG_HEADER_DATE | ZL_LOG_HEADER_TIME | ZL_LOG_HEADER_PRIORITY
+    ZL_LOG_HEADER_DEFAULT  = ZL_LOG_HEADER_DATE | ZL_LOG_HEADER_TIME | ZL_LOG_HEADER_PRIORITY | ZL_LOG_HEADER_THREAD
 };
 
 /** Mode of log output */

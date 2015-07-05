@@ -75,9 +75,6 @@
     <ClCompile Include="..\..\zlreactor\net\poller\SelectPoller.cpp">
       <Filter>net\poller</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\zlreactor\net\ActiveSocket.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\zlreactor\net\Channel.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -88,12 +85,6 @@
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\..\zlreactor\net\EventLoopThreadPool.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\zlreactor\net\PassiveSocket.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\zlreactor\net\SignalHandler.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\..\zlreactor\net\TcpAcceptor.cpp">
@@ -140,6 +131,33 @@
     </ClCompile>
     <ClCompile Include="..\..\zlreactor\base\LogFile.cpp">
       <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\Signalfd.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\AsyncLogger.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\ByteArray.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\Daemonize.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\Exception.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\File.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\Logger.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\base\ProcessUtil.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\poller\EpollPoller.cpp">
+      <Filter>net\poller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,9 +292,6 @@
       <Filter>net\poller</Filter>
     </ClInclude>
     <ClInclude Include="..\..\zlreactor\OsDefine.h" />
-    <ClInclude Include="..\..\zlreactor\net\ActiveSocket.h">
-      <Filter>net</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\zlreactor\net\Channel.h">
       <Filter>net</Filter>
     </ClInclude>
@@ -289,13 +304,7 @@
     <ClInclude Include="..\..\zlreactor\net\EventLoopThreadPool.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\zlreactor\net\PassiveSocket.h">
-      <Filter>net</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\zlreactor\net\PipePairFactory.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\zlreactor\net\SignalHandler.h">
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\..\zlreactor\net\TcpAcceptor.h">
@@ -346,5 +355,37 @@
     <ClInclude Include="..\..\zlreactor\base\LogFile.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\Signalfd.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\AsyncLogger.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\ByteArray.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\Daemonize.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\Exception.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\File.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\Logger.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\base\ProcessUtil.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\poller\EpollPoller.h">
+      <Filter>net\poller</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\zlreactor\base\Makefile.am">
+      <Filter>base</Filter>
+    </None>
   </ItemGroup>
 </Project>

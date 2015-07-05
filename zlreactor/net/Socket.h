@@ -4,9 +4,6 @@
 // Created          : 2014-07-01
 // Description      : socket的跨平台包装, 以RAII的方式管理socket fd
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-07-01
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_SOCKET_H
@@ -62,26 +59,23 @@ public:
 
     /** Set/Get SO_SNDBUF */
     bool           setSendBuffer(int size);
-    bool           getSendBuffer(int& size);
+    bool           getSendBuffer(int* size);
 
     /** Set/Get  SO_RCVBUF */
     bool           setRecvBuffer(int size);
-    bool           getRecvBuffer(int& size);
+    bool           getRecvBuffer(int* size);
 
     /** Set/Get  SO_SNDTIMEO */
-    bool           setSendTimeout(int sendTimeoutSec, int sendTimeoutUsec = 0);
-    bool           getSendTimeout(int& sendTimeoutSec, int& sendTimeoutUsec);
+    bool           setSendTimeout(long long timeoutMs);
+    bool           getSendTimeout(long long* timeoutMs);
 
     /** Set/Get  SO_RCVTIMEO */
-    bool           setReceiveTimeout(int recvTimeoutSec, int recvTimeoutUsec = 0);
-    bool           getReceiveTimeout(int& recvTimeoutSec, int& recvTimeoutUsec);
+    bool           setRecvTimeout(long long timeoutMs);
+    bool           getRecvTimeout(long long* timeoutMs);
 
     /** Set/Get  SO_LINGER */
     bool           setLinger(bool enable, int waitTimeSec = 5);
     bool           getLinger(bool& enable, int& waitTimeSec);
-
-    bool           setOpt(int level, int name, char *value, int len);
-    bool           getOpt(int level, int optname, int& optval);
 
     // Net Transimission
     int            send(const std::string& data) const;

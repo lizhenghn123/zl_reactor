@@ -77,15 +77,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\zlreactor\base\AsyncLogger.cpp" />
+    <ClCompile Include="..\..\zlreactor\base\ByteArray.cpp" />
+    <ClCompile Include="..\..\zlreactor\base\Daemonize.cpp" />
     <ClCompile Include="..\..\zlreactor\base\Date.cpp" />
     <ClCompile Include="..\..\zlreactor\base\DateTimeUtil.cpp" />
     <ClCompile Include="..\..\zlreactor\base\Demangle.cpp" />
+    <ClCompile Include="..\..\zlreactor\base\Exception.cpp" />
+    <ClCompile Include="..\..\zlreactor\base\File.cpp" />
     <ClCompile Include="..\..\zlreactor\base\FileUtil.cpp" />
     <ClCompile Include="..\..\zlreactor\base\LogFile.cpp" />
+    <ClCompile Include="..\..\zlreactor\base\Logger.cpp" />
+    <ClCompile Include="..\..\zlreactor\base\ProcessUtil.cpp" />
     <ClCompile Include="..\..\zlreactor\base\StringUtil.cpp" />
     <ClCompile Include="..\..\zlreactor\base\Timestamp.cpp" />
     <ClCompile Include="..\..\zlreactor\base\ZLog.cpp" />
-    <ClCompile Include="..\..\zlreactor\net\ActiveSocket.cpp" />
     <ClCompile Include="..\..\zlreactor\net\Channel.cpp" />
     <ClCompile Include="..\..\zlreactor\net\Eventfd.cpp" />
     <ClCompile Include="..\..\zlreactor\net\EventLoop.cpp" />
@@ -98,10 +104,10 @@
     <ClCompile Include="..\..\zlreactor\net\InetAddress.cpp" />
     <ClCompile Include="..\..\zlreactor\net\NetBuffer.cpp" />
     <ClCompile Include="..\..\zlreactor\net\NetUtil.cpp" />
-    <ClCompile Include="..\..\zlreactor\net\PassiveSocket.cpp" />
+    <ClCompile Include="..\..\zlreactor\net\poller\EpollPoller.cpp" />
     <ClCompile Include="..\..\zlreactor\net\poller\Poller.cpp" />
     <ClCompile Include="..\..\zlreactor\net\poller\SelectPoller.cpp" />
-    <ClCompile Include="..\..\zlreactor\net\SignalHandler.cpp" />
+    <ClCompile Include="..\..\zlreactor\net\Signalfd.cpp" />
     <ClCompile Include="..\..\zlreactor\net\Socket.cpp" />
     <ClCompile Include="..\..\zlreactor\net\SocketUtil.cpp" />
     <ClCompile Include="..\..\zlreactor\net\TcpAcceptor.cpp" />
@@ -119,17 +125,24 @@
     <ClCompile Include="..\..\zlreactor\utility\MD5.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\zlreactor\base\AsyncLogger.h" />
+    <ClInclude Include="..\..\zlreactor\base\ByteArray.h" />
     <ClInclude Include="..\..\zlreactor\base\Closure.h" />
+    <ClInclude Include="..\..\zlreactor\base\Daemonize.h" />
     <ClInclude Include="..\..\zlreactor\base\Date.h" />
     <ClInclude Include="..\..\zlreactor\base\DateTimeUtil.h" />
     <ClInclude Include="..\..\zlreactor\base\Demangle.h" />
+    <ClInclude Include="..\..\zlreactor\base\Exception.h" />
+    <ClInclude Include="..\..\zlreactor\base\File.h" />
     <ClInclude Include="..\..\zlreactor\base\FileUtil.h" />
     <ClInclude Include="..\..\zlreactor\base\HighPrecisionTime.h" />
     <ClInclude Include="..\..\zlreactor\base\IntrusiveList.h" />
     <ClInclude Include="..\..\zlreactor\base\LogFile.h" />
+    <ClInclude Include="..\..\zlreactor\base\Logger.h" />
     <ClInclude Include="..\..\zlreactor\base\MathUtil.h" />
     <ClInclude Include="..\..\zlreactor\base\NonCopy.h" />
     <ClInclude Include="..\..\zlreactor\base\ProcessTimeCounter.h" />
+    <ClInclude Include="..\..\zlreactor\base\ProcessUtil.h" />
     <ClInclude Include="..\..\zlreactor\base\ScopeExitGuard.h" />
     <ClInclude Include="..\..\zlreactor\base\Singleton.h" />
     <ClInclude Include="..\..\zlreactor\base\SmartAssert.h" />
@@ -139,7 +152,6 @@
     <ClInclude Include="..\..\zlreactor\base\Timestamp.h" />
     <ClInclude Include="..\..\zlreactor\base\ZLog.h" />
     <ClInclude Include="..\..\zlreactor\Define.h" />
-    <ClInclude Include="..\..\zlreactor\net\ActiveSocket.h" />
     <ClInclude Include="..\..\zlreactor\net\CallBacks.h" />
     <ClInclude Include="..\..\zlreactor\net\Channel.h" />
     <ClInclude Include="..\..\zlreactor\net\Eventfd.h" />
@@ -154,11 +166,11 @@
     <ClInclude Include="..\..\zlreactor\net\InetAddress.h" />
     <ClInclude Include="..\..\zlreactor\net\NetBuffer.h" />
     <ClInclude Include="..\..\zlreactor\net\NetUtil.h" />
-    <ClInclude Include="..\..\zlreactor\net\PassiveSocket.h" />
     <ClInclude Include="..\..\zlreactor\net\PipePairFactory.h" />
+    <ClInclude Include="..\..\zlreactor\net\poller\EpollPoller.h" />
     <ClInclude Include="..\..\zlreactor\net\poller\Poller.h" />
     <ClInclude Include="..\..\zlreactor\net\poller\SelectPoller.h" />
-    <ClInclude Include="..\..\zlreactor\net\SignalHandler.h" />
+    <ClInclude Include="..\..\zlreactor\net\Signalfd.h" />
     <ClInclude Include="..\..\zlreactor\net\Socket.h" />
     <ClInclude Include="..\..\zlreactor\net\SocketUtil.h" />
     <ClInclude Include="..\..\zlreactor\net\TcpAcceptor.h" />
@@ -188,6 +200,9 @@
     <ClInclude Include="..\..\zlreactor\utility\Hex2String.h" />
     <ClInclude Include="..\..\zlreactor\utility\MD5.h" />
     <ClInclude Include="..\..\zlreactor\utility\UUID.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\zlreactor\base\Makefile.am" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

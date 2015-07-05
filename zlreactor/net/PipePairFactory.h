@@ -5,9 +5,6 @@
 // Description      : pipe、socketpair、eventfd的封装，可用于线程/进程间通信及同步
 //                    未充分验证，可能有bug
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-12-24
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_PIPEPAIRFACTORY_H

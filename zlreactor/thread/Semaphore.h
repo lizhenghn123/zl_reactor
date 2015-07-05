@@ -4,9 +4,6 @@
 // Created          : 2014-06-08
 // Description      : 信号量
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2014-12-21
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_SEMAPHORE_H

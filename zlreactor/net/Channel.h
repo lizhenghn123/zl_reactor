@@ -4,9 +4,6 @@
 // Created          : 2014-10-26
 // Description      :
 //
-// Last Modified By : LIZHENG
-// Last Modified On : 2015-01-12
-//
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_CHANNEL_H
