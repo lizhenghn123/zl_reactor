@@ -4,12 +4,18 @@
 #include <time.h>
 #ifdef OS_WINDOWS
 #include <Windows.h>
+#define ZL_LOCALTIME(a, b)  localtime_s(b, a)
+#define ZL_GMTIME(a, b)     gmtime_s(b, a)
 #else
 #include <sys/time.h>
+#define ZL_LOCALTIME(a, b)  localtime_r(a, b)
+#define ZL_GMTIME(a, b)     gmtime_r(a, b)
 #endif
 
-namespace zl{
-namespace base {
+namespace zl
+{
+namespace base
+{
 
 Timestamp::Timestamp() : microSeconds_(0)
 {
@@ -47,29 +53,31 @@ Timestamp::Timestamp(int64_t ms) : microSeconds_(ms)
 #endif
 }
 
-struct tm* Timestamp::getTm(bool showlocaltime/* = true*/) const
+struct tm Timestamp::getTm(bool showlocaltime/* = true*/) const
 {
+    struct tm tm_time;
     time_t seconds = static_cast<time_t>(microSeconds_ / ZL_USEC_PER_SEC);
     if(showlocaltime)
-        return localtime(&seconds);
+        ZL_LOCALTIME(&seconds, &tm_time);
     else
-        return gmtime(&seconds);
+        ZL_GMTIME(&seconds, &tm_time);
+    return tm_time;
 }
 
 std::string Timestamp::toString(bool showlocaltime/* = true*/) const
 {
-    struct tm *tm_time = NULL;
+    struct tm tm_time;
     time_t seconds = static_cast<time_t>(microSeconds_ / ZL_USEC_PER_SEC);
     int microseconds = microSeconds_ % (ZL_USEC_PER_SEC);
 
     if(showlocaltime)
-        tm_time = localtime(&seconds);
+        ZL_LOCALTIME(&seconds, &tm_time);
     else
-        tm_time = gmtime(&seconds);
+        ZL_GMTIME(&seconds, &tm_time);
 
     char buf[32] = { 0 };
-    ZL_SNPRINTF(buf, sizeof(buf), "%4d-%02d-%02d %02d:%02d:%02d:%06d", tm_time->tm_year + 1900,
-              tm_time->tm_mon + 1, tm_time->tm_mday, tm_time->tm_hour, tm_time->tm_min, tm_time->tm_sec, microseconds);
+    ZL_SNPRINTF(buf, sizeof(buf), "%4d-%02d-%02d %02d:%02d:%02d:%06d", tm_time.tm_year + 1900,
+              tm_time.tm_mon + 1, tm_time.tm_mday, tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec, microseconds);
 
     return buf;
 }

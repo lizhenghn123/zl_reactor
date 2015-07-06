@@ -56,11 +56,11 @@ public:
         getTimeOfDay(&now, NULL);
         return float(GET_TICK_COUNT(now, start_time) / 1000.0);
     }
-    float   elapsedTimeInMicro()
+    int64_t   elapsedTimeInMicro()
     {
         timeval now;
         getTimeOfDay(&now, NULL);
-        return float(GET_TICK_COUNT(now, start_time));
+        return GET_TICK_COUNT(now, start_time);
     }
     float   diffTime(const struct timeval& start)
     {

@@ -9,6 +9,7 @@
 #ifndef ZL_SOCKET_H
 #define ZL_SOCKET_H
 #include <exception>
+#include "base/NonCopy.h"
 #include "net/SocketUtil.h"
 NAMESPACE_ZL_NET_START
 
@@ -24,7 +25,7 @@ public:
     }
 };
 
-class Socket
+class Socket : zl::NonCopy
 {
 public:
     explicit Socket(ZL_SOCKET fd);

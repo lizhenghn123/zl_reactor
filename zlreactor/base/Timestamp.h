@@ -72,7 +72,7 @@ public:
         std::swap(microSeconds_, that.microSeconds_);
     }
 
-    struct tm* getTm(bool showlocaltime = true) const;
+    struct tm getTm(bool showlocaltime = true) const;
     std::string toString(bool showlocaltime = true) const;
 
 private:
