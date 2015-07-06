@@ -26,12 +26,12 @@ namespace
 }
 
 EventLoop::EventLoop()
-    : currentThreadId_(this_thread::get_id()),
-      currentActiveChannel_(NULL),
-      running_(false),
-      eventHandling_(false),
-      callingPendingFunctors_(false),
-      mutex_()
+    : currentThreadId_(this_thread::tid())
+    , currentActiveChannel_(NULL)
+    , running_(false)
+    , eventHandling_(false)
+    , callingPendingFunctors_(false)
+    , mutex_()
 {
     poller_ = Poller::createPoller(this);
 
@@ -201,7 +201,7 @@ void EventLoop::assertInLoopThread() const
     if(!isInLoopThread())
     {
         LOG_ALERT("EventLoop::abortNotInLoopThread - EventLoop [%0x] was created in threadId_ [%d], " 
-            "but current thread id = [%d].", this, currentThreadId_.tid(), this_thread::get_id().tid());
+            "but current thread id = [%d].", this, currentThreadId_, this_thread::tid());
         assert("EventLoop::assertInLoopThread()" && 0);
     }
 }

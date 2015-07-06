@@ -61,7 +61,7 @@ private:
 private:
     typedef std::vector<Channel*> ChannelList;
 
-    const thread::Thread::id currentThreadId_;  // thread id of this object created
+    const int                currentThreadId_;  // thread id of this object created
 
     ChannelList              activeChannels_;   // active channels when poll return
     Channel                  *currentActiveChannel_; // the current processing active channel 

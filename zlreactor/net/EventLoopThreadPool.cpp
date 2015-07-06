@@ -8,7 +8,11 @@ using zl::thread::Thread;
 NAMESPACE_ZL_NET_START
 
 EventLoopThreadPool::EventLoopThreadPool(EventLoop* baseLoop)
-    : baseLoop_(baseLoop), started_(false), numThreads_(0), next_(0), latch_(NULL)
+    : baseLoop_(baseLoop)
+    , started_(false)
+    , numThreads_(0)
+    , next_(0)
+    , latch_(NULL)
 {
 }
 

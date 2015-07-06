@@ -8,7 +8,9 @@
 NAMESPACE_ZL_NET_START
 
 TcpServer::TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::string& server_name/* = "TcpServer"*/)
-    : loop_(loop), serverAddr_(listenAddr.getSockAddrInet()), serverName_(server_name)
+    : loop_(loop)
+    , serverAddr_(listenAddr.getSockAddrInet())
+    , serverName_(server_name)
 {
     acceptor_ = new TcpAcceptor(loop, listenAddr);
     acceptor_->setNewConnectionCallback(std::bind(&TcpServer::newConnection, 
