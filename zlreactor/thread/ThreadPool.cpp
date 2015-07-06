@@ -1,6 +1,8 @@
 ﻿#include "thread/ThreadPool.h"
-#include "thread/Thread.h"
 #include <assert.h>
+#include <exception>
+#include "thread/Thread.h"
+#include "base/Exception.h"
 NAMESPACE_ZL_THREAD_START
 
 ThreadPool::ThreadPool(const std::string& name/* = "ThreadPool"*/)
@@ -63,10 +65,23 @@ void ThreadPool::executeThread()
             }
         }
     }
+    catch (const zl::base::Exception& ex)
+    {
+        fprintf(stderr, "exception caught in ThreadPool %s\n", name_.c_str());
+        fprintf(stderr, "reason: %s\n", ex.what());
+        fprintf(stderr, "stack trace: %s\n", ex.stackTrace());
+        std::abort();
+    }
+    catch (const std::exception& ex)
+    {
+        fprintf(stderr, "exception caught in ThreadPool %s\n", name_.c_str());
+        fprintf(stderr, "reason: %s\n", ex.what());
+        std::abort();           
+    }
     catch (...)
     {
-        //print("caught exception caught in ThreadPool %s\n", name_.c_str());
-        std::abort();
+        fprintf(stderr, "unknown exception caught in ThreadPool %s\n", name_.c_str());
+        throw; // rethrow
     }
 }
 

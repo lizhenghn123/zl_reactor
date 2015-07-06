@@ -2,7 +2,7 @@
 // Filename         : Thread.h
 // Author           : LIZHENG
 // Created          : 2014-09-04
-// Description      : Refer : http://tinythreadpp.bitsnbites.eu/
+// Description      : 
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -60,6 +60,14 @@ public:
     static unsigned int hardware_concurrency();
 
 private:
+#if defined(OS_WINDOWS)
+    static unsigned WINAPI startThread(void *aArg);
+#else
+    static void* startThread(void *aArg);
+#endif
+    void runThreadFunc();
+
+private:
     friend struct ThreadImplDataInfo;
     native_thread_handle   threadId_;
     ThreadFunc             threadFunc_;
@@ -71,7 +79,7 @@ private:
 #endif
 };
 
-/// Thread ID.
+/// Thread ID. Refer : http://tinythreadpp.bitsnbites.eu/
 /// The thread ID is a unique identifier for each thread.
 /// @see thread::get_id()
 class Thread::id
