@@ -24,7 +24,7 @@
 
 NAMESPACE_ZL_BASE_START
 
-#define GET_TICK_COUNT(a, b) ((b.tv_sec - a.tv_sec)*1000000 + (b.tv_usec - a.tv_usec))
+#define GET_TICK_COUNT(a, b) ((a.tv_sec - b.tv_sec)*1000000 + (a.tv_usec - b.tv_usec))
 
 class StopWatch
 {

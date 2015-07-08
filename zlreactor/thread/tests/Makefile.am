@@ -10,6 +10,7 @@ LDFLAGS  = -L../../../lib -lzlreactor
 #Atomic_test_LDFLAGS         = $(CPPFLAGS)
 Atomic_test_SOURCES          = Atomic_test.cpp
 
+Mutex_test_CPPFLAGS          = $(CPPFLAGS) -O2
 Mutex_test_SOURCES           = Mutex_test.cpp
 
 BlockingQueue_test_SOURCES   = BlockingQueue_test.cpp

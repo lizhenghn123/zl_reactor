@@ -1,19 +1,16 @@
-/*************************************************************************
-	File Name   : Mutex_test.cpp
-	Author      : LIZHENG
-	Mail        : lizhenghn@gmail.com
-	Created Time: 2015年06月10日 星期三 20时05分14秒
- ************************************************************************/
 #include <iostream>
 #include <vector>
 #include "thread/Thread.h"
 #include "thread/Mutex.h"
-#include "thread/CountDownLatch.h"
+#include "thread/ThreadGroup.h"
+#include "base/StopWatch.h"
+#include "base/Timestamp.h"
 using namespace std;
 using namespace zl;
+using namespace zl::base;
 using namespace zl::thread;
 
-namespace md
+namespace test_DeadLock
 {
     class DeadLock
     {
@@ -23,7 +20,7 @@ namespace md
             LockGuard<Mutex> lock(mutex_);
             cout << "visit this\n";
             // visit and process
-            print();   // just for debug, 但是导致了死锁， 通过gdb调试命令thread apply all bt查看所有线程的调用堆栈
+            print();   // just for debug, 导致了死锁， 通过gdb调试命令thread apply all bt查看所有线程的调用堆栈
         }
         void print() const
         {
@@ -41,8 +38,69 @@ namespace md
     }
 }
 
+namespace bench
+{
+	const int kMaxCount = 10 * 1000 * 1000;
+	const int kMaxThreads = 10;
+	Mutex gMutex;
+	vector<int> gVector;
+	
+	void func_noMutex()
+	{
+		gVector.reserve(kMaxCount);
+		zl::base::StopWatch watch;
+		for(int i = 0; i < kMaxCount; ++i)
+		{
+			gVector.push_back(i);
+		}
+		cout << "elpased " << watch.elapsedTimeInMicro() << " us \t by func_noMutex elpased.\n"; 
+		vector<int>().swap(gVector);
+	}
+	void func_Mutex_singleThread()
+	{
+		gVector.reserve(kMaxCount);
+		zl::base::StopWatch watch;
+		for(int i = 0; i < kMaxCount; ++i)
+		{
+			LockGuard<Mutex> lock(gMutex);
+			gVector.push_back(i);
+		}
+		cout << "elpased " << watch.elapsedTimeInMicro() << " us \t by func_Mutex_singleThread elpased.\n"; 
+		vector<int>().swap(gVector);
+	}
+	void func_Mutex_multiThread()
+	{
+		zl::base::StopWatch watch;
+		for(int i = 0; i < kMaxCount; ++i)
+		{
+			LockGuard<Mutex> lock(gMutex);
+			gVector.push_back(i);
+		}
+		cout << "elpased " << watch.elapsedTimeInMicro() << " us \t by func_Mutex_multiThread.\n"; 
+	}
+	
+	void bench_Mutex()
+	{
+		func_noMutex();							// 单线程且无锁版本
+		//return;
+		
+		func_Mutex_singleThread();				// 单线程加锁版本
+		
+		gVector.reserve(kMaxCount * kMaxThreads);	
+		ThreadGroup trd_group;
+		zl::base::StopWatch watch;
+		for(int i = 0; i < kMaxThreads; i++)	// 多线程版本，不过这个时间统计包括了创建线程的时间
+		{
+			trd_group.create_thread(std::bind(func_Mutex_multiThread));
+		}
+		trd_group.join_all();
+		cout << "elpased " << watch.elapsedTimeInMicro() << " us \t by total " << kMaxThreads << " threads.\n"; 
+	}
+}
 int main()
 {
-    md::test_MutexDeadLock();
+    //test_DeadLock::test_MutexDeadLock();
+	
+	bench::bench_Mutex();
     cout << "####### GAME OVER ######\n";
 }
