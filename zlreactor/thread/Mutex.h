@@ -75,7 +75,7 @@ public:
     void lock()
     {
     #ifdef OS_WINDOWS
-        while (::InterlockedExchange(&lock_, TRUE))
+        while (::InterlockedExchange((long*)&lock_, TRUE))
         {
             
         }
@@ -90,7 +90,7 @@ public:
     void unlock()
     {
     #ifdef OS_WINDOWS
-        ::InterlockedExchange(&lock_, FALSE);
+        ::InterlockedExchange((long*)&lock_, FALSE);
     #elif defined(OS_LINUX)
         __sync_lock_release(&lock_);
     #endif

@@ -134,7 +134,7 @@ public:
         return os;
     }
 
-    unsigned long int tid() const
+    unsigned long int value() const
     {
         return mId;
     }

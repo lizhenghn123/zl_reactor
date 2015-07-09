@@ -23,7 +23,8 @@ class ScopeExitGuard
 {
 public:
     explicit ScopeExitGuard(std::function<void ()> onExitCallback)
-        : onExitCb_(onExitCallback), dismissed_(false)
+        : onExitCb_(onExitCallback)
+        , dismissed_(false)
     {
     }
 

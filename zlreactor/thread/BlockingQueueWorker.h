@@ -22,16 +22,16 @@ public:
 
     template<typename FunctionType>
     BlockingQueueWorker(QueueType& queue, const FunctionType& function, int thread_num = 1)
-        : queue_(queue),
-          function_(function),
-          threadNum_(thread_num)
+        : queue_(queue)
+        , function_(function)
+        , threadNum_(thread_num)
     {
     }
 
     BlockingQueueWorker(QueueType& queue, int thread_num = 1)
-        : queue_(queue),
-          function_(NULL),
-          threadNum_(thread_num)
+        : queue_(queue)
+        , function_(NULL)
+        , threadNum_(thread_num)
     {
     }
 

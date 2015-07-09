@@ -24,9 +24,9 @@ class SmartAssert
 {
 public:
     SmartAssert(const char* expr, const char* function, int line, const char* file, bool abortOnExit = false)
-        : SMART_ASSERT_A(*this),
-          SMART_ASSERT_B(*this),
-          abortIfExit_(abortOnExit)
+        : SMART_ASSERT_A(*this)
+        , SMART_ASSERT_B(*this)
+        , abortIfExit_(abortOnExit)
     {
         std::ostringstream oss;
         if (expr && *expr)

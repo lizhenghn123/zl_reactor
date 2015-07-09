@@ -8,14 +8,14 @@
 NAMESPACE_ZL_BASE_START
 
 AsyncLogger::AsyncLogger(int flushInterval/* = 3*/)
-    : isRunning_(false),
-      mutex_(new thread::Mutex),
-      condition_(new thread::Condition(*mutex_)),
-      latch_(new thread::CountDownLatch(1)),
-      thread_(new thread::Thread(std::bind(&AsyncLogger::logThread, this), "AsyncLogger")),
-      flushInterval_(flushInterval),
-      currentBuffer_(new Buffer),
-      remainBuffer_(new Buffer)
+    : isRunning_(false)
+    , mutex_(new thread::Mutex)
+    , condition_(new thread::Condition(*mutex_))
+    , latch_(new thread::CountDownLatch(1))
+    , thread_(new thread::Thread(std::bind(&AsyncLogger::logThread, this), "AsyncLogger"))
+    , flushInterval_(flushInterval)
+    , currentBuffer_(new Buffer)
+    , remainBuffer_(new Buffer)
 {
     //latch_->wait();
 }

@@ -16,12 +16,12 @@ using namespace zl::thread;
 
 void printI(int i)
 {
-    printf("this thread[%ld] print %d\n", this_thread::get_id().tid(), i);
+    printf("this thread[%ld] print %d\n", this_thread::get_id().value(), i);
     this_thread::sleep_for(chrono::milliseconds(1000));
 }
 void printString(const char* data)
 {
-    printf("this thread[%ld] print %s\n", this_thread::get_id().tid(), data);
+    printf("this thread[%ld] print %s\n", this_thread::get_id().value(), data);
 }
 
 void test_ThreadGroup()

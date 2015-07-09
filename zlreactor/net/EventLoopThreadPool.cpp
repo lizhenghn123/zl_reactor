@@ -54,7 +54,7 @@ void EventLoopThreadPool::start()
         threads_.push_back(thread);
     }
     latch_->wait();
-    LOG_INFO("EventLoopThreadPool[%0x]::started [%ld][%d]", this, zl::thread::this_thread::get_id().tid(), numThreads_);
+    LOG_INFO("EventLoopThreadPool[%0x]::started [%ld][%d]", this, zl::thread::this_thread::tid(), numThreads_);
 }
 
 void EventLoopThreadPool::runLoop()
@@ -67,7 +67,7 @@ void EventLoopThreadPool::runLoop()
     }
     //zl::thread::this_thread::sleep_for(zl::thread::chrono::seconds(2));
     latch_->countDown();
-    LOG_INFO("EventLoopThreadPool countDown [%0x]::runInLoop [%ld]", this, zl::thread::this_thread::get_id().tid());
+    LOG_INFO("EventLoopThreadPool countDown [%0x]::runInLoop [%ld]", this, zl::thread::this_thread::tid());
     this_loop.loop();
 }
 

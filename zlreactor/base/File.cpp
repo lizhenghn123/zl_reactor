@@ -5,26 +5,26 @@
 NAMESPACE_ZL_START
 
 File::File()
-    :m_fil(NULL)
-    ,m_b_close(true)
-    ,m_rptr(0)
-    ,m_wptr(0)
+    : m_fil(NULL)
+    , m_b_close(true)
+    , m_rptr(0)
+    , m_wptr(0)
 {
 }
 
 File::File(FILE *fil)
-    :m_fil(fil)
-    ,m_b_close(false)
-    ,m_rptr(0)
-    ,m_wptr(0)
+    : m_fil(fil)
+    , m_b_close(false)
+    , m_rptr(0)
+    , m_wptr(0)
 {
 }
 
 File::File(const std::string& path, const std::string& mode)
-    :m_fil(NULL)
-    ,m_b_close(true)
-    ,m_rptr(0)
-    ,m_wptr(0)
+    : m_fil(NULL)
+    , m_b_close(true)
+    , m_rptr(0)
+    , m_wptr(0)
 {
     fopen(path, mode);
 }
