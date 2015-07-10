@@ -1,4 +1,5 @@
 #include "net/Socket.h"
+#include "base/Exception.h"
 #include "net/InetAddress.h"
 NAMESPACE_ZL_NET_START
 
@@ -224,7 +225,7 @@ int Socket::recvFrom(char *data, int length, int flags, InetAddress& sinaddr)con
     socklen_t slen;
     int len = ZL_RECVFROM(sockfd_, data, length, flags, sinaddr, &slen);
     if(slen != sinaddr.addressLength())
-        throw SocketException("unknown protocol type(in Socket::RecvFrom)");
+        throw zl::base::Exception("unknown protocol type(in Socket::RecvFrom)");
     return len;
 }
 

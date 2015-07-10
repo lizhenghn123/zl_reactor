@@ -10,30 +10,18 @@ namespace
     public:
         SocketInitialization()
         {
-            SocketUtil::socketInitialise();
+        #ifdef OS_WINDOWS
+            WSADATA wsaData;
+            WSAStartup(MAKEWORD(2, 2), &wsaData);
+        #endif
         }
         ~SocketInitialization()
         {
-            SocketUtil::socketCleanup();
+        #ifdef OS_WINDOWS
+            WSACleanup();
+        #endif
         }
     }g_socket_init_once ;
-}
-
-int SocketUtil::socketInitialise()
-{
-#ifdef OS_WINDOWS
-    WSADATA wsaData;
-    return WSAStartup(MAKEWORD(2, 2), &wsaData);
-#endif
-    return 0;
-}
-
-int SocketUtil::socketCleanup()
-{
-#ifdef OS_WINDOWS
-    return WSACleanup();
-#endif
-    return 0;
 }
 
 ZL_SOCKET SocketUtil::createSocket()

@@ -8,22 +8,12 @@
 // ***********************************************************************
 #ifndef ZL_SOCKET_H
 #define ZL_SOCKET_H
-#include <exception>
 #include "base/NonCopy.h"
 #include "net/SocketUtil.h"
 NAMESPACE_ZL_NET_START
 
 class SocketAddress;
 class InetAddress;
-
-class SocketException : public std::exception
-{
-public:
-    SocketException(const char *err_msg)
-    {
-        printf("Get Socket Exception: %s\n", err_msg);
-    }
-};
 
 class Socket : zl::NonCopy
 {

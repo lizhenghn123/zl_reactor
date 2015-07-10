@@ -156,9 +156,6 @@ NAMESPACE_ZL_NET_START
 class SocketUtil
 {
 public:
-    static int socketInitialise();
-    static int socketCleanup();
-
     static ZL_SOCKET createSocket();
     static ZL_SOCKET createSocketAndListen(const char *ip, int port, int backlog = 5);
     static int closeSocket(ZL_SOCKET fd);

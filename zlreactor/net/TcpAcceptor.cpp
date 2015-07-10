@@ -1,8 +1,9 @@
 #include "net/TcpAcceptor.h"
+#include "base/Exception.h"
+#include "base/Logger.h"
 #include "net/Socket.h"
 #include "net/Channel.h"
 #include "net/EventLoop.h"
-#include "base/Logger.h"
 #include "net/InetAddress.h"
 NAMESPACE_ZL_NET_START
 
@@ -16,11 +17,11 @@ TcpAcceptor::TcpAcceptor(EventLoop *loop, const InetAddress& listenAddr)
 
     if (!accept_socket->setReuseAddr(true))
     {
-        throw SocketException("Could not reuse socket address.");
+        throw zl::base::Exception("Could not reuse socket address.");
     }
     if (!accept_socket->bind(listenAddr))
     {
-        throw SocketException("Could not bind to port.");
+        throw zl::base::Exception("Could not bind to port.");
     }
 
     accept_channel_ = new Channel(loop, accept_socket->fd());
@@ -40,7 +41,7 @@ void TcpAcceptor::listen()
     loop_->assertInLoopThread();
     if (!accept_socket->listen(128)) //may be bigger, see 'cat /proc/sys/net/core/somaxconn'
     {
-        throw SocketException("Could not listen to port.");
+        throw zl::base::Exception("Could not listen to port.");
     }
     LOG_INFO("TcpAcceptor::listen on [%s]", accept_socket->getHost().c_str());
 
