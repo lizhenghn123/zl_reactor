@@ -11,6 +11,7 @@
 #include "Define.h"
 #include "base/NonCopy.h"
 #include "thread/Mutex.h"
+#include <string>
 NAMESPACE_ZL_THREAD_START
 
 #if defined(OS_WINDOWS)
@@ -60,17 +61,9 @@ public:
     static unsigned int hardware_concurrency();
 
 private:
-#if defined(OS_WINDOWS)
-    static unsigned WINAPI startThread(void *aArg);
-#else
-    static void* startThread(void *aArg);
-#endif
-    void runThreadFunc();
-
-private:
     friend struct ThreadImplDataInfo;
     native_thread_handle   threadId_;
-    ThreadFunc             threadFunc_;
+    //ThreadFunc             threadFunc_;
     std::string            threadName_;
     bool                   notAThread_;     ///< True iff this object is not a thread of execution
 	bool                   joined_;         ///< True iff this thread called join 
