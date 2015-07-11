@@ -33,7 +33,7 @@ public:
     void           close();
 
     // Client Initialization
-    bool           connect(const std::string& host, const int port);
+    bool           connect(const char* host, const int port);
 
     // Socket Settings
     /** Enable/disable Block Socket */

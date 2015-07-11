@@ -65,7 +65,7 @@ ZL_SOCKET SocketUtil::createSocketAndListen(const char *ip, int port, int backlo
     return sockfd;
 }
 
-int  SocketUtil::bind(ZL_SOCKET sockfd, const char *ip, int port)
+int SocketUtil::bind(ZL_SOCKET sockfd, const char *ip, int port)
 {
     ZL_SOCKADDR_IN  sockaddr;
     ::memset(&sockaddr, 0, sizeof(sockaddr));
@@ -86,13 +86,28 @@ int  SocketUtil::bind(ZL_SOCKET sockfd, const char *ip, int port)
     return ZL_BIND(sockfd, (struct sockaddr *) &sockaddr, sizeof(sockaddr));
 }
 
-int  SocketUtil::connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr)
+int SocketUtil::connect(ZL_SOCKET sockfd, const char *ip, int port)
+{
+    struct sockaddr_in addr;
+    ::memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+
+    int status = inet_pton(AF_INET, ip, &addr.sin_addr);
+    if (status != 0 || errno == EAFNOSUPPORT)
+        return -1;
+
+    return SocketUtil::connect(sockfd, addr);
+}
+
+int SocketUtil::connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr)
 {
     return ZL_CONNECT(sockfd, (sockaddr *)&addr, static_cast<socklen_t>(sizeof(addr)));
 }
 
 ZL_SOCKET SocketUtil::accept(ZL_SOCKET sockfd, ZL_SOCKADDR_IN *addr)
 {
+    ::memset(addr, 0, sizeof(*addr));
     socklen_t addrlen = static_cast<socklen_t>(sizeof(*addr));
     ZL_SOCKET connfd = ZL_ACCEPT(sockfd, (sockaddr *)addr, &addrlen);
     return connfd;

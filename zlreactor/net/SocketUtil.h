@@ -163,6 +163,7 @@ public:
     static void shutdownWrite(ZL_SOCKET sockfd);
 
     static int  bind(ZL_SOCKET sockfd, const char *ip, int port);
+    static int  connect(ZL_SOCKET sockfd, const char *ip, int port);
     static int  connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr);
     static ZL_SOCKET accept(ZL_SOCKET sockfd, struct sockaddr_in *addr);
     static ssize_t read(ZL_SOCKET sockfd, void *buf, size_t count);

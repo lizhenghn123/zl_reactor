@@ -87,34 +87,52 @@ bool Socket::listen(int backlog /*= 5*/) const
 
 ZL_SOCKET Socket::accept(ZL_SOCKADDR_IN* peerAddr) const
 {
-    ::memset(&peerAddr, 0, sizeof(peerAddr));
-    socklen_t addr_length = sizeof(peerAddr);
-    ZL_SOCKET connfd = ZL_ACCEPT(sockfd_, (sockaddr *)peerAddr, &addr_length);
-    return connfd;
+    return SocketUtil::accept(sockfd_, peerAddr);
 }
 
 bool Socket::accept(Socket& new_socket) const
 {
-    socklen_t addr_length = static_cast<socklen_t>(sizeof(new_socket.sockaddr_));
-    new_socket.sockfd_ = ZL_ACCEPT(sockfd_, (sockaddr *)&new_socket.sockaddr_, &addr_length);
-
-    if(new_socket.sockfd_ <= 0)
-        return false;
-    else
-        return true;
+    new_socket.sockfd_ = SocketUtil::accept(sockfd_, &new_socket.sockaddr_);
+    return (new_socket.sockfd_ > 0 ? true : false);
 }
 
 ZL_SOCKET Socket::accept(InetAddress *peerAddr) const
 {
     ZL_SOCKADDR_IN addr;
     ::memset(&addr, 0, sizeof(addr));
-    socklen_t addr_length = static_cast<socklen_t>(sizeof(addr));
-    ZL_SOCKET connfd = ZL_ACCEPT(sockfd_, (sockaddr *)&addr, &addr_length);
+    ZL_SOCKET connfd = SocketUtil::accept(sockfd_, &addr);
     if (connfd > 0)
     {
         peerAddr->setSockAddrInet(addr);
     }
     return connfd;
+}
+
+bool Socket::connect(const char* host, int port)
+{
+    if (!isValid())
+    {
+        return false;
+    }
+
+    sockaddr_.sin_family = AF_INET;
+    sockaddr_.sin_port = htons(port);
+
+    int status = inet_pton(AF_INET, host, &sockaddr_.sin_addr);
+    if (errno == EAFNOSUPPORT)
+        return false;
+
+    status = ZL_CONNECT(sockfd_, (sockaddr *)&sockaddr_, sizeof(sockaddr_));
+
+    return status == 0 ? true : false;
+}
+
+void Socket::close()
+{
+    if (isValid())
+    {
+        ZL_CLOSE(sockfd_);
+    }
 }
 
 int Socket::send(const std::string& data) const
@@ -227,33 +245,6 @@ int Socket::recvFrom(char *data, int length, int flags, InetAddress& sinaddr)con
     if(slen != sinaddr.addressLength())
         throw zl::base::Exception("unknown protocol type(in Socket::RecvFrom)");
     return len;
-}
-
-bool Socket::connect(const std::string& host, int port)
-{
-    if(!isValid())
-    {
-        return false;
-    }
-
-    sockaddr_.sin_family = AF_INET;
-    sockaddr_.sin_port = htons(port);
-
-    int status = inet_pton(AF_INET, host.c_str(), &sockaddr_.sin_addr);
-    if(errno == EAFNOSUPPORT)
-        return false;
-
-    status = ZL_CONNECT(sockfd_, (sockaddr *)&sockaddr_, sizeof(sockaddr_));
-
-    return status == 0 ? true : false;
-}
-
-void Socket::close()
-{
-    if(isValid())
-    {
-        ZL_CLOSE(sockfd_);
-    }
 }
 
 bool Socket::setNonBlocking(bool on /*= true*/)
