@@ -51,7 +51,7 @@ public:
     void    cancelTimer(TimerId id);
 
     bool isRunning() { return running_; }
-    bool isInLoopThread() const { return currentThreadId_ == thread::this_thread::get_id(); }
+    bool isInLoopThread() const { return currentThreadId_ == thread::this_thread::tid(); }
     void assertInLoopThread() const;
 
 private:
