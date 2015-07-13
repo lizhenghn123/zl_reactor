@@ -29,7 +29,6 @@ public:
     bool           listen(int backlog = 5) const;
     ZL_SOCKET      accept(ZL_SOCKADDR_IN* peerAddr) const;
     ZL_SOCKET      accept(InetAddress *peerAddr) const;
-    bool           accept(Socket& new_socket) const;
     void           close();
 
     // Client Initialization
@@ -111,7 +110,7 @@ public:
     //    recv(&t, sizeof(t));
     //}
 protected:
-    /*const*/ ZL_SOCKET sockfd_;
+    const ZL_SOCKET sockfd_;
     ZL_SOCKADDR_IN  sockaddr_;
 };
 

@@ -4,6 +4,7 @@
 #include <signal.h>          // for ::signal
 #include "base/Timestamp.h"
 #include "base/Logger.h"
+#include "thread/Thread.h"
 #include "net/Channel.h"
 #include "net/poller/Poller.h"
 #include "net/TimerQueue.h"
@@ -25,6 +26,8 @@ namespace
     }_dont_use_this_class_;
 }
 
+thread_local EventLoop *g_evloopInThisThread = 0;
+
 EventLoop::EventLoop()
     : currentThreadId_(this_thread::tid())
     , currentActiveChannel_(NULL)
@@ -33,6 +36,8 @@ EventLoop::EventLoop()
     , callingPendingFunctors_(false)
     , mutex_()
 {
+    assert(!g_evloopInThisThread); // 避免在同一个线程中创建多个EventLoop对象(one EventLoop per thread)
+
     poller_ = Poller::createPoller(this);
 
     wakeupfd_ = new EventfdHandler();
@@ -42,6 +47,8 @@ EventLoop::EventLoop()
     wakeupChannel_->enableReading();  // ready for read event of wakeupfd_
 
     timerQueue_ = new TimerQueue(this);
+
+    g_evloopInThisThread = this;
 }
 
 EventLoop::~EventLoop()

@@ -32,7 +32,12 @@ public:
 
     std::vector<EventLoop*> getAllLoops() { return loops_; }
 
+    /// 设置EventLoopThreadPool的threads大小；if numThreads
+    /// < 0  : 设置该值为当前系统CPU并发数；
+    /// == 0 : 不使用EventLoopThreadPool，所有Channel都在同一个EventLoop中运行，默认值；
+    /// > 0  : 设置numThreads个线程，也即numThreads个EventLoop，每个连接选择其中一个
     void setMultiReactorThreads(int numThreads);
+
     void start();
     bool isStart() { return started_; }
     EventLoop* getNextLoop();

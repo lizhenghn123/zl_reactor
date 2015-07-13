@@ -90,12 +90,6 @@ ZL_SOCKET Socket::accept(ZL_SOCKADDR_IN* peerAddr) const
     return SocketUtil::accept(sockfd_, peerAddr);
 }
 
-bool Socket::accept(Socket& new_socket) const
-{
-    new_socket.sockfd_ = SocketUtil::accept(sockfd_, &new_socket.sockaddr_);
-    return (new_socket.sockfd_ > 0 ? true : false);
-}
-
 ZL_SOCKET Socket::accept(InetAddress *peerAddr) const
 {
     ZL_SOCKADDR_IN addr;
