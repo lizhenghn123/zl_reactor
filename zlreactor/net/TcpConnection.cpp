@@ -1,4 +1,4 @@
-﻿#include "TcpConnection.h"
+#include "TcpConnection.h"
 #include "net/Socket.h"
 #include "base/Logger.h"
 #include "net/EventLoop.h"

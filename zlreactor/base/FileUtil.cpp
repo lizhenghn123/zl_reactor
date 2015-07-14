@@ -91,7 +91,7 @@ bool FileUtil::isDirectory(const char *path)
 #endif
 }
 
-void modifyDirPath(std::string& path) // 修改目录路径为X/Y/Z/
+void modifyDirPath(std::string& path) // 淇敼鐩綍璺緞涓篨/Y/Z/
 {
     if(path.empty())
     {

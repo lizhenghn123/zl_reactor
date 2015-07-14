@@ -9,7 +9,7 @@ using namespace std;
 using namespace zl;
 using namespace zl::thread;
 
-// pod ÀàĞÍµÄthread_local²âÊÔ
+// pod ç±»å‹çš„thread_localæµ‹è¯•
 namespace thread_tls1
 {
     thread_local int gLocalVar = 0;
@@ -22,20 +22,20 @@ namespace thread_tls1
 
     void test_threadtls()
     {
-        gLocalVar = 1;   // Ö÷Ïß³ÌÉèÖÃgLocalVarĞÂÖµ
+        gLocalVar = 1;   // ä¸»çº¿ç¨‹è®¾ç½®gLocalVaræ–°å€¼
         cout << "[" << this_thread::tid() << "]Main   gLocalVar is " << gLocalVar << ".\n";
 
-        Thread t1(std::bind(ThreadTLS, 99));   // ×ÓÏß³Ì¸üĞÂgLocalVarÖµ£¬ ×¢ÒâÊä³ö
+        Thread t1(std::bind(ThreadTLS, 99));   // å­çº¿ç¨‹æ›´æ–°gLocalVarå€¼ï¼Œ æ³¨æ„è¾“å‡º
         t1.join();   // cout 99, not 99 + 1
 
-        Thread t2(std::bind(ThreadTLS, 9999));  // ÁíÒ»×ÓÏß³Ì¸üĞÂgLocalVarÖµ£¬ ×¢ÒâÊä³ö
+        Thread t2(std::bind(ThreadTLS, 9999));  // å¦ä¸€å­çº¿ç¨‹æ›´æ–°gLocalVarå€¼ï¼Œ æ³¨æ„è¾“å‡º
         t2.join();   // cout 9999, not 9999+1
 
         assert(gLocalVar == 1);
     }
 }
 
-// class ÀàĞÍµÄthread_local²âÊÔ
+// class ç±»å‹çš„thread_localæµ‹è¯•
 namespace thread_tls2
 {
     class TestTLS

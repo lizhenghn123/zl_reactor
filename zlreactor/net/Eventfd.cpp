@@ -1,4 +1,4 @@
-﻿#include "net/Eventfd.h"
+#include "net/Eventfd.h"
 #include <sys/eventfd.h>
 #include <unistd.h>
 #include "base/Logger.h"

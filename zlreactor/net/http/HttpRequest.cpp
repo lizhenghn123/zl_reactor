@@ -1,4 +1,4 @@
-﻿#include "HttpRequest.h"
+#include "HttpRequest.h"
 //#include <regex>
 #include <sstream>
 NAMESPACE_ZL_NET_START

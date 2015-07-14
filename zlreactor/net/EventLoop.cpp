@@ -14,8 +14,8 @@ NAMESPACE_ZL_NET_START
 
 namespace
 {
-    // Èç¹ûÍùÒÑ¹Ø±ÕµÄclient socketÉÏ¼ÌĞøwriteÊ±£¬·şÎñÆ÷½ø³Ì»áÊÕµ½SIGPIPEĞÅºÅ¶øÖÕÖ¹,
-    // ÕâÀï¼òµ¥ºöÂÔ¸ÃĞÅºÅ
+    // å¦‚æœå¾€å·²å…³é—­çš„client socketä¸Šç»§ç»­writeæ—¶ï¼ŒæœåŠ¡å™¨è¿›ç¨‹ä¼šæ”¶åˆ°SIGPIPEä¿¡å·è€Œç»ˆæ­¢,
+    // è¿™é‡Œç®€å•å¿½ç•¥è¯¥ä¿¡å·
     class IgnoreSigPipe
     {
     public:
@@ -36,7 +36,7 @@ EventLoop::EventLoop()
     , callingPendingFunctors_(false)
     , mutex_()
 {
-    assert(!g_evloopInThisThread); // ±ÜÃâÔÚÍ¬Ò»¸öÏß³ÌÖĞ´´½¨¶à¸öEventLoop¶ÔÏó(one EventLoop per thread)
+    assert(!g_evloopInThisThread); // é¿å…åœ¨åŒä¸€ä¸ªçº¿ç¨‹ä¸­åˆ›å»ºå¤šä¸ªEventLoopå¯¹è±¡(one EventLoop per thread)
 
     poller_ = Poller::createPoller(this);
 
@@ -105,7 +105,7 @@ void EventLoop::loop()
 
         timerQueue_->runTimer(now);
 
-        callPendingFunctors();    //´¦ÀípollµÈ´ı¹ı³ÌÖĞ·¢ÉúµÄÊÂ¼ş
+        callPendingFunctors();    //å¤„ç†pollç­‰å¾…è¿‡ç¨‹ä¸­å‘ç”Ÿçš„äº‹ä»¶
     }
 }
 

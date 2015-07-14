@@ -1,4 +1,4 @@
-﻿#include "AsyncLogger.h"
+#include "AsyncLogger.h"
 #include "thread/Thread.h"
 #include "thread/Mutex.h"
 #include "thread/Condition.h"

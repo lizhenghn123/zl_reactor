@@ -1,4 +1,4 @@
-﻿#include "base/Exception.h"
+#include "base/Exception.h"
 #include <execinfo.h>
 #include <stdlib.h>
 #ifdef DO_NAME_DEMANGLE

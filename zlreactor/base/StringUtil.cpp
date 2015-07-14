@@ -1,4 +1,4 @@
-﻿#include "base/StringUtil.h"
+#include "base/StringUtil.h"
 #include "Define.h"
 #include <stdarg.h>
 

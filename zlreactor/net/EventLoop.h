@@ -2,7 +2,7 @@
 // Filename         : EventLoop.h
 // Author           : LIZHENG
 // Created          : 2014-10-26
-// Description      : io service, ¿É¹ÜÀísocket£¬timer£¬signalµÈio
+// Description      : io service, å¯ç®¡ç†socketï¼Œtimerï¼Œsignalç­‰io
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -38,12 +38,12 @@ public:
     void removeChannel(Channel *channel);
     bool hasChannel(Channel *channel);
 
-    /// ÔÚÖ÷Ïß³ÌÖĞÔËĞĞ£¬Èç¹ûÊÇÆäËûÏß³Ìµ÷ÓÃ£¬Ôò×ªÎªµ÷ÓÃqueueInLoop
-    /// @param func        : ´ıÔËĞĞÊÂÎñ
+    /// åœ¨ä¸»çº¿ç¨‹ä¸­è¿è¡Œï¼Œå¦‚æœæ˜¯å…¶ä»–çº¿ç¨‹è°ƒç”¨ï¼Œåˆ™è½¬ä¸ºè°ƒç”¨queueInLoop
+    /// @param func        : å¾…è¿è¡Œäº‹åŠ¡
     void runInLoop(const Functor& func);
     
-    /// ½«¸ÃÒì²½µ÷ÓÃ´æ´¢£¬²¢µÈ´ıpoller·µ»ØÊ±ÔÙÖğÒ»µ÷ÓÃÒì²½¶ÓÁĞÖĞµÄ²Ù×÷
-    /// @param func        : ´ıÔËĞĞÊÂÎñ
+    /// å°†è¯¥å¼‚æ­¥è°ƒç”¨å­˜å‚¨ï¼Œå¹¶ç­‰å¾…pollerè¿”å›æ—¶å†é€ä¸€è°ƒç”¨å¼‚æ­¥é˜Ÿåˆ—ä¸­çš„æ“ä½œ
+    /// @param func        : å¾…è¿è¡Œäº‹åŠ¡
     void queueInLoop(const Functor& func);
 
     TimerId addTimer(const TimerCallback& cb, const Timestamp& when);

@@ -1,4 +1,4 @@
-﻿#include "thread/Thread.h"
+#include "thread/Thread.h"
 #include "base/Exception.h"
 #if defined(OS_WINDOWS)
 #include <process.h>

@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <stdio.h>
 #include "base/Logger.h"
 #include "net/EventLoop.h"

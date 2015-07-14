@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include "base/ProcessUtil.h"
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>

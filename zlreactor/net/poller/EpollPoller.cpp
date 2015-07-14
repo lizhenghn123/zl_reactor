@@ -55,7 +55,7 @@ bool EpollPoller::updateChannel(Channel *channel)
 
 bool EpollPoller::removeChannel(Channel *channel)
 {
-    if(!hasChannel(channel))   // ×¢Òâ updateChannel º¯ÊıÖĞÒ²ÓĞÒ»´¦removeChannelµÄÂß¼­
+    if(!hasChannel(channel))   // æ³¨æ„ updateChannel å‡½æ•°ä¸­ä¹Ÿæœ‰ä¸€å¤„removeChannelçš„é€»è¾‘
         return true;
 
     ZL_SOCKET fd = channel->fd();

@@ -2,7 +2,7 @@
 // Filename         : Mutex.h
 // Author           : LIZHENG
 // Created          : 2014-05-16
-// Description      : 互斥锁在Windows及Linux平台下的封装
+// Description      : 浜掓枼閿佸湪Windows鍙奓inux骞冲彴涓嬬殑灏佽
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************

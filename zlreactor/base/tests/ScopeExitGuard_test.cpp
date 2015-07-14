@@ -131,14 +131,14 @@ namespace test_rb
         ScopeExitGuard onSuccessRollback([&] { delete t; t = NULL; });
 
         if(!init1(t))     // init1 failure
-            return NULL;  // Ö±½Óreturn£¬t »á×Ô¶¯Îö¹¹
+            return NULL;  // ç›´æ¥returnï¼Œt ä¼šè‡ªåŠ¨ææ„
         if(!init2(t))     // init2 failure
             return NULL;
         if(!init3(t) || !init4(t))  // init3 or init4 failure
             return NULL;
 
         // now t must be available
-        onSuccessRollback.dismiss(); // dismiss£¬ t²»»áÎö¹¹£¬Ö±½Ó·µ»Ø
+        onSuccessRollback.dismiss(); // dismissï¼Œ tä¸ä¼šææ„ï¼Œç›´æ¥è¿”å›
         return t;
     }
     void test_rollback()

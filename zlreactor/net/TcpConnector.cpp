@@ -111,17 +111,17 @@ void TcpConnector::stopInLoop()
 
 ZL_SOCKET TcpConnector::disableChannel()
 {
-    connChannel_->disableAll();   // 从poller中移除，不再关注任何事件
+    connChannel_->disableAll();   // 浠巔oller涓Щ闄わ紝涓嶅啀鍏虫敞浠讳綍浜嬩欢
     connChannel_->remove();
     ZL_SOCKET sockfd = connChannel_->fd();
     return sockfd;
 }
 
-//连接远端socket成功
+//杩炴帴杩滅socket鎴愬姛
 void TcpConnector::handleWrite()
 {
     LOG_INFO("TcpConnector::handleWrite : [%d]", connChannel_->fd());
-    if (state_ == kConnecting) //连接建立时注册Channel可写事件，此时响应可写，将socket返回，并禁用Channel
+    if (state_ == kConnecting) //杩炴帴寤虹珛鏃舵敞鍐孋hannel鍙啓浜嬩欢锛屾鏃跺搷搴斿彲鍐欙紝灏唖ocket杩斿洖锛屽苟绂佺敤Channel
     {
         ZL_SOCKET sockfd = disableChannel();
         int err = SocketUtil::getSocketError(sockfd);

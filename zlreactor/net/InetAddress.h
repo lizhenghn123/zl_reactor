@@ -2,7 +2,7 @@
 // Filename         : InetAddress.h
 // Author           : LIZHENG
 // Created          : 2014-09-06
-// Description      : InetAddress的跨平台包装
+// Description      : InetAddress鐨勮法骞冲彴鍖呰
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************

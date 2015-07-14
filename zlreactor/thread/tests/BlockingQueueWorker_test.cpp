@@ -2,7 +2,7 @@
 	File Name   : BlockingQueueWorker_test.cpp
 	Author      : LIZHENG
 	Mail        : lizhenghn@gmail.com
-	Created Time: 2015Äê06ÔÂ24ÈÕ ÐÇÆÚ¶þ 20Ê±12·Ö34Ãë
+	Created Time: 2015å¹´06æœˆ24æ—¥ æ˜ŸæœŸäºŒ 20æ—¶12åˆ†34ç§’
  ************************************************************************/
 #include <iostream>
 #include "thread/Thread.h"

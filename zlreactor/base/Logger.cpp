@@ -9,7 +9,7 @@
 NAMESPACE_ZL_BASE_START
 
 #define MAX_PRIORITY_NAME_LENGTH   (9)
-#define MAX_LOG_ENTRY_SIZE         (4096)                /* Ã¿´ÎlogÊä³öµÄ×î´ó´óÐ¡(B) */
+#define MAX_LOG_ENTRY_SIZE         (4096)                /* æ¯æ¬¡logè¾“å‡ºçš„æœ€å¤§å¤§å°(B) */
 
 static const char priority_snames[ZL_LOG_PRIO_COUNT][MAX_PRIORITY_NAME_LENGTH + 1] =
 {

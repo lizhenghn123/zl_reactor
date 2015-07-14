@@ -1,4 +1,4 @@
-﻿#include "ProcessUtil.h"
+#include "ProcessUtil.h"
 #include "FileUtil.h"
 #include "thread/Thread.h"
 #include <dirent.h>

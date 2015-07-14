@@ -2,7 +2,7 @@
 // Filename         : Logger.h
 // Author           : LIZHENG
 // Created          : 2014-07-13
-// Description      : ÈÕÖ¾Àà,¿ÉÉèÖÃÈÕÖ¾¼¶±ğ\Êä³ö¸ñÊ½\Êä³öÀàĞÍ\ÖØ¶¨ÏòÊä³ö
+// Description      : æ—¥å¿—ç±»,å¯è®¾ç½®æ—¥å¿—çº§åˆ«\è¾“å‡ºæ ¼å¼\è¾“å‡ºç±»å‹\é‡å®šå‘è¾“å‡º
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -13,9 +13,9 @@
 #include <stdlib.h>
 NAMESPACE_ZL_BASE_START
 
-#define ZL_LOG_MARK  __FILE__,__LINE__  /** Êä³ö¸ñÊ½£ºÎÄ¼ş+ĞĞºÅ */
-#define ZL_PTR_FMT   "<0x%x>"           /** Êä³ö¸ñÊ½£ºÖ¸ÕëµØÖ·Öµ */
-#define ZL_STR_FMT   "<%s>"             /** Êä³ö¸ñÊ½£º×Ö·û´®±êÊ¶ */
+#define ZL_LOG_MARK  __FILE__,__LINE__  /** è¾“å‡ºæ ¼å¼ï¼šæ–‡ä»¶+è¡Œå· */
+#define ZL_PTR_FMT   "<0x%x>"           /** è¾“å‡ºæ ¼å¼ï¼šæŒ‡é’ˆåœ°å€å€¼ */
+#define ZL_STR_FMT   "<%s>"             /** è¾“å‡ºæ ¼å¼ï¼šå­—ç¬¦ä¸²æ ‡è¯† */
 
 /** Priority of log messages ordered from highest priority to lowest (rfc3164) */
 enum ZLogPriority
@@ -89,11 +89,11 @@ public:
     static bool              log(const char *file, int line, ZLogPriority priority, const char *format, ...);
 
 private:
-    static ZLogOutput        mode_;          /// Ö»Éè¶¨ÊÇ·ñÔÚÆÁÄ»ÉÏÊä³ö
+    static ZLogOutput        mode_;          /// åªè®¾å®šæ˜¯å¦åœ¨å±å¹•ä¸Šè¾“å‡º
     static ZLogPriority      priority_;
     static ZLogHeader        header_;
     static ZLogMasking       masking_;
-    static log_ext_handler_f ext_handler_;   /// ÖØ¶¨ÏòÊä³ö£¬×¢Òâ²»Ó¦¸ÃÊÇÆÁÄ»Êä³ö£¬Ä¬ÈÏÒ»Ö±ÆÁÄ»Êä³ö, ´Ë»Øµ÷²»Ó¦¸ÃÊÇ×èÈûµÄ£¡
+    static log_ext_handler_f ext_handler_;   /// é‡å®šå‘è¾“å‡ºï¼Œæ³¨æ„ä¸åº”è¯¥æ˜¯å±å¹•è¾“å‡ºï¼Œé»˜è®¤ä¸€ç›´å±å¹•è¾“å‡º, æ­¤å›è°ƒä¸åº”è¯¥æ˜¯é˜»å¡çš„ï¼
     //static LogFile*          logFile_;
 private:
     Logger(const Logger&);

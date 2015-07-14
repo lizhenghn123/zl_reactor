@@ -1,4 +1,4 @@
-﻿#include "net/http/HttpResponse.h"
+#include "net/http/HttpResponse.h"
 #include "net/http/HttpKeyValue.h"
 #include "base/FileUtil.h"
 #include "net/NetBuffer.h"

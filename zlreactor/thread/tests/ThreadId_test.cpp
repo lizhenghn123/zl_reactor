@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include "Define.h"
 #ifdef OS_WINDOWS

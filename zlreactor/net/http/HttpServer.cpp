@@ -1,4 +1,4 @@
-﻿#include "net/http/HttpServer.h"
+#include "net/http/HttpServer.h"
 #include "base/Logger.h"
 #include "net/TcpConnection.h"
 #include "net/http/HttpContext.h"

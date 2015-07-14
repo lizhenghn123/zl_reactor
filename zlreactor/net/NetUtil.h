@@ -2,7 +2,7 @@
 // Filename         : NetUtil.h
 // Author           : LIZHENG
 // Created          : 2014-09-17
-// Description      : ÍøÂçÏà¹Ø¹¤¾ßÀà
+// Description      : ç½‘ç»œç›¸å…³å·¥å…·ç±»
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -15,51 +15,51 @@ class NetUtil
 {
 public:
     /**
-    * @brief           ÅĞ¶Ï´«ÈëµÄIP×Ö·û´®ÊÇ·ñÊÇ¹ã²¥µØÖ·
-    * @param  str      IPµØÖ·×Ö·û´®
-    * @return          Èç¹ûstrÎª¹ã²¥µØÖ·£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    * @brief           åˆ¤æ–­ä¼ å…¥çš„IPå­—ç¬¦ä¸²æ˜¯å¦æ˜¯å¹¿æ’­åœ°å€
+    * @param  str      IPåœ°å€å­—ç¬¦ä¸²
+    * @return          å¦‚æœsträ¸ºå¹¿æ’­åœ°å€ï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     static bool        isBroadcastAddress(const char *str);
 
     /**
-    * @brief           ÅĞ¶Ï¸ø¶¨µÄ×Ö·û´®ÊÇ·ñÎªÒ»¸öIPv4»òIPv6µØÖ·
-    * @param  str      IPµØÖ·×Ö·û´®
-    * @return          Èç¹ûÊÇÒ»¸öIPµØÖ·£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    * @brief           åˆ¤æ–­ç»™å®šçš„å­—ç¬¦ä¸²æ˜¯å¦ä¸ºä¸€ä¸ªIPv4æˆ–IPv6åœ°å€
+    * @param  str      IPåœ°å€å­—ç¬¦ä¸²
+    * @return          å¦‚æœæ˜¯ä¸€ä¸ªIPåœ°å€ï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     static bool        isValidIp(const char *str);
 
     /**
-    * @brief           ÅĞ¶Ï¸ø¶¨µÄ×Ö·û´®ÊÇ·ñÎªÒ»¸öIPv4µØÖ·
-    * @param  str      IPµØÖ·×Ö·û´®
-    * @return          Èç¹ûÊÇÒ»¸öIPv4µØÖ·£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    * @brief           åˆ¤æ–­ç»™å®šçš„å­—ç¬¦ä¸²æ˜¯å¦ä¸ºä¸€ä¸ªIPv4åœ°å€
+    * @param  str      IPåœ°å€å­—ç¬¦ä¸²
+    * @return          å¦‚æœæ˜¯ä¸€ä¸ªIPv4åœ°å€ï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     static bool        isValidIpv4(const char *str);
 
     /**
-    * @brief           ÅĞ¶Ï¸ø¶¨µÄ×Ö·û´®ÊÇ·ñÎªÒ»¸öIPv6µØÖ·
-    * @param  str      IPµØÖ·×Ö·û´®
-    * @return          Èç¹ûÊÇÒ»¸öIPv6µØÖ·£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    * @brief           åˆ¤æ–­ç»™å®šçš„å­—ç¬¦ä¸²æ˜¯å¦ä¸ºä¸€ä¸ªIPv6åœ°å€
+    * @param  str      IPåœ°å€å­—ç¬¦ä¸²
+    * @return          å¦‚æœæ˜¯ä¸€ä¸ªIPv6åœ°å€ï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     static bool        isValidIpv6(const char *str);
 
     /**
-    * @brief           CPU´óĞ¡¶Ë£¬×Ö½ÚĞòÅĞ¶Ï
-    * @return          Èç¹ûÊÇĞ¡¶Ë×Ö½ÚĞò£¬Èç¹ûÊÇ·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    * @brief           CPUå¤§å°ç«¯ï¼Œå­—èŠ‚åºåˆ¤æ–­
+    * @return          å¦‚æœæ˜¯å°ç«¯å­—èŠ‚åºï¼Œå¦‚æœæ˜¯è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     static bool        isLittleEndian();
 
     /**
-    * @brief           ·´×ª×Ö½ÚĞò£¬ÒÔ±ãÔÚÍøÂçÉÏ´«Êä
-    * @param  source   Ô´×Ö½Ú
-    * @param  result   ·´×ªºóµÄ×Ö½Ú
-    * @param  length   ·´×ªµÄ³¤¶È
+    * @brief           åè½¬å­—èŠ‚åºï¼Œä»¥ä¾¿åœ¨ç½‘ç»œä¸Šä¼ è¾“
+    * @param  source   æºå­—èŠ‚
+    * @param  result   åè½¬åçš„å­—èŠ‚
+    * @param  length   åè½¬çš„é•¿åº¦
     */
     static void        reverseBytes(const void *source, void *result, size_t length);
 
     /**
-    * @brief           ·´×ª×Ö½ÚĞò£¬ÒÔ±ãÔÚÍøÂçÉÏ´«Êä
-    * @param  source   Ô´×Ö½Ú
-    * @return          ·´×ªºóµÄ×Ö½Ú
+    * @brief           åè½¬å­—èŠ‚åºï¼Œä»¥ä¾¿åœ¨ç½‘ç»œä¸Šä¼ è¾“
+    * @param  source   æºå­—èŠ‚
+    * @return          åè½¬åçš„å­—èŠ‚
     */
     template <typename DataType>
     static DataType    reverseBytes(const DataType& source)
@@ -70,9 +70,9 @@ public:
     }
 
     /**
-    * @brief           ·´×ª×Ö½ÚĞò£¬ÒÔ±ãÔÚÍøÂçÉÏ´«Êä
-    * @param  source   Ô´×Ö½Ú
-    * @param  result   ·´×ªºóµÄ×Ö½Ú
+    * @brief           åè½¬å­—èŠ‚åºï¼Œä»¥ä¾¿åœ¨ç½‘ç»œä¸Šä¼ è¾“
+    * @param  source   æºå­—èŠ‚
+    * @param  result   åè½¬åçš„å­—èŠ‚
     */
     template <typename DataType>
     static void        reverseBytes(const DataType *source, DataType *result)
@@ -81,17 +81,17 @@ public:
     }
 
     /**
-    * @brief           ½«Ô´Êı¾İ´ÓÖ÷»ú×Ö½ÚĞò×ª»»³ÉÍøÂç×Ö½ÚĞò
-    * @param  source   Ö÷»ú×Ö½ÚĞòÔ´Êı¾İ
-    * @param  result   ´æ·Å×ª»»ºóµÄÍøÂç×Ö½ÚĞò½á¹ûÊı¾İ
-    * @param  length   ĞèÒª×ª»»µÄ×Ö½Ú³¤¶È
+    * @brief           å°†æºæ•°æ®ä»ä¸»æœºå­—èŠ‚åºè½¬æ¢æˆç½‘ç»œå­—èŠ‚åº
+    * @param  source   ä¸»æœºå­—èŠ‚åºæºæ•°æ®
+    * @param  result   å­˜æ”¾è½¬æ¢åçš„ç½‘ç»œå­—èŠ‚åºç»“æœæ•°æ®
+    * @param  length   éœ€è¦è½¬æ¢çš„å­—èŠ‚é•¿åº¦
     */
     static void        host2Net(const void *source, void *result, size_t length);
 
     /**
-    * @brief           ½«Ô´Êı¾İ´ÓÖ÷»ú×Ö½ÚĞò×ª»»³ÉÍøÂç×Ö½ÚĞò
-    * @param  source   Ö÷»ú×Ö½ÚĞòÔ´Êı¾İ
-    * @param  result   ´æ·Å×ª»»ºóµÄÍøÂç×Ö½ÚĞò½á¹ûÊı¾İ
+    * @brief           å°†æºæ•°æ®ä»ä¸»æœºå­—èŠ‚åºè½¬æ¢æˆç½‘ç»œå­—èŠ‚åº
+    * @param  source   ä¸»æœºå­—èŠ‚åºæºæ•°æ®
+    * @param  result   å­˜æ”¾è½¬æ¢åçš„ç½‘ç»œå­—èŠ‚åºç»“æœæ•°æ®
     */
     template <typename DataType>
     static void        host2Net(const DataType& source, DataType& result)
@@ -100,9 +100,9 @@ public:
     }
 
     /**
-    * @brief           ½«Ô´Êı¾İ´ÓÖ÷»ú×Ö½ÚĞò×ª»»³ÉÍøÂç×Ö½ÚĞò
-    * @param  source   Ö÷»ú×Ö½ÚĞòÔ´Êı¾İ
-    * @return          ´æ·Å×ª»»ºóµÄÍøÂç×Ö½ÚĞò½á¹ûÊı¾İ
+    * @brief           å°†æºæ•°æ®ä»ä¸»æœºå­—èŠ‚åºè½¬æ¢æˆç½‘ç»œå­—èŠ‚åº
+    * @param  source   ä¸»æœºå­—èŠ‚åºæºæ•°æ®
+    * @return          å­˜æ”¾è½¬æ¢åçš„ç½‘ç»œå­—èŠ‚åºç»“æœæ•°æ®
     */
     template <typename DataType>
     static DataType    host2Net(const DataType& source)
@@ -113,17 +113,17 @@ public:
     }
 
     /**
-    * @brief           ½«Ô´Êı¾İ´ÓÍøÂç×Ö½ÚĞò×ª»»³ÉÖ÷»ú×Ö½ÚĞò
-    * @param  source   ÍøÂç×Ö½ÚĞòÔ´Êı¾İ
-    * @param  result   ´æ·Å×ª»»ºóµÄÖ÷»ú×Ö½ÚĞò½á¹ûÊı¾İ
-    * @param  length   ĞèÒª×ª»»µÄ×Ö½Ú³¤¶È
+    * @brief           å°†æºæ•°æ®ä»ç½‘ç»œå­—èŠ‚åºè½¬æ¢æˆä¸»æœºå­—èŠ‚åº
+    * @param  source   ç½‘ç»œå­—èŠ‚åºæºæ•°æ®
+    * @param  result   å­˜æ”¾è½¬æ¢åçš„ä¸»æœºå­—èŠ‚åºç»“æœæ•°æ®
+    * @param  length   éœ€è¦è½¬æ¢çš„å­—èŠ‚é•¿åº¦
     */
     static void        net2Host(const void *source, void *result, size_t length);
 
     /**
-    * @brief           ½«Ô´Êı¾İ´ÓÍøÂç×Ö½ÚĞò×ª»»³ÉÖ÷»ú×Ö½ÚĞò
-    * @param  source   ÍøÂç×Ö½ÚĞòÔ´Êı¾İ
-    * @param  result   ´æ·Å×ª»»ºóµÄÖ÷»ú×Ö½ÚĞò½á¹ûÊı¾İ
+    * @brief           å°†æºæ•°æ®ä»ç½‘ç»œå­—èŠ‚åºè½¬æ¢æˆä¸»æœºå­—èŠ‚åº
+    * @param  source   ç½‘ç»œå­—èŠ‚åºæºæ•°æ®
+    * @param  result   å­˜æ”¾è½¬æ¢åçš„ä¸»æœºå­—èŠ‚åºç»“æœæ•°æ®
     */
     template <typename DataType>
     static void        net2Host(const DataType& source, DataType& result)
@@ -132,9 +132,9 @@ public:
     }
 
     /**
-    * @brief           ½«Ô´Êı¾İ´ÓÍøÂç×Ö½ÚĞò×ª»»³ÉÖ÷»ú×Ö½ÚĞò
-    * @param  source   ÍøÂç×Ö½ÚĞòÔ´Êı¾İ
-    * @return          ×ª»»ºóµÄÖ÷»ú×Ö½ÚĞò½á¹ûÊı¾İ
+    * @brief           å°†æºæ•°æ®ä»ç½‘ç»œå­—èŠ‚åºè½¬æ¢æˆä¸»æœºå­—èŠ‚åº
+    * @param  source   ç½‘ç»œå­—èŠ‚åºæºæ•°æ®
+    * @return          è½¬æ¢åçš„ä¸»æœºå­—èŠ‚åºç»“æœæ•°æ®
     */
     template <typename DataType>
     static DataType net2Host(const DataType& source)
