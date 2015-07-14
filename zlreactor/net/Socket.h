@@ -19,7 +19,6 @@ class Socket : zl::NonCopy
 {
 public:
     explicit Socket(ZL_SOCKET fd);
-    Socket(ZL_SOCKET fd, ZL_SOCKADDR_IN sockAddr);
     ~Socket();
 
 public:
@@ -32,7 +31,7 @@ public:
     void           close();
 
     // Client Initialization
-    bool           connect(const char* host, const int port);
+    bool           connect(const char* ip, const int port);
 
     // Socket Settings
     /** Enable/disable Block Socket */
@@ -82,19 +81,11 @@ public:
     {
         return sockfd_ != ZL_INVALID_SOCKET;
     }
+
     const ZL_SOCKET& fd() const
     {
         return sockfd_;
     }
-
-    const ZL_SOCKADDR_IN addr() const
-    {
-        return sockaddr_;
-    }
-
-    short          getHostPort();
-    std::string    getHostIP();
-    std::string    getHost();    // IP:Port
 
     //template < typename T >
     //Socket& operator<< (const T& t)
@@ -111,7 +102,6 @@ public:
     //}
 protected:
     const ZL_SOCKET sockfd_;
-    ZL_SOCKADDR_IN  sockaddr_;
 };
 
 NAMESPACE_ZL_NET_END

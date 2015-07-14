@@ -43,7 +43,7 @@ void TcpAcceptor::listen()
     {
         throw zl::base::Exception("Could not listen to port.");
     }
-    LOG_INFO("TcpAcceptor::listen on [%s]", accept_socket->getHost().c_str());
+    LOG_INFO("TcpAcceptor::listen on [%s]", SocketUtil::getLocalIpPort(accept_socket->fd()).c_str());
 
     accept_channel_->enableReading();
 }
@@ -78,10 +78,10 @@ void TcpAcceptor::onAccept(Timestamp now)
             }
             else if(SOCKET_ERROR == SOCK_ERR_EMFILE)
             {
-                // TODO ��ʱ��Ϊ�ﵽ����ļ�������������ʧ�ܣ���Ϊpollerʹ�õ���ˮƽ����ģʽ��
-                // �ᵼ��poller����֪ͨ�ɶ��¼���������acceptorƵ��ȥaccept��ֱ�������йر���
-                // �������Ӷ��п�����������ֹͣ�������ᵼ��CPU 100% loop��
-                // ��������� �� http://blog.csdn.net/solstice/article/details/6365666
+                // TODO 此时因为达到最大文件描述符而接收失败，因为poller使用的是水平触发模式，
+                // 会导致poller持续通知可读事件，因此造成acceptor频繁去accept，直至进程中关闭了
+                // 其他连接而有空余描述符才停止。这样会导致CPU 100% loop。
+                // 解决方案见 ： http://blog.csdn.net/solstice/article/details/6365666
                 // http://pod.tst.eu/http://cvs.schmorp.de/libev/ev.pod#The_special_problem_of_accept_ing_wh
             }
             else

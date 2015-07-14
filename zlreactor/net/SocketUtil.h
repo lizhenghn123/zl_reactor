@@ -163,6 +163,7 @@ public:
     static void shutdownWrite(ZL_SOCKET sockfd);
 
     static int  bind(ZL_SOCKET sockfd, const char *ip, int port);
+    static int  bind(ZL_SOCKET sockfd, struct sockaddr_in addr);
     static int  connect(ZL_SOCKET sockfd, const char *ip, int port);
     static int  connect(ZL_SOCKET sockfd, const struct sockaddr_in& addr);
     static ZL_SOCKET accept(ZL_SOCKET sockfd, struct sockaddr_in *addr);
@@ -188,7 +189,13 @@ public:
     static int getOpt(ZL_SOCKET fd, int level, int optname, int& optval);
 
     static struct sockaddr_in getLocalAddr(ZL_SOCKET sockfd);
+    static std::string        getLocalIp(ZL_SOCKET sockfd);
+    static short              getLocalPort(ZL_SOCKET sockfd);
+    static std::string        getLocalIpPort(ZL_SOCKET sockfd);
     static struct sockaddr_in getPeerAddr(ZL_SOCKET sockfd);
+    static std::string        getPeerIp(ZL_SOCKET sockfd);
+    static short              getPeerPort(ZL_SOCKET sockfd);
+    static std::string        getPeerIpPort(ZL_SOCKET sockfd);
 
     static bool isSelfConnect(ZL_SOCKET sockfd);
     static int getSocketError(ZL_SOCKET sockfd);
