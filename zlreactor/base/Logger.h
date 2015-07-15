@@ -100,20 +100,20 @@ private:
     Logger& operator=(const Logger&);
 };
 
-
+#define LOG_SET_DEBUG_MODE            LOG_SET_PRIORITY(zl::base::ZL_LOG_PRIO_DEBUG)
 #define LOG_SET_LOGHANDLER(handler)   zl::base::Logger::setLogHandler(handler)
 #define LOG_SET_PRIORITY(priority)    zl::base::Logger::setLogPriority(priority)
 #define LOG_CONSOLE_OUTPUT(optval)    zl::base::Logger::setConsoleOutput(optval)
 #define LOG_DISABLE_ALL               zl::base::Logger::disableLog()
 
-#define LOG_DEBUG(s, ...)        zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
-#define LOG_INFO(s, ...)         zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
-#define LOG_NOTICE(s, ...)       zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_NOTICE,    s, ##__VA_ARGS__)
-#define LOG_WARN(s, ...)         zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_WARNING,   s, ##__VA_ARGS__)
-#define LOG_ERROR(s, ...)        zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ERROR,     s, ##__VA_ARGS__)
-#define LOG_CRITICA(s, ...)      zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_CRITICAL,  s, ##__VA_ARGS__)
-#define LOG_ALERT(s, ...)        zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
-#define LOG_EMERGENCY(s, ...)    zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
+#define LOG_DEBUG(s, ...)             zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_DEBUG,     s, ##__VA_ARGS__)
+#define LOG_INFO(s, ...)              zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_INFO,      s, ##__VA_ARGS__)
+#define LOG_NOTICE(s, ...)            zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_NOTICE,    s, ##__VA_ARGS__)
+#define LOG_WARN(s, ...)              zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_WARNING,   s, ##__VA_ARGS__)
+#define LOG_ERROR(s, ...)             zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ERROR,     s, ##__VA_ARGS__)
+#define LOG_CRITICA(s, ...)           zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_CRITICAL,  s, ##__VA_ARGS__)
+#define LOG_ALERT(s, ...)             zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_ALERT,     s, ##__VA_ARGS__)
+#define LOG_EMERGENCY(s, ...)         zl::base::Logger::log(ZL_LOG_MARK, zl::base::ZL_LOG_PRIO_EMERGENCY, s, ##__VA_ARGS__)
 
 NAMESPACE_ZL_BASE_END
 #endif /* ZL_ZLOG_H */
