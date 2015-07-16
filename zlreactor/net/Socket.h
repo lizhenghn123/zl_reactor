@@ -68,13 +68,13 @@ public:
 
     // Net Transimission
     int            send(const std::string& data) const;
-    int            send(const char *data, size_t size)const;
+    int            send(const void* data, size_t size)const;
     int            recv(std::string& data) const;
-    int            recv(char *data, int length, bool complete = false)const;
+    int            recv(void* data, int length, bool complete = false)const;
     int            sendTo(const std::string& data, int flags, InetAddress& sinaddr)const;
-    int            sendTo(const char *data, size_t size, int flags, InetAddress& sinaddr)const;
+    int            sendTo(const void* data, size_t size, int flags, InetAddress& sinaddr)const;
     int            recvFrom(std::string& data, int flags, InetAddress& sinaddr)const;
-    int            recvFrom(char *data, int length, int flags, InetAddress& sinaddr)const;
+    int            recvFrom(void* data, int length, int flags, InetAddress& sinaddr)const;
 
     // Property Access
     bool           isValid() const

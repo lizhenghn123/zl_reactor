@@ -96,7 +96,7 @@ int Socket::send(const std::string& data) const
     return send(data.c_str(), data.size());
 }
 
-int Socket::send(const char* data, size_t size)const
+int Socket::send(const void* data, size_t size)const
 {
     int len = ZL_SEND(sockfd_, data, size, 0);
     //if (len == -1)     // error
@@ -136,7 +136,7 @@ int Socket::recv(std::string& data) const
     return data.size();
 }
 
-int Socket::recv(char *data, int length, bool complete /*= false */) const
+int Socket::recv(void* data, int length, bool complete /*= false */) const
 {
     int received = 0;
     if(complete)
@@ -171,7 +171,7 @@ int Socket::sendTo(const std::string& data, int flags, InetAddress& sinaddr)cons
     return sendTo(data.c_str(), data.size(), flags, sinaddr);
 }
 
-int Socket::sendTo(const char* data, size_t size, int flags, InetAddress& sinaddr)const
+int Socket::sendTo(const void* data, size_t size, int flags, InetAddress& sinaddr)const
 {
     int len = ZL_SENDTO(sockfd_, data, size, flags, sinaddr, sinaddr.addressLength());
 
@@ -194,7 +194,7 @@ int Socket::recvFrom(std::string& data, int flags, InetAddress& sinaddr)const
     return data.size();
 }
 
-int Socket::recvFrom(char *data, int length, int flags, InetAddress& sinaddr)const
+int Socket::recvFrom(void* data, int length, int flags, InetAddress& sinaddr)const
 {
     socklen_t slen;
     int len = ZL_RECVFROM(sockfd_, data, length, flags, sinaddr, &slen);

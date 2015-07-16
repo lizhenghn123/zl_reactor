@@ -1,4 +1,4 @@
-#include "NetUtil.h"
+﻿#include "NetUtil.h"
 #include <stdlib.h>
 #include <string.h>
 NAMESPACE_ZL_NET_START
@@ -21,25 +21,25 @@ bool NetUtil::isValidIpv4(const char *str)
 
     int dot = 0; // .的个数
     const char *strp = str;
-	int num = 0; //计算每一个以'.'分开的字符串数值
+    int num = 0; //计算每一个以'.'分开的字符串数值
     while(*strp)
     {
         if('.' == *strp)
-		{
+        {
             ++dot;
-			num = 0;
-		}
+            num = 0;
+        }
         else if((*strp < '0') || (*strp > '9'))
         {
-			return false;
-		}
-		else
-		{
-			num *= 10;
-			num += (*strp - '0');
-			if(num > 255)
-				return false;
-		}
+            return false;
+        }
+        else
+        {
+            num *= 10;
+            num += (*strp - '0');
+            if(num > 255)
+                return false;
+        }
         ++strp;
     }
 
