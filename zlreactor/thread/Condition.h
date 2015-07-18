@@ -2,7 +2,7 @@
 // Filename         : Condition.h
 // Author           : LIZHENG
 // Created          : 2014-05-16
-// Description      : 条件变量在Windows及Linux平台下的封装
+// Description      : 鏉′欢鍙橀噺鍦╓indows鍙奓inux骞冲彴涓嬬殑灏佽
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************

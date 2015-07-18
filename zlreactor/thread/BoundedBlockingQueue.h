@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Filename         : BoundedBlockingQueue.h
 // Author           : LIZHENG
 // Created          : 2014-06-08
@@ -32,11 +32,11 @@ public:
 
 public:
     explicit BoundedBlockingQueue(int maxSize)
-        : stopFlag_(false),
-        maxSize_(maxSize),
-        mutex_(),
-        notEmpty_(mutex_),
-        notFull_(mutex_)
+        : stopFlag_(false)
+        , maxSize_(maxSize)
+        , mutex_()
+        , notEmpty_(mutex_)
+        , notFull_(mutex_)
     {
     }
 

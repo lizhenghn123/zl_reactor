@@ -30,11 +30,11 @@ void thread_bench(int thread_num)
     for(int i = 0; i < thread_num; ++i)    
     {
         Thread trd(threadFunc);
-        trd.join();  // Thread 的析构有问题
+        trd.join(); 
         //trd.detach();
     }    
     Timestamp end = Timestamp::now();
-    printf("create %d threads costs %f us\n", thread_num, Timestamp::timeDiff(end, start));
+    printf("create %d threads costs %f s\n", thread_num, Timestamp::timeDiff(end, start));
 }
 
 void process_bench(int process_num)
@@ -53,7 +53,7 @@ void process_bench(int process_num)
         }
     }    
     Timestamp end = Timestamp::now();
-    printf("create %d process costs %f us\n", process_num, Timestamp::timeDiff(end, start));
+    printf("create %d process costs %f s\n", process_num, Timestamp::timeDiff(end, start));
     
 }
 
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     thread_bench(max_thread_num);
 
     printf("###### process ######\n");
-    //process_bench(max_thread_num);
+    process_bench(max_thread_num);
 
     printf("###### GAME OVER ######");
 }

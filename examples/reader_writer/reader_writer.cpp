@@ -73,7 +73,7 @@ namespace test_RWMutex   // rwMutex
              {
                  MapPtr data = getData();
                  readCount_ ++;
-                 printf("reader thread[%ld] : read one\n", this_thread::get_id().tid());
+                 printf("reader thread[%ld] : read one\n", this_thread::tid());
                  if(data->size() > test_max_loop)
                  {
                      break;
@@ -90,7 +90,7 @@ namespace test_RWMutex   // rwMutex
                  count ++;
                  RWMutexWriteLockGuard lock(rwMutex_);
                  (*data_)[count] = count * count;
-                 printf("writer thread[%ld] : writer one\n", this_thread::get_id().tid());
+                 printf("writer thread[%ld] : writer one\n", this_thread::tid());
                  if(count > test_max_loop)
                      break;
              }
@@ -160,7 +160,7 @@ namespace test_Mutex_COW      // mutex + copy on write
                 // data 一旦拿到，就不再需要锁了。取数据的时候只有getData()内部有锁，多线程并发读的性能很好。
                 MapPtr data = getData();
                 readCount_ ++;
-                printf("reader thread[%ld] : read one\n", this_thread::get_id().tid());
+                printf("reader thread[%ld] : read one\n", this_thread::tid());
                 if(data->size() > test_max_loop)
                 {
                     break;
@@ -182,7 +182,7 @@ namespace test_Mutex_COW      // mutex + copy on write
                 }
                 assert(data_.unique());
                 (*data_)[count] = count * count;
-                printf("writer thread[%ld] : writer one\n", this_thread::get_id().tid());
+                printf("writer thread[%ld] : writer one\n", this_thread::tid());
 
                 if(count > test_max_loop)
                     break;

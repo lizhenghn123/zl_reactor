@@ -1,4 +1,4 @@
-﻿#include "Process.h"
+#include "Process.h"
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>

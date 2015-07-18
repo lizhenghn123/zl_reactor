@@ -30,9 +30,9 @@ public:
 
 public:
     NetBuffer()
-        : readerIndex_(kCheapPrepend),
-          writerIndex_(kCheapPrepend),
-          buffer_(kCheapPrepend + kInitialSize)
+        : readerIndex_(kCheapPrepend)
+        , writerIndex_(kCheapPrepend)
+        , buffer_(kCheapPrepend + kInitialSize)
     {
         assert(readableBytes() == 0);
         assert(writableBytes() == kInitialSize);

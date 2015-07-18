@@ -1,16 +1,19 @@
 ﻿#include "base/Exception.h"
-#include <execinfo.h>
 #include <stdlib.h>
+#ifdef OS_WINDOWS
+#else
+#include <execinfo.h>
+#define DO_NAME_DEMANGLE
+#endif
 #ifdef DO_NAME_DEMANGLE
 #include "base/Demangle.h"
 #endif
 NAMESPACE_ZL_BASE_START
 
 Exception::Exception(const char* errinfo)
-    : line_(0),
-      filename_("unknown filename"),
-      errmsg_(errinfo)
-      
+    : line_(0)
+    , filename_("unknown filename")
+    , errmsg_(errinfo)
 {
     trace_stack();
 }
@@ -25,9 +28,9 @@ Exception::Exception(const char *filename, int linenumber, const char* errinfo)
 }
 
 Exception::Exception(const char *filename, int linenumber, const std::string& errinfo)
-    : line_(linenumber),
-      filename_(filename),
-      errmsg_(errinfo)
+    : line_(linenumber)
+    , filename_(filename)
+    , errmsg_(errinfo)
 {
     trace_stack();
 }
@@ -38,6 +41,8 @@ Exception::~Exception() throw ()
 
 void Exception::trace_stack()
 {
+#ifdef OS_WINDOWS
+#else
     static const int len = 256;
     void* buffer[len];
     int nptrs = ::backtrace(buffer, len);
@@ -69,6 +74,7 @@ void Exception::trace_stack()
         callStack_.push_back('\n');
     }
     free(strings);
+#endif
 }
 
 NAMESPACE_ZL_BASE_END

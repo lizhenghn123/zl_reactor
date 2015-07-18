@@ -60,7 +60,7 @@ void TimerQueue::cancelTimerInLoop(TimerId id)
         activeTimers_.erase(it);
         timers_.erase(iter);
     }
-    else             // not find£¬maybe non exist or calling functor
+    else             // not findï¼Œmaybe non exist or calling functor
     {
         if(callingTimesFunctor_) // exist, but calling functor
         {

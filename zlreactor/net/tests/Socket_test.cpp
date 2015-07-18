@@ -20,6 +20,7 @@ void test_socket()
     {
         Socket sock(SocketUtil::createSocket());
         assert(sock.fd() > 0);
+        sock.setReuseAddr(true);
         bool ret = sock.bind("0.0.0.0", 8888);
         assert(ret);
         ret = sock.listen();
@@ -35,25 +36,29 @@ namespace detail
 {
     const char* g_serverIp = "0.0.0.0";
     const int   g_serverPort = 8888;
+
     void server_thread()
     {
         Socket sock(SocketUtil::createSocketAndListen(g_serverIp, g_serverPort, 1024));
         assert(sock.fd() > 0);
         ZL_SOCKADDR_IN peerAddr;
         std::vector<Socket*> sockets;
+        printf("server socket is listening......\n");
         while (true)
         {
             memset(&peerAddr, 0, sizeof(peerAddr));
             int clifd = sock.accept(&peerAddr);
             assert(clifd);
-            Socket* client = new Socket(clifd, peerAddr);
-            printf("server accept [%d] from [%s]\n", client->fd(), client->getHost().c_str());
+            Socket* client = new Socket(clifd);
+            printf("server accept [%d] from [%s]\n", client->fd(), SocketUtil::getPeerIpPort(client->fd()).c_str());
 
             sockets.push_back(client);
         }
     }
+
     void client_thread()
     {
+        this_thread::sleep(1000);
         int max_count = 10;
         while (max_count-- > 0)
         {

@@ -1,4 +1,4 @@
-﻿#include "net/Signalfd.h"
+#include "net/Signalfd.h"
 #include <signal.h>
 #include <assert.h>
 #include "net/Channel.h"

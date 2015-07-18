@@ -4,6 +4,7 @@
 #include <signal.h>          // for ::signal
 #include "base/Timestamp.h"
 #include "base/Logger.h"
+#include "thread/Thread.h"
 #include "net/Channel.h"
 #include "net/poller/Poller.h"
 #include "net/TimerQueue.h"
@@ -13,8 +14,8 @@ NAMESPACE_ZL_NET_START
 
 namespace
 {
-    // Èç¹ûÍùÒÑ¹Ø±ÕµÄclient socketÉÏ¼ÌĞøwriteÊ±£¬·şÎñÆ÷½ø³Ì»áÊÕµ½SIGPIPEĞÅºÅ¶øÖÕÖ¹,
-    // ÕâÀï¼òµ¥ºöÂÔ¸ÃĞÅºÅ
+    // å¦‚æœå¾€å·²å…³é—­çš„client socketä¸Šç»§ç»­writeæ—¶ï¼ŒæœåŠ¡å™¨è¿›ç¨‹ä¼šæ”¶åˆ°SIGPIPEä¿¡å·è€Œç»ˆæ­¢,
+    // è¿™é‡Œç®€å•å¿½ç•¥è¯¥ä¿¡å·
     class IgnoreSigPipe
     {
     public:
@@ -25,14 +26,18 @@ namespace
     }_dont_use_this_class_;
 }
 
+thread_local EventLoop *g_evloopInThisThread = 0;
+
 EventLoop::EventLoop()
-    : currentThreadId_(this_thread::get_id()),
-      currentActiveChannel_(NULL),
-      running_(false),
-      eventHandling_(false),
-      callingPendingFunctors_(false),
-      mutex_()
+    : currentThreadId_(this_thread::tid())
+    , currentActiveChannel_(NULL)
+    , running_(false)
+    , eventHandling_(false)
+    , callingPendingFunctors_(false)
+    , mutex_()
 {
+    assert(!g_evloopInThisThread); // é¿å…åœ¨åŒä¸€ä¸ªçº¿ç¨‹ä¸­åˆ›å»ºå¤šä¸ªEventLoopå¯¹è±¡(one EventLoop per thread)
+
     poller_ = Poller::createPoller(this);
 
     wakeupfd_ = new EventfdHandler();
@@ -42,6 +47,8 @@ EventLoop::EventLoop()
     wakeupChannel_->enableReading();  // ready for read event of wakeupfd_
 
     timerQueue_ = new TimerQueue(this);
+
+    g_evloopInThisThread = this;
 }
 
 EventLoop::~EventLoop()
@@ -98,7 +105,7 @@ void EventLoop::loop()
 
         timerQueue_->runTimer(now);
 
-        callPendingFunctors();    //´¦ÀípollµÈ´ı¹ı³ÌÖĞ·¢ÉúµÄÊÂ¼ş
+        callPendingFunctors();    //å¤„ç†pollç­‰å¾…è¿‡ç¨‹ä¸­å‘ç”Ÿçš„äº‹ä»¶
     }
 }
 
@@ -201,7 +208,7 @@ void EventLoop::assertInLoopThread() const
     if(!isInLoopThread())
     {
         LOG_ALERT("EventLoop::abortNotInLoopThread - EventLoop [%0x] was created in threadId_ [%d], " 
-            "but current thread id = [%d].", this, currentThreadId_.tid(), this_thread::get_id().tid());
+            "but current thread id = [%d].", this, currentThreadId_, this_thread::tid());
         assert("EventLoop::assertInLoopThread()" && 0);
     }
 }

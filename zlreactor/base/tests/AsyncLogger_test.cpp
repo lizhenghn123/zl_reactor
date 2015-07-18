@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include "base/Logger.h"
@@ -33,14 +33,14 @@ void producer()
 {
     for (int i = 0; i < 5000; ++i)
     {
-        LOG_DEBUG("[%d] This is a LOG_DEBUG msg!", this_thread::get_id().tid());
-        LOG_INFO("[%d] This is a LOG_INFO msg!", this_thread::get_id().tid());
-        LOG_NOTICE("[%d] This is a LOG_NOTICE msg!", this_thread::get_id().tid());
-        LOG_WARN("[%d] This is a LOG_WARN msg!", this_thread::get_id().tid());
-        LOG_ERROR("[%d] This is a LOG_ERROR msg!", this_thread::get_id().tid());
-        LOG_CRITICA("[%d] This is a LOG_CRITICA msg!", this_thread::get_id().tid());
-        LOG_ALERT("[%d] This is a LOG_ALERT msg!", this_thread::get_id().tid());
-        LOG_EMERGENCY("[%d] This is a LOG_EMERGENCY msg!", this_thread::get_id().tid());
+        LOG_DEBUG("[%d] This is a LOG_DEBUG msg!", this_thread::get_id().value());
+        LOG_INFO("[%d] This is a LOG_INFO msg!", this_thread::get_id().value());
+        LOG_NOTICE("[%d] This is a LOG_NOTICE msg!", this_thread::get_id().value());
+        LOG_WARN("[%d] This is a LOG_WARN msg!", this_thread::get_id().value());
+        LOG_ERROR("[%d] This is a LOG_ERROR msg!", this_thread::get_id().value());
+        LOG_CRITICA("[%d] This is a LOG_CRITICA msg!", this_thread::get_id().value());
+        LOG_ALERT("[%d] This is a LOG_ALERT msg!", this_thread::get_id().value());
+        LOG_EMERGENCY("[%d] This is a LOG_EMERGENCY msg!", this_thread::get_id().value());
     }
 }
 

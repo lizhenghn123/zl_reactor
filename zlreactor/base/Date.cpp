@@ -1,4 +1,4 @@
-﻿#include "base/Date.h"
+#include "base/Date.h"
 #include "Define.h"
 #include <stdio.h>
 #include <time.h>

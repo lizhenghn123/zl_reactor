@@ -1,4 +1,4 @@
-﻿#include "base/Daemonize.h"
+#include "base/Daemonize.h"
 #include <stdio.h>
 #include <assert.h>
 #include <unistd.h>

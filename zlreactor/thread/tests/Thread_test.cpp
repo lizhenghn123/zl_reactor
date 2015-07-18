@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 #include "thread/Thread.h"
 #include "thread/Mutex.h"

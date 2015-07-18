@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <iostream>
 #include <unistd.h>
 #include "net/EventLoop.h"
@@ -15,7 +15,7 @@ EventLoop *g_loop;
 
 void printTid()
 {
-    printf("pid = %d, tid = %ld\n", getpid(), thread::this_thread::get_id().tid());
+    printf("pid = %d, tid = %ld\n", getpid(), thread::this_thread::get_id().value());
     printf("now %s\n", Timestamp::now().toString().c_str());
 }
 

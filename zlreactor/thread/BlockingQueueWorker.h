@@ -2,7 +2,7 @@
 // Filename         : BlockingQueueWorker.h
 // Author           : LIZHENG
 // Created          : 2014-05-16
-// Description      : ¹¤×÷µ÷¶È£¬¹¤×÷ÔÚ×èÈû¶ÓÁĞ(BlockingQueue »òÕß BoundedBlockingQueue)ÉÏÃæ
+// Description      : å·¥ä½œè°ƒåº¦ï¼Œå·¥ä½œåœ¨é˜»å¡é˜Ÿåˆ—(BlockingQueue æˆ–è€… BoundedBlockingQueue)ä¸Šé¢
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -22,16 +22,16 @@ public:
 
     template<typename FunctionType>
     BlockingQueueWorker(QueueType& queue, const FunctionType& function, int thread_num = 1)
-        : queue_(queue),
-          function_(function),
-          threadNum_(thread_num)
+        : queue_(queue)
+        , function_(function)
+        , threadNum_(thread_num)
     {
     }
 
     BlockingQueueWorker(QueueType& queue, int thread_num = 1)
-        : queue_(queue),
-          function_(NULL),
-          threadNum_(thread_num)
+        : queue_(queue)
+        , function_(NULL)
+        , threadNum_(thread_num)
     {
     }
 

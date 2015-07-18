@@ -1,72 +1,94 @@
-﻿#include "thread/Thread.h"
+#include "thread/Thread.h"
+#include "base/Exception.h"
 #if defined(OS_WINDOWS)
 #include <process.h>
 #else
 #include <syscall.h>
 #endif
-
 NAMESPACE_ZL_THREAD_START
 
-struct ThreadImplDataInfo
+//#define DO_NOT_USE_TRY_CATCH
+
+namespace detail
 {
-    typedef Thread::ThreadFunc ThreadFunc;
-    ThreadFunc            threadFunc_;
-    Thread                *thread_;
-    native_thread_handle  threadId_;
-
-    ThreadImplDataInfo(const ThreadFunc& func, Thread *thread, native_thread_handle tid)
-        : threadFunc_(func), thread_(thread), threadId_(tid)
+    struct ThreadImplDataInfo
     {
-    }
+        typedef zl::thread::Thread::ThreadFunc ThreadFunc;
+        ThreadFunc func_;
+        std::string name_;
 
-    void RunThread()
-    {
-        try
+        ThreadImplDataInfo(const ThreadFunc& func, const std::string threadName)
+            : func_(func)
+            , name_(threadName)
         {
-            // Call the actual client thread function
-            threadFunc_();
+            
         }
-        catch(...)
+
+        void runThread()
         {
-            // Uncaught exceptions will terminate the application (default behavior according to C++11)
-            std::terminate();
+        #ifdef DO_NOT_USE_TRY_CATCH
+            func_();
+        #else
+            try
+            {
+                func_();
+            }
+            catch (const zl::base::Exception& ex)
+            {
+                fprintf(stderr, "exception caught in Thread %s\n", name_.c_str());
+                fprintf(stderr, "reason: %s\n", ex.what());
+                fprintf(stderr, "stack trace: %s\n", ex.stackTrace());
+                std::abort();
+            }
+            catch (const std::exception& ex)
+            {
+                fprintf(stderr, "exception caught in Thread %s\n", name_.c_str());
+                fprintf(stderr, "reason: %s\n", ex.what());
+                std::abort();
+            }
+            catch (...)
+            {
+                fprintf(stderr, "uncaught exception caught in Thread %s\n", name_.c_str());
+                // Uncaught exceptions will terminate the application (default behavior according to C++11)
+                std::terminate();
+            }
+        #endif
         }
-    }
-};
+    };
 
 #if defined(OS_WINDOWS)
-unsigned WINAPI StartThread(void *aArg)
+    unsigned WINAPI startThread(void *arg)
 #else
-void *StartThread(void *aArg)
+    void* startThread(void *arg)
 #endif
-{
-    ThreadImplDataInfo *data = static_cast<ThreadImplDataInfo *>(aArg);
-    data->RunThread();
-    delete data;
-    return NULL;
+    {
+        ThreadImplDataInfo *data = static_cast<ThreadImplDataInfo *>(arg);
+        data->runThread();
+        delete data;
+        return 0;
+    }
 }
 
 Thread::Thread(const ThreadFunc& func, const std::string& name/* = unknown*/)
     : threadId_(0)
-    , threadFunc_(func)
+    //, threadFunc_(func)
     , threadName_(name)
     , notAThread_(true)
     , joined_(false)
 {
 
-    ThreadImplDataInfo *data = new ThreadImplDataInfo(threadFunc_, this, threadId_);
-
+    detail::ThreadImplDataInfo* data = new detail::ThreadImplDataInfo(func, name);
     // Create the thread
 #if defined(OS_WINDOWS)
-    threadId_ = (HANDLE) _beginthreadex(0, 0, StartThread, (void *)data, 0, &win32ThreadID_);
+    threadId_ = (HANDLE) _beginthreadex(0, 0, detail::startThread, data, 0, &win32ThreadID_);
 #else
-    if(pthread_create(&threadId_, NULL, StartThread, (void *)data) != 0)
+    if (pthread_create(&threadId_, NULL, detail::startThread, data) != 0)
         threadId_ = 0;
 #endif
     if(!threadId_)
     {
         delete data;
-        abort();
+        std::abort();
     }
     notAThread_ = false;  // The thread is now alive
 }

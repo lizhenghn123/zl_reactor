@@ -1,4 +1,4 @@
-﻿#include "net/TcpServer.h"
+#include "net/TcpServer.h"
 #include "net/InetAddress.h"
 #include "base/Logger.h"
 #include "net/TcpAcceptor.h"
@@ -8,7 +8,9 @@
 NAMESPACE_ZL_NET_START
 
 TcpServer::TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::string& server_name/* = "TcpServer"*/)
-    : loop_(loop), serverAddr_(listenAddr.getSockAddrInet()), serverName_(server_name)
+    : loop_(loop)
+    , serverAddr_(listenAddr.getSockAddrInet())
+    , serverName_(server_name)
 {
     acceptor_ = new TcpAcceptor(loop, listenAddr);
     acceptor_->setNewConnectionCallback(std::bind(&TcpServer::newConnection, 
@@ -33,10 +35,8 @@ TcpServer::~TcpServer()
     }
 }
 
-void TcpServer::setMultiReactorThreads(size_t numThreads)
+void TcpServer::setMultiReactorThreads(int numThreads)
 {
-    if(numThreads < 0)
-        numThreads = zl::thread::Thread::hardware_concurrency();
     evloopThreadPool_->setMultiReactorThreads(numThreads);
 }
 

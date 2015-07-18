@@ -1,4 +1,4 @@
-#include "NetUtil.h"
+ï»¿#include "NetUtil.h"
 #include <stdlib.h>
 #include <string.h>
 NAMESPACE_ZL_NET_START
@@ -19,31 +19,31 @@ bool NetUtil::isValidIpv4(const char *str)
     if(0 == strcmp(str, "*")) return true;
     if(0 == strcmp(str, "255.255.255.255")) return false;
 
-    int dot = 0; // .µÄ¸öÊı
+    int dot = 0; // .çš„ä¸ªæ•°
     const char *strp = str;
-	int num = 0; //¼ÆËãÃ¿Ò»¸öÒÔ'.'·Ö¿ªµÄ×Ö·û´®ÊıÖµ
+    int num = 0; //è®¡ç®—æ¯ä¸€ä¸ªä»¥'.'åˆ†å¼€çš„å­—ç¬¦ä¸²æ•°å€¼
     while(*strp)
     {
         if('.' == *strp)
-		{
+        {
             ++dot;
-			num = 0;
-		}
+            num = 0;
+        }
         else if((*strp < '0') || (*strp > '9'))
         {
-			return false;
-		}
-		else
-		{
-			num *= 10;
-			num += (*strp - '0');
-			if(num > 255)
-				return false;
-		}
+            return false;
+        }
+        else
+        {
+            num *= 10;
+            num += (*strp - '0');
+            if(num > 255)
+                return false;
+        }
         ++strp;
     }
 
-    return (3 == dot);  // .µÄ¸öÊı±ØĞëÎª3
+    return (3 == dot);  // .çš„ä¸ªæ•°å¿…é¡»ä¸º3
 }
 
 bool NetUtil::isValidIpv6(const char *str)
@@ -55,13 +55,13 @@ bool NetUtil::isValidIpv6(const char *str)
 
 bool NetUtil::isLittleEndian()
 {
-    //Little-endianÄ£Ê½µÄCPU¶Ô²Ù×÷ÊıµÄ´æ·Å·½Ê½ÊÇ´ÓµÍ×Ö½Úµ½¸ß×Ö½Ú£¬¶øBig-endianÄ£Ê½¶Ô²Ù×÷ÊıµÄ´æ·Å·½Ê½ÊÇ´Ó¸ß×Ö½Úµ½µÍ×Ö½Ú¡£
-    //[´óĞ¡¶Ë´æ´¢ÎÊÌâ]: Ğ¡¶Ë·½Ê½ÖĞ£¨iÕ¼ÖÁÉÙÁ½¸ö×Ö½ÚµÄ³¤¶È£©,iËù·ÖÅäµÄÄÚ´æ×îĞ¡µØÖ·ÄÇ¸ö×Ö½ÚÖĞ¾Í´æ×Å1£¬ÆäËû×Ö½ÚÊÇ0.
-    //´ó¶ËµÄ»°Ôò1ÔÚiµÄ×î¸ßµØÖ·×Ö½Ú´¦´æ·Å£¬charÊÇÒ»¸ö×Ö½Ú£¬ËùÒÔÇ¿ÖÆ½«charĞÍÁ¿pÖ¸ÏòiÔòpÖ¸ÏòµÄÒ»¶¨ÊÇiµÄ×îµÍµØÖ·£¬
-    //ÄÇÃ´¾Í¿ÉÒÔÅĞ¶ÏpÖĞµÄÖµÊÇ²»ÊÇ1À´È·¶¨ÊÇ²»ÊÇĞ¡¶Ë¡£
-    //Èô´¦ÀíÆ÷ÊÇBig_endianµÄ£¬Ôò·µ»Ø0£»ÈôÊÇLittle_endianµÄ£¬Ôò·µ»Ø1
+    //Little-endianæ¨¡å¼çš„CPUå¯¹æ“ä½œæ•°çš„å­˜æ”¾æ–¹å¼æ˜¯ä»ä½å­—èŠ‚åˆ°é«˜å­—èŠ‚ï¼Œè€ŒBig-endianæ¨¡å¼å¯¹æ“ä½œæ•°çš„å­˜æ”¾æ–¹å¼æ˜¯ä»é«˜å­—èŠ‚åˆ°ä½å­—èŠ‚ã€‚
+    //[å¤§å°ç«¯å­˜å‚¨é—®é¢˜]: å°ç«¯æ–¹å¼ä¸­ï¼ˆiå è‡³å°‘ä¸¤ä¸ªå­—èŠ‚çš„é•¿åº¦ï¼‰,iæ‰€åˆ†é…çš„å†…å­˜æœ€å°åœ°å€é‚£ä¸ªå­—èŠ‚ä¸­å°±å­˜ç€1ï¼Œå…¶ä»–å­—èŠ‚æ˜¯0.
+    //å¤§ç«¯çš„è¯åˆ™1åœ¨içš„æœ€é«˜åœ°å€å­—èŠ‚å¤„å­˜æ”¾ï¼Œcharæ˜¯ä¸€ä¸ªå­—èŠ‚ï¼Œæ‰€ä»¥å¼ºåˆ¶å°†charå‹é‡pæŒ‡å‘iåˆ™pæŒ‡å‘çš„ä¸€å®šæ˜¯içš„æœ€ä½åœ°å€ï¼Œ
+    //é‚£ä¹ˆå°±å¯ä»¥åˆ¤æ–­pä¸­çš„å€¼æ˜¯ä¸æ˜¯1æ¥ç¡®å®šæ˜¯ä¸æ˜¯å°ç«¯ã€‚
+    //è‹¥å¤„ç†å™¨æ˜¯Big_endiançš„ï¼Œåˆ™è¿”å›0ï¼›è‹¥æ˜¯Little_endiançš„ï¼Œåˆ™è¿”å›1
 
-    //ÁªºÏÌåunionµÄ´æ·ÅË³ĞòÊÇËùÓĞ³ÉÔ±¶¼´ÓµÍµØÖ·¿ªÊ¼´æ·Å
+    //è”åˆä½“unionçš„å­˜æ”¾é¡ºåºæ˜¯æ‰€æœ‰æˆå‘˜éƒ½ä»ä½åœ°å€å¼€å§‹å­˜æ”¾
     union w
     {
         int i;
@@ -86,7 +86,7 @@ void NetUtil::reverseBytes(const void *source, void *result, size_t length)
 
 void NetUtil::host2Net(const void *source, void *result, size_t length)
 {
-    if(isLittleEndian())   //Ö»ÓĞĞ¡×Ö½ÚĞò²ÅĞèÒª×ª»»£¬´ó×Ö½ÚĞòºÍÍøÂç×Ö½ÚĞòÊÇÒ»ÖÂµÄ
+    if(isLittleEndian())   //åªæœ‰å°å­—èŠ‚åºæ‰éœ€è¦è½¬æ¢ï¼Œå¤§å­—èŠ‚åºå’Œç½‘ç»œå­—èŠ‚åºæ˜¯ä¸€è‡´çš„
         reverseBytes(source, result, length);
 }
 

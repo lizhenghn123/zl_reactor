@@ -9,7 +9,9 @@ using namespace zl::base;
 
 void test_log()
 {
-    LOG_CONSOLE_OUTPUT(false);
+    LOG_CONSOLE_OUTPUT(true);    
+    LOG_SET_DEBUG_MODE;    // == LOG_SET_PRIORITY(ZL_LOG_PRIO_DEBUG);
+
     LOG_DEBUG("This is a LOG_DEBUG msg!");
     LOG_INFO("This is a LOG_INFO msg!");
     LOG_NOTICE("This is a LOG_NOTICE msg!");
@@ -108,8 +110,8 @@ void bench(int type)
 
 int main()
 {
-    bench(0);
-    //test_log();
+    //bench(0);
+    test_log();
     //test_logfile();
     //test_bench();
     return 0;

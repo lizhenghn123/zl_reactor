@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Filename         : CountDownLatch.h
 // Author           : LIZHENG
 // Created          : 2014-06-08
@@ -17,7 +17,9 @@ class CountDownLatch : zl::NonCopy
 {
 public:
     explicit CountDownLatch(int count)
-        : count_(count), mutex_(), condition_(mutex_)
+        : count_(count)
+        , mutex_()
+        , condition_(mutex_)
     {
     }
 

@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <memory>
@@ -42,14 +42,14 @@ public:
 private:
 	void threadFunc()
 	{
-		LOG_INFO("tid(threadFunc)=%d ready, waiting signal...", this_thread::get_id().tid());
+		LOG_INFO("tid(threadFunc)=%d ready, waiting signal...", this_thread::tid());
 		latch_.wait();
-		LOG_INFO("tid(threadFunc)=%d run, doing....", this_thread::get_id().tid());
+		LOG_INFO("tid(threadFunc)=%d run, doing....", this_thread::tid());
 
 		this_thread::sleep_for(chrono::milliseconds(4000));
 		//while (true) { }
 
-		LOG_INFO("tid(threadFunc)=%d finish, stopped", this_thread::get_id().tid());
+		LOG_INFO("tid(threadFunc)=%d finish, stopped", this_thread::tid());
 	}
 private:
 	CountDownLatch latch_;
@@ -88,13 +88,13 @@ public:
 private:
 	void threadFunc()
 	{
-		LOG_INFO("tid(threadFunc)=%d start, doing...", this_thread::get_id().tid());
+		LOG_INFO("tid(threadFunc)=%d start, doing...", this_thread::tid());
 
 		this_thread::sleep_for(chrono::milliseconds(3000));
 		//while (true) { }
 		latch_.countDown();   // 工作完成，通知主线程，如果此句写在本函数第一行，表示本线程以启动并通知主线程
 
-		LOG_INFO("tid(threadFunc)=%d finish, stopped", this_thread::get_id().tid());
+		LOG_INFO("tid(threadFunc)=%d finish, stopped", this_thread::tid());
 	}
 private:
 	CountDownLatch latch_;
@@ -104,25 +104,25 @@ private:
 int main()
 {
 	LOG_INFO("-------------------");
-	LOG_INFO("tid(main)=%d running....", this_thread::get_id().tid());
+	LOG_INFO("tid(main)=%d running....", this_thread::tid());
 	KidsThreadsWaitMainThread t1(3);
 	this_thread::sleep_for(chrono::milliseconds(3000));
-	LOG_INFO("tid(main)=%d create thread ok ...", this_thread::get_id().tid());
+	LOG_INFO("tid(main)=%d create thread ok ...", this_thread::tid());
 	t1.run();
 	this_thread::sleep_for(chrono::milliseconds(1000));
 	t1.joinAll();
 
 
 	LOG_INFO("-------------------\n");
-	LOG_INFO("tid(main)=%d running....", this_thread::get_id().tid());
+	LOG_INFO("tid(main)=%d running....", this_thread::tid());
 	MainThreadWaitKidsThreads t2(3);
 	this_thread::sleep_for(chrono::milliseconds(3000));
-	LOG_INFO("tid(main)=%d create thread ok ...", this_thread::get_id().tid());
+	LOG_INFO("tid(main)=%d create thread ok ...", this_thread::tid());
 	t2.wait();
 	this_thread::sleep_for(chrono::milliseconds(1000));
 	t2.joinAll();
 
 	LOG_INFO("game over\n");
-	getchar();
+
 	return 0;
 }

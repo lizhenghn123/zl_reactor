@@ -35,7 +35,7 @@ namespace test1
         }
         catch (Exception& e)
         {
-            std::cout << e.what() << "\n" << e.stack_trace() << "\n-------------\n";
+            std::cout << e.what() << "\n" << e.stackTrace() << "\n-------------\n";
         }
 
         try
@@ -45,7 +45,7 @@ namespace test1
         catch (const Exception& ex)
         {
             printf("reason: %s\n", ex.what());
-            printf("stack trace: %s\n", ex.stack_trace());
+            printf("stack trace: %s\n", ex.stackTrace());
         }
     }
 }
@@ -104,7 +104,7 @@ namespace test2
             cout << ex.filename() << "\n";
             cout << ex.line() << "\n";
             printf("reason: %s\n", ex.what());
-            printf("stack trace: %s\n", ex.stack_trace());
+            printf("stack trace: %s\n", ex.stackTrace());
         }
         else
         {

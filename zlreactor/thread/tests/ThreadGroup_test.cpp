@@ -2,7 +2,7 @@
 	File Name   : ThreadLocal_test.cpp
 	Author      : LIZHENG
 	Mail        : lizhenghn@gmail.com
-	Created Time: 2015Äê06ÔÂ23ÈÕ ĞÇÆÚ¶ş 23Ê±26·Ö50Ãë
+	Created Time: 2015å¹´06æœˆ23æ—¥ æ˜ŸæœŸäºŒ 23æ—¶26åˆ†50ç§’
  ************************************************************************/
 #include<iostream>
 #include "thread/Thread.h"
@@ -16,12 +16,12 @@ using namespace zl::thread;
 
 void printI(int i)
 {
-    printf("this thread[%ld] print %d\n", this_thread::get_id().tid(), i);
+    printf("this thread[%ld] print %d\n", this_thread::get_id().value(), i);
     this_thread::sleep_for(chrono::milliseconds(1000));
 }
 void printString(const char* data)
 {
-    printf("this thread[%ld] print %s\n", this_thread::get_id().tid(), data);
+    printf("this thread[%ld] print %s\n", this_thread::get_id().value(), data);
 }
 
 void test_ThreadGroup()
@@ -44,7 +44,7 @@ void test_ThreadGroup()
         }
     }
 
-    tg.remove_thread(trd); // ¸Ã½Ó¿Ú²¢²»ÄÜÊ¹ÒÑ¼ÓÈëµÄÏß³ÌÍ£Ö¹ÔËĞĞ£¨´´½¨Ê±¼´ÔËĞĞ£©£¬½ö½öÊ¹¸ÃÏß³Ì²»ÔÙÓÉThreadGroup¸ºÔğÉ¾³ı
+    tg.remove_thread(trd); // è¯¥æ¥å£å¹¶ä¸èƒ½ä½¿å·²åŠ å…¥çš„çº¿ç¨‹åœæ­¢è¿è¡Œï¼ˆåˆ›å»ºæ—¶å³è¿è¡Œï¼‰ï¼Œä»…ä»…ä½¿è¯¥çº¿ç¨‹ä¸å†ç”±ThreadGroupè´Ÿè´£åˆ é™¤
 
     tg.create_thread(std::bind(printString, "ThreadGroup"));
 

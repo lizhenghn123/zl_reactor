@@ -9,6 +9,7 @@ using namespace std;
 using namespace zl;
 using namespace zl::thread;
 
+// pod 类型的thread_local测试
 namespace thread_tls1
 {
     thread_local int gLocalVar = 0;
@@ -21,21 +22,20 @@ namespace thread_tls1
 
     void test_threadtls()
     {
-        // Clear the TLS variable (it should keep this value after all threads are finished).
-        gLocalVar = 1;
+        gLocalVar = 1;   // 主线程设置gLocalVar新值
         cout << "[" << this_thread::tid() << "]Main   gLocalVar is " << gLocalVar << ".\n";
 
-        // Start child thread that modifies gLocalVar
-        Thread t1(std::bind(ThreadTLS, 99));
+        Thread t1(std::bind(ThreadTLS, 99));   // 子线程更新gLocalVar值， 注意输出
         t1.join();   // cout 99, not 99 + 1
 
-        Thread t2(std::bind(ThreadTLS, 9999));
+        Thread t2(std::bind(ThreadTLS, 9999));  // 另一子线程更新gLocalVar值， 注意输出
         t2.join();   // cout 9999, not 9999+1
 
         assert(gLocalVar == 1);
     }
 }
 
+// class 类型的thread_local测试
 namespace thread_tls2
 {
     class TestTLS
@@ -93,7 +93,5 @@ int main()
     test();
 
     cout << "###### GAME OVER ######\n";
-    cout << "please input any char for exiting.\n";
-    getchar();
     return 0;
 }

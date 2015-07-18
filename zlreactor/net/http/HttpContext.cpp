@@ -1,4 +1,4 @@
-﻿#include "net/http/HttpContext.h"
+#include "net/http/HttpContext.h"
 #include "net/NetBuffer.h"
 #include "base/Timestamp.h"
 #include "base/StringUtil.h"

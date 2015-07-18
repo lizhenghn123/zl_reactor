@@ -1,4 +1,4 @@
-﻿#include "TcpConnection.h"
+#include "TcpConnection.h"
 #include "net/Socket.h"
 #include "base/Logger.h"
 #include "net/EventLoop.h"
@@ -17,7 +17,10 @@ void defaultMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buf, Timest
 }
 
 TcpConnection::TcpConnection(EventLoop* loop, int sockfd, const InetAddress& localAddr, const InetAddress& peerAddr)
-    : loop_(loop), state_(kConnecting), localAddr_(localAddr.getSockAddrInet()), peerAddr_(peerAddr.getSockAddrInet())
+    : loop_(loop)
+    , state_(kConnecting)
+    , localAddr_(localAddr.getSockAddrInet())
+    , peerAddr_(peerAddr.getSockAddrInet())
 {
     socket_ = new Socket(sockfd);
     socket_->setKeepAlive(true);

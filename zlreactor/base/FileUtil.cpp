@@ -91,7 +91,7 @@ bool FileUtil::isDirectory(const char *path)
 #endif
 }
 
-void modifyDirPath(std::string& path) // 修改目录路径为X/Y/Z/
+void modifyDirPath(std::string& path) // 淇敼鐩綍璺緞涓篨/Y/Z/
 {
     if(path.empty())
     {
@@ -125,11 +125,11 @@ bool FileUtil::createRecursionDir(const char *dir)
         if(cur.length() > 0 && !isDirectory(cur.c_str()))
         {
             bool ret = false;
-#ifdef OS_WINDOWS
+        #ifdef OS_WINDOWS
             ret = CreateDirectoryA(cur.c_str(), NULL) ? true : false;
-#else
+        #else
             ret = (mkdir(cur.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == 0);
-#endif
+        #endif
             if(!ret)
             {
                 return false;
@@ -178,24 +178,29 @@ long FileUtil::getFileSize(const char *filepath)
 #endif
 }
 
-bool  FileUtil::readFile(const char *filepath, std::string& buf)
+size_t FileUtil::readFile(const char *filepath, std::string& buf)
 {
     FILE *file = fopen(filepath, "rb");
     if(file == NULL)
-        return false;
+        return 0;
 
     const static size_t PER_READ_SIZE = 1024;
+    size_t total = 0;
     char data[PER_READ_SIZE];
-    size_t size = PER_READ_SIZE;
-    while(!feof(file) && size == PER_READ_SIZE)
+    while(!feof(file))
     {
         ::memset(data, '\0', PER_READ_SIZE);
-        size = fread(data, PER_READ_SIZE, 1, file);
-        buf += data;
+        size_t size = fread(data, 1, PER_READ_SIZE, file);
+        buf.append(data, size);
+        total += size;
+        if(size < PER_READ_SIZE)
+        {
+            break;
+        }
     }
-	if(size > 0)
-		buf += data;
-    return true;
+
+    fclose(file);
+    return total;
 }
 
 NAMESPACE_ZL_END

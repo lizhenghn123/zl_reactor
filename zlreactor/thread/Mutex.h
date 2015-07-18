@@ -2,7 +2,7 @@
 // Filename         : Mutex.h
 // Author           : LIZHENG
 // Created          : 2014-05-16
-// Description      : 互斥锁在Windows及Linux平台下的封装
+// Description      : 浜掓枼閿佸湪Windows鍙奓inux骞冲彴涓嬬殑灏佽
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -75,7 +75,7 @@ public:
     void lock()
     {
     #ifdef OS_WINDOWS
-        while (::InterlockedExchange(&lock_, TRUE))
+        while (::InterlockedExchange((long*)&lock_, TRUE))
         {
             
         }
@@ -90,7 +90,7 @@ public:
     void unlock()
     {
     #ifdef OS_WINDOWS
-        ::InterlockedExchange(&lock_, FALSE);
+        ::InterlockedExchange((long*)&lock_, FALSE);
     #elif defined(OS_LINUX)
         __sync_lock_release(&lock_);
     #endif

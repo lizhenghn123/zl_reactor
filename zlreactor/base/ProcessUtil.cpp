@@ -1,4 +1,4 @@
-﻿#include "ProcessUtil.h"
+#include "ProcessUtil.h"
 #include "FileUtil.h"
 #include "thread/Thread.h"
 #include <dirent.h>
@@ -180,7 +180,7 @@ namespace ProcessUtil
     string threadStat()
     {
         char buf[64];
-        snprintf(buf, sizeof buf, "/proc/self/task/%d/stat", (int)thread::this_thread::get_id().tid());
+        snprintf(buf, sizeof buf, "/proc/self/task/%d/stat", thread::this_thread::tid());
         string result;
         readFile(buf, result);
         return result;

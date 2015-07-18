@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Filename         : TcpServer.h
 // Author           : LIZHENG
 // Created          : 2014-10-31
@@ -29,7 +29,15 @@ public:
     TcpServer(EventLoop *loop, const InetAddress& listenAddr, const std::string& server_name = "TcpServer");
     virtual ~TcpServer();
 
-    void setMultiReactorThreads(size_t numThreads);
+    /// 设置EventLoopThreadPool的threads大小；if numThreads
+    /// < 0  : 设置该值为当前系统CPU并发数；
+    /// == 0 : 不使用EventLoopThreadPool，所有Channel都在同一个EventLoop中运行，默认值；
+    /// > 0  : 设置numThreads个线程，也即numThreads个EventLoop，每个连接选择其中一个
+    /// 注意： 该函数必须在start之前调用
+    void setMultiReactorThreads(int numThreads);
+
+    /// 启动TcpServer，设置server socket listen
+    /// 注意：必须调用该接口，且只限调用一次
     void start();
 
 public:

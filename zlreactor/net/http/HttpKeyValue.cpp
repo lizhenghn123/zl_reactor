@@ -1,4 +1,4 @@
-﻿#include "HttpKeyValue.h"
+#include "HttpKeyValue.h"
 #include "HttpProtocol.h"
 NAMESPACE_ZL_NET_START
 

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Filename         : FileUtil.h
 // Author           : LIZHENG
 // Created          : 2014-07-01
@@ -24,7 +24,7 @@ namespace FileUtil
 	bool   isFileExist(const char *filepath);
 	long   getFileSize(FILE *file);
 	long   getFileSize(const char *filepath);
-	bool   readFile(const char *filepath, std::string& buf);
+	size_t readFile(const char *filepath, std::string& buf);
 };
 
 using namespace FileUtil;

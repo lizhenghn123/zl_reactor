@@ -97,7 +97,7 @@ bool DateTimeUtil::stringToDataTime(const char *strTime, struct tm *datetime)
     datetime->tm_mday = atoi(pos);
     if(datetime->tm_mday < 1)
         return false;
-    // ÈòÄê¶şÔÂ29Ìì
+    // é—°å¹´äºŒæœˆ29å¤©
     if((DateTimeUtil::isLeapYear(datetime->tm_year)) && (2 == datetime->tm_mon) && (datetime->tm_mday > 29))
         return false;
     else if(datetime->tm_mday > 28)
@@ -122,12 +122,12 @@ bool DateTimeUtil::stringToDataTime(const char *strTime, struct tm *datetime)
     datetime->tm_wday = 0;
     datetime->tm_yday = 0;
 
-    // ¼ÆËã¸ÄÌìÊÇÒ»ÄêÖĞµÄµÚ¼¸Ìì
+    // è®¡ç®—æ”¹å¤©æ˜¯ä¸€å¹´ä¸­çš„ç¬¬å‡ å¤©
     for(int i = 1; i <= datetime->tm_mon; ++i)
     {
         if(i == datetime->tm_mon)
         {
-            // ¸ÕºÃÊÇÕâ¸öÔÂ
+            // åˆšå¥½æ˜¯è¿™ä¸ªæœˆ
             datetime->tm_yday += datetime->tm_mday;
         }
         else
@@ -151,7 +151,7 @@ bool DateTimeUtil::stringToDataTime(const char *strTime, struct tm *datetime)
         }
     }
 
-    // ÔÂ»ùÊı
+    // æœˆåŸºæ•°
     static int leap_month_base[] = { -1, 0, 3, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6 };
     static int common_month_base[] = { -1, 0, 3, 3, 6, 1, 4, 0, 3, 5, 0, 3, 5 };
 
@@ -168,7 +168,7 @@ bool DateTimeUtil::stringToDataTime(const char *strTime, struct tm *datetime)
         month_base = common_month_base;
     }
 
-    // ¼ÆËãĞÇÆÚ¼¸
+    // è®¡ç®—æ˜ŸæœŸå‡ 
     datetime->tm_wday = (datetime->tm_year
                          + datetime->tm_year / 4
                          + datetime->tm_year / 400
@@ -177,7 +177,7 @@ bool DateTimeUtil::stringToDataTime(const char *strTime, struct tm *datetime)
                          + month_base[datetime->tm_mon]
                          + datetime->tm_mday) / 7;
 
-    // ÄêÔÂ´¦Àí
+    // å¹´æœˆå¤„ç†
     datetime->tm_mon -= 1;
     datetime->tm_year -= 1900;
 

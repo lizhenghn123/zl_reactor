@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Filename         : StopWatch.h
 // Author           : LIZHENG
 // Created          : 2014-04-28
@@ -24,7 +24,7 @@
 
 NAMESPACE_ZL_BASE_START
 
-#define GET_TICK_COUNT(a, b) ((b.tv_sec - a.tv_sec)*1000000 + (b.tv_usec - a.tv_usec))
+#define GET_TICK_COUNT(a, b) ((a.tv_sec - b.tv_sec)*1000000 + (a.tv_usec - b.tv_usec))
 
 class StopWatch
 {
@@ -56,11 +56,11 @@ public:
         getTimeOfDay(&now, NULL);
         return float(GET_TICK_COUNT(now, start_time) / 1000.0);
     }
-    float   elapsedTimeInMicro()
+    int64_t   elapsedTimeInMicro()
     {
         timeval now;
         getTimeOfDay(&now, NULL);
-        return float(GET_TICK_COUNT(now, start_time));
+        return GET_TICK_COUNT(now, start_time);
     }
     float   diffTime(const struct timeval& start)
     {

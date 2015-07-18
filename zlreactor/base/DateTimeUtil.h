@@ -2,7 +2,7 @@
 // Filename         : DateTimeUtil.h
 // Author           : LIZHENG
 // Created          : 2014-09-17
-// Description      : ÈÕÆÚ¡¢Ê±¼ä¹¤¾ßÀà
+// Description      : æ—¥æœŸã€æ—¶é—´å·¥å…·ç±»
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
@@ -17,107 +17,107 @@ class DateTimeUtil
 {
 public:
     /**
-    * @brief           ÅĞ¶ÏÖ¸¶¨Äê·İÊÇ·ñÎªÈòÄê
-    * @param year      Ö¸¶¨µÄÄê·İ
-    * @return          ·µ»ØÈÕÆÚºÍÊ±¼ä¸ñÊ½»¯ºóµÄ×Ö·û´®: YYYY-MM-DD HH:MM:SS
+    * @brief           åˆ¤æ–­æŒ‡å®šå¹´ä»½æ˜¯å¦ä¸ºé—°å¹´
+    * @param year      æŒ‡å®šçš„å¹´ä»½
+    * @return          è¿”å›æ—¥æœŸå’Œæ—¶é—´æ ¼å¼åŒ–åçš„å­—ç¬¦ä¸²: YYYY-MM-DD HH:MM:SS
     */
     static bool        isLeapYear(int year);
 
     /**
-    * @brief           »ñÈ¡µ±Ç°ÈÕÆÚºÍÊ±¼ä
-    * @param ptm       Ö¸Ïòµ±Ç°ÈÕÆÚºÍÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
+    * @brief           è·å–å½“å‰æ—¥æœŸå’Œæ—¶é—´
+    * @param ptm       æŒ‡å‘å½“å‰æ—¥æœŸå’Œæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
     */
     static void        currentDateTime(struct tm *ptm);
     /**
-    * @brief           »ñÈ¡µ±Ç°ÈÕÆÚºÍÊ±¼ä: YYYY-MM-DD HH:MM:SS
-    * @param buf       ÓÃÀ´´æ´¢µ±Ç°ÈÕÆÚºÍÊ±¼äµÄ»º³åÇø
-    * @param size      bufµÄ´óĞ¡£¬len > sizeof("YYYY-MM-DD HH:MM:SS")
+    * @brief           è·å–å½“å‰æ—¥æœŸå’Œæ—¶é—´: YYYY-MM-DD HH:MM:SS
+    * @param buf       ç”¨æ¥å­˜å‚¨å½“å‰æ—¥æœŸå’Œæ—¶é—´çš„ç¼“å†²åŒº
+    * @param size      bufçš„å¤§å°ï¼Œlen > sizeof("YYYY-MM-DD HH:MM:SS")
     */
     static void        currentDateTime(char *buf, size_t size);
     /**
-    * @brief           »ñÈ¡µ±Ç°ÈÕÆÚºÍÊ±¼ä: YYYY-MM-DD HH:MM:SS
-    * @return          ·µ»ØÈÕÆÚºÍÊ±¼ä¸ñÊ½»¯ºóµÄ×Ö·û´®
+    * @brief           è·å–å½“å‰æ—¥æœŸå’Œæ—¶é—´: YYYY-MM-DD HH:MM:SS
+    * @return          è¿”å›æ—¥æœŸå’Œæ—¶é—´æ ¼å¼åŒ–åçš„å­—ç¬¦ä¸²
     */
     static std::string currentDateTime();
 
     /**
-    * @brief           »ñÈ¡µ±Ç°ÈÕÆÚ: YYYY-MM-DD
-    * @param buf       ÓÃÀ´´æ´¢µ±Ç°ÈÕÆÚµÄ»º³åÇø
-    * @param size      bufµÄ´óĞ¡£¬len > sizeof("YYYY-MM-DD")
+    * @brief           è·å–å½“å‰æ—¥æœŸ: YYYY-MM-DD
+    * @param buf       ç”¨æ¥å­˜å‚¨å½“å‰æ—¥æœŸçš„ç¼“å†²åŒº
+    * @param size      bufçš„å¤§å°ï¼Œlen > sizeof("YYYY-MM-DD")
     */
     static void        currentDate(char *buf, size_t size);
     /**
-    * @brief           »ñÈ¡µ±Ç°ÈÕÆÚ: YYYY-MM-DD
-    * @return          ·µ»ØÈÕÆÚºÍÊ±¼ä¸ñÊ½»¯ºóµÄ×Ö·û´®
+    * @brief           è·å–å½“å‰æ—¥æœŸ: YYYY-MM-DD
+    * @return          è¿”å›æ—¥æœŸå’Œæ—¶é—´æ ¼å¼åŒ–åçš„å­—ç¬¦ä¸²
     */
     static std::string currentDate();
 
     /**
-    * @brief           »ñÈ¡µ±Ç°Ê±¼ä: HH:SS:MM
-    * @param buf       ÓÃÀ´´æ´¢µ±Ç°Ê±¼äµÄ»º³åÇø
-    * @param size      bufµÄ´óĞ¡£¬len > sizeof("HH:SS:MM")
+    * @brief           è·å–å½“å‰æ—¶é—´: HH:SS:MM
+    * @param buf       ç”¨æ¥å­˜å‚¨å½“å‰æ—¶é—´çš„ç¼“å†²åŒº
+    * @param size      bufçš„å¤§å°ï¼Œlen > sizeof("HH:SS:MM")
     */
     static void        currentTime(char *buf, size_t size);
     /**
-    * @brief           »ñÈ¡µ±Ç°Ê±¼ä: HH:SS:MM
-    * @return          ·µ»ØÊ±¼ä¸ñÊ½»¯ºóµÄ×Ö·û´®
+    * @brief           è·å–å½“å‰æ—¶é—´: HH:SS:MM
+    * @return          è¿”å›æ—¶é—´æ ¼å¼åŒ–åçš„å­—ç¬¦ä¸²
     */
     static std::string currentTime();
 
     /**
-    * @brief           ½«Ò»¸ö×Ö·û´®×ª»»³ÉÈÕÆÚÊ±¼ä¸ñÊ½£¬ÒªÇóÔ­×Ö·û´®¸ñÊ½Îª: YYYY-MM-DD HH:MM:SS
-    * @param strTime   °üº¬Ê±¼ä¸ñÊ½µÄ×Ö·û´®
-    * @param datetime  ÓÃÀ´´æ´¢×Ö·û´®×ª»»³ÉÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
-    * @return          ×ª»»³É¹¦·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    * @brief           å°†ä¸€ä¸ªå­—ç¬¦ä¸²è½¬æ¢æˆæ—¥æœŸæ—¶é—´æ ¼å¼ï¼Œè¦æ±‚åŸå­—ç¬¦ä¸²æ ¼å¼ä¸º: YYYY-MM-DD HH:MM:SS
+    * @param strTime   åŒ…å«æ—¶é—´æ ¼å¼çš„å­—ç¬¦ä¸²
+    * @param datetime  ç”¨æ¥å­˜å‚¨å­—ç¬¦ä¸²è½¬æ¢æˆæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
+    * @return          è½¬æ¢æˆåŠŸè¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     static bool        stringToDataTime(const char *strTime, struct tm *datetime);
     /**
-    * @brief           ½«Ò»¸ö×Ö·û´®×ª»»³ÉÈÕÆÚÊ±¼ä¸ñÊ½£¬ÒªÇóÔ­×Ö·û´®¸ñÊ½Îª: YYYY-MM-DD HH:MM:SS
-    * @param strTime   °üº¬Ê±¼ä¸ñÊ½µÄ×Ö·û´®
-    * @param datetime  ÓÃÀ´´æ´¢×Ö·û´®×ª»»³ÉÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
-    * @return          ×ª»»³É¹¦·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    * @brief           å°†ä¸€ä¸ªå­—ç¬¦ä¸²è½¬æ¢æˆæ—¥æœŸæ—¶é—´æ ¼å¼ï¼Œè¦æ±‚åŸå­—ç¬¦ä¸²æ ¼å¼ä¸º: YYYY-MM-DD HH:MM:SS
+    * @param strTime   åŒ…å«æ—¶é—´æ ¼å¼çš„å­—ç¬¦ä¸²
+    * @param datetime  ç”¨æ¥å­˜å‚¨å­—ç¬¦ä¸²è½¬æ¢æˆæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
+    * @return          è½¬æ¢æˆåŠŸè¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     static bool        stringToDataTime(const char *strTime, time_t *datetime);
 
     /**
-    * @brief           ½«Ò»¸ö×Ö·û´®×ª»»³ÉÈÕÆÚÊ±¼ä¸ñÊ½£¬ÒªÇóÔ­×Ö·û´®¸ñÊ½Îª: YYYY-MM-DD HH:MM:SS
-    * @param datetime  Ö¸ÏòÈÕÆÚºÍÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
-    * @param buf       ÓÃÀ´´æ´¢×Ö·û´®×ª»»³ÉÊ±¼äµÄ»º³åÇø
-    * @param size      »º³åÇø´óĞ¡
+    * @brief           å°†ä¸€ä¸ªå­—ç¬¦ä¸²è½¬æ¢æˆæ—¥æœŸæ—¶é—´æ ¼å¼ï¼Œè¦æ±‚åŸå­—ç¬¦ä¸²æ ¼å¼ä¸º: YYYY-MM-DD HH:MM:SS
+    * @param datetime  æŒ‡å‘æ—¥æœŸå’Œæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
+    * @param buf       ç”¨æ¥å­˜å‚¨å­—ç¬¦ä¸²è½¬æ¢æˆæ—¶é—´çš„ç¼“å†²åŒº
+    * @param size      ç¼“å†²åŒºå¤§å°
     */
     static void        dateTimeToString(struct tm *datetime, char *buf, size_t size);
     /**
-    * @brief           ½«Ò»¸öÈÕÆÚºÍÊ±¼ä×ª»»Îª×Ö·û´®: YYYY-MM-DD HH:MM:SS
-    * @param datetime  ´æ´¢ÈÕÆÚºÍÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
-    * @return          ·µ»ØÊ±¼ä¸ñÊ½»¯ºóµÄ×Ö·û´®
+    * @brief           å°†ä¸€ä¸ªæ—¥æœŸå’Œæ—¶é—´è½¬æ¢ä¸ºå­—ç¬¦ä¸²: YYYY-MM-DD HH:MM:SS
+    * @param datetime  å­˜å‚¨æ—¥æœŸå’Œæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
+    * @return          è¿”å›æ—¶é—´æ ¼å¼åŒ–åçš„å­—ç¬¦ä¸²
     */
     static std::string dateTimeToString(struct tm *datetime);
 
     /**
-    * @brief           ½«Ò»¸öÈÕÆÚ×ª»»Îª×Ö·û´®: YYYY-MM-DD
-    * @param datetime  Ö¸ÏòÈÕÆÚºÍÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
-    * @param buf       ÓÃÀ´´æ´¢×Ö·û´®×ª»»³ÉÊ±¼äµÄ»º³åÇø
-    * @param size      »º³åÇø´óĞ¡
+    * @brief           å°†ä¸€ä¸ªæ—¥æœŸè½¬æ¢ä¸ºå­—ç¬¦ä¸²: YYYY-MM-DD
+    * @param datetime  æŒ‡å‘æ—¥æœŸå’Œæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
+    * @param buf       ç”¨æ¥å­˜å‚¨å­—ç¬¦ä¸²è½¬æ¢æˆæ—¶é—´çš„ç¼“å†²åŒº
+    * @param size      ç¼“å†²åŒºå¤§å°
     */
     static void        dateToString(struct tm *datetime, char *buf, size_t size);
     /**
-    * @brief           ½«Ò»¸öÈÕÆÚ×ª»»Îª×Ö·û´®: YYYY-MM-DD
-    * @param datetime  Ö¸ÏòÈÕÆÚºÍÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
-    * @return          ·µ»ØÊ±¼ä¸ñÊ½»¯ºóµÄ×Ö·û´®
+    * @brief           å°†ä¸€ä¸ªæ—¥æœŸè½¬æ¢ä¸ºå­—ç¬¦ä¸²: YYYY-MM-DD
+    * @param datetime  æŒ‡å‘æ—¥æœŸå’Œæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
+    * @return          è¿”å›æ—¶é—´æ ¼å¼åŒ–åçš„å­—ç¬¦ä¸²
     */
     static std::string dateToString(struct tm *datetime);
 
     /**
-    * @brief           ½«Ò»¸öÊ±¼ä×ª»»Îª×Ö·û´®: HH:MM:SS
-    * @param datetime  Ö¸ÏòÈÕÆÚºÍÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
-    * @param buf       ÓÃÀ´´æ´¢×Ö·û´®×ª»»³ÉÊ±¼äµÄ»º³åÇø
-    * @param size      »º³åÇø´óĞ¡
+    * @brief           å°†ä¸€ä¸ªæ—¶é—´è½¬æ¢ä¸ºå­—ç¬¦ä¸²: HH:MM:SS
+    * @param datetime  æŒ‡å‘æ—¥æœŸå’Œæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
+    * @param buf       ç”¨æ¥å­˜å‚¨å­—ç¬¦ä¸²è½¬æ¢æˆæ—¶é—´çš„ç¼“å†²åŒº
+    * @param size      ç¼“å†²åŒºå¤§å°
     */
     static void        timeToString(struct tm *datetime, char *buf, size_t size);
     /**
-    * @brief           ½«Ò»¸öÊ±¼ä×ª»»Îª×Ö·û´®: HH:MM:SS
-    * @param datetime  Ö¸ÏòÈÕÆÚºÍÊ±¼äµÄ½á¹¹ÌåÖ¸Õë
-    * @return          ·µ»ØÊ±¼ä¸ñÊ½»¯ºóµÄ×Ö·û´®
+    * @brief           å°†ä¸€ä¸ªæ—¶é—´è½¬æ¢ä¸ºå­—ç¬¦ä¸²: HH:MM:SS
+    * @param datetime  æŒ‡å‘æ—¥æœŸå’Œæ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
+    * @return          è¿”å›æ—¶é—´æ ¼å¼åŒ–åçš„å­—ç¬¦ä¸²
     */
     static std::string timeToString(struct tm *datetime);
 };

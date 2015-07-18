@@ -8,27 +8,17 @@
 // ***********************************************************************
 #ifndef ZL_SOCKET_H
 #define ZL_SOCKET_H
-#include <exception>
+#include "base/NonCopy.h"
 #include "net/SocketUtil.h"
 NAMESPACE_ZL_NET_START
 
 class SocketAddress;
 class InetAddress;
 
-class SocketException : public std::exception
-{
-public:
-    SocketException(const char *err_msg)
-    {
-        printf("Get Socket Exception: %s\n", err_msg);
-    }
-};
-
-class Socket
+class Socket : zl::NonCopy
 {
 public:
     explicit Socket(ZL_SOCKET fd);
-    Socket(ZL_SOCKET fd, ZL_SOCKADDR_IN sockAddr);
     ~Socket();
 
 public:
@@ -38,11 +28,10 @@ public:
     bool           listen(int backlog = 5) const;
     ZL_SOCKET      accept(ZL_SOCKADDR_IN* peerAddr) const;
     ZL_SOCKET      accept(InetAddress *peerAddr) const;
-    bool           accept(Socket& new_socket) const;
     void           close();
 
     // Client Initialization
-    bool           connect(const std::string& host, const int port);
+    bool           connect(const char* ip, const int port);
 
     // Socket Settings
     /** Enable/disable Block Socket */
@@ -79,32 +68,24 @@ public:
 
     // Net Transimission
     int            send(const std::string& data) const;
-    int            send(const char *data, size_t size)const;
+    int            send(const void* data, size_t size)const;
     int            recv(std::string& data) const;
-    int            recv(char *data, int length, bool complete = false)const;
+    int            recv(void* data, int length, bool complete = false)const;
     int            sendTo(const std::string& data, int flags, InetAddress& sinaddr)const;
-    int            sendTo(const char *data, size_t size, int flags, InetAddress& sinaddr)const;
+    int            sendTo(const void* data, size_t size, int flags, InetAddress& sinaddr)const;
     int            recvFrom(std::string& data, int flags, InetAddress& sinaddr)const;
-    int            recvFrom(char *data, int length, int flags, InetAddress& sinaddr)const;
+    int            recvFrom(void* data, int length, int flags, InetAddress& sinaddr)const;
 
     // Property Access
     bool           isValid() const
     {
         return sockfd_ != ZL_INVALID_SOCKET;
     }
+
     const ZL_SOCKET& fd() const
     {
         return sockfd_;
     }
-
-    const ZL_SOCKADDR_IN addr() const
-    {
-        return sockaddr_;
-    }
-
-    short          getHostPort();
-    std::string    getHostIP();
-    std::string    getHost();    // IP:Port
 
     //template < typename T >
     //Socket& operator<< (const T& t)
@@ -120,8 +101,7 @@ public:
     //    recv(&t, sizeof(t));
     //}
 protected:
-    /*const*/ ZL_SOCKET sockfd_;
-    ZL_SOCKADDR_IN  sockaddr_;
+    const ZL_SOCKET sockfd_;
 };
 
 NAMESPACE_ZL_NET_END

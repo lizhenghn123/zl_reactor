@@ -1,14 +1,14 @@
-﻿#include "base/LogFile.h"
+#include "base/LogFile.h"
 #include "base/FileUtil.h"
 NAMESPACE_ZL_BASE_START
 
 LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/, bool threadSafe/* = true*/, int flushInterval/* = 3*/,
                 int flushCount/* = 1024*/, size_t max_file_size/* = MAX_LOG_FILE_SIZE*/, size_t max_file_count/* = MAX_LOG_FILE_COUNT*/, bool append/* = true*/)
-    : flushInterval_(flushInterval),
-      flushCount_(flushCount),
-      maxFileSize_(max_file_size <= 0 ? MAX_LOG_FILE_SIZE : max_file_size),
-      maxFileCount_(max_file_count <= 0 ? MAX_LOG_FILE_COUNT : max_file_count),
-      mutex_(threadSafe ? new thread::Mutex : NULL)
+    : flushInterval_(flushInterval)
+    , flushCount_(flushCount)
+    , maxFileSize_(max_file_size <= 0 ? MAX_LOG_FILE_SIZE : max_file_size)
+    , maxFileCount_(max_file_count <= 0 ? MAX_LOG_FILE_COUNT : max_file_count)
+    , mutex_(threadSafe ? new thread::Mutex : NULL)
 {
     file_ = NULL;
     count_ = 0;

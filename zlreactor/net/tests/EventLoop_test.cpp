@@ -13,14 +13,14 @@ namespace t1
 {
     void threadFunc()
     {
-        printf("threadFunc(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().tid());
+        printf("threadFunc(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().value());
         EventLoop loop;
         loop.loop();
     }
 
     void test()
     {
-        printf("main(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().tid());
+        printf("main(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().value());
         EventLoop loop;
         Thread t(threadFunc);
 
@@ -35,12 +35,12 @@ namespace t2
 
     void threadFunc()
     {
-        printf("threadFunc(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().tid());
+        printf("threadFunc(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().value());
         g_loop->loop();  // ERROR, ASSERT FAILURE, loop must run in the thread where this object created
     }
     void test()
     {
-        printf("main(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().tid());
+        printf("main(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().value());
         EventLoop loop;
         g_loop = &loop;
         Thread t(threadFunc);
@@ -52,14 +52,14 @@ namespace t3
 	void newConnection(int sockfd, const InetAddress& peerAddr)
 	{
 		static char buf[] = { "I am server, accept you and close you." };
-		printf("newConnection(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().tid());
+		printf("newConnection(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().value());
 		printf("newConnection(): accepted a new connection from %s\n", peerAddr.ipPort().c_str());
 		SocketUtil::write(sockfd, buf, sizeof(buf));
         SocketUtil::closeSocket(sockfd);
 	}
 	void test_acceptor()
 	{
-		printf("main(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().tid());
+		printf("main(): pid = %d, tid = %d\n", getpid(), this_thread::get_id().value());
 		InetAddress listenAddr(8888);
 		EventLoop loop;
 

@@ -1,4 +1,4 @@
-﻿#include "base/Demangle.h"
+#include "base/Demangle.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #include <DbgHelp.h>

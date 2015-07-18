@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Filename         : BlockingQueue.h
 // Author           : LIZHENG
 // Created          : 2014-06-08
@@ -30,7 +30,10 @@ public:
     typedef zl::thread::Condition               ConditionType;
 
 public:
-    BlockingQueue() : stopFlag_(false), mutex_(), hasJob_(mutex_)
+    BlockingQueue()
+        : stopFlag_(false)
+        , mutex_()
+        , hasJob_(mutex_)
     {
 
     }
