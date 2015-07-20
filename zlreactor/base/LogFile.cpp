@@ -1,5 +1,6 @@
 #include "base/LogFile.h"
 #include "base/FileUtil.h"
+#include "base/Logger.h"
 NAMESPACE_ZL_BASE_START
 
 LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/, bool threadSafe/* = true*/, int flushInterval/* = 3*/,
@@ -21,6 +22,8 @@ LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/
 
     init(log_dir, log_name, append);
     assert((isThreadSafe_ && mutex_) || (!isThreadSafe_ && !mutex_));
+
+    LOG_SET_LOGHANDLER(std::bind(&LogFile::dumpLog, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 LogFile::~LogFile()
