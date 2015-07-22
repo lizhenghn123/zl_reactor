@@ -5,12 +5,10 @@
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************#
-#ifndef ZL_PROCESS_H
-#define ZL_PROCESS_H
+#ifndef ZL_MASTERWORKER_PROCESS_H
+#define ZL_MASTERWORKER_PROCESS_H
 #include <unistd.h>
-#include <set>
-#include <sys/wait.h>
-#include <sys/types.h>
+#include <list>
 
 // 一个通用的watcher-woker多进程模型，亦称 prefork模型
 // 
@@ -44,16 +42,16 @@
 
 namespace zl
 {
-    class Process;
+    class MasterWorkerProcess;
     //typedef std::function<void()> ProcessCallback;
-    typedef void(*ProcessCallback)(Process *mainProcess, int jodid, void *arg);
+    typedef void(*ProcessCallback)(MasterWorkerProcess* master, int jodid, void *arg);
 
 
-    class Process
+    class MasterWorkerProcess
     {
     public:
-        Process();
-        ~Process();
+        MasterWorkerProcess();
+        ~MasterWorkerProcess();
 
         static pid_t mainProcessPid() { return mainProcessPid_; }
 
@@ -78,8 +76,8 @@ namespace zl
 
         volatile bool               running_;
         pid_t                       pid_;
-        std::set<pid_t>             childenPids_;
+        std::list<pid_t>            childenPids_;
     };
 }
 
-#endif  /* ZL_PROCESS_H */
+#endif  /* ZL_MASTERWORKER_PROCESS_H */

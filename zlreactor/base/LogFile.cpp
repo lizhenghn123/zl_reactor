@@ -1,4 +1,5 @@
 #include "base/LogFile.h"
+#include <time.h>
 #include "base/FileUtil.h"
 #include "base/Logger.h"
 NAMESPACE_ZL_BASE_START

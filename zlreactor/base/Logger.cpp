@@ -4,7 +4,6 @@
 #include <string>
 #include "base/Timestamp.h"
 #include "base/FileUtil.h"
-#include "base/LogFile.h"
 #include "thread/Thread.h"
 NAMESPACE_ZL_BASE_START
 
@@ -188,7 +187,7 @@ namespace detail
 /*static*/ ZLogPriority          Logger::priority_    = ZL_LOG_PRIO_INFO;
 /*static*/ ZLogHeader            Logger::header_      = ZL_LOG_HEADER_DEFAULT;
 /*static*/ ZLogMasking           Logger::masking_     = ZL_LOG_MASKING_COMPLETE;
-/*static*/ log_ext_handler_f     Logger::ext_handler_ = NULL;
+/*static*/ log_ext_handler_f     Logger::ext_handler_ /*= NULL*/;
 
 Logger::Logger()
 {

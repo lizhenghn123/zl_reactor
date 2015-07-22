@@ -1,4 +1,4 @@
-#include "Process.h"
+#include "MasterWorkerProcess.h"
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
@@ -26,13 +26,11 @@ namespace detail
         {
         case SIGTERM:			// 15
             srv_shutdown = 1;
-            //g_process.setRunningState(0);
             break;
         case SIGINT:			// 2
             if (graceful_shutdown)
             {
                 srv_shutdown = 1;
-                //g_process.setRunningState(0);
             }
             else
             {
@@ -69,26 +67,26 @@ pid_t gettid()
     return static_cast<pid_t>(::syscall(SYS_gettid));
 }
 
-pid_t Process::mainProcessPid_ = 0;
+pid_t MasterWorkerProcess::mainProcessPid_ = 0;
 
-Process::Process()
+MasterWorkerProcess::MasterWorkerProcess()
     : running_(0)
     , pid_(::getpid())
 {
     detail::setSignalHandler();
 }
 
-Process::~Process()
+MasterWorkerProcess::~MasterWorkerProcess()
 {
     stop();
 }
 
-bool Process::shutdown() const
+bool MasterWorkerProcess::shutdown() const
 {
     return srv_shutdown;
 }
 
-pid_t Process::createOneProcess()
+pid_t MasterWorkerProcess::createOneProcess()
 {
     pid_t pid = ::fork();
     if (pid < 0)
@@ -99,7 +97,7 @@ pid_t Process::createOneProcess()
     }
     else if (pid > 0)      // parent process
     {
-        childenPids_.insert(pid);
+        childenPids_.push_back(pid);
         return 0;
     }
     else //if (pid == 0)   // child process
@@ -110,7 +108,7 @@ pid_t Process::createOneProcess()
     }
 }
 
-void Process::createWorkProcess(int workProcessNum, const ProcessCallback& callback, void* arg)
+void MasterWorkerProcess::createWorkProcess(int workProcessNum, const ProcessCallback& callback, void* arg)
 {
     assert(workProcessNum >= 0);
     assert(mainProcessPid_ <= 0);
@@ -143,7 +141,7 @@ void Process::createWorkProcess(int workProcessNum, const ProcessCallback& callb
                 child = true;
                 break;
             default:         // master process
-                childenPids_.insert(pid);
+                childenPids_.push_back(pid);
                 workProcessNum--;
                 break;
             }
@@ -156,7 +154,7 @@ void Process::createWorkProcess(int workProcessNum, const ProcessCallback& callb
             {
                 printf("master process: get one child[%d] exit\n", pid);
                 workProcessNum++;
-                childenPids_.erase(pid);
+                childenPids_.remove(pid);
             }
             else
             {
@@ -207,7 +205,7 @@ void Process::createWorkProcess(int workProcessNum, const ProcessCallback& callb
     }
 }
 
-void Process::stop()
+void MasterWorkerProcess::stop()
 {
     printf("process[%d] : stopped[%ld]\n", ::getpid(), childenPids_.size());
     if(!running_)
