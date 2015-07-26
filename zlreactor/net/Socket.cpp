@@ -3,7 +3,7 @@
 #include "net/InetAddress.h"
 NAMESPACE_ZL_NET_START
 
-const static int MAX_RECV_SIZE = 64;
+const static int MAX_RECV_SIZE = 64*1024;  // 设置64k ?
 
 /*********
 recv read write send 函数的返回值说明:

@@ -26,9 +26,11 @@ void test_log()
 
 void test_logfile()
 {
-    LogFile logfile;
-    logfile.setThreadSafe(false);
-    LOG_SET_LOGHANDLER(std::bind(&LogFile::dumpLog, &logfile, std::placeholders::_1, std::placeholders::_2));
+    LogFile logfile;		// LogFile 需要保证在整个程序运行期间不能析构，且只应该创建一个LogFile对象（SingleTon?）
+    logfile.setThreadSafe(false);  // 这里的测试是单线程的，所以可以设置不使用线程（内部不会加锁），否则的话需要设置为多线安全的（默认值）
+	
+	// 下句可以不用调用，该类对象构造的时候进行了设置（注意资源竞态的可能，所有该对象应该最早创建）
+    //LOG_SET_LOGHANDLER(std::bind(&LogFile::dumpLog, &logfile, std::placeholders::_1, std::placeholders::_2));
 
     LOG_DEBUG("This is a LOG_DEBUG msg!");
     LOG_INFO("This is a LOG_INFO msg!");
@@ -112,7 +114,7 @@ int main()
 {
     //bench(0);
     test_log();
-    //test_logfile();
+    test_logfile();
     //test_bench();
     return 0;
 }
