@@ -167,22 +167,24 @@ namespace this_thread
 {
     thread_local int g_currentTid = 0;
 
-    int gettid()
+    void cacheThreadTid()
     {
     #if defined(OS_WINDOWS)
-        return static_cast<int>(::GetCurrentThreadId());
+        g_currentTid = static_cast<int>(::GetCurrentThreadId());
     #else
-        return static_cast<int>(::syscall(SYS_gettid));
+        g_currentTid = static_cast<int>(::syscall(SYS_gettid));
     #endif
     }
-
-    void cacheThreadTid()
+    
+    int gettid()
     {
         if (g_currentTid == 0)
         {
-            g_currentTid = gettid();
+            cacheThreadTid();
         }
+        return g_currentTid;
     }
+
 
     Thread::id get_id()
     {
