@@ -18,7 +18,7 @@ libzlreactor_la_LIBADD =
 
 INCLUDES                   = -I../
 libzlreactor_la_CPPFLAGS =-O2 -std=c++0x -fPIC -shared
-libzlreactor_la_LDFLAGS = -lrt	
+libzlreactor_la_LDFLAGS = -lrt -version-info 1:0:1	
 
 libzlreactor_la_SOURCES =                             \
 					 base/ByteArray.cpp               \
