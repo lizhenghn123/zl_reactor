@@ -162,6 +162,17 @@ int SocketUtil::setReuseAddr(ZL_SOCKET fd, bool resue /*= true*/)
     return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
 }
 
+int SocketUtil::setReusePort(ZL_SOCKET fd, bool resue /*= true*/)
+{
+#ifdef SO_REUSEPORT
+    int optval = resue ? 1 : 0;
+    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+#else
+    LOG_WARN("setReusePort failure, see /usr/include/asm-generic/socket.h SO_REUSEPORT need linux kernel >= 3.9");
+    return -1;
+#endif
+}
+
 int SocketUtil::setKeepAlive(ZL_SOCKET fd, bool alive /*= true*/)
 {
     int optval = alive ? 1 : 0;

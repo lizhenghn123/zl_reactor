@@ -49,6 +49,7 @@
 #include <fstream>
 #include <sstream>
 #include <locale>
+namespace zl { namespace base {
 
 class ConfigFile {
 // Data
@@ -353,6 +354,7 @@ std::istream& operator>>( std::istream& is, ConfigFile& cf )
 	return is;
 }
 
+} }
 #endif  // SECPLATFORM_COMMON_CONFIGFILE_H
 
 // Release notes:

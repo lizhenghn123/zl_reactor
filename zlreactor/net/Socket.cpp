@@ -219,6 +219,11 @@ bool Socket::setReuseAddr(bool on /*= true*/)
     return SocketUtil::setReuseAddr(sockfd_, on) == 0;
 }
 
+bool Socket::setReusePort(bool on /*= true*/)
+{
+    return SocketUtil::setReusePort(sockfd_, on) == 0;
+}
+
 bool Socket::setKeepAlive(bool on /*= true*/)
 {
     return SocketUtil::setKeepAlive(sockfd_, on) == 0;

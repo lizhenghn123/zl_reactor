@@ -43,6 +43,9 @@ public:
     /** Enable/disable SO_REUSEADDR(TIME_WAIT) */
     bool           setReuseAddr(bool on = true);
 
+    /** Enable/disable SO_REUSEPORT */
+    bool           setReusePort(bool on = true);
+
     /** Enable/disable SO_KEEPALIVE */
     bool           setKeepAlive(bool on = true);
 
