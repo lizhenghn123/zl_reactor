@@ -6,4 +6,5 @@ compiler:
 # Change this to your needs
 
 script:
-    ./configure && make
+    # ./configure && make
+    sh bootstrap
