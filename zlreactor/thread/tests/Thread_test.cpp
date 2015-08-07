@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <assert.h>
 #include "thread/Thread.h"
 #include "thread/Mutex.h"
 #include "thread/Condition.h"
@@ -250,7 +251,8 @@ namespace threadpool_usage
         this_thread::sleep_for(chrono::milliseconds(1000));
         CountDownLatch latch(1);
         pool.run(std::bind(&CountDownLatch::countDown, &latch));
-        latch.wait();
+        latch.wait(); //它返回的时候，线程池里的所有任务都已经分发了（未必运行结束）！
+        assert(pool.size() == 0);
         pool.stop();
     }
 }
