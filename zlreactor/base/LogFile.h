@@ -1,4 +1,4 @@
-// ***********************************************************************
+﻿// ***********************************************************************
 // Filename         : LogFile.h
 // Author           : LIZHENG
 // Created          : 2015-06-12
@@ -19,8 +19,9 @@ NAMESPACE_ZL_BASE_START
 class LogFile
 {
 public:
-    LogFile(const char *log_name = NULL, const char *log_dir = NULL, bool threadSafe = true, int flushInterval = 3, // second
-          int flushCount = 1024, size_t max_file_size = MAX_LOG_FILE_SIZE, size_t max_file_count = MAX_LOG_FILE_COUNT, bool append = true);
+    LogFile(const char *log_name = NULL, const char *log_dir = NULL, size_t max_file_size = MAX_LOG_FILE_SIZE, 
+             bool threadSafe = true, int flushInterval = 3/*second*/, int flushCount = 1024, 
+             size_t max_file_count = MAX_LOG_FILE_COUNT, bool append = true);
 
     ~LogFile();
 

@@ -1,11 +1,12 @@
-#include "base/LogFile.h"
+﻿#include "base/LogFile.h"
 #include <time.h>
 #include "base/FileUtil.h"
 #include "base/Logger.h"
 NAMESPACE_ZL_BASE_START
 
-LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/, bool threadSafe/* = true*/, int flushInterval/* = 3*/,
-                int flushCount/* = 1024*/, size_t max_file_size/* = MAX_LOG_FILE_SIZE*/, size_t max_file_count/* = MAX_LOG_FILE_COUNT*/, bool append/* = true*/)
+LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/, size_t max_file_size/* = MAX_LOG_FILE_SIZE*/, 
+                 bool threadSafe/* = true*/, int flushInterval/* = 3*/, int flushCount/* = 1024*/, 
+                 size_t max_file_count/* = MAX_LOG_FILE_COUNT*/, bool append/* = true*/)
     : flushInterval_(flushInterval)
     , flushCount_(flushCount)
     , maxFileSize_(max_file_size <= 0 ? MAX_LOG_FILE_SIZE : max_file_size)
@@ -21,7 +22,7 @@ LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/
     ::memset(logFileName_, 0, MAX_FILE_PATH_LEN);
     ::memset(currLogFileName_, 0, MAX_FILE_PATH_LEN);
 
-    init(log_dir, log_name, append);
+    init(log_name, log_dir, append);
     assert((isThreadSafe_ && mutex_) || (!isThreadSafe_ && !mutex_));
 
     LOG_SET_LOGHANDLER(std::bind(&LogFile::dumpLog, this, std::placeholders::_1, std::placeholders::_2));
@@ -132,15 +133,22 @@ void LogFile::dumpLogWithHold(const char *log_entry, size_t size)
     }
 
     ::fwrite(log_entry, 1, size, file_);
-    count_ ++;
-    if(count_ > flushCount_)
+    if(flushCount_ <= 0 || flushInterval_ <= 0)
     {
-        count_ = 0;
-        time_t now = ::time(NULL);
-        if(now - lastFlush_ > flushInterval_)
+        flush();
+    }
+    else
+    {
+        count_ ++;
+        if(count_ > flushCount_)
         {
-            lastFlush_ = now;
-            flush();
+            count_ = 0;
+            time_t now = ::time(NULL);
+            if(now - lastFlush_ > flushInterval_)
+            {
+                lastFlush_ = now;
+                flush();
+            }
         }
     }
 }
