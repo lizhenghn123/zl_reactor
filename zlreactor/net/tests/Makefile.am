@@ -2,7 +2,8 @@
 
 bin_PROGRAMS = Timer_test NetBuffer_test DomainResolver_test HttpRequestParser_test Socket_test\
                Eventfd_test Timerfd_test Signalfd_test \
-			   TcpAcceptor_test TcpClient_test EventLoop_test EventLoopThreadPool_test InetAddress_test
+			   TcpAcceptor_test TcpClient_test EventLoop_test EventLoopThreadPool_test InetAddress_test \
+			   UriQueryParams_test UriDecode_test
 
 INCLUDES = -I../../../zlreactor
 CPPFLAGS = -std=c++0x
@@ -33,3 +34,7 @@ TcpClient_test_SOURCES           = TcpClient_test.cpp
 EventLoop_test_SOURCES           = EventLoop_test.cpp
 
 EventLoopThreadPool_test_SOURCES = EventLoopThreadPool_test.cpp
+
+UriQueryParams_test_SOURCES      = UriQueryParams_test.cpp
+
+UriDecode_test_SOURCES           = UriDecode_test.cpp

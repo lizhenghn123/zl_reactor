@@ -66,6 +66,8 @@ libzlreactor_la_SOURCES =                             \
 					 net/Timerfd.cpp                  \
 					 net/Signalfd.cpp                 \
 					 net/http/HttpKeyValue.cpp        \
+					 net/http/UriQueryParams.cpp      \
+					 net/http/UriUtil.cpp             \
 					 net/http/HttpRequest.cpp         \
 					 net/http/HttpResponse.cpp        \
 					 net/http/HttpContext.cpp         \

@@ -1,72 +1,98 @@
 #include "HttpRequest.h"
-//#include <regex>
-#include <sstream>
+#include <string.h>
+#include <algorithm>
 NAMESPACE_ZL_NET_START
 
-HttpRequest::HttpRequest()
+// request line: httpmethod path httpversion
+static bool processRequestLine(const char *begin, const char *end, HttpRequest* req)
 {
+    const char* start = begin;
+    const char* space = std::find(start, end, ' ');
+    string method(start, space);
+    if (space != end && req->setMethod(method))
+    {
+        // parse url path
+        start = space + 1;
+        space = std::find(start, end, ' ');
+        if (space != end)
+        {
+            const char* question = std::find(start, space, '?');
+            if (question != space)
+            {
+                string u(start, question);
+                req->setPath(u);
+                u.assign(++question, space);  //不包括?
+                req->setQuery(u);
+            }
+            else
+            {
+                string u(start, question);
+                req->setPath(u);
+            }
+
+            // parse http version
+            start = space + 1;
+            if (end - start != 8)  // neither HTTP/1.1 nor HTTP/1.0
+            {
+                return false;
+            }
+
+            if (std::equal(start, end, "HTTP/1.1"))
+                req->setVersion(HTTP_VERSION_1_1);
+            else if (std::equal(start, end, "HTTP/1.0"))
+                req->setVersion(HTTP_VERSION_1_0);
+
+            return true;
+        }
+    }
+    return false;
 }
 
-HttpRequest::HttpRequest(const std::string& header)
+static bool processRequestHeaders(const char *begin, const char* end, HttpRequest* req)
 {
-    parseHeader(header);
+    const char *nextCRLF = strstr(begin, CRLF);
+    while (nextCRLF && nextCRLF < end)
+    {
+        const char *colon = std::find(begin, nextCRLF, ':'); //一行一行遍历
+        if (colon != nextCRLF)
+        {
+            string field(begin, colon);
+            ++colon;
+            while (colon < nextCRLF && isspace(*colon))
+            {
+                ++colon;
+            }
+            string value(colon, nextCRLF);
+            while (!value.empty() && isspace(value[value.size() - 1]))
+            {
+                value.resize(value.size() - 1);
+            }
+            req->addHeader(field, value);
+        }
+        else
+        {
+            // empty line, end of header
+            return true;
+        }
+
+        begin = nextCRLF + 2;
+        nextCRLF = strstr(begin, CRLF);
+    }
+    return true;
 }
 
-HttpRequest::~HttpRequest()
-{
-}
-
-bool HttpRequest::parseHeader(const string& header)
+/*static*/bool HttpRequest::parseRequest(const char* requestLineandHeader, size_t len, HttpRequest* req)
 {
     //解析Http消息头的第一行，即请求行，Method Location HttpVer ： GET /index.html HTTP/1.1
-    std::vector<std::string> token;
-    auto start = header.begin();
-    for (auto it = header.begin(); it != header.end(); ++it)
-    {
-        if (*it == ' ' || *it == '\r' || *it == '\0')
-        {
-            std::string tmp;
-            copy(start, it, std::back_inserter(tmp));
-            token.push_back( tmp );
+    const char* start = requestLineandHeader;
+    const char* firstCRLF = strstr(start, CRLF);
+    if (!firstCRLF)
+        return false;
 
-            start = ++it;
-        }
-        if( *it == '\n' )
-            break;
-    }
+    if (!processRequestLine(start, firstCRLF, req))
+        return false;
 
-    auto& method = token[0];
-    std::transform(method.begin(), method.end(), method.begin(), ::tolower);
-    if(strcmp(method.c_str(), "get") == 0)
-        setMethod(HttpMethod::HttpGet);
-    else if (strcmp(method.c_str(), "post") == 0)
-        setMethod(HttpMethod::HttpPost);
-    else if (strcmp(method.c_str(), "put") == 0)
-        setMethod(HttpMethod::HttpPut);
-    else if (strcmp(method.c_str(), "delete") == 0)
-        setMethod(HttpMethod::HttpDelete);
-
-    setPath(token[1]);
-
-    //HttpVersion，Client发过来的http协议版本号
-    setVersion((token[2] == "HTTP/1.1" ? HttpVersion::HTTP_VERSION_1_1 : HttpVersion::HTTP_VERSION_1_0));
-
-    ///* 解析剩余的选项行 */
-    //std::regex expr("([a-zA-Z_-]*)\\s?:\\s?(.*)");
-    //std::smatch match;
-    //std::string request = header;
-    //while(std::regex_search(request, match, expr))
-    //{
-    //    std::string key = match[1].str();
-    //    std::string value = match[2].str();
-    //    std::transform(key.begin(), key.end(), key.begin(), ::tolower);
-
-    //    headers_.insert(std::make_pair(key, value));
-
-    //    request = match.suffix().str();
-    //}
-
-    return true;
+    return processRequestHeaders(firstCRLF + 2, requestLineandHeader + len, req);
 }
 
 NAMESPACE_ZL_NET_END
