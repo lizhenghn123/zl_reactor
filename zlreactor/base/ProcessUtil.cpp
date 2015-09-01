@@ -50,6 +50,55 @@ namespace
 
 namespace ProcessUtil
 {
+    uid_t uid()
+    {
+        return ::getuid();
+    }
+
+    uid_t euid()
+    {
+        return ::geteuid();
+    }
+
+    string username()
+    {
+        struct passwd pwd;
+        struct passwd* result = NULL;
+        char buf[8192];
+        const char* name = "unknownuser";
+
+        getpwuid_r(uid(), &pwd, buf, sizeof buf, &result);
+        if (result)
+        {
+            name = pwd.pw_name;
+        }
+        return name;
+    }
+
+    int clockTicksPerSecond()
+    {
+        return g_clockTicks;
+    }
+
+    int pageSize()
+    {
+        return g_pageSize;
+    }
+
+    string hostname()
+    {
+        char buf[256];
+        if (::gethostname(buf, sizeof(buf)) == 0)
+        {
+            buf[sizeof(buf) - 1] = '\0';
+            return buf;
+        }
+        else
+        {
+            return "unknownhost";
+        }
+    }
+
     pid_t pid()
     {
 	#ifdef OS_WINDOWS
@@ -104,31 +153,6 @@ namespace ProcessUtil
         return name;
     }
 
-    uid_t uid()
-    {
-        return ::getuid();
-    }
-
-    uid_t euid()
-    {
-        return ::geteuid();
-    }
-
-    string username()
-    {
-        struct passwd pwd;
-        struct passwd* result = NULL;
-        char buf[8192];
-        const char* name = "unknownuser";
-
-        getpwuid_r(uid(), &pwd, buf, sizeof buf, &result);
-        if (result)
-        {
-            name = pwd.pw_name;
-        }
-        return name;
-    }
-
     Timestamp startTime()
     {
         return g_startTime;
@@ -137,30 +161,6 @@ namespace ProcessUtil
     int64_t elapsedTime()
     {
         return Timestamp::timeDiffMs(Timestamp::now(), g_startTime);
-    }
-
-    int clockTicksPerSecond()
-    {
-        return g_clockTicks;
-    }
-
-    int pageSize()
-    {
-        return g_pageSize;
-    }
-
-    string hostname()
-    {
-        char buf[256];
-        if (::gethostname(buf, sizeof(buf)) == 0)
-        {
-            buf[sizeof(buf)-1] = '\0';
-            return buf;
-        }
-        else
-        {
-            return "unknownhost";
-        }
     }
 
     string procStatus()
@@ -264,5 +264,149 @@ namespace ProcessUtil
 
         return true;
     }
+
+
+    /// 根据进程名查找pid
+    int getPidByName(const char* procname)
+    {
+        assert(procname);
+
+        char cmd[256] = { 0 };
+        sprintf(cmd, "ps -ef|grep %s", procname);
+
+        FILE* pf = popen(cmd, "r");
+        assert(pf);
+
+        char buffer[512] = { 0 };
+        fgets(buffer, 512, pf);
+        //printf("====%s====\n", buffer);
+        pclose(pf);
+
+        if (strstr(buffer, cmd) != NULL)   // "ps -ef|grep %s" 这个命令本身也会产生一个进程, 要把grep的进程过滤掉。
+        {
+            return -1;
+        }
+
+        int pid = -1;
+        char *p = strtok(buffer, " "); // 以空格分开，返回第二段指针
+        p = strtok(NULL, " "); //这句是否去掉，取决于当前系统中ps后，进程ID号是否是第一个字段 pclose(pstr);
+        if (p == NULL || strlen(p) == 0)
+        {
+            return -1;
+        }
+
+        if ((pid = atoi(p)) == 0)
+        {
+            return -1;
+        }
+
+        //printf("pidnum: %d\n", pid);
+        //pid_t pID = (pid_t)pid;
+        //int ret = kill(pID, 0);//这里不是要杀死进程，而是验证一下进程是否真的存在，返回0表示真的存在
+        //printf("ret= %d \n", ret);
+        //if (0 == ret)
+        //    printf("process: %s exist!\n", procname);
+        //else
+        //    printf("process: %s not exist!\n", procname);
+        return pid;
+    }
+
+    /// 根据pid查找进程名
+    string getNameByPid(pid_t pid)
+    {
+        static const std::string empty_name("");
+
+        char proc_pid_path[1024];
+        sprintf(proc_pid_path, "/proc/%d/status", pid);
+
+        FILE* fp = fopen(proc_pid_path, "r");
+        if (!fp)
+        {
+            return empty_name;
+        }
+        else
+        {
+            char buf[1024] = { 0 };
+            if (fgets(buf, 1024 - 1, fp) == NULL)  // 第一行一般是  Name:	a.out
+            {
+                fclose(fp);
+                return empty_name;
+            }
+            fclose(fp);
+            char task_name[1024] = { 0 };
+            sscanf(buf, "%*s %s", task_name);
+            return string(task_name);
+        }
+    }
+
+    /// 获取指定进程的status信息, read /proc/pid/status 
+    string procStatus(pid_t pid)
+    {
+        char buf[128] = { 0 };
+        snprintf(buf, sizeof buf, "/proc/%d/status", pid);
+        string result;
+        readFile(buf, result);
+        return result;
+    }
+
+    /// 获取指定进程的stat信息, read /proc/pid/stat 
+    string procStat(pid_t pid)
+    {
+        char buf[128] = { 0 };
+        snprintf(buf, sizeof buf, "/proc/%d/stat", pid);
+        string result;
+        readFile(buf, result);
+        return result;
+    }
+
+    /// 获取指定进程所创建的线程总数
+    int numThreads(pid_t pid)
+    {
+        int result = 0;
+        string status = procStatus(pid);
+        size_t pos = status.find("Threads:");
+        if (pos != string::npos)
+        {
+            result = ::atoi(status.c_str() + pos + 8);
+        }
+        return result;
+    }
+
+    /// 获取指定进程所创建的线程tid
+    std::vector<pid_t> threads(pid_t pid)
+    {
+        char buf[128] = { 0 };
+        snprintf(buf, sizeof buf, "/proc/%d/task", pid);
+
+        std::vector<pid_t> result;
+        g_pids = &result;
+        scanDir(buf, taskDirFilter);
+        g_pids = NULL;
+        std::sort(result.begin(), result.end());
+        return result;
+    }
+
+    /// 获取指定进程的执行路径
+    string exePath(pid_t pid)
+    {
+        char cmd[256] = { 0 };
+        sprintf(cmd, "ls -l /proc/%d/exe", pid);
+
+        FILE* pf = popen(cmd, "r");
+        assert(pf);
+        char buffer[512] = { 0 };
+        fgets(buffer, 512, pf);
+        pclose(pf);
+
+        std::string result(buffer);
+        size_t pos = result.find("->");
+        if (pos != std::string::npos)
+            result = result.substr(pos + 2);
+        pos = result.find_last_of("/");
+        if (pos != std::string::npos)
+            result = result.substr(0, pos+1);
+        return result;
+    }
 }
+
 NAMESPACE_ZL_END

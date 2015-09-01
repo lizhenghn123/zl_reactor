@@ -22,25 +22,25 @@ NAMESPACE_ZL_START
 
 namespace ProcessUtil
 {
-    /// process id of current process.
+    uid_t uid();
+    uid_t euid();
+    string username();
+    int clockTicksPerSecond();
+    int pageSize();
+    string hostname();
+
+    /// 当前进程的信息
+    /// 当前进程的id及程序名
     pid_t  pid();
     string pidString();
     string procname();
     string procname(const string& stat);
 
-    uid_t uid();
-    uid_t euid();
-    string username();
-
-    /// obtain start time in microseconds
+    /// 获取当前进程的启动时间（毫秒级）
     Timestamp startTime();
 
-    /// obtain elapsed millseconds since start.
+    /// 获取当前进程已运行的时间（当前时间减去启动时间, 微秒）
     int64_t elapsedTime();
-
-    int clockTicksPerSecond();
-    int pageSize();
-    string hostname();
 
     /// read /proc/self/status
     string procStatus();
@@ -73,6 +73,29 @@ namespace ProcessUtil
     /// enabled = true, 启用codedump; core_file_size < 0 , 不限制coredump文件大小
     /// return true iff set success, false otherwise
     bool enableCoreDump(bool enabled = true, int core_file_size = -1);
+
+
+    /// 获取第三方进程的信息
+    /// 根据进程名查找pid, 返回-1表示没找到，否则返回值>0
+    int getPidByName(const char* procname);
+
+    /// 根据pid查找进程名, 返回空表示没找到，否则返回非空字符串
+    string getNameByPid(pid_t pid);
+
+    /// 获取指定进程的status信息, read /proc/pid/status 
+    string procStatus(pid_t pid);
+
+    /// 获取指定进程的stat信息, read /proc/pid/stat 
+    string procStat(pid_t pid);
+
+    /// 获取指定进程所创建的线程总数
+    int numThreads(pid_t pid);
+
+    /// 获取指定进程所创建的线程tid
+    std::vector<pid_t> threads(pid_t pid);
+
+    /// 获取指定进程的执行路径
+    string exePath(pid_t pid);
 }
 
 using namespace ProcessUtil;
