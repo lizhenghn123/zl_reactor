@@ -24,7 +24,7 @@ CountDownLatch_test_SOURCES  = CountDownLatch_test.cpp
 #Thread_test_LDFLAGS         = $(CPPFLAGS)
 Thread_test_SOURCES          = Thread_test.cpp
 
-ThreadiId_test_SOURCES       = ThreadId_test.cpp
+ThreadId_test_SOURCES       = ThreadId_test.cpp
 
 ThreadLocal_test_SOURCES     = ThreadLocal_test.cpp
 
