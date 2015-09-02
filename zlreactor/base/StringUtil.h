@@ -8,6 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_STRING_UTIL_H
 #define ZL_STRING_UTIL_H
+#include <string.h>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -82,6 +83,18 @@ inline void trimAll(std::string& str)
 {
     str.erase(std::remove_if(str.begin(), str.end(),
         std::bind2nd(std::equal_to<char>(), ' ')), str.end());
+}
+
+/** 去掉字符串中的某特定字符串delim并以新字符串s代替 */
+inline void trimAll(std::string& str, const char* delim, const char* s = "")
+{
+    size_t len = strlen(delim);
+    size_t pos = str.find(delim);
+    while (pos != std::string::npos)
+    {
+        str.replace(pos, len, s);
+        pos = str.find(delim, pos);
+    }
 }
 
 /** 去掉字符串中的特定字符 */

@@ -18,9 +18,19 @@ NAMESPACE_ZL_NET_START
 class HttpRequest
 {
 public:
-    HttpRequest();
-    HttpRequest(const std::string& header);
-    ~HttpRequest();
+    static bool parseRequest(const char* requestLineandHeader, size_t len, HttpRequest* req);
+
+    HttpRequest()
+        : method_(HttpInvalid)
+        , version_(HTTP_VERSION_0_0)
+    {
+
+    }
+
+    ~HttpRequest()
+    {
+        
+    }
 
 public:
     void setMethod(HttpMethod method)        { method_ = method; }
@@ -52,7 +62,7 @@ public:
         version_ = (httpver == "HTTP/1.1" ? HTTP_VERSION_1_1 : HTTP_VERSION_1_0);
     }
     HttpVersion version() const              { return version_; }
-    const std::string versionStr() const
+    const char* versionStr() const
     {
         return version_ == HTTP_VERSION_1_1 ? "HTTP/1.1" : "HTTP/1.0";
     }
@@ -60,8 +70,8 @@ public:
     void setPath(const std::string& url)     { urlpath_ = url; }
     const std::string& path() const          { return urlpath_; }
 
-    void setQuery(const std::string& url)    { urlpath_ = url; }
-    const std::string& query() const         { return urlpath_; }
+    void setQuery(const std::string& url)    { query_ = url; }
+    const std::string& query() const         { return query_; }
 
     void setBody(const std::string& body)    { body_ = body; }
     const std::string& body() const          { return body_; }
@@ -95,13 +105,24 @@ public:
         headers_.swap(that.headers_);
     }
 
-    bool parseHeader(const std::string& header);
-
+    std::string dump() const
+    {
+        std::string result;
+        result = std::string(methodStr()) + " " + path() + "?" + query() + " " + versionStr() + "\r\n";
+        for (std::map<std::string, std::string>::const_iterator it = headers_.begin(); it != headers_.end(); ++it)
+        {
+            result += it->first;
+            result += ": ";
+            result += it->second;
+            result += "\r\n";
+        }
+        return result;
+    }
 private:
     HttpMethod   method_;
     HttpVersion  version_;
     std::string  urlpath_;  // url
-    std::string  query_;    // url后面的以?分割的参数
+    std::string  query_;    // url后面的以?分割的参数(不包括?)
     std::string  body_;
     Timestamp    receiveTime_;
 

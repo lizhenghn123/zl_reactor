@@ -173,6 +173,7 @@ public:
     static int setNonBlocking(ZL_SOCKET fd, bool nonBlocking = true);
     static int setNoDelay(ZL_SOCKET fd, bool noDelay = true);
     static int setReuseAddr(ZL_SOCKET fd, bool resue = true);
+    static int setReusePort(ZL_SOCKET fd, bool resue = true);
     static int setKeepAlive(ZL_SOCKET fd, bool alive = true);
 
     static int setSendTimeout(ZL_SOCKET fd, long long timeoutMs);
