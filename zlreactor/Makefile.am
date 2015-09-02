@@ -1,4 +1,8 @@
-#SUBDIRS= thread utility task_service log net statistic
+# tests case
+MAINTAINERCLEANFILES   = Makefile.in
+#SUBDIRS = base thread net
+
+# lib case 
 
 CXXFLAGS =-Wall -Werror -g -O2 -fPIC -Wno-unused-function
 
@@ -17,8 +21,8 @@ libzlreactor_la_LIBFLAGS =
 libzlreactor_la_LIBADD =
 
 INCLUDES                   = -I../
-libzlreactor_la_CPPFLAGS =-O2 -std=c++0x -fPIC -shared
-libzlreactor_la_LDFLAGS = -lrt -version-info 1:0:1	
+libzlreactor_la_CPPFLAGS   = -O2 -std=c++0x -fPIC -shared
+libzlreactor_la_LDFLAGS    = -lrt -version-info 1:0:1	
 
 libzlreactor_la_SOURCES =                             \
 					 base/ByteArray.cpp               \
@@ -73,9 +77,3 @@ libzlreactor_la_SOURCES =                             \
 					 net/http/HttpContext.cpp         \
 					 net/http/HttpServer.cpp
 
-# tests case
-MAINTAINERCLEANFILES   = Makefile.in
-SUBDIRS = 
-SUBDIRS += base
-SUBDIRS += net
-SUBDIRS += thread

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#dos2unix config* INSTALL libtool ltmain.sh  depcomp install-sh  stamp-h1
-#chmod +x  config* INSTALL libtool ltmain.sh  depcomp install-sh  stamp-h1
+dos2unix config* INSTALL libtool ltmain.sh  depcomp install-sh  stamp-h1
+chmod +x  config* INSTALL libtool ltmain.sh  depcomp install-sh  stamp-h1
 
 case `uname` in
     Darwin) libtoolize=glibtoolize ;;
