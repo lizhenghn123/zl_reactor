@@ -12,12 +12,37 @@ Created Time: 2015年05月12日 星期二 19时44分29秒
 #include "net/TcpConnection.h"
 #include "base/Timestamp.h"
 #include "base/Logger.h"
+#include "thread/Thread.h"
+#include "thread/ThreadPool.h"
 #include <string>
 #include <memory>
+#include <thread>
 using namespace std;
 using namespace zl;
 using namespace zl::base;
+using namespace zl::thread;
 using namespace zl::net;
+
+// epoll如果一个socket正在线程池中被处理，epoll上又收到了该socket的数据 读请求，怎么办？
+zl::thread::ThreadPool pool("ThreadPool");;
+void do_message(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp time)
+{
+	printf("-------------\n");
+    string msg(buf->retrieveAllAsString());
+    printf("[thread : %d][%d] recv %d bytes[%s]\n", zl::thread::this_thread::tid(), conn->fd(), msg.size(), msg.c_str());
+    printf("==[%p-%p]==\n", conn.get(), buf);
+	sleep(10);
+    if (msg == "bye\n")
+    {
+        conn->send("ok\n");
+        conn->shutdown();
+    }
+    else
+    {
+        conn->send(msg);
+    }
+}
+
 
 EchoServer::EchoServer(EventLoop *loop, const InetAddress& listenAddr, int numReactors/* = 0*/)
     : loop_(loop)
@@ -27,6 +52,7 @@ EchoServer::EchoServer(EventLoop *loop, const InetAddress& listenAddr, int numRe
     server_->setMessageCallback(std::bind(&EchoServer::onMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     server_->setMultiReactorThreads(numReactors);
+	//pool.start(10);
 }
 
 EchoServer::~EchoServer()
@@ -54,16 +80,15 @@ void EchoServer::onConnection(const TcpConnectionPtr& conn)
 
 void EchoServer::onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, const Timestamp& time)
 {
-    string msg(buf->retrieveAllAsString());
-    LOG_INFO("[%d] recv %d bytes[%s]", conn->fd(), msg.size(), msg.c_str());
-
-    if (msg == "bye\n")
-    {
-        conn->send("ok\n");
-        conn->shutdown();
-    }
-    else
-    {
-        conn->send(msg);
-    }
+	if(1)
+	{
+		//std::thread trd(std::bind(do_message, conn, buf, time));
+		zl::thread::Thread trd(std::bind(do_message, conn, buf, time));
+		cout << "trd detach\n";
+		trd.detach();
+	}
+	else
+	{
+		pool.run(std::bind(do_message, conn, buf, time));
+	}
 }
