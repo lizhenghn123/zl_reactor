@@ -6,6 +6,8 @@ AC_INIT([zlreactor], [1.0], [lizhenghn@gmail.com])
 AC_CONFIG_SRCDIR([zlreactor/Define.h])
 AC_CONFIG_HEADERS([Config.h])
 AM_INIT_AUTOMAKE(zlreactor,1.0)
+
+AC_LINK_IFELSE([AC_LANG_SOURCE([int main() { return 0; }])], [some=thing], [some=other])
 AC_PROG_LIBTOOL
 
 # Checks for programs.
