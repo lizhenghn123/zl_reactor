@@ -1,5 +1,5 @@
 #include "net/http/HttpContext.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 #include "base/Timestamp.h"
 #include "base/StringUtil.h"
 using zl::base::Timestamp;
@@ -22,7 +22,7 @@ NAMESPACE_ZL_NET_START
 // Accept - Language : zh - CN, zh; q = 0.8
 // RA - Ver: 2.2.22
 // RA - Sid : 7B747245 - 20140622 - 042030 - f79ea7 - 5f07a8
-bool HttpContext::parseRequest(NetBuffer *buf, Timestamp receiveTime)
+bool HttpContext::parseRequest(ByteBuffer *buf, Timestamp receiveTime)
 {
     bool ok = true;
     bool hasMore = true;

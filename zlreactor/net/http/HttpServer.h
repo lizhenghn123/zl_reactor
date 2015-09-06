@@ -40,7 +40,7 @@ public:
 
 private:
     void onConnection(const TcpConnectionPtr& conn);
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp receiveTime);
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestamp receiveTime);
     void response(const TcpConnectionPtr& conn, const HttpRequest& req);
     void methodCallback(const HttpRequest& req, HttpResponse *resp);
 

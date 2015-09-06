@@ -1,6 +1,6 @@
 # tests case
 MAINTAINERCLEANFILES   = Makefile.in
-#SUBDIRS = base thread net
+SUBDIRS = base thread net
 
 # lib case 
 
@@ -25,7 +25,6 @@ libzlreactor_la_CPPFLAGS   = -O2 -std=c++0x -fPIC -shared
 libzlreactor_la_LDFLAGS    = -lrt -version-info 1:0:1	
 
 libzlreactor_la_SOURCES =                             \
-					 base/ByteArray.cpp               \
 					 base/Date.cpp                    \
 					 base/DateTimeUtil.cpp            \
 					 base/File.cpp                    \
@@ -51,7 +50,7 @@ libzlreactor_la_SOURCES =                             \
 					 net/poller/PollPoller.cpp        \
 					 net/poller/EpollPoller.cpp       \
 					 net/NetUtil.cpp                  \
-					 net/NetBuffer.cpp                \
+					 net/ByteBuffer.cpp               \
 					 net/SocketUtil.cpp               \
 					 net/InetAddress.cpp              \
 					 net/DomainResolver.cpp           \

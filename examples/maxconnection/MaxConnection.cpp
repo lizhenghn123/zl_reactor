@@ -22,7 +22,7 @@ public:
 private:
     void onConnection(const TcpConnectionPtr& conn);
 
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time);
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time);
 
     TcpServer server_;
     Atomic<int>  numConnected_;
@@ -64,7 +64,7 @@ void EchoServer::onConnection(const TcpConnectionPtr& conn)
     cout << "numConnected = " << numConnected_ << "\n";
 }
 
-void EchoServer::onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
+void EchoServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time)
 {
     string msg(buf->retrieveAllAsString());
     //cout << "EchoServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, ["

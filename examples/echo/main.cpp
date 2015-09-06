@@ -10,7 +10,7 @@
 #include <time.h>
 #include "net/EventLoop.h"
 #include "net/InetAddress.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 #include "net/TcpConnection.h"
 #include "net/TcpClient.h"
 #include "base/Logger.h"

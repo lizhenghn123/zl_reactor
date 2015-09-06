@@ -3,7 +3,7 @@
 #include "net/http/HttpRequest.h"
 #include "net/http/HttpResponse.h"
 #include "net/http/HttpContext.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 #include "base/FileUtil.h"
 using namespace std;
 using namespace zl::net;
@@ -13,7 +13,7 @@ using namespace zl::net;
 
 void testParseRequest1()
 {
-	NetBuffer input;
+	ByteBuffer input;
 	input.write("GET /index.html HTTP/1.1\r\n"
                 "Host: www.baidu.com\r\n"
                 "\r\n");
@@ -37,7 +37,7 @@ void testParseRequest2()
     for(size_t sz1 = 0; sz1 < all.size(); ++sz1)
 	{
 		HttpContext context;
-		NetBuffer input;
+		ByteBuffer input;
 		input.write(all.c_str(), sz1);
 		ZL_CHECK_TRUE(context.parseRequest(&input, Timestamp::now()));
 		ZL_CHECK_TRUE(!context.gotAll());
@@ -57,7 +57,7 @@ void testParseRequest2()
 
 void testParseRequest3()
 {
-	NetBuffer input;
+	ByteBuffer input;
 	input.write("GET /index.html HTTP/1.1\r\n"
                 "Host: www.baidu.com\r\n"
                 "User-Agent:\r\n"
@@ -78,7 +78,7 @@ void testParseRequest3()
 
 void testParseRequestPost()
 {
-	NetBuffer input;
+	ByteBuffer input;
 	input.write("POST /index.html HTTP/1.1\r\n"
                 "Host: www.baidu.com\r\n"
                 "User-Agent:\r\n"

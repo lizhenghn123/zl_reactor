@@ -1,7 +1,7 @@
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 NAMESPACE_ZL_NET_START
 
-const char NetBuffer::kCRLF[] = "\r\n";
+const char ByteBuffer::kCRLF[] = "\r\n";
 
 //const size_t ByteBuffer::kCheapPrepend;
 //const size_t ByteBuffer::kInitialSize;

@@ -12,7 +12,7 @@
 #include "net/http/HttpProtocol.h"
 NAMESPACE_ZL_NET_START
 
-class NetBuffer;
+class ByteBuffer;
 class HttpRequest;
 
 class HttpResponse
@@ -31,7 +31,7 @@ public:
     void setBody(const string& body)          { body_ = body; }
     void addHeader(const string& key, const string& value)  { headers_[key] = value; }
 
-    void compileToBuffer(NetBuffer* output) const;
+    void compileToBuffer(ByteBuffer* output) const;
 
 private:
     HttpStatusCode       statusCode_;

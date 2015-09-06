@@ -11,12 +11,11 @@
 #include "Define.h"
 #include "base/Timestamp.h"
 #include "base/NonCopy.h"
-#include "base/ByteArray.h"
 #include "stl/any.h"
 #include "net/CallBacks.h"
 #include "net/InetAddress.h"
 #include "net/Socket.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 #include "net/Channel.h"
 #include <memory>     //for enable_shared_from_this
 NAMESPACE_ZL_NET_START
@@ -61,7 +60,7 @@ public:
 
     void send(const void* data, size_t len);
     void send(const std::string& buffer);
-    void send(NetBuffer* buffer);
+    void send(ByteBuffer* buffer);
 
     void shutdown();
 
@@ -86,8 +85,8 @@ private:
 
     zl::stl::any          context_;
 
-    NetBuffer             inputBuffer_;
-    NetBuffer             outputBuffer_; // FIXME: use list<Buffer> as output buffer.
+    ByteBuffer             inputBuffer_;
+    ByteBuffer             outputBuffer_; // FIXME: use list<Buffer> as output buffer.
 
     ConnectionCallback    connectionCallback_;
     MessageCallback       messageCallback_;

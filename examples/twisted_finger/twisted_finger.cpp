@@ -4,7 +4,7 @@
 #include "net/EventLoop.h"
 #include "net/TcpServer.h"
 #include "net/TcpConnection.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 using namespace std;
 using namespace zl;
 using namespace zl::net;
@@ -65,7 +65,7 @@ void finger03()
 //如果读到一行以 /r/n 结尾的消息，就断开连接
 //注意这段代码有安全问题，如果恶意客户端不断发送数据而不换行，会撑爆服务端的内存。
 //另外，Buffer::findCRLF() 是线性查找，如果客户端每次发一个字节，服务端的时间复杂度为 O(N^2)，会消耗 CPU 资源。
-void onMessage4(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp receiveTime)
+void onMessage4(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp receiveTime)
 {
     if (buf->findCRLF() || buf->readableBytes() > 100)
     {
@@ -83,7 +83,7 @@ void finger04()
 
 // Test05 ：Read Username, Output Error, Drop Connections
 //读取用户名、输出错误信息、然后断开连接
-void onMessage5(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp receiveTime)
+void onMessage5(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp receiveTime)
 {
     if (buf->findCRLF())
     {
@@ -101,7 +101,7 @@ void finger05()
 }
 
 // Test06 ：Output From Empty Factory
-void onMessage6(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp receiveTime)
+void onMessage6(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp receiveTime)
 {
     if (buf->findCRLF())
     {

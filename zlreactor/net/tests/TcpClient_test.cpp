@@ -5,7 +5,7 @@
 #include "net/TcpClient.h"
 #include "net/TcpServer.h"
 #include "net/TcpConnection.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 #include "net/NetUtil.h"
 using namespace std;
 using namespace zl;
@@ -33,7 +33,7 @@ namespace test_client
         }
     }
 
-    void clientMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp receiveTime)
+    void clientMessageCallback(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp receiveTime)
     {
         string msg(buf->retrieveAllAsString());
         //cout << "EchoServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, ["
@@ -94,7 +94,7 @@ namespace test_client_stdin
                 //clientConnection.reset();
             }
         }
-        void onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp time)
+        void onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestamp time)
         {
             string msg(buf->retrieveAllAsString());
             printf("onMessage(): recv a message [%s]\n", msg.c_str());
