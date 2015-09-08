@@ -37,6 +37,8 @@
 #ifndef ZL_STRINGPIECE_H
 #define ZL_STRINGPIECE_H
 #include <string.h>
+#include <stddef.h>  // for ptrdiff_t
+#include <assert.h>
 #include <string>
 #include <iosfwd>    // for ostream forward-declaration
 
@@ -68,7 +70,22 @@ class StringPiece
 {
 private:
     const char*   ptr_;
-    int           length_;
+    size_t        length_;
+
+public:
+    // standard STL container boilerplate
+    typedef size_t size_type;
+    typedef char value_type;
+    typedef const char* pointer;
+    typedef const char& reference;
+    typedef const char& const_reference;
+    typedef ptrdiff_t difference_type;
+    typedef const char* const_iterator;
+    typedef const char* iterator;
+    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef std::reverse_iterator<iterator> reverse_iterator;
+
+    static const size_type npos = ~size_type(0);
 
 public:
     // We provide non-explicit singleton constructors so users can pass
@@ -77,12 +94,12 @@ public:
     StringPiece()
         : ptr_(NULL), length_(0) { }
     StringPiece(const char* str)
-        : ptr_(str), length_(static_cast<int>(strlen(ptr_))) { }
+        : ptr_(str), length_(strlen(ptr_)) { }
     StringPiece(const unsigned char* str)
         : ptr_(reinterpret_cast<const char*>(str)),
         length_(static_cast<int>(strlen(ptr_))) { }
     StringPiece(const string& str)
-        : ptr_(str.data()), length_(static_cast<int>(str.size())) { }
+        : ptr_(str.data()), length_(str.size()) { }
     StringPiece(const char* offset, int len)
         : ptr_(offset), length_(len) { }
 
@@ -93,11 +110,23 @@ public:
     // this.  Or better yet, change your routine so it does not rely on NUL
     // termination.
     const char* data() const { return ptr_; }
-    int size() const { return length_; }
+    size_t size() const { return length_; }
+    size_t length() const { return length_; }
     bool empty() const { return length_ == 0; }
-    const char* begin() const { return ptr_; }
-    const char* end() const { return ptr_ + length_; }
     void clear() { ptr_ = NULL; length_ = 0; }
+    iterator begin() const { return ptr_; }
+    iterator end() const { return ptr_ + length_; }
+    const_reverse_iterator rbegin() const
+    {
+        return const_reverse_iterator(ptr_ + length_);
+    }
+    const_reverse_iterator rend() const
+    {
+        return const_reverse_iterator(ptr_);
+    }
+
+    size_type max_size() const { return length_; }
+    size_type capacity() const { return length_; }
 
     void set(const char* buffer, int len)
     {
@@ -107,7 +136,7 @@ public:
     void set(const char* str)
     {
         ptr_ = str;
-        length_ = static_cast<int>(strlen(str));
+        length_ = str ? strlen(str) : 0;
     }
     void set(const void* buffer, int len)
     {
@@ -158,21 +187,60 @@ public:
         }
         return r;
     }
+    int ignore_case_compare(const StringPiece& other) const;
+    bool ignore_case_equal(const StringPiece& other) const;
 
     string as_string() const
     {
         return string(data(), size());
     }
-
-    void copyToString(string* target) const
+    void copy_to_string(string* target) const
     {
         target->assign(ptr_, length_);
+    }
+    void append_to_string(std::string* target) const
+    {
+        if (!empty())
+            target->append(data(), size());
     }
 
     // Does "this" start with "x"
     bool starts_with(const StringPiece& x) const
     {
         return ((length_ >= x.length_) && (memcmp(ptr_, x.ptr_, x.length_) == 0));
+    }
+
+    // Does "this" end with "x"
+    bool ends_with(const StringPiece& x) const
+    {
+        return ((length_ >= x.length_) && (memcmp(ptr_, x.ptr_, x.length_) == 0));
+    }
+
+    size_type find(const StringPiece& s, size_type pos = 0) const;
+    size_type find(char c, size_type pos = 0) const;
+    size_type rfind(const StringPiece& s, size_type pos = npos) const;
+    size_type rfind(char c, size_type pos = npos) const;
+
+    size_type find_first_of(const StringPiece& s, size_type pos = 0) const;
+    size_type find_first_of(char c, size_type pos = 0) const {
+        return find(c, pos);
+    }
+    size_type find_first_not_of(const StringPiece& s, size_type pos = 0) const;
+    size_type find_first_not_of(char c, size_type pos = 0) const;
+    size_type find_last_of(const StringPiece& s, size_type pos = npos) const;
+    size_type find_last_of(char c, size_type pos = npos) const {
+        return rfind(c, pos);
+    }
+    size_type find_last_not_of(const StringPiece& s, size_type pos = npos) const;
+    size_type find_last_not_of(char c, size_type pos = npos) const;
+
+    StringPiece substr(size_type pos, size_type n = npos) const
+    {
+        if (pos > length_)
+            pos = length_;
+        if (n > length_ - pos)
+            n = length_ - pos;
+        return StringPiece(ptr_ + pos, n);
     }
 };
 
