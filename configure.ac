@@ -82,8 +82,8 @@ AC_CONFIG_FILES([Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile
                 tests/timerqueue/Makefile
-                tests/epollclient/Makefile
-                tests/epollserver/Makefile
+                tests/epoll_echoclient/Makefile
+                tests/epoll_echoserver/Makefile
                 tests/signal_handler/Makefile
                 tests/tcpselfconnect1/Makefile
                 tests/tcpselfconnect2/Makefile

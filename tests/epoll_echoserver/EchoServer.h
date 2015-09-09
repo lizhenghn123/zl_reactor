@@ -1,13 +1,14 @@
-﻿#ifndef ZL_EPOLLSERVER_H
-#define ZL_EPOLLSERVER_H
+﻿#ifndef ZL_ECHOSERVER_H
+#define ZL_ECHOSERVER_H
 #include <pthread.h>
+class EpollPoller;
 
-class EpollServer
+class EchoServer
 {
 public:
-    EpollServer(const char *serverIP, int serverPort);
+    EchoServer(const char *serverIP, int serverPort);
 
-    ~EpollServer();
+    ~EchoServer();
 
     void runLoop();
 
@@ -18,11 +19,11 @@ private:
     static void listenThread(void *args);
 
 private:
-    int             epollFd_;
     int             srvSocket_;
     char            srvIP_[64];
     short           srvPort_;
     pthread_t       listenThread_;
+    EpollPoller*    epoller_;
 };
 
-#endif  /* ZL_EPOLLSERVER_H */
+#endif  /* ZL_ECHOSERVER_H */

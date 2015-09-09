@@ -8,9 +8,9 @@ SUBDIRS                += stress_client
 
 SUBDIRS                += timerqueue
 
-SUBDIRS                += epollclient
+SUBDIRS                += epoll_echoclient
 
-SUBDIRS                += epollserver
+SUBDIRS                += epoll_echoserver
 
 SUBDIRS                += signal_handler
 
