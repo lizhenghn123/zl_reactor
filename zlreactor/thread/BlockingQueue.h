@@ -190,14 +190,14 @@ protected:
 };
 
 /* using is not support in VS2010*/
-//template< typename Job>
-//using FifoJobQueue = zl::BlockingQueue<Job, std::queue<Job>, tagFIFO>;
+//template <typename Job>
+//using BlockingFifoQueue = BlockingQueue<Job, std::queue<Job>, tagFIFO>;
 
-//template< typename Job>
-//using FiloJobQueue = zl::BlockingQueue<Job, std::stack<Job>, tagFILO>;
-//
-//template< typename Job>
-//using PrioJobQueue = zl::BlockingQueue<Job, std::priority_queue<Job>, tagPRIO>;
+//template <typename Job>
+//using BlockingFiloQueue = BlockingQueue<Job, std::stack<Job>, tagFILO>;
+
+//template <typename Job>
+//using BlockingPrioQueue = BlockingQueue<Job, std::priority_queue<Job>, tagPRIO>;
 
 NAMESPACE_ZL_THREAD_END
 #endif /* ZL_BLOCKINGQUEUE_H */
