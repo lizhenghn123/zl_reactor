@@ -49,12 +49,13 @@ public:
     void push(const JobType& job)
     {
         LockGuard lock(mutex_);
-        while(queue_.size() == maxSize_)  // already full
+        while(queue_.size() == maxSize_ && !stopFlag_)  // already full or stopped
         {
             notFull_.wait();
-            if(stopFlag_)
-                return ;
         }
+        if(stopFlag_)
+            return;
+                
         queue_.push(job);
         notEmpty_.notify_one();
     }
@@ -62,12 +63,13 @@ public:
     void push(JobType&& job)
     {
         LockGuard lock(mutex_);
-        while(queue_.size() == maxSize_)
+        while(queue_.size() == maxSize_ && !stopFlag_)  // already full or stopped
         {
             notFull_.wait();
-			if(stopFlag_)
-                return ;
         }
+        if(stopFlag_)
+            return;
+            
         queue_.push(std::move(job));
         notEmpty_.notify_one();
     }
@@ -144,7 +146,10 @@ public:
 
     void stop()
     {
-        stopFlag_ = true;
+        {
+            LockGuard lock(mutex_);
+            stopFlag_ = true;
+        }
         notFull_.notify_all();
         notEmpty_.notify_all();
     }

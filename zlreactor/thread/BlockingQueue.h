@@ -125,7 +125,10 @@ public:
 
     void stop()
     {
-        stopFlag_ = true;
+        {
+            LockGuard lock(mutex_);
+            stopFlag_ = true;
+        }
         hasJob_.notify_all();
     }
 
