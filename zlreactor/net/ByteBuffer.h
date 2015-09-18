@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Filename         : NetBuffer.h
+// Filename         : ByteBuffer.h
 // Author           : LIZHENG
 // Created          : 2014-11-04
 // Description      :
@@ -22,14 +22,14 @@ NAMESPACE_ZL_NET_START
 /// |                   |                  |                  |
 /// 0      <=      readerIndex   <=   writerIndex    <=     size
 /// @endcode
-class NetBuffer
+class ByteBuffer
 {
 public:
     static const size_t kCheapPrepend = 8;
     static const size_t kInitialSize = 1024;
 
 public:
-    NetBuffer()
+    ByteBuffer()
         : readerIndex_(kCheapPrepend)
         , writerIndex_(kCheapPrepend)
         , buffer_(kCheapPrepend + kInitialSize)
@@ -244,7 +244,7 @@ public:
 
     void shrink(size_t reserve)
     {
-        NetBuffer other;
+        ByteBuffer other;
         other.ensureWritableBytes(readableBytes()+reserve);
         other.write(toString());
         swap(other);
@@ -255,7 +255,7 @@ public:
         return buffer_.capacity();
     }
 
-    void swap(NetBuffer& rhs)
+    void swap(ByteBuffer& rhs)
     {
         buffer_.swap(rhs.buffer_);
         std::swap(readerIndex_, rhs.readerIndex_);

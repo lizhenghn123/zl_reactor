@@ -33,7 +33,7 @@ void HttpServer::onConnection(const TcpConnectionPtr& conn)
      }
 }
 
-void HttpServer::onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp receiveTime)
+void HttpServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestamp receiveTime)
 {
      LOG_INFO("HttpServer::onConnection recv data [%d][%s]", conn->fd(), buf->toString().c_str());
 
@@ -65,7 +65,7 @@ void HttpServer::response(const TcpConnectionPtr& conn, const HttpRequest& req)
 
     methodCallback(req, &response);    // callback, for init response
 
-    NetBuffer buf;
+    ByteBuffer buf;
     response.compileToBuffer(&buf);
     //printf("[%s]\n", buf.toString().c_str());
     conn->send(&buf);

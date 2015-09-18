@@ -8,7 +8,7 @@
 #include "net/TcpClient.h"
 #include "net/EventLoop.h"
 #include "net/InetAddress.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 #include "net/TcpConnection.h"
 #include "base/Timestamp.h"
 #include "base/Logger.h"
@@ -65,7 +65,7 @@ void EchoClient::onConnection(const TcpConnectionPtr& conn)
     }
 }
 
-void EchoClient::onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, const Timestamp& time)
+void EchoClient::onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, const Timestamp& time)
 {
     string msg(buf->retrieveAllAsString());
     LOG_INFO("[%d] recv %d bytes[%s]", conn->fd(), msg.size(), msg.c_str());

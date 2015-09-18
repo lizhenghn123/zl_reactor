@@ -11,7 +11,7 @@ void defaultConnectionCallback(const TcpConnectionPtr& conn)
         conn->peerAddress().ipPort().c_str(), conn->connected() ? "UP" : "DOWN");
 }
 
-void defaultMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp receiveTime)
+void defaultMessageCallback(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp receiveTime)
 {
     LOG_INFO("defaultMessageCallback : [%d][%s]", conn->fd(), buf->toString().c_str());
 }
@@ -63,7 +63,7 @@ void TcpConnection::send(const std::string& buffer)
       send(buffer.data(), buffer.size());
 }
 
-void TcpConnection::send(NetBuffer* buffer)
+void TcpConnection::send(ByteBuffer* buffer)
 {
     if (state_ == kConnected)
     {

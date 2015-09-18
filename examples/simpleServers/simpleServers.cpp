@@ -70,7 +70,7 @@ struct DiscardProtocolServer// : public DemoServer
     {
     }
 
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time)
     {
         string msg(buf->retrieveAllAsString());
         cout << "DiscardServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, ["
@@ -98,7 +98,7 @@ struct DayTimeProtocolServer
         conn->shutdown(); // 主动断开连接
     }
 
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time)
     {
         assert(0 && "daytime protocol do not need receive data from client" && "DayTimeProtocolServer::onMessage");
     }
@@ -128,7 +128,7 @@ struct TimeProtocolServer
         conn->shutdown(); // 主动断开连接
     }
 
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time)
     {
         assert(0 && "time protocol do not need receive data from client" && "TimeProtocolServer::onMessage");
     }
@@ -147,7 +147,7 @@ struct EchoProtocolServer
     {
     }
 
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time)
     {
         string msg(buf->retrieveAllAsString());
         cout << "EchoServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, ["
@@ -189,7 +189,7 @@ struct ChargenProtocolServer
         }
     }
 
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time)
     {
         string msg(buf->retrieveAllAsString());
         cout << "EchoServer::onMessage, fd [" << conn->fd() << "], "<< msg.size() << " bytes, ["

@@ -17,19 +17,19 @@ class EventLoop;
 class TcpConnection;
 class InetAddress;
 class TcpAcceptor;
-class NetBuffer;
+class ByteBuffer;
 using zl::base::Timestamp;
 
 //typedef std::string Buffer;
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 
 void defaultConnectionCallback(const TcpConnectionPtr& conn);
-void defaultMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buffer, Timestamp receiveTime);
+void defaultMessageCallback(const TcpConnectionPtr& conn, ByteBuffer* buffer, Timestamp receiveTime);
 
 typedef std::function<void (const TcpConnectionPtr&)> ConnectionCallback;
 typedef std::function<void (const TcpConnectionPtr&)> CloseCallback;
 typedef std::function<void (const TcpConnectionPtr&)> WriteCompleteCallback;
-typedef std::function<void (const TcpConnectionPtr&, NetBuffer*, Timestamp)> MessageCallback;
+typedef std::function<void (const TcpConnectionPtr&, ByteBuffer*, Timestamp)> MessageCallback;
 
 
 typedef int  TimerId;

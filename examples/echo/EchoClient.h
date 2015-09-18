@@ -19,7 +19,7 @@ namespace zl
         class TcpClient;
         class Channel;
         class Socket;
-        class NetBuffer;
+        class ByteBuffer;
     }
 }
 using namespace zl;
@@ -38,7 +38,7 @@ public:
 
 private:
     void onConnection(const TcpConnectionPtr& conn);
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, const Timestamp& time);
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, const Timestamp& time);
 
 private:
     EventLoop *loop_;

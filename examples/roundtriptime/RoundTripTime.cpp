@@ -5,7 +5,7 @@
 #include "net/TcpClient.h"
 #include "net/TcpServer.h"
 #include "net/TcpConnection.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 #include "net/NetUtil.h"
 using namespace std;
 using namespace zl;
@@ -34,7 +34,7 @@ void serverConnectionCallback(const TcpConnectionPtr& conn)
     }
 }
 
-void serverMessageCallback(const TcpConnectionPtr& conn, NetBuffer* buffer, Timestamp receiveTime)
+void serverMessageCallback(const TcpConnectionPtr& conn, ByteBuffer* buffer, Timestamp receiveTime)
 {
     static int64_t i = 100;
     int64_t message[2];
@@ -78,7 +78,7 @@ void clientConnectionCallback(const TcpConnectionPtr& conn)
     }
 }
 
-void clientMessageCallback(const TcpConnectionPtr&, NetBuffer* buffer, Timestamp receiveTime)
+void clientMessageCallback(const TcpConnectionPtr&, ByteBuffer* buffer, Timestamp receiveTime)
 {
     int64_t message[2];
     while (buffer->readableBytes() >= frameLen)

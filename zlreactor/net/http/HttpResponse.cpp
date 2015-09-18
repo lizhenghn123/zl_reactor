@@ -1,7 +1,7 @@
 #include "net/http/HttpResponse.h"
 #include "net/http/HttpKeyValue.h"
 #include "base/FileUtil.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 NAMESPACE_ZL_NET_START
 
 HttpResponse::HttpResponse(bool closeConn/* = true*/)
@@ -17,7 +17,7 @@ HttpResponse::~HttpResponse()
 /// response header  \r\n
 ///                  \r\n
 /// response body
-void HttpResponse::compileToBuffer(NetBuffer* output) const
+void HttpResponse::compileToBuffer(ByteBuffer* output) const
 {
     HttpKeyValue *ptable = HttpKeyValue::getInstancePtr();
 

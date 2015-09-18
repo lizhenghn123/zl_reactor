@@ -20,7 +20,7 @@ namespace zl
         class TcpServer;
         class Channel;
         class Socket;
-        class NetBuffer;
+        class ByteBuffer;
     }
 }
 
@@ -29,7 +29,7 @@ using zl::net::InetAddress;
 using zl::net::TcpServer;
 using zl::net::Channel;
 using zl::net::Socket;
-using zl::net::NetBuffer;
+using zl::net::ByteBuffer;
 
 using namespace zl;
 using namespace zl::net;
@@ -44,7 +44,7 @@ public:
 
 private:
     void onConnection(const TcpConnectionPtr& conn);
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, const Timestamp& time);
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, const Timestamp& time);
 
 private:
     EventLoop *loop_;

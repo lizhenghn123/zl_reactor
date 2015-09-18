@@ -21,7 +21,7 @@ class EventLoop;
 class HttpRequest;
 class HttpResponse;
 class InetAddress;
-class NetBuffer;
+class ByteBuffer;
 
 class HttpContext// : public zl::NonCopy
 {
@@ -40,7 +40,7 @@ public:
     }
 
 public:
-    bool parseRequest(NetBuffer *buf, Timestamp receiveTime);
+    bool parseRequest(ByteBuffer *buf, Timestamp receiveTime);
 
 public:
     bool expectRequestLine() const { return state_ == kExpectRequestLine; }

@@ -8,7 +8,7 @@ Created Time: 2015年05月12日 星期二 19时44分29秒
 #include "net/TcpServer.h"
 #include "net/EventLoop.h"
 #include "net/InetAddress.h"
-#include "net/NetBuffer.h"
+#include "net/ByteBuffer.h"
 #include "net/TcpConnection.h"
 #include "base/Timestamp.h"
 #include "base/Logger.h"
@@ -25,7 +25,7 @@ using namespace zl::net;
 
 // epoll如果一个socket正在线程池中被处理，epoll上又收到了该socket的数据 读请求，怎么办？
 zl::thread::ThreadPool pool("ThreadPool");;
-void do_message(const TcpConnectionPtr& conn, NetBuffer *buf, Timestamp time)
+void do_message(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestamp time)
 {
 	printf("-------------\n");
     string msg(buf->retrieveAllAsString());
@@ -78,7 +78,7 @@ void EchoServer::onConnection(const TcpConnectionPtr& conn)
     }
 }
 
-void EchoServer::onMessage(const TcpConnectionPtr& conn, NetBuffer *buf, const Timestamp& time)
+void EchoServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, const Timestamp& time)
 {
 	if(1)
 	{

@@ -32,7 +32,7 @@ public:
 private:
     void onTimer();
     void onConnection(const TcpConnectionPtr& conn);
-    void onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time);
+    void onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time);
     void dump();
 
 private:
@@ -87,7 +87,7 @@ void EchoServer::onConnection(const TcpConnectionPtr& conn)
     }
 }
 
-void EchoServer::onMessage(const TcpConnectionPtr& conn, NetBuffer* buf, Timestamp time)
+void EchoServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp time)
 {
     //LOG_NOTICE("socket [%d] thread[%ld]", conn->fd(), this_thread::get_id().tid());
 
