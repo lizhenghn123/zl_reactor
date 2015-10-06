@@ -27,3 +27,5 @@ SUBDIRS                += socketAcceptThunderingHerd
 SUBDIRS                += bind_tcp_udp
 
 SUBDIRS                += backtrace_test
+
+SUBDIRS                += server_aio

@@ -16,7 +16,7 @@
 #include "thread/Mutex.h"
 NAMESPACE_ZL_START
 
-#define DECLARE_SINGLETON_CLASS(type)  friend class Singleton< type >
+#define DECLARE_SINGLETON_CLASS(type)  friend class zl::Singleton< type >
 
 template <class T>
 class Singleton

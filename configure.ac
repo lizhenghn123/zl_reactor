@@ -92,6 +92,7 @@ AC_CONFIG_FILES([Makefile
                 tests/socketAcceptThunderingHerd/Makefile
                 tests/bind_tcp_udp/Makefile
                 tests/backtrace_test/Makefile
+                tests/server_aio/Makefile
                ])
 
 AC_OUTPUT

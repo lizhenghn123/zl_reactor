@@ -9,14 +9,12 @@ ZL_STATIC_ASSERT(SIGINT == 2, "SIGINT == 2 must be true");
 
 int main()
 {
-//    cout << MACRO_CAT(__FILE__, __LINE__) << "\n";
-//    cout << MACRO_CAT(__FILE__, "ee") << "\n";
     {
         const static int i = 2;
         ZL_STATIC_ASSERT(i>0);
         ZL_STATIC_ASSERT(i>0, "i must greater than 0");
-        //ZL_STATIC_ASSERT(i>3);
-        //ZL_STATIC_ASSERT(i>3, "must i>3");
+        //ZL_STATIC_ASSERT(i>3);    // complie failure
+        //ZL_STATIC_ASSERT(i>3, "must i>3");   // complie failure
     }
     {
         int i = 2;

@@ -8,6 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_SMARTASSERT_H
 #define ZL_SMARTASSERT_H
+#include "Define.h"
 #include <string>
 #include <sstream>
 #include <stdlib.h>
@@ -95,14 +96,13 @@ static SmartAssert __dont_use_this__ = MakeAssert(NULL, NULL, 0, 0, false); //gc
 #endif
 
 // compile time assert
-#define MACRO_CAT(x, y)     MACRO_DO_CAT(x, y)
-#define MACRO_DO_CAT(x, y)  MACRO_DO_CAT2(x, y)
-#define MACRO_DO_CAT2(x, y) x##y
-#define MACRO_P(x)  #x
-
-#define ZL_STATIC_ASSERT(expr, ...) ZL_STATIC_ASSERT_IMPL(expr, __FILE__, __LINE__)
-#define ZL_STATIC_ASSERT_IMPL(expr, file, line)  \
-                  typedef char static_assert_fail_on_##file_##line[2 * ((expr) != 0) - 1]
+#ifdef ZL_CXX11_ENABLED
+#define ZL_STATIC_ASSERT(e, ...) static_assert(e, "" __VA_ARGS__)
+#else
+#define ZL_STATIC_ASSERT(e, ...) ZL_STATIC_ASSERT_IMPL(e, __FILE__, __LINE__)
+#define ZL_STATIC_ASSERT_IMPL(e, file, line)  \
+                  typedef char static_assert_fail_on_##file_##line[2 * ((e) != 0) - 1]
+#endif
 
 }
 }

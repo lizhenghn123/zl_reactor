@@ -1,6 +1,10 @@
 #include <iostream>
 #include <string.h>
+#include <assert.h>
+#include <string>
 #include "net/http/UriUtil.h"
+#include "UriDecode_gbk.h"
+#include "UriDecode_utf8.h"
 using namespace std;
 
 //void url_decode(char* src, char* dest, int max)
@@ -41,9 +45,20 @@ void test_UriEncode(const char* unencoded)
     cout << zl::net::uriEncode(unencoded, strlen(unencoded)) << "\n";
 }
 
+#define ZL_EXCEPT_EQ(x, y)  assert(std::string(x) == std::string(y))
+
 // http://tool.chinaz.com/Tools/URLEncode.aspx
 int main()
 {
+    ZL_EXCEPT_EQ("percent%20encoding", zl::net::uriEncode("percent encoding"));
+    ZL_EXCEPT_EQ("percent encoding", zl::net::uriDecode("percent+encoding"));
+
+    ZL_EXCEPT_EQ(kTigerGBKEncoded, zl::net::uriEncode(kTigerGBK));
+    ZL_EXCEPT_EQ(kTigerGBK, zl::net::uriDecode(kTigerGBKEncoded));
+
+    ZL_EXCEPT_EQ(kTigerUtf8Encoded, zl::net::uriEncode(kTigerUtf8));
+    ZL_EXCEPT_EQ(kTigerUtf8, zl::net::uriDecode(kTigerUtf8Encoded));
+
     cout << "#########  test_UriDecode  #########\n";
     {
         char str[] = { "http://www.baidu.com/rr?%2Bfe" };
