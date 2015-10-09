@@ -17,7 +17,7 @@ namespace detail
         ThreadFunc func_;
         std::string name_;
 
-        ThreadImplDataInfo(const ThreadFunc& func, const std::string threadName)
+        ThreadImplDataInfo(const ThreadFunc& func, const std::string& threadName)
             : func_(func)
             , name_(threadName)
         {
