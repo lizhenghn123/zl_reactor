@@ -44,18 +44,22 @@ public:
     }
 
 public:
-    void push(const JobType& job)
+    bool push(const JobType& job)
     {
         LockGuard lock(mutex_);
+        if(stopFlag_) return false;
         queue_.push(job);
         hasJob_.notify_one();
+        return true;
     }
 
-    void push(JobType&& job)
+    bool push(JobType&& job)
     {
         LockGuard lock(mutex_);
+        if(stopFlag_) return false;
         queue_.push(std::move(job));
         hasJob_.notify_one();
+        return true;
     }
 
     bool pop(JobType& job)

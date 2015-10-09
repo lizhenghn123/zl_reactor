@@ -63,7 +63,6 @@ public:
 private:
     friend struct ThreadImplDataInfo;
     native_thread_handle   threadId_;
-    //ThreadFunc             threadFunc_;
     std::string            threadName_;
     bool                   notAThread_;     ///< True iff this object is not a thread of execution
 	bool                   joined_;         ///< True iff this thread called join 
