@@ -13,7 +13,7 @@ NAMESPACE_ZL_BASE_START
 
 bool demangleName(const char *mangled, char *unmangled, size_t buf_size)
 {
-   // static const size_t max_size = 1024;
+    // static const size_t max_size = 1024;
 #ifdef OS_WINDOWS
     if (::UnDecorateSymbolName(mangled, unmangled, buf_size, UNDNAME_COMPLETE) == 0)
     {
@@ -40,7 +40,7 @@ bool demangleName(const char *mangled, char *unmangled, size_t buf_size)
 }
 
 bool demangleName(const char *mangled, std::string& unmangled)
-{ 
+{
     static const size_t max_size = 1024;
     char result[max_size];
     if(demangleName(mangled, result, max_size))

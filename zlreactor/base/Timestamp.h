@@ -80,9 +80,8 @@ private:
 };
 
 
-
-inline std::ostream& operator<<(std::ostream& out, const Timestamp& ts)                                                                                                                        
-{                                                                       
+inline std::ostream& operator<<(std::ostream& out, const Timestamp& ts)
+{
     out << ts.toString();                                               
     return out;                                                         
 }  
