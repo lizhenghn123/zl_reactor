@@ -71,7 +71,7 @@ private:
     void handleClose();
     void handleError();
     void sendInLoop(const void* data, size_t len);
-    void sendInLoop2(const std::string& buffer);
+    void sendInLoop(const std::string& buffer);
     void shutdownInLoop();
     void setState(StateE s) { state_ = s; }
 
@@ -85,8 +85,8 @@ private:
 
     zl::stl::any          context_;
 
-    ByteBuffer             inputBuffer_;
-    ByteBuffer             outputBuffer_; // FIXME: use list<Buffer> as output buffer.
+    ByteBuffer            inputBuffer_;
+    ByteBuffer            outputBuffer_; // FIXME: use list<Buffer> as output buffer.
 
     ConnectionCallback    connectionCallback_;
     MessageCallback       messageCallback_;
