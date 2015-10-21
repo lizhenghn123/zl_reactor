@@ -53,7 +53,8 @@ void TcpConnection::send(const void* data, size_t len)
         }
         else
         {
-            loop_->runInLoop(std::bind(&TcpConnection::sendInLoop, this, data, len));
+            loop_->runInLoop(std::bind(static_cast<void(TcpConnection::*)(const void*, size_t)>
+                            (&TcpConnection::sendInLoop), this, data, len));
         }
     }
 }
@@ -74,9 +75,15 @@ void TcpConnection::send(ByteBuffer* buffer)
         }
         else
         {
-            loop_->runInLoop(std::bind(&TcpConnection::sendInLoop2, shared_from_this(), buffer->retrieveAllAsString()));
+            loop_->runInLoop(std::bind(static_cast<void(TcpConnection::*)(const std::string&)>(&TcpConnection::sendInLoop),
+                        shared_from_this(), buffer->retrieveAllAsString()));
         }
     }
+}
+
+void TcpConnection::sendInLoop(const std::string& buffer)
+{
+    sendInLoop(buffer.data(), buffer.size());
 }
 
 void TcpConnection::sendInLoop(const void* data, size_t len)
@@ -128,11 +135,6 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
             channel_->enableWriting();
         }
     }
-}
-
-void TcpConnection::sendInLoop2(const std::string& buffer)
-{
-    sendInLoop(buffer.data(), buffer.size());
 }
 
 void TcpConnection::shutdown()

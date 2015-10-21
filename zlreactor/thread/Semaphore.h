@@ -9,7 +9,7 @@
 #ifndef ZL_SEMAPHORE_H
 #define ZL_SEMAPHORE_H
 #include "OsDefine.h"
-#include "NonCopy.h"
+#include "base/NonCopy.h"
 #include <exception>
 #ifdef OS_WINDOWS
 #include <Windows.h>
@@ -23,12 +23,12 @@ NAMESPACE_ZL_THREAD_START
 class Semaphore : public zl::NonCopy
 {
 public:
-    explicit Semaphore(int initial = 0)
+    explicit Semaphore(int initialcount = 0, int maxcount = 0x7fffffff)
     {
     #ifdef OS_WINDOWS
-        sem_ = ::CreateSemaphore(NULL, initial, 0x7fffffff, NULL);
+        sem_ = ::CreateSemaphore(NULL, initialcount, maxcount, NULL);
     #elif defined(OS_LINUX)
-        sem_init(&sem_, false, initial);
+        sem_init(&sem_, false, initialcount);
     #endif
     }
 
@@ -45,7 +45,7 @@ public:
     bool wait()
     {
     #ifdef OS_WINDOWS
-        return ::WaitForSingleObject(&sem_, 0) == WAIT_OBJECT_0;
+        return ::WaitForSingleObject(sem_, INFINITE) == WAIT_OBJECT_0;
     #elif defined(OS_LINUX)
         return sem_wait(&sem_) == 0;
     #endif
@@ -54,7 +54,7 @@ public:
     bool wait(int64_t timeoutMs)
     {
     #ifdef OS_WINDOWS
-        return ::WaitForSingleObject(&sem_, timeoutMs) == WAIT_OBJECT_0;
+        return ::WaitForSingleObject(sem_, timeoutMs) == WAIT_OBJECT_0;
     #elif defined(OS_LINUX)
         struct timespec ts;
         struct timeval tv;

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <assert.h>
+#include <vector>
 #include <exception>
 #include "base/ScopeExitGuard.h"
 using namespace std;
@@ -118,6 +119,50 @@ void test_scopeexitguard()
     }
 }
 
+void test_differentWaysToBind()
+{
+    cout << "##############  test_differentWaysToBind  ##############\n";
+    vector<int> v;
+    void (vector<int>::*push_back)(int const&) = &vector<int>::push_back;
+
+    v.push_back(1);
+    {
+        // binding to member function.
+        ScopeExitGuard g = makeScopeExitGuard(std::bind(&vector<int>::pop_back, &v));
+    }
+    assert(0 == v.size());
+
+    {
+        // bind member function with args. v is passed-by-value!
+        ScopeExitGuard g = makeScopeExitGuard(std::bind(push_back, v, 2));
+    }
+    assert(0 == v.size()); // push_back happened on a copy of v... fail!
+
+    // pass in an argument by pointer so to avoid copy.
+    {
+        ScopeExitGuard g = makeScopeExitGuard(std::bind(push_back, &v, 4));
+    }
+    assert(1 == v.size());
+
+    {
+        // pass in an argument by reference so to avoid copy.
+        ScopeExitGuard g = makeScopeExitGuard(std::bind(push_back, std::ref(v), 4));
+    }
+    assert(2 == v.size());
+
+    // lambda with a reference to v
+    {
+        ScopeExitGuard g = makeScopeExitGuard([&] { v.push_back(5); });
+    }
+    assert(3 == v.size());
+
+    // lambda with a copy of v
+    {
+        ScopeExitGuard g = makeScopeExitGuard([v]() mutable { v.push_back(6); });
+    }
+    assert(3 == v.size());
+}
+
 namespace test_rb
 {
     bool init1(test *t) { return true; }
@@ -170,13 +215,53 @@ namespace test_rb
         // do something for t
     }
 }
+namespace test_rb2
+{
+    void testUndoAction(bool failure)
+    {
+        vector<int64_t> v;
+        {
+            v.push_back(1);
 
+            // The guard is triggered to undo the insertion unless dismiss() is called.
+            ScopeExitGuard guard = makeScopeExitGuard([&] { v.pop_back(); });
+
+            // Do some action; Use the failure argument to pretend
+            // if it failed or succeeded.
+
+            // if there was no failure, dismiss the undo guard action.
+            if (!failure)
+            {
+                guard.dismiss();
+            }
+        } // all stack allocated in the mini-scope will be destroyed here.
+
+        if (failure)
+        {
+            assert(0 == v.size()); // the action failed => undo insertion
+        }
+        else
+        {
+            assert(1 == v.size()); // the action succeeded => keep insertion
+        }
+    }
+
+    void test_rollback()
+    {
+        testUndoAction(false);
+        testUndoAction(true);
+    }
+}
 
 int main()
 {
     test_scopeexitguard();
 
+    test_differentWaysToBind();
+
     test_rb::test_rollback();
+
+    test_rb2::test_rollback();
 
     return 0;
 }

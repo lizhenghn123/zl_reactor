@@ -13,65 +13,64 @@
 #endif
 NAMESPACE_ZL_START
 
-
 std::string FileUtil::getBinaryPath()
 {
-	const static size_t pathLen = 1024;
-	char appFullPath[pathLen] = { 0 };
+    const static size_t pathLen = 1024;
+    char appFullPath[pathLen] = { 0 };
 
 #ifdef OS_LINUX
-	const static char *procExe = "/proc/self/exe";
-	if (::readlink(procExe, appFullPath, pathLen) != -1)
-		return appFullPath;
+    const static char *procExe = "/proc/self/exe";
+    if (::readlink(procExe, appFullPath, pathLen) != -1)
+        return appFullPath;
 #else
-	if (::GetModuleFileName(NULL, appFullPath, pathLen))
-		return appFullPath;
+    if (::GetModuleFileName(NULL, appFullPath, pathLen))
+        return appFullPath;
 #endif
 
-	return "";
+    return "";
 }
 
 std::string FileUtil::getBinaryName()
 {
-	std::string path = getBinaryPath();
-	if (path.empty())
-		return path;
+    std::string path = getBinaryPath();
+    if (path.empty())
+        return path;
 
 #ifdef OS_LINUX
-	size_t pos = path.find_last_of("/");
-	if (pos != std::string::npos)
-		path = path.substr(pos + 1);
-	return path;
+    size_t pos = path.find_last_of("/");
+    if (pos != std::string::npos)
+        path = path.substr(pos + 1);
+    return path;
 #else
-	size_t pos = path.find_last_of("\\/:");
-	if (pos != std::string::npos)
-		path = path.substr(pos + 1);
-	pos = path.find_last_of('.');
-	if (pos != std::string::npos)
-		path = path.substr(0, pos);
-	return path;
+    size_t pos = path.find_last_of("\\/:");
+    if (pos != std::string::npos)
+        path = path.substr(pos + 1);
+    pos = path.find_last_of('.');
+    if (pos != std::string::npos)
+        path = path.substr(0, pos);
+    return path;
 #endif
 }
 
 std::string FileUtil::getBinaryDir()
 {
-	std::string path = getBinaryPath();
-	if (path.empty())
-		return path;
+    std::string path = getBinaryPath();
+    if (path.empty())
+        return path;
 
 #ifdef OS_LINUX
-	size_t pos = path.find_last_of("/");
-	if (pos != std::string::npos)
-		path = path.substr(0, pos);
-	return path;
+    size_t pos = path.find_last_of("/");
+    if (pos != std::string::npos)
+        path = path.substr(0, pos);
+    return path;
 #else
-	size_t pos = path.find_last_of("\\/:");
-	if (pos != std::string::npos)
-		path = path.substr(0, pos);
-	pos = path.find_last_of('.');
-	if (pos != std::string::npos)
-		path = path.substr(0, pos);
-	return path;
+    size_t pos = path.find_last_of("\\/:");
+    if (pos != std::string::npos)
+        path = path.substr(0, pos);
+    pos = path.find_last_of('.');
+    if (pos != std::string::npos)
+        path = path.substr(0, pos);
+    return path;
 #endif
 }
 

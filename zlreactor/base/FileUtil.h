@@ -14,17 +14,17 @@ NAMESPACE_ZL_START
 
 namespace FileUtil
 {
-	string getBinaryPath();
-	string getBinaryName();
-	string getBinaryDir();
+    string getBinaryPath();
+    string getBinaryName();
+    string getBinaryDir();
 
-	bool   isDirectory(const char *dir);
-	bool   createRecursionDir(const char *dir);
+    bool   isDirectory(const char *dir);
+    bool   createRecursionDir(const char *dir);
 
-	bool   isFileExist(const char *filepath);
-	long   getFileSize(FILE *file);
-	long   getFileSize(const char *filepath);
-	size_t readFile(const char *filepath, std::string& buf);
+    bool   isFileExist(const char *filepath);
+    long   getFileSize(FILE *file);
+    long   getFileSize(const char *filepath);
+    size_t readFile(const char *filepath, std::string& buf);
 };
 
 using namespace FileUtil;
