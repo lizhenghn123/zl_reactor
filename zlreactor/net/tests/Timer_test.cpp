@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include "net/EventLoop.h"
 #include "thread/Thread.h"
+#include "base/StopWatch.h"
+#include "base/Logger.h"
 using namespace zl;
 using namespace zl::net;
 
@@ -34,10 +36,27 @@ void cancel(TimerId timer)
     printf("cancelled at %s\n", Timestamp::now().toString().c_str());
 }
 
+void bench()
+{
+	EventLoop loop;
+	zl::base::StopWatch sw;
+	for(int i = 0; i < 100000; ++i)
+	{
+		loop.addTimer(printTid, 1, false);
+	}
+	std::cout << sw.elapsedTimeInMill() << " ms\n";
+}
+
+bool dobench = false;
 int main()
 {
     printTid();
-    sleep(1);
+	if(dobench)
+	{
+	    LOG_DISABLE_ALL;
+	    bench();
+	}
+	else
     {
         EventLoop loop;
         g_loop = &loop;
@@ -57,4 +76,5 @@ int main()
         loop.loop();
         print("main loop exits");
     }
+	return 0;
 }

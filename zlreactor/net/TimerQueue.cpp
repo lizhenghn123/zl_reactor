@@ -7,7 +7,8 @@
 NAMESPACE_ZL_NET_START
 
 TimerQueue::TimerQueue(EventLoop* loop)
-    : loop_(loop), callingTimesFunctor_(false)
+    : loop_(loop)
+    , callingTimesFunctor_(false)
 {
 
 }
@@ -24,7 +25,7 @@ TimerQueue::~TimerQueue()
 
 TimerId TimerQueue::addTimer(const TimerCallback& cb, const Timestamp& when, double interval)
 {
-    int id = ++atomic_;
+    TimerId id = ++atomic_;
     Timer *timer = new Timer(id, cb, when, interval);
     loop_->runInLoop(std::bind(&TimerQueue::addTimerInLoop, this, timer));
     return id;
@@ -91,16 +92,16 @@ void TimerQueue::runTimer(const Timestamp& now)
     callingTimesFunctor_ = true;
     cancelTimers_.clear();  // just for saving cancel timers when runTimer
 
-    std::vector< Entry > expired = getExpiredTimers(now);
+    std::vector<Entry> expired = getExpiredTimers(now);
 
-    for (std::vector< Entry >::iterator it = expired.begin(); it != expired.end(); ++it)
+    for (std::vector<Entry>::iterator it = expired.begin(); it != expired.end(); ++it)
     {
         it->second->trigger();
     }
 
     callingTimesFunctor_ = false;
 
-    for (std::vector< Entry >::iterator it = expired.begin(); it != expired.end(); ++it)
+    for (std::vector<Entry>::iterator it = expired.begin(); it != expired.end(); ++it)
     {
         Timer *timer = it->second;
         if(timer->repeat() && cancelTimers_.find(timer->id()) == cancelTimers_.end())
@@ -118,9 +119,9 @@ void TimerQueue::runTimer(const Timestamp& now)
     assert(timers_.size() == activeTimers_.size());
 }
 
-std::vector< TimerQueue::Entry > TimerQueue::getExpiredTimers(const Timestamp& now)
+std::vector<TimerQueue::Entry> TimerQueue::getExpiredTimers(const Timestamp& now)
 {
-    std::vector< Entry > expired;
+    std::vector<Entry> expired;
 
     Entry piovt(now, reinterpret_cast<Timer*>(INT_MAX));
     TimerList::iterator end = timers_.lower_bound(piovt); // return the pos of that not less than piovt

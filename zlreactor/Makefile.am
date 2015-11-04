@@ -64,7 +64,6 @@ libzlreactor_la_SOURCES =                             \
 					 net/TcpServer.cpp                \
 					 net/TcpClient.cpp                \
 					 net/TcpConnector.cpp             \
-					 net/Timer.cpp                    \
 					 net/TimerQueue.cpp               \
 					 net/Eventfd.cpp                  \
 					 net/Timerfd.cpp                  \
