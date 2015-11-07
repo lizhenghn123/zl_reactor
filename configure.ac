@@ -93,6 +93,7 @@ AC_CONFIG_FILES([Makefile
                 tests/bind_tcp_udp/Makefile
                 tests/backtrace_test/Makefile
                 tests/server_aio/Makefile
+                tests/proxy_server/Makefile
                ])
 
 AC_OUTPUT

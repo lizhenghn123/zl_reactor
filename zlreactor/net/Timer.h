@@ -19,13 +19,15 @@ class EventLoop;
 class Timer
 {
 public:
-    Timer(int id, const TimerCallback& cb, const Timestamp& when, double interval)
-        : id_(id), callback_(cb), when_(when), interval_(interval)
+    Timer(TimerId id, const TimerCallback& cb, const Timestamp& when, double interval)
+        : id_(id)
+        , callback_(cb)
+        , when_(when)
+        , interval_(interval)
     {
-
     }
 
-    int  id() const { return id_; }
+    TimerId  id() const { return id_; }
 
     Timestamp expires_at() const { return when_; }
 
@@ -46,7 +48,7 @@ public:
     }
 
 private:
-    int           id_;
+    TimerId       id_;
     TimerCallback callback_;
     Timestamp     when_;
     double        interval_;  // second

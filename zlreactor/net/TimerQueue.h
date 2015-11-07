@@ -26,7 +26,7 @@ class EventLoop;
 class TimerQueue
 {
     typedef std::pair<Timestamp, Timer*>         Entry;
-    typedef std::set< Entry >                    TimerList;
+    typedef std::set<Entry>                      TimerList;
     typedef std::unordered_map<TimerId, Timer*>  TimerMap;
     typedef std::unordered_set<TimerId>          CancelTimerList;
 
@@ -44,12 +44,11 @@ private:
     void addTimerInLoop(Timer* timer);
     void cancelTimerInLoop(TimerId id);
     void addTimer(Timer* timer);
-    std::vector< Entry > getExpiredTimers(const Timestamp& now);
+    std::vector<Entry> getExpiredTimers(const Timestamp& now);
 
 private:
     TimerList                timers_;
     TimerMap                 activeTimers_;
-    //TimerMap               cancelTimers_;
     CancelTimerList          cancelTimers_;
 
     EventLoop                *loop_;
