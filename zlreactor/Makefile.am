@@ -43,6 +43,7 @@ libzlreactor_la_SOURCES =                             \
 					 utility/StringHash.cpp           \
 					 utility/Base64.cpp               \
 					 utility/Md5.cpp                  \
+					 utility/SHA1.cpp                  \
 					 thread/Thread.cpp                \
 					 thread/ThreadGroup.cpp           \
 					 thread/ThreadPool.cpp            \
@@ -74,5 +75,7 @@ libzlreactor_la_SOURCES =                             \
 					 net/http/HttpRequest.cpp         \
 					 net/http/HttpResponse.cpp        \
 					 net/http/HttpContext.cpp         \
-					 net/http/HttpServer.cpp
+					 net/http/HttpServer.cpp          \
+					 net/websocket/WebSocket.cpp      \
+					 net/websocket/WebSocketServer.cpp
 

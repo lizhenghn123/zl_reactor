@@ -92,6 +92,7 @@
     <ClCompile Include="..\..\zlreactor\base\StringUtil.cpp" />
     <ClCompile Include="..\..\zlreactor\base\Timestamp.cpp" />
     <ClCompile Include="..\..\zlreactor\base\ZLog.cpp" />
+    <ClCompile Include="..\..\zlreactor\net\ByteBuffer.cpp" />
     <ClCompile Include="..\..\zlreactor\net\Channel.cpp" />
     <ClCompile Include="..\..\zlreactor\net\Eventfd.cpp" />
     <ClCompile Include="..\..\zlreactor\net\EventLoop.cpp" />
@@ -102,7 +103,6 @@
     <ClCompile Include="..\..\zlreactor\net\http\HttpResponse.cpp" />
     <ClCompile Include="..\..\zlreactor\net\http\HttpServer.cpp" />
     <ClCompile Include="..\..\zlreactor\net\InetAddress.cpp" />
-    <ClCompile Include="..\..\zlreactor\net\NetBuffer.cpp" />
     <ClCompile Include="..\..\zlreactor\net\NetUtil.cpp" />
     <ClCompile Include="..\..\zlreactor\net\poller\EpollPoller.cpp" />
     <ClCompile Include="..\..\zlreactor\net\poller\Poller.cpp" />
@@ -118,6 +118,8 @@
     <ClCompile Include="..\..\zlreactor\net\Timer.cpp" />
     <ClCompile Include="..\..\zlreactor\net\Timerfd.cpp" />
     <ClCompile Include="..\..\zlreactor\net\TimerQueue.cpp" />
+    <ClCompile Include="..\..\zlreactor\net\websocket\WebSocket.cpp" />
+    <ClCompile Include="..\..\zlreactor\net\websocket\WebSocketServer.cpp" />
     <ClCompile Include="..\..\zlreactor\thread\Thread.cpp" />
     <ClCompile Include="..\..\zlreactor\thread\ThreadGroup.cpp" />
     <ClCompile Include="..\..\zlreactor\thread\ThreadPool.cpp" />
@@ -152,6 +154,7 @@
     <ClInclude Include="..\..\zlreactor\base\Timestamp.h" />
     <ClInclude Include="..\..\zlreactor\base\ZLog.h" />
     <ClInclude Include="..\..\zlreactor\Define.h" />
+    <ClInclude Include="..\..\zlreactor\net\ByteBuffer.h" />
     <ClInclude Include="..\..\zlreactor\net\CallBacks.h" />
     <ClInclude Include="..\..\zlreactor\net\Channel.h" />
     <ClInclude Include="..\..\zlreactor\net\Eventfd.h" />
@@ -164,7 +167,6 @@
     <ClInclude Include="..\..\zlreactor\net\http\HttpResponse.h" />
     <ClInclude Include="..\..\zlreactor\net\http\HttpServer.h" />
     <ClInclude Include="..\..\zlreactor\net\InetAddress.h" />
-    <ClInclude Include="..\..\zlreactor\net\NetBuffer.h" />
     <ClInclude Include="..\..\zlreactor\net\NetUtil.h" />
     <ClInclude Include="..\..\zlreactor\net\PipePairFactory.h" />
     <ClInclude Include="..\..\zlreactor\net\poller\EpollPoller.h" />
@@ -181,6 +183,8 @@
     <ClInclude Include="..\..\zlreactor\net\Timer.h" />
     <ClInclude Include="..\..\zlreactor\net\Timerfd.h" />
     <ClInclude Include="..\..\zlreactor\net\TimerQueue.h" />
+    <ClInclude Include="..\..\zlreactor\net\websocket\WebSocket.h" />
+    <ClInclude Include="..\..\zlreactor\net\websocket\WebSocketServer.h" />
     <ClInclude Include="..\..\zlreactor\OsDefine.h" />
     <ClInclude Include="..\..\zlreactor\thread\Atomic.h" />
     <ClInclude Include="..\..\zlreactor\thread\BlockingQueue.h" />

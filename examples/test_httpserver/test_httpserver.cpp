@@ -22,8 +22,8 @@ void printRequestHeaders(const HttpRequest& req)
     std::cout << "---------------print request headers---------------\n";
     std::cout << "Headers " << req.method() << " " << req.path() << std::endl;
     
-    const std::map<string, string> &headers = req.headers();
-    for (map<string, string>::const_iterator it = headers.begin(); it != headers.end(); ++it)
+    const HttpRequest::HeadersMap &headers = req.headers();
+    for (HttpRequest::HeadersMap::const_iterator it = headers.begin(); it != headers.end(); ++it)
     {
         std::cout << it->first << ": " << it->second << std::endl;
     }
