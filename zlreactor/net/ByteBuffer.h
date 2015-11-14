@@ -196,6 +196,12 @@ public:    // search
         return crlf == beginWrite() ? NULL : crlf;
     }
 
+    const char* findDoubleCRLF() const
+    {
+        const char* crlf = std::search(peek(), beginWrite(), kDoubleCRLF, kDoubleCRLF + 4);
+        return crlf == beginWrite() ? NULL : crlf;
+    }
+
     const char* findEOL() const
     {
         const void* eol = memchr(peek(), '\n', readableBytes());
@@ -298,6 +304,7 @@ private:
     std::vector<char> buffer_;     // save buffer of network endian
 
     static const char kCRLF[];
+    static const char kDoubleCRLF[];
 };
 
 NAMESPACE_ZL_NET_END

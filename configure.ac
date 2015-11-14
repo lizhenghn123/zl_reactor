@@ -78,6 +78,7 @@ AC_CONFIG_FILES([Makefile
                 examples/test_httpserver/Makefile
                 examples/echo/Makefile
                 examples/thread_bench/Makefile
+                examples/test_websocketserver/Makefile
                 tests/Makefile
                 tests/stress_client/Makefile
                 tests/universal_timer/Makefile

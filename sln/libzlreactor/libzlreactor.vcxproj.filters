@@ -19,6 +19,9 @@
     <Filter Include="net\http">
       <UniqueIdentifier>{f2ce9e9a-e26b-47b4-a594-8d51a8381023}</UniqueIdentifier>
     </Filter>
+    <Filter Include="net\websocket">
+      <UniqueIdentifier>{25a56918-2dbc-499f-9b34-fc65459d7f76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\zlreactor\utility\Base64.cpp">
@@ -55,9 +58,6 @@
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\zlreactor\net\InetAddress.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\zlreactor\net\NetBuffer.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\..\zlreactor\net\NetUtil.cpp">
@@ -158,6 +158,15 @@
     </ClCompile>
     <ClCompile Include="..\..\zlreactor\net\poller\EpollPoller.cpp">
       <Filter>net\poller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\ByteBuffer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\websocket\WebSocket.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zlreactor\net\websocket\WebSocketServer.cpp">
+      <Filter>net\websocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -273,9 +282,6 @@
     <ClInclude Include="..\..\zlreactor\net\InetAddress.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\zlreactor\net\NetBuffer.h">
-      <Filter>net</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\zlreactor\net\NetUtil.h">
       <Filter>net</Filter>
     </ClInclude>
@@ -381,6 +387,15 @@
     </ClInclude>
     <ClInclude Include="..\..\zlreactor\net\poller\EpollPoller.h">
       <Filter>net\poller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\ByteBuffer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\websocket\WebSocket.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zlreactor\net\websocket\WebSocketServer.h">
+      <Filter>net\websocket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

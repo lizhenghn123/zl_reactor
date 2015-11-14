@@ -12,14 +12,19 @@
 #include "base/Timestamp.h"
 #include "net/http/HttpProtocol.h"
 #include "net/http/HttpKeyValue.h"
+#include "base/StringUtil.h"
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 
 class HttpRequest
 {
 public:
+    /// 请求解析出来的key-value对，key忽略大小写
+    typedef std::map<std::string, std::string, zl::base::string_cmp_nocase> HeadersMap;
+
     static bool parseRequest(const char* requestLineandHeader, size_t len, HttpRequest* req);
 
+public:
     HttpRequest()
         : method_(HttpInvalid)
         , version_(HTTP_VERSION_0_0)
@@ -86,14 +91,14 @@ public:
     string getHeader(const string& field) const
     {
         string result;
-        std::map<string, string>::const_iterator it = headers_.find(field);
+        HeadersMap::const_iterator it = headers_.find(field);
         if (it != headers_.end())
         {
             result = it->second;
         }
         return result;
     }
-    const std::map<string, string>& headers() const  { return headers_; }
+    const HeadersMap& headers() const  { return headers_; }
 
     void swap(HttpRequest& that)
     {
@@ -109,7 +114,7 @@ public:
     {
         std::string result;
         result = std::string(methodStr()) + " " + path() + "?" + query() + " " + versionStr() + "\r\n";
-        for (std::map<std::string, std::string>::const_iterator it = headers_.begin(); it != headers_.end(); ++it)
+        for (HeadersMap::const_iterator it = headers_.begin(); it != headers_.end(); ++it)
         {
             result += it->first;
             result += ": ";
@@ -126,7 +131,7 @@ private:
     std::string  body_;
     Timestamp    receiveTime_;
 
-    std::map<string, string> headers_;
+    HeadersMap   headers_;
 };
 
 NAMESPACE_ZL_NET_END
