@@ -19,3 +19,5 @@ SUBDIRS                += idleconnection
 SUBDIRS                += echo
 
 SUBDIRS                += thread_bench 
+
+SUBDIRS                += test_websocketserver 

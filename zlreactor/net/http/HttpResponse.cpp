@@ -29,8 +29,14 @@ void HttpResponse::compileToBuffer(ByteBuffer* output) const
     output->write(buf, strlen(buf));
 
     // respone headers
-    output->write("Server: ");       output->write(serverName_);   output->write("\r\n");
-    output->write("Content-Type: "); output->write(contentType_);  output->write("\r\n");
+    if(!serverName_.empty())
+    {
+        output->write("Server: ");       output->write(serverName_);   output->write("\r\n");
+    }
+    if(!contentType_.empty())
+    {
+        output->write("Content-Type: "); output->write(contentType_);  output->write("\r\n");
+    }
 
     if (closeConnection_)
     {
@@ -51,14 +57,13 @@ void HttpResponse::compileToBuffer(ByteBuffer* output) const
         output->write("\r\n");
     }
 
+    output->write("\r\n");    //消息头和消息体之间有一个空行
     // response body, maybe
     if(!body_.empty())
     {
         memset(buf, 0, 128);
         snprintf(buf, sizeof buf, "Content-Length: %d\r\n", static_cast<int>(body_.size()));
         output->write(buf, strlen(buf));
-
-        output->write("\r\n");    //消息头和消息体之间有一个空行
         output->write(body_);
     }
 

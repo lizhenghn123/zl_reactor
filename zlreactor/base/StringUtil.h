@@ -36,6 +36,27 @@ T strTo(const std::string& str)
     return t;
 }
 
+/// 字符串忽略大小写比较, 可用作容器（比如map、set）的比较子
+struct string_cmp_nocase : public std::binary_function<std::string, std::string, bool>
+{
+public:
+    bool operator()(const std::string& lhs, const std::string& rhs) const
+    {
+        std::string::const_iterator p = lhs.begin();
+        std::string::const_iterator p2 = rhs.begin();
+
+        while (p != lhs.end() && p2 != rhs.end())
+        {
+            if (toupper(*p) != toupper(*p2))
+                return (toupper(*p) < toupper(*p2) ? 1 : 0);
+            ++p;
+            ++p2;
+        }
+
+        return (lhs.size() == rhs.size()) ? 0 : (lhs.size() < rhs.size()) ? 1 : 0;
+    }
+};
+
 /** 格式化字符串 */
 size_t stringFormatAppend(std::string *dst, const char* format, ...);
 
