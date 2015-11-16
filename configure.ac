@@ -56,9 +56,14 @@ if test $ac_cv_c_endian = little; then
   AC_DEFINE(ENDIAN_LITTLE, 1, [machine is littleendian])
 fi
 ])
-
 AC_C_ENDIAN
 
+dnl Enable test suites
+AC_ARG_ENABLE(test-suites,
+    [AC_HELP_STRING([--enable-test-suites],[build test suites])],
+    [enable_test_suites="$enableval"],
+    [enable_test_suites="no"])
+AM_CONDITIONAL([ZL_TEST_SUITES],[test "${enable_test_suites}" != "no"])
 
 AC_CONFIG_FILES([Makefile
                 zlreactor/Makefile
