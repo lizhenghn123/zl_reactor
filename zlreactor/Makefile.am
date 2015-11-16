@@ -1,6 +1,9 @@
 # tests case
 MAINTAINERCLEANFILES   = Makefile.in
+
+if ZL_TEST_SUITES
 SUBDIRS = base thread net
+endif
 
 # lib case 
 
