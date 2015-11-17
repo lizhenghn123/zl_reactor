@@ -9,9 +9,41 @@ namespace net
 {
 namespace ws
 {
+
+    uint16_t ntoh16(uint16_t x)
+    {
+        return ((x & 0x00ff) << 8) | ((x & 0xff00) >> 8);
+    }
+    uint16_t hton16(uint16_t x)
+    {
+        return ((x & 0x00ff) << 8) | ((x & 0xff00) >> 8);
+    }
+    uint64_t ntoh64(uint64_t x)
+    {
+        return (x >> 56) |
+            ((x << 40) & 0x00ff000000000000LL) |
+            ((x << 24) & 0x0000ff0000000000LL) |
+            ((x << 8) & 0x000000ff00000000LL) |
+            ((x >> 8) & 0x00000000ff000000LL) |
+            ((x >> 24) & 0x0000000000ff0000LL) |
+            ((x >> 40) & 0x000000000000ff00LL) |
+            (x << 56);
+    }
+    uint64_t hton64(uint64_t x)
+    {
+        return (x >> 56) |
+            ((x << 40) & 0x00ff000000000000LL) |
+            ((x << 24) & 0x0000ff0000000000LL) |
+            ((x << 8) & 0x000000ff00000000LL) |
+            ((x >> 8) & 0x00000000ff000000LL) |
+            ((x >> 24) & 0x0000000000ff0000LL) |
+            ((x >> 40) & 0x000000000000ff00LL) |
+            (x << 56);
+    }
+
     std::string makeHandshakeResponse(const char* seckey)
     {
-        std::string answer;
+        std::string answer("");
         answer += "HTTP/1.1 101 Switching Protocols\r\n";
         answer += "Upgrade: WebSocket\r\n";
         answer += "Connection: Upgrade\r\n";
@@ -33,10 +65,7 @@ namespace ws
         return answer;
     }
 
-    // see https://github.com/katzarsky/WebSocket/blob/master/WebSocket%2FWebSocket.cpp#L195
-    WsFrameType decodeFrame(const char* inbuf, int inlength, std::vector<char>* outbuf)
-    {
-        /*
+    /*
            0                   1                   2                   3
            0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
            +-+-+-+-+-------+-+-------------+-------------------------------+
@@ -69,12 +98,12 @@ namespace ws
            Payload length:  7 bits, 7+16 bits, or 7+64 bits
 
            Masking-key:  0 or 4 bytes
-        */
-
-        if(inlength < 3) return INCOMPLETE_FRAME;
+    */
+    WsFrameType decodeFrame(const char* inbuf, int inlength, std::vector<char>* outbuf)
+    {
+        if(inlength < 3) return WS_INCOMPLETE_FRAME;
 
         const unsigned char* inp = (const unsigned char*)(inbuf);
-        printf("IN:"); for(int i=0; i < 20; i++) printf("%02x ",inp[i]); printf("\n");
 
         unsigned char msg_opcode = inp[0] & 0x0F;
         unsigned char msg_fin = (inp[0] >> 7) & 0x01;
@@ -99,10 +128,10 @@ namespace ws
             payload_length = inp[2] + (inp[3]<<8); 
             pos += 8;
         }
-        //printf("PAYLOAD_LEN: %08x\n", payload_length);
+
         if(inlength < payload_length+pos)
         {
-            return INCOMPLETE_FRAME;
+            return WS_INCOMPLETE_FRAME;
         }
         else if(payload_length > (int)outbuf->size())
         {
@@ -112,7 +141,6 @@ namespace ws
         if(msg_masked)
         {
             mask = *((unsigned int*)(inp+pos));
-            //printf("MASK: %08x\n", mask);
             pos += 4;
             memcpy(&*outbuf->begin(), (void*)(inp+pos), payload_length);
             // unmask data:
@@ -123,25 +151,31 @@ namespace ws
             }
         }
         (*outbuf)[payload_length] = 0;
-        //*(c+payload_length) = 0;
-        //outbuf[payload_length] = 0;
-        //*outlength = payload_length+1;
 
-        //printf("TEXT: %s\n", outbuf);
-        //printf("msg_opcode : %d\n", msg_opcode);
-        if(msg_opcode == 0x0) return (msg_fin) ? TEXT_FRAME : INCOMPLETE_TEXT_FRAME; // continuation frame ?
-        if(msg_opcode == 0x1) return (msg_fin) ? TEXT_FRAME : INCOMPLETE_TEXT_FRAME;
-        if(msg_opcode == 0x2) return (msg_fin) ? BINARY_FRAME : INCOMPLETE_BINARY_FRAME;
-        if(msg_opcode == 0x8) return CLOSE_FRAME;
-        if(msg_opcode == 0x9) return PING_FRAME;
-        if(msg_opcode == 0xA) return PONG_FRAME;
+        if(0)
+        {
+            printf("IN:");
+            for(int i=0; i < 20; i++)
+                printf("%02x ",inp[i]);
+            printf("\n");
+            printf("OPCODE : %d\n", msg_opcode);
+            printf("PAYLOAD_LEN: %08x\n", payload_length);
+            printf("MASK: %08x\n", mask);
+            printf("TEXT: %s\n", outbuf->data());
+        }
+        if(msg_opcode == 0x0) return (msg_fin) ? WS_TEXT_FRAME : WS_INCOMPLETE_TEXT_FRAME; // continuation frame ?
+        if(msg_opcode == 0x1) return (msg_fin) ? WS_TEXT_FRAME : WS_INCOMPLETE_TEXT_FRAME;
+        if(msg_opcode == 0x2) return (msg_fin) ? WS_BINARY_FRAME : WS_INCOMPLETE_BINARY_FRAME;
+        if(msg_opcode == 0x8) return WS_CLOSE_FRAME;
+        if(msg_opcode == 0x9) return WS_PING_FRAME;
+        if(msg_opcode == 0xA) return WS_PONG_FRAME;
 
-        return ERROR_FRAME;
+        return WS_ERROR_FRAME;
     }
 
     int encodeFrame(WsFrameType frame_type, const char* msg, int msg_length, char* outbuf, int bufsize)
     {
-        std::cout << "makeFrame : " <<  frame_type << "\t" << msg << "\t" << msg_length << "\n";
+        //std::cout << "makeFrame : " <<  frame_type << "\t" << msg << "\t" << msg_length << "\n";
         int pos = 0;
         int size = msg_length; 
         outbuf[pos++] = (unsigned char)frame_type; // text frame
