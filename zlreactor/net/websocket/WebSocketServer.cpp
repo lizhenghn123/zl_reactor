@@ -1,11 +1,11 @@
 #include "net/websocket/WebSocketServer.h"
+#include "Define.h"
 #include "base/Logger.h"
 #include "net/TcpConnection.h"
 #include "net/http/HttpContext.h"
 #include "net/http/HttpRequest.h"
 #include "net/http/HttpResponse.h"
 #include "net/websocket/WebSocket.h"
-#include "WebSocket.h"
 
 namespace zl
 {
@@ -72,18 +72,17 @@ void WsServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestam
     {
         std::vector<char> outbuf;
         WsFrameType type = decodeFrame(buf->peek(), buf->readableBytes(), &outbuf);
-        
         std::cout << "getFrame : " << type << "\t" << outbuf.size() << "\t[" << outbuf.data() << "]\n";
-        if(type == INCOMPLETE_TEXT_FRAME || type == INCOMPLETE_BINARY_FRAME)
+        if(type == WS_INCOMPLETE_TEXT_FRAME || type == WS_INCOMPLETE_BINARY_FRAME)
         {
             return;
         }
-        else if(type == TEXT_FRAME || type == BINARY_FRAME)
+        else if(type == WS_TEXT_FRAME || type == WS_BINARY_FRAME)
         {
             buf->retrieveAll();
             onmessage_(conn, outbuf, receiveTime);
         }
-        else if(type == CLOSE_FRAME)
+        else if(type == WS_CLOSE_FRAME)
         {
             conn->shutdown();
             onclose_(conn);
@@ -92,7 +91,6 @@ void WsServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestam
         {
             LOG_WARN("No this [%d] opcode handler", type);
         }
-
     }
 }
 
@@ -140,12 +138,27 @@ void WsServer::handshake(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestam
 
 void WsServer::sendText(const TcpConnectionPtr& conn, const char* data, size_t size)
 {
-    send(conn, data, size, TEXT_FRAME);
+    send(conn, data, size, WS_TEXT_FRAME);
 }
 
 void WsServer::sendBinary(const TcpConnectionPtr& conn, const char* data, size_t size)
 {
-    send(conn, data, size, BINARY_FRAME);
+    send(conn, data, size, WS_BINARY_FRAME);
+}
+
+void WsServer::close(const TcpConnectionPtr& conn, WsCloseReason code, const char* reason)
+{
+    size_t len = 0;
+    char buf[128];
+    unsigned short code_be = hton16(code);
+    memcpy(buf, &code_be, 2);
+    len += 2;
+    if (reason)
+    {
+        len += ZL_SNPRINTF(buf + 2, 124, "%s", reason);
+    }
+
+    send(conn, buf, len, WS_CLOSE_FRAME);
 }
 
 void WsServer::send(const TcpConnectionPtr& conn, const char* data, size_t size, WsFrameType type/* = TEXT_FRAME*/)
@@ -155,8 +168,6 @@ void WsServer::send(const TcpConnectionPtr& conn, const char* data, size_t size,
     {
         char outbuf[max_send_buf_size];
         int encodesize = encodeFrame(type, data, size, outbuf, max_send_buf_size);
-        //std::string s((char*)outbuf2+2, size-2);
-        //std::cout << "...(" << s << ")...\n";
         conn->send(outbuf, encodesize);
     }
     else

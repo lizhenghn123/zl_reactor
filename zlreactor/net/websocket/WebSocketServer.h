@@ -56,7 +56,8 @@ public:
 
     void sendText(const TcpConnectionPtr& conn, const char* data, size_t size);
     void sendBinary(const TcpConnectionPtr& conn, const char* data, size_t size);
-    void send(const TcpConnectionPtr& conn, const char* data, size_t size, WsFrameType type = TEXT_FRAME);
+    void send(const TcpConnectionPtr& conn, const char* data, size_t size, WsFrameType type = WS_TEXT_FRAME);
+    void close(const TcpConnectionPtr& conn, WsCloseReason code = WS_CLOSE_NORMAL, const char* reason = NULL);
 
 private:
     void onConnection(const TcpConnectionPtr& conn);
