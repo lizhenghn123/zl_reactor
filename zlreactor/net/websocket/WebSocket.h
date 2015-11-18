@@ -9,28 +9,67 @@ namespace net
 {
 namespace ws
 {
+	// see rfc6455 : http://tools.ietf.org/rfc/rfc6455.txt
+
+    #define WS_FRAGMENT_FIN (1 << 7)
+
+    enum WsOpcode
+    {
+        WS_OPCODE_CONTINUE          = 0x0,
+        WS_OPCODE_TEXT              = 0x1,
+        WS_OPCODE_BINARY            = 0x2,
+        WS_OPCODE_CLOSE             = 0x8,
+        WS_OPCODE_PING              = 0x9,
+        WS_OPCODE_PONG              = 0xa
+    };
+
     enum WsFrameType
     {
-        ERROR_FRAME                 = 0xFF00,
-        INCOMPLETE_FRAME            = 0xFE00,
+        WS_ERROR_FRAME              = 0xFF00,
+        WS_INCOMPLETE_FRAME         = 0xFE00,
 
-        OPENING_FRAME               = 0x3300,
-        CLOSING_FRAME               = 0x3400,
+        WS_OPENING_FRAME            = 0x3300,
+        WS_CLOSING_FRAME            = 0x3400,
 
-        INCOMPLETE_TEXT_FRAME       = 0x01,
-        INCOMPLETE_BINARY_FRAME     = 0x02,
+        WS_INCOMPLETE_TEXT_FRAME    = 0x01,
+        WS_INCOMPLETE_BINARY_FRAME  = 0x02,
 
-        TEXT_FRAME                  = 0x81,       // 128 + 1
-        BINARY_FRAME                = 0x82,       // 128 + 2
-        RSV3_FRAME                  = 0x83,       // 128 + 3
-        RSV4_FRAME                  = 0x84,
-        RSV5_FRAME                  = 0x85,
-        RSV6_FRAME                  = 0x86,
-        RSV7_FRAME                  = 0x87,
-        CLOSE_FRAME                 = 0x88,
-        PING_FRAME                  = 0x89,
-        PONG_FRAME                  = 0x8A,
+        WS_TEXT_FRAME               = 0x81,       // 128 + 1 == WS_FRAGMENT_FIN | WS_OPCODE_TEXT
+        WS_BINARY_FRAME             = 0x82,       // 128 + 2
+        WS_RSV3_FRAME               = 0x83,       // 128 + 3
+        WS_RSV4_FRAME               = 0x84,
+        WS_RSV5_FRAME               = 0x85,
+        WS_RSV6_FRAME               = 0x86,
+        WS_RSV7_FRAME               = 0x87,
+        WS_CLOSE_FRAME              = 0x88,
+        WS_PING_FRAME               = 0x89,
+        WS_PONG_FRAME               = 0x8A,
     };
+
+    enum WsCloseReason
+    {
+        WS_CLOSE_NORMAL             = 1000,
+        WS_CLOSE_GOING_AWAY         = 1001,
+        WS_CLOSE_PROTOCOL_ERROR     = 1002,
+        WS_CLOSE_NOT_ALLOWED        = 1003,
+        WS_CLOSE_RESERVED           = 1004,
+        WS_CLOSE_NO_CODE            = 1005,
+        WS_CLOSE_DIRTY              = 1006,
+        WS_CLOSE_WRONG_TYPE         = 1007,
+        WS_CLOSE_POLICY_VIOLATION   = 1008,
+        WS_CLOSE_MESSAGE_TOO_BIG    = 1009,
+        WS_CLOSE_UNEXPECTED_ERROR   = 1011
+    };
+
+    #define STATE_SHOULD_CLOSE (1 << 0)
+    #define STATE_SENT_CLOSE_FRAME (1 << 1)
+    #define STATE_CONNECTING (1 << 2)
+    #define STATE_IS_SSL (1 << 3)
+    #define STATE_CONNECTED (1 << 4)
+    #define STATE_SENDING_FRAGMENT (1 << 5)
+    #define STATE_RECEIVING_FRAGMENT (1 << 6)
+    #define STATE_RECEIVED_CLOSE_FRAME (1 << 7)
+    #define STATE_FAILING_CONNECTION (1 << 8)
 
     enum WsConnState
     {
@@ -100,6 +139,11 @@ namespace ws
     };
 
 
+    uint16_t ntoh16(uint16_t);
+    uint16_t hton16(uint16_t);
+    uint64_t ntoh64(uint64_t);
+    uint64_t hton64(uint64_t);
+
     /// 设置返回给client的握手响应
     /// seckey : client的"Sec-WebSocket-Key"对应值
     std::string makeHandshakeResponse(const char* seckey);
@@ -117,7 +161,6 @@ namespace ws
     /// outbuf     : 编码缓冲区
     /// outsize    : 编码缓冲区大小（建议outsize > insize + 10）
     int encodeFrame(WsFrameType frame_type, const char* msg, int msgsize, char* outbuf, int outsize);
-
 
 }  }  }  // namespace zl { namespace net { namespace ws {
 #endif  /* ZL_WEBSOCKET_UTIL_H */
