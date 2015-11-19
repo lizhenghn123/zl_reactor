@@ -215,6 +215,7 @@ void EventLoop::assertInLoopThread() const
 
 void EventLoop::wakeupPoller()
 {
+    LOG_INFO("EventLoop::wakeupPoller()");
     uint64_t value = 1;
     ssize_t n = wakeupfd_->write(value);
     if (n != sizeof(value))

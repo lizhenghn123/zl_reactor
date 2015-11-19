@@ -38,9 +38,26 @@ TcpConnection::TcpConnection(EventLoop* loop, int sockfd, const InetAddress& loc
 TcpConnection::~TcpConnection()
 {
     LOG_INFO("TcpConnection::~TcpConnection(),[%0x] [%d][%0x][%0x]", this, socket_->fd(), socket_, channel_);
-    ZL_ASSERT(state_ == kDisconnected)(state_);
+    //ZL_ASSERT(state_ == kDisconnected)(state_); // 异常断开或者EventLoop主动退出时，tcp conn未必是disconnected状态
     Safe_Delete(socket_);
     Safe_Delete(channel_);
+}
+
+const char* TcpConnection::getState(StateE state)
+{
+    switch (state)
+    {
+    case kDisconnected:
+        return "TcpDisconnected";  break;
+    case kConnecting:
+        return "TcpConnecting";    break;
+    case kConnected:
+        return "TcpConnected";     break;
+    case kDisconnecting:
+        return "TcpDisconnecting"; break;
+    default:
+        assert(0); break;
+    }
 }
 
 void TcpConnection::send(const void* data, size_t len)
@@ -157,6 +174,7 @@ void TcpConnection::shutdownInLoop()
 
 void TcpConnection::connectEstablished()
 {
+    LOG_INFO("TcpConnection::connectEstablished fd = %d, state = %s", socket_->fd(), getState(state_));
     loop_->assertInLoopThread();
     ZL_ASSERT(state_ == kConnecting)(state_);
     setState(kConnected);
@@ -168,7 +186,7 @@ void TcpConnection::connectEstablished()
 
 void TcpConnection::connectDestroyed()
 {
-    LOG_INFO("TcpConnection::connectDestroyed fd = %d, state = %d", socket_->fd(), state_);
+    LOG_INFO("TcpConnection::connectDestroyed fd = %d, state = %s", socket_->fd(), getState(state_));
     loop_->assertInLoopThread();
     if (state_ == kConnected)
     {
@@ -184,7 +202,7 @@ void TcpConnection::connectDestroyed()
 
 void TcpConnection::handleRead(Timestamp receiveTime)
 {
-    LOG_INFO("TcpConnection::handleRead fd = %d, state = %d", socket_->fd(), state_);
+    LOG_INFO("TcpConnection::handleRead fd = %d, state = %s", socket_->fd(), getState(state_));
     loop_->assertInLoopThread();
     std::string data;
     size_t n = socket_->recv(data);
@@ -205,7 +223,7 @@ void TcpConnection::handleRead(Timestamp receiveTime)
 
 void TcpConnection::handleWrite()
 {
-    LOG_INFO("TcpConnection::handleWrite fd = %d, state = %d", socket_->fd(), state_);
+    LOG_INFO("TcpConnection::handleWrite fd = %d, state = %s", socket_->fd(), getState(state_));
     loop_->assertInLoopThread();
 
     if (channel_->isWriting())
@@ -230,7 +248,7 @@ void TcpConnection::handleWrite()
         }
         else
         {
-            LOG_ERROR("TcpConnection::handleWrite, send fail fd = %d, state = %d, send = %d", socket_->fd(), state_, n);
+            LOG_ERROR("TcpConnection::handleWrite, send fail fd = %d, state = %s, send = %d", socket_->fd(), getState(state_), n);
              if (state_ == kDisconnecting)
              { 
                  shutdownInLoop();
@@ -239,7 +257,7 @@ void TcpConnection::handleWrite()
     }
     else
     {
-        LOG_ERROR("TcpConnection::handleWrite,  no more writing, fd = %d, state = %d", socket_->fd(), state_);
+        LOG_ERROR("TcpConnection::handleWrite,  no more writing, fd = %d, state = %s", socket_->fd(), getState(state_));
     }
 }
 

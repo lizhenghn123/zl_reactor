@@ -66,6 +66,7 @@ public:
 
 private:
     enum StateE { kDisconnected, kConnecting, kConnected, kDisconnecting };
+    const char* getState(StateE);
     void handleRead(Timestamp receiveTime);
     void handleWrite();
     void handleClose();
