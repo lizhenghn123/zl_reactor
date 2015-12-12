@@ -278,7 +278,8 @@ namespace ProcessUtil
         assert(pf);
 
         char buffer[512] = { 0 };
-        fgets(buffer, 512, pf);
+        char* dummy = fgets(buffer, 512, pf);
+        (void)dummy; 
         //printf("====%s====\n", buffer);
         pclose(pf);
 
@@ -395,7 +396,8 @@ namespace ProcessUtil
         FILE* pf = popen(cmd, "r");
         assert(pf);
         char buffer[512] = { 0 };
-        fgets(buffer, 512, pf);
+        char* dummy = fgets(buffer, 512, pf);
+        (void)dummy;
         pclose(pf);
 
         std::string result(buffer);
