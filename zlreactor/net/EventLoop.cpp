@@ -91,7 +91,7 @@ void EventLoop::loop()
         #endif
         }
 
-        now = poller_->poll_once(timeoutMs, activeChannels_);
+        now = poller_->pollOnce(timeoutMs, activeChannels_);
         //LOG_INFO("EventLoop::loop [%s][%d]", now.toString().c_str(), activeChannels_.size());
 
         eventHandling_ = true;

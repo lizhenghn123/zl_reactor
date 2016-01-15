@@ -97,7 +97,7 @@ bool PollPoller::removeChannel(Channel *channel)
     return true;
 }
 
-Timestamp PollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
+Timestamp PollPoller::pollOnce(int timeoutMs, ChannelList& activeChannels)
 {
     int numEvents = ::poll(&*pollfds_.begin(), pollfds_.size(), timeoutMs);
     int savedErrno = errno;
@@ -108,14 +108,14 @@ Timestamp PollPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
     }
     else if (numEvents == 0)
     {
-        LOG_INFO("PollPoller::poll_once: nothing happended");
+        LOG_INFO("PollPoller::pollOnce: nothing happended");
     }
     else
     {
         if (savedErrno != SOCK_ERR_EINTR)
         {
             errno = savedErrno;
-            LOG_INFO("EpollPoller::poll_once: error [%d]", errno);
+            LOG_INFO("EpollPoller::pollOnce: error [%d]", errno);
         }
     }
     return now;

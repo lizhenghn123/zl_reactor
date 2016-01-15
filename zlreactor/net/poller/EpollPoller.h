@@ -24,7 +24,7 @@ public:
 
     virtual bool removeChannel(Channel *channel);
 
-    virtual Timestamp poll_once(int timeoutMs, ChannelList& activeChannels);
+    virtual Timestamp pollOnce(int timeoutMs, ChannelList& activeChannels);
 
     virtual const char* ioMultiplexerName() const { return "linux_epoll"; }
 
