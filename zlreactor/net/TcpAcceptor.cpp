@@ -72,11 +72,11 @@ void TcpAcceptor::onAccept(Timestamp now)
         }
         else
         {
-            if(SOCKET_ERROR == SOCK_ERR_EAGAIN || SOCKET_ERROR == SOCK_ERR_EWOULDBLOCK)
+            if(ZL_SOCKET_ERROR == SOCK_ERR_EAGAIN || ZL_SOCKET_ERROR == SOCK_ERR_EWOULDBLOCK)
             {
                 //We have processed all incoming  connections.
             }
-            else if(SOCKET_ERROR == SOCK_ERR_EMFILE)
+            else if(ZL_SOCKET_ERROR == SOCK_ERR_EMFILE)
             {
                 // TODO 此时因为达到最大文件描述符而接收失败，因为poller使用的是水平触发模式，
                 // 会导致poller持续通知可读事件，因此造成acceptor频繁去accept，直至进程中关闭了

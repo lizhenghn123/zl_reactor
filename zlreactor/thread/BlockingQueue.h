@@ -196,15 +196,19 @@ protected:
     QueueType              queue_;
 };
 
-/* using is not support in VS2010*/
-//template <typename Job>
-//using BlockingFifoQueue = BlockingQueue<Job, std::queue<Job>, tagFIFO>;
 
-//template <typename Job>
-//using BlockingFiloQueue = BlockingQueue<Job, std::stack<Job>, tagFILO>;
+#if defined(ZL_CXX11_ENABLED) || (_MSC_VER >= 1700)   /// using is not support in VS2010
 
-//template <typename Job>
-//using BlockingPrioQueue = BlockingQueue<Job, std::priority_queue<Job>, tagPRIO>;
+template <typename Job>
+using BlockingFifoQueue = BlockingQueue<Job, std::queue<Job>, tagFIFO>;
+    
+template <typename Job>
+using BlockingFiloQueue = BlockingQueue<Job, std::stack<Job>, tagFILO>;
+    
+template <typename Job>
+using BlockingPrioQueue = BlockingQueue<Job, std::priority_queue<Job>, tagPRIO>;
+
+#endif
 
 NAMESPACE_ZL_THREAD_END
 #endif /* ZL_BLOCKINGQUEUE_H */

@@ -118,9 +118,9 @@ int Socket::recv(std::string& data) const
         }
         else if(len < 0)
         {
-            if(SOCK_ERR_RW_RETRY(SOCKET_ERROR))
+            if(SOCK_ERR_RW_RETRY(ZL_SOCKET_ERROR))
                 continue;
-            else if(SOCKET_ERROR == SOCK_ERR_EWOULDBLOCK)
+            else if(ZL_SOCKET_ERROR == SOCK_ERR_EWOULDBLOCK)
                 break;
             else
                 return len; // 发生了错误

@@ -17,7 +17,7 @@
 namespace zl{
 namespace base{
 
-/** 任意类型转为字符串 */
+/// 任意类型转为字符串
 template <typename T>
 inline std::string toStr(const T& t)
 {
@@ -26,7 +26,7 @@ inline std::string toStr(const T& t)
     return oss.str();
 }
 
-/** 字符串转为某一类型 */
+/// 字符串转为某一类型
 template <typename T>
 T strTo(const std::string& str)
 {
@@ -57,14 +57,14 @@ public:
     }
 };
 
-/** 格式化字符串 */
+/// 格式化字符串
 size_t stringFormatAppend(std::string *dst, const char* format, ...);
 
 size_t stringFormat(std::string *dst, const char* format, ...);
 
 std::string stringFormat(const char *format, ...);
 
-/** 将字符串转为小写并返回 */
+/// 将字符串转为小写并返回
 inline std::string toLower(const std::string& str)
 {
     std::string t = str;
@@ -72,7 +72,7 @@ inline std::string toLower(const std::string& str)
     return t;
 }
 
-/** 将字符串转为小写并返回 */
+/// 将字符串转为小写并返回
 inline std::string toUpper(const std::string& str)
 {
     std::string t = str;
@@ -80,34 +80,34 @@ inline std::string toUpper(const std::string& str)
     return t;
 }
 
-/** 去掉字符串中左边的空格 */
-inline void trimLeft(std::string& str)
+/// 去掉字符串中左边的特定单一字符(默认去除空格)
+inline void trimLeft(std::string& str, char delm = ' ')
 {
-    str.erase(0, str.find_first_not_of(' '));
+    str.erase(0, str.find_first_not_of(delm));
 }
 
-/** 去掉字符串中右边的空格 */
-inline void trimRight(std::string& str)
+/// 去掉字符串中右边的特定单一字符(默认去除空格)
+inline void trimRight(std::string& str, char delm = ' ')
 {
-    str.erase(str.find_last_not_of(' ') + 1);
+    str.erase(str.find_last_not_of(delm) + 1);
 }
 
-/** 去掉字符串中两端的空格 */
-inline void trim(std::string& str)
+/// 去掉字符串中两端的特定单一字符(默认去除空格)
+inline void trim(std::string& str, char delm = ' ')
 {
-    trimLeft(str);
-    trimRight(str);
+    trimLeft(str, delm);
+    trimRight(str, delm);
 }
 
-/** 去掉字符串中的所有空格 */
+/// 去掉字符串中的所有空格
 inline void trimAll(std::string& str)
 {
     str.erase(std::remove_if(str.begin(), str.end(),
         std::bind2nd(std::equal_to<char>(), ' ')), str.end());
 }
 
-/** 去掉字符串中的某特定字符串delim并以新字符串s代替 */
-inline void trimAll(std::string& str, const char* delim, const char* s = "")
+/// 去掉字符串中的某特定字符串delim并以新字符串s代替
+inline void replaceAll(std::string& str, const char* delim, const char* s = "")
 {
     size_t len = strlen(delim);
     size_t pos = str.find(delim);
@@ -118,38 +118,38 @@ inline void trimAll(std::string& str, const char* delim, const char* s = "")
     }
 }
 
-/** 去掉字符串中的特定字符 */
+/// 去掉字符串中的特定字符
 inline void erase(std::string& str, const char& charactor)
 {
     str.erase(std::remove_if(str.begin(), str.end(),
         std::bind2nd(std::equal_to<char>(), charactor)), str.end());
 }
 
-/** 判断字符串是否以某一子串为开始 */
+/// 判断字符串是否以某一子串为开始
 inline bool startsWith(const std::string& str, const std::string& substr)
 {
     return str.find(substr) == 0;
 }
 
-/** 判断字符串是否以某一子串为结尾 */
+/// 判断字符串是否以某一子串为结尾
 inline bool endsWith(const std::string& str, const std::string& substr)
 {
     return str.rfind(substr) == (str.length() - substr.length());
 }
 
-/** 比较两个字符串是否相等 */
+/// 比较两个字符串是否相等
 inline bool equals(const std::string& lhs, const std::string& rhs)
 {
     return (lhs) == (rhs);
 }
 
-/** 比较两个字符串是否相等（忽略大小写） */
+/// 比较两个字符串是否相等（忽略大小写）
 inline bool iequals(const std::string& lhs, const std::string& rhs)
 {
     return toLower(lhs) == toLower(rhs);
 }
 
-/** 字符串替换 */
+/// 字符串替换
 inline void replace(std::string& strSrc, const std::string& strDeliter, const std::string& strDest)
 {
     while(true)
@@ -163,7 +163,7 @@ inline void replace(std::string& strSrc, const std::string& strDeliter, const st
     }
 }
 
-/** 字符串分隔，insertEmpty : 如果有连续的delim，是否插入空串 */
+/// 字符串分隔，insertEmpty : 如果有连续的delim，是否插入空串
 inline void split(const std::string& str, std::vector<std::string>& result,
     const std::string& delim = " ", bool insertEmpty = false)
 {
@@ -191,22 +191,18 @@ inline void split(const std::string& str, std::vector<std::string>& result,
     }
 }
 
-/** 字符串合并 */
+/// 字符串合并
 template< typename SequenceSequenceT, typename Range1T>
 inline typename SequenceSequenceT::value_type join(const SequenceSequenceT& Input, const Range1T& Separator)
 {
-    // Define working types
     typedef typename SequenceSequenceT::value_type ResultT;
     typedef typename SequenceSequenceT::const_iterator InputIteratorT;
 
-    // Parse input
-     InputIteratorT itBegin = Input.begin();
-     InputIteratorT itEnd = Input.end();
+    InputIteratorT itBegin = Input.begin();
+    InputIteratorT itEnd = Input.end();
 
-    // Construct container to hold the result
     ResultT Result;
 
-    // Append first element
     if(itBegin != itEnd)
     {
         Result += *itBegin;
@@ -226,21 +222,16 @@ template<typename SequenceSequenceT, typename Range1T, typename PredicateT>
 inline typename SequenceSequenceT::value_type 
     join_if(const SequenceSequenceT& Input, const Range1T& Separator, PredicateT Pred)
 {
-    // Define working types
     typedef typename SequenceSequenceT::value_type ResultT;
     typedef typename SequenceSequenceT::const_iterator InputIteratorT;
 
-    // Parse input
     InputIteratorT itBegin = Input.begin();
     InputIteratorT itEnd = Input.end();
 
-    // Construct container to hold the result
     ResultT Result;
 
-    // Roll to the first element that will be added
     while(itBegin!=itEnd && !Pred(*itBegin)) ++itBegin;
 
-    // Append first element
     if(itBegin != itEnd)
     {
         Result += *itBegin;
@@ -261,4 +252,4 @@ inline typename SequenceSequenceT::value_type
 
 } // namespace base
 } // namespace zl
-#endif  /* ZL_STRING_UTIL_H */
+#endif  // ZL_STRING_UTIL_H
