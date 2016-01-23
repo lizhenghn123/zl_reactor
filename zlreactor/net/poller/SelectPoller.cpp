@@ -80,7 +80,7 @@ bool SelectPoller::removeChannel(Channel *channel)
 	return true;
 }
 
-Timestamp SelectPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
+Timestamp SelectPoller::pollOnce(int timeoutMs, ChannelList& activeChannels)
 {	
 	struct timeval tv = {0, 0};
 	struct timeval *ptv = &tv;
@@ -96,25 +96,25 @@ Timestamp SelectPoller::poll_once(int timeoutMs, ChannelList& activeChannels)
 	writefds_  = select_writefds_;
 	exceptfds_ = select_exceptfds_;
 
-    //LOG_INFO("SelectPoller::poll_once: [%d][%d]", *fdlist_.begin(), timeoutMs);
+    //LOG_INFO("SelectPoller::pollOnce: [%d][%d]", *fdlist_.begin(), timeoutMs);
     int numEvents = ::select(*fdlist_.begin() + 1, &readfds_, &writefds_, &exceptfds_, ptv);
     int savedErrno = errno;
     Timestamp now(Timestamp::now());
     if (numEvents > 0)
     {
-		LOG_INFO("SelectPoller::poll_once: events happended[%d]", numEvents);
+		LOG_INFO("SelectPoller::pollOnce: events happended[%d]", numEvents);
         fireActiveChannels(numEvents, activeChannels);
     }
     else if (numEvents == 0)
     {
-        LOG_INFO("SelectPoller::poll_once: nothing happended");
+        LOG_INFO("SelectPoller::pollOnce: nothing happended");
     }
     else
     {
         if (savedErrno != SOCK_ERR_EINTR)
         {
             errno = savedErrno;
-            LOG_INFO("SelectPoller::poll_once: error [%d]", errno);
+            LOG_INFO("SelectPoller::pollOnce: error [%d]", errno);
         }
     }
     return now;

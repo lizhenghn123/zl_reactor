@@ -224,15 +224,19 @@ protected:
     QueueType               queue_;
 };
 
-/* using is not support in VS2010*/
-//template <typename Job>
-//using BoundedBlockingFifoQueue = BoundedBlockingQueue<Job, std::queue<Job>, tagFIFO>;
 
-//template <typename Job>
-//using BoundedBlockingFiloQueue = BoundedBlockingQueue<Job, std::stack<Job>, tagFILO>;
+#if defined(ZL_CXX11_ENABLED) || (_MSC_VER >= 1700)   /// using is not support in VS2010
 
-//template <typename Job>
-//using BoundedBlockingPrioQueue = BoundedBlockingQueue<Job, std::priority_queue<Job>, tagPRIO>;
+template <typename Job>
+using FifoBoundedBlockingQueue = BoundedBlockingQueue<Job, std::queue<Job>, tagFIFO>;
+
+template <typename Job>
+using FiloBoundedBlockingQueue = BoundedBlockingQueue<Job, std::stack<Job>, tagFILO>;
+
+template <typename Job>
+using PrioBoundedBlockingQueue = BoundedBlockingQueue<Job, std::priority_queue<Job>, tagPRIO>;
+
+#endif
 
 NAMESPACE_ZL_THREAD_END
 #endif /* ZL_BOUNDEDBLOCKINGQUEUE_H */

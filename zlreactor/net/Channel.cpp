@@ -17,7 +17,7 @@ Channel::~Channel()
 {
     if (loop_->isInLoopThread())
     {
-        assert(!loop_->hasChannel(this));
+        // assert(!loop_->hasChannel(this));  // 原因同TcpConnection析构时的注释
     }
 }
 

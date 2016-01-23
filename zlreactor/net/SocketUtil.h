@@ -37,7 +37,7 @@ typedef int          ssize_t;
 #define ZL_INVALID_SOCKET         INVALID_SOCKET
 #define RECV_FLAGS                MSG_WAITALL
 #define SEND_FLAGS                0
-#define SOCKET_ERROR              ::WSAGetLastError()
+#define ZL_SOCKET_ERROR           ::WSAGetLastError()
 #define SOCK_ERR_EINTR            WSAEINTR
 #define SOCK_ERR_EAGAIN           EAGAIN
 #define SOCK_ERR_EINPROGRESS      WSAEINPROGRESS
@@ -82,7 +82,7 @@ typedef socklen_t    ZL_SOCKLEN;
 #define ZL_INVALID_SOCKET         -1
 #define RECV_FLAGS                0
 #define SEND_FLAGS                MSG_NOSIGNAL
-#define SOCKET_ERROR              errno
+#define ZL_SOCKET_ERROR           errno
 #define SOCK_ERR_EINTR            EINTR         // 阻塞的操作被取消阻塞的调用打断
 #define SOCK_ERR_EAGAIN           EAGAIN        // 非阻塞下没有 连接请求/数据可读/数据可写, 不是错误
 #define SOCK_ERR_EINPROGRESS      EINPROGRESS   // 操作正在进行中，一个阻塞的操作正在执行

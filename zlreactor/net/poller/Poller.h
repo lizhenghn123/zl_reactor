@@ -59,7 +59,7 @@ public:
     /// @param timeout     : 超时时间(单位:ms)
     /// @param activeConns : 已激活的连接
     /// @return            : io multiplexing 调用返回时的当前时间
-    virtual Timestamp poll_once(int timeoutMs, ChannelList &activeChannels) = 0;
+    virtual Timestamp pollOnce(int timeoutMs, ChannelList &activeChannels) = 0;
 
     /// 获得当前所使用的IO复用backends的描述
     /// @return            : IO复用的名称
