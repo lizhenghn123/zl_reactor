@@ -17,6 +17,12 @@
 namespace zl{
 namespace base{
 
+
+/// 格式化字符串
+size_t stringFormatAppend(std::string *dst, const char* format, ...);
+size_t stringFormat(std::string *dst, const char* format, ...);
+std::string stringFormat(const char *format, ...);
+
 /// 任意类型转为字符串
 template <typename T>
 inline std::string toStr(const T& t)
@@ -57,13 +63,6 @@ public:
     }
 };
 
-/// 格式化字符串
-size_t stringFormatAppend(std::string *dst, const char* format, ...);
-
-size_t stringFormat(std::string *dst, const char* format, ...);
-
-std::string stringFormat(const char *format, ...);
-
 /// 将字符串转为小写并返回
 inline std::string toLower(const std::string& str)
 {
@@ -78,51 +77,6 @@ inline std::string toUpper(const std::string& str)
     std::string t = str;
     std::transform(t.begin(), t.end(), t.begin(), ::toupper);
     return t;
-}
-
-/// 去掉字符串中左边的特定单一字符(默认去除空格)
-inline void trimLeft(std::string& str, char delm = ' ')
-{
-    str.erase(0, str.find_first_not_of(delm));
-}
-
-/// 去掉字符串中右边的特定单一字符(默认去除空格)
-inline void trimRight(std::string& str, char delm = ' ')
-{
-    str.erase(str.find_last_not_of(delm) + 1);
-}
-
-/// 去掉字符串中两端的特定单一字符(默认去除空格)
-inline void trim(std::string& str, char delm = ' ')
-{
-    trimLeft(str, delm);
-    trimRight(str, delm);
-}
-
-/// 去掉字符串中的所有空格
-inline void trimAll(std::string& str)
-{
-    str.erase(std::remove_if(str.begin(), str.end(),
-        std::bind2nd(std::equal_to<char>(), ' ')), str.end());
-}
-
-/// 去掉字符串中的某特定字符串delim并以新字符串s代替
-inline void replaceAll(std::string& str, const char* delim, const char* s = "")
-{
-    size_t len = strlen(delim);
-    size_t pos = str.find(delim);
-    while (pos != std::string::npos)
-    {
-        str.replace(pos, len, s);
-        pos = str.find(delim, pos);
-    }
-}
-
-/// 去掉字符串中的特定字符
-inline void erase(std::string& str, const char& charactor)
-{
-    str.erase(std::remove_if(str.begin(), str.end(),
-        std::bind2nd(std::equal_to<char>(), charactor)), str.end());
 }
 
 /// 判断字符串是否以某一子串为开始
@@ -143,24 +97,46 @@ inline bool equals(const std::string& lhs, const std::string& rhs)
     return (lhs) == (rhs);
 }
 
-/// 比较两个字符串是否相等（忽略大小写）
-inline bool iequals(const std::string& lhs, const std::string& rhs)
+/// 去掉字符串中左边属于字符串delim中任一字符的所有字符(默认去除空格)
+inline std::string trimLeft(std::string& str, const char* delim = " ")
 {
-    return toLower(lhs) == toLower(rhs);
+    str.erase(0, str.find_first_not_of(delim));
+    return str;
 }
 
-/// 字符串替换
-inline void replace(std::string& strSrc, const std::string& strDeliter, const std::string& strDest)
+/// 去掉字符串中右边属于字符串delim中任一字符的所有字符(默认去除空格)
+inline std::string trimRight(std::string& str, const char* delim = " ")
 {
-    while(true)
-    {
-        size_t pos = strSrc.find(strDeliter);
+    str.erase(str.find_last_not_of(delim) + 1);
+    return str;
+}
 
-        if(pos != std::string::npos)
-            strSrc.replace(pos, strDeliter.size(), strDest);
-        else
-            break;
+/// 去掉字符串中两端属于字符串delim中任一字符的所有字符(默认去除空格)
+inline std::string trim(std::string& str, const char* delim = " ")
+{
+    trimLeft(str, delim);
+    trimRight(str, delim);
+    return str;
+}
+
+/// 去掉字符串中的所有特定单一字符
+inline std::string erase(std::string& str, char c = ' ')
+{
+    str.erase(std::remove_if(str.begin(), str.end(), std::bind2nd(std::equal_to<char>(), c)), str.end());
+    return str;
+}
+
+/// 字符串替换 去掉字符串中的某特定字符串delim并以新字符串s代替
+inline std::string replaceAll(std::string& str, const char* delim, const char* s = "")
+{
+    size_t len = strlen(delim);
+    size_t pos = str.find(delim);
+    while (pos != std::string::npos)
+    {
+        str.replace(pos, len, s);
+        pos = str.find(delim, pos);
     }
+    return str;
 }
 
 /// 字符串分隔，insertEmpty : 如果有连续的delim，是否插入空串
