@@ -185,18 +185,18 @@ int SocketUtil::setSendTimeout(ZL_SOCKET fd, long long timeoutMs)
     tv.tv_sec = timeoutMs / 1000;
     tv.tv_usec = (timeoutMs % 1000) * 1000;
 
-    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) == -1;
+    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
 }
 
 int SocketUtil::getSendTimeout(ZL_SOCKET fd, long long *timeoutMs)
 {
     struct timeval tv;
-    if (ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) == 0)
+    int ret = ZL_GETSOCKOPT(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
+    if (ret == 0)
     {
         *timeoutMs = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-        return 0;
     }
-    return -1;
+    return ret;
 }
 
 int SocketUtil::setRecvTimeout(ZL_SOCKET fd, long long timeoutMs)
@@ -205,7 +205,7 @@ int SocketUtil::setRecvTimeout(ZL_SOCKET fd, long long timeoutMs)
     tv.tv_sec = timeoutMs / 1000;
     tv.tv_usec = (timeoutMs % 1000) * 1000;
 
-    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) == -1;
+    return ZL_SETSOCKOPT(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
 }
 
 int SocketUtil::getRecvTimeout(ZL_SOCKET fd, long long* timeoutMs)
