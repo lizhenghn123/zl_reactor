@@ -35,7 +35,7 @@ private:
 
 private:
     std::string           name_;
-    bool                  running_;
+    volatile bool         running_;
     BlockingQueue<Task>   queue_;
     std::vector<Thread *> threads_;
 };

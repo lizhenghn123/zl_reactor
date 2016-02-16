@@ -1,7 +1,8 @@
 #CXXFLAGS += -Wall -static -g -O2 -fPIC
 
 bin_PROGRAMS = Atomic_test BlockingQueue_test CountDownLatch_test Thread_test ThreadLocal_test \
-               Mutex_test ThreadGroup_test BlockingQueueWorker_test ThreadId_test BlockingQueue_bench
+               Mutex_test ThreadGroup_test BlockingQueueWorker_test ThreadId_test BlockingQueue_bench \
+			   ConcurrentQueue_test ConcurrentHashMap_test
 
 INCLUDES = -I../../../zlreactor
 CPPFLAGS = -std=c++0x
@@ -31,3 +32,7 @@ ThreadLocal_test_SOURCES     = ThreadLocal_test.cpp
 ThreadGroup_test_SOURCES     = ThreadGroup_test.cpp
 
 BlockingQueueWorker_test_SOURCES = BlockingQueueWorker_test.cpp
+
+ConcurrentQueue_test_SOURCES = ConcurrentQueue_test.cpp
+
+ConcurrentHashMap_test_SOURCES = ConcurrentHashMap_test.cpp
