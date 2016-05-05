@@ -37,7 +37,7 @@ TcpConnection::TcpConnection(EventLoop* loop, int sockfd, const InetAddress& loc
 
 TcpConnection::~TcpConnection()
 {
-    LOG_INFO("TcpConnection::~TcpConnection(),[%0x] [%d][%0x][%0x]", this, socket_->fd(), socket_, channel_);
+    //LOG_INFO("TcpConnection::~TcpConnection(),[%0x] [%d][%0x][%0x]", this, socket_->fd(), socket_, channel_);
     //ZL_ASSERT(state_ == kDisconnected)(state_); // 异常断开或者EventLoop主动退出时，tcp conn未必是disconnected状态
     Safe_Delete(socket_);
     Safe_Delete(channel_);
@@ -202,7 +202,7 @@ void TcpConnection::connectDestroyed()
 
 void TcpConnection::handleRead(Timestamp receiveTime)
 {
-    LOG_INFO("TcpConnection::handleRead fd = %d, state = %s", socket_->fd(), getState(state_));
+    LOG_DEBUG("TcpConnection::handleRead fd = %d, state = %s", socket_->fd(), getState(state_));
     loop_->assertInLoopThread();
     std::string data;
     size_t n = socket_->recv(data);
@@ -223,7 +223,7 @@ void TcpConnection::handleRead(Timestamp receiveTime)
 
 void TcpConnection::handleWrite()
 {
-    LOG_INFO("TcpConnection::handleWrite fd = %d, state = %s", socket_->fd(), getState(state_));
+    LOG_DEBUG("TcpConnection::handleWrite fd = %d, state = %s", socket_->fd(), getState(state_));
     loop_->assertInLoopThread();
 
     if (channel_->isWriting())

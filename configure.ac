@@ -100,6 +100,7 @@ AC_CONFIG_FILES([Makefile
                 tests/backtrace_test/Makefile
                 tests/server_aio/Makefile
                 tests/proxy_server/Makefile
+                tests/pingpong/Makefile
                ])
 
 AC_OUTPUT
