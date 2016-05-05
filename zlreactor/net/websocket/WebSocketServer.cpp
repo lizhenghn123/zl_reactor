@@ -163,7 +163,7 @@ void WsServer::close(const TcpConnectionPtr& conn, WsCloseReason code, const cha
 
 void WsServer::send(const TcpConnectionPtr& conn, const char* data, size_t size, WsFrameType type/* = TEXT_FRAME*/)
 {
-    const static int max_send_buf_size = 4096;
+    const static size_t max_send_buf_size = 4096;
     if(size < max_send_buf_size)
     {
         char outbuf[max_send_buf_size];

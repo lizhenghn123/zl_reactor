@@ -31,3 +31,6 @@ SUBDIRS                += backtrace_test
 SUBDIRS                += server_aio
 
 SUBDIRS                += proxy_server
+
+SUBDIRS                += pingpong
+

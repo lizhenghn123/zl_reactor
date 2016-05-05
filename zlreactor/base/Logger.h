@@ -102,7 +102,7 @@ private:
 
 #define LOG_SET_DEBUG_MODE            LOG_SET_PRIORITY(zl::base::ZL_LOG_PRIO_DEBUG)
 #define LOG_SET_LOGHANDLER(handler)   zl::base::Logger::setLogHandler(handler)
-#define LOG_SET_PRIORITY(priority)    zl::base::Logger::setLogPriority((ZLogPriority)priority)
+#define LOG_SET_PRIORITY(priority)    zl::base::Logger::setLogPriority((zl::base::ZLogPriority)priority)
 #define LOG_CONSOLE_OUTPUT(optval)    zl::base::Logger::setConsoleOutput(optval)
 #define LOG_DISABLE_ALL               zl::base::Logger::disableLog()
 
