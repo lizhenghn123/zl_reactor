@@ -98,21 +98,21 @@ inline bool equals(const std::string& lhs, const std::string& rhs)
 }
 
 /// 去掉字符串中左边属于字符串delim中任一字符的所有字符(默认去除空格)
-inline std::string trimLeft(std::string& str, const char* delim = " ")
+inline std::string& trimLeft(std::string& str, const char* delim = " ")
 {
     str.erase(0, str.find_first_not_of(delim));
     return str;
 }
 
 /// 去掉字符串中右边属于字符串delim中任一字符的所有字符(默认去除空格)
-inline std::string trimRight(std::string& str, const char* delim = " ")
+inline std::string& trimRight(std::string& str, const char* delim = " ")
 {
     str.erase(str.find_last_not_of(delim) + 1);
     return str;
 }
 
 /// 去掉字符串中两端属于字符串delim中任一字符的所有字符(默认去除空格)
-inline std::string trim(std::string& str, const char* delim = " ")
+inline std::string& trim(std::string& str, const char* delim = " ")
 {
     trimLeft(str, delim);
     trimRight(str, delim);
