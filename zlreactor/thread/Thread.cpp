@@ -185,7 +185,6 @@ namespace this_thread
         return g_currentTid;
     }
 
-
     Thread::id get_id()
     {
     #if defined(OS_WINDOWS)

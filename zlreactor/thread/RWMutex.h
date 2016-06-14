@@ -111,12 +111,12 @@ private:
 #endif
 };
 
-
+template <class LockType>
 class RWMutexReadLockGuard
 {
     DISALLOW_COPY_AND_ASSIGN(RWMutexReadLockGuard);
 public:
-    explicit RWMutexReadLockGuard(RWMutex& mutex) : mutex_(mutex)
+    explicit RWMutexReadLockGuard(LockType& mutex) : mutex_(mutex)
     {
         mutex_.readLock();
     }
@@ -125,14 +125,15 @@ public:
         mutex_.readUnLock();
     }
 private:
-    RWMutex& mutex_;
+    LockType& mutex_;
 };
 
+template <class LockType>
 class RWMutexReadTryLockGuard
 {
     DISALLOW_COPY_AND_ASSIGN(RWMutexReadTryLockGuard);
 public:
-    explicit RWMutexReadTryLockGuard(RWMutex& mutex) : mutex_(mutex)
+    explicit RWMutexReadTryLockGuard(LockType& mutex) : mutex_(mutex)
     {
         isLocked_ = mutex_.tryReadLock();
     }
@@ -148,14 +149,15 @@ public:
 
 private:
     bool  isLocked_;
-    RWMutex& mutex_;
+    LockType& mutex_;
 };
 
+template <class LockType>
 class RWMutexWriteLockGuard
 {
     DISALLOW_COPY_AND_ASSIGN(RWMutexWriteLockGuard);
 public:
-    explicit RWMutexWriteLockGuard(RWMutex& mutex) : mutex_(mutex)
+    explicit RWMutexWriteLockGuard(LockType& mutex) : mutex_(mutex)
     {
         mutex_.writeLock();
     }
@@ -164,14 +166,15 @@ public:
         mutex_.writeUnLock();
     }
 private:
-    RWMutex& mutex_;
+    LockType& mutex_;
 };
 
+template <class LockType>
 class RWMutexWriteTryLockGuard
 {
     DISALLOW_COPY_AND_ASSIGN(RWMutexWriteTryLockGuard);
 public:
-    explicit RWMutexWriteTryLockGuard(RWMutex& mutex) : mutex_(mutex)
+    explicit RWMutexWriteTryLockGuard(LockType& mutex) : mutex_(mutex)
     {
         isLocked_ = mutex_.tryWriteLock();
     }
@@ -187,7 +190,7 @@ public:
 
 private:
     bool  isLocked_;
-    RWMutex& mutex_;
+    LockType& mutex_;
 };
 
 NAMESPACE_ZL_THREAD_END

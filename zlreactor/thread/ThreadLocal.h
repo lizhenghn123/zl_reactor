@@ -1,7 +1,6 @@
 // ***********************************************************************
 // Filename         : ThreadLocal.h
 // Author           : LIZHENG
-// Created          : 2014-10-07
 // Description      : Thread Local Storage(TLS)
 // 
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.

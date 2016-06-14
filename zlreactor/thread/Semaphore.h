@@ -1,7 +1,6 @@
 // ***********************************************************************
 // Filename         : Semaphore.h
 // Author           : LIZHENG
-// Created          : 2014-06-08
 // Description      : 信号量
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
@@ -17,6 +16,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <sys/time.h>
 #endif
 NAMESPACE_ZL_THREAD_START
 
@@ -47,7 +47,13 @@ public:
     #ifdef OS_WINDOWS
         return ::WaitForSingleObject(sem_, INFINITE) == WAIT_OBJECT_0;
     #elif defined(OS_LINUX)
-        return sem_wait(&sem_) == 0;
+        // see http://stackoverflow.com/questions/2013181/gdb-causes-sem-wait-to-fail-with-eintr-error
+        int rc;
+        do
+        {
+            rc = sem_wait(&sem_);
+        }while (rc == -1 && errno == EINTR);
+        return rc == 0;
     #endif
     }
 
@@ -62,7 +68,7 @@ public:
         int64_t usec = tv.tv_usec + timeoutMs * 1000LL;
         ts.tv_sec = tv.tv_sec + usec / 1000000;
         ts.tv_nsec = (usec % 1000000) * 1000;
-        return sem_timedwait(sem, &ts) == 0;
+        return sem_timedwait(&sem_, &ts) == 0;
     #endif
     }
 
@@ -80,7 +86,11 @@ public:
     #ifdef OS_WINDOWS
         return ::ReleaseSemaphore(sem_, rc, NULL);
     #elif defined(OS_LINUX)
-        return sem_post(&sem_) == 0;
+        while (rc-- > 0)
+        {
+            sem_post(&sem_);
+        }
+        return true;
     #endif
     }
 
@@ -94,3 +104,4 @@ private:
 
 NAMESPACE_ZL_THREAD_END
 #endif  /* ZL_SEMAPHORE_H */
+
