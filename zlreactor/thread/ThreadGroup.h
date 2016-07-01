@@ -8,10 +8,10 @@
 // ***********************************************************************
 #ifndef ZL_THREADGROU_H
 #define ZL_THREADGROU_H
-#include "Define.h"
-#include "base/NonCopy.h"
-#include "thread/Thread.h"
-#include "thread/Mutex.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/Mutex.h"
 NAMESPACE_ZL_THREAD_START
 class Thread;
 

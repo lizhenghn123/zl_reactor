@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_FASTMUTEX_H
 #define ZL_FASTMUTEX_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #elif defined(OS_LINUX)

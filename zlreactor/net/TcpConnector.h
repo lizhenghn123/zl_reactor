@@ -8,10 +8,10 @@
 // ***********************************************************************
 #ifndef ZL_TCPCONNECTOR_H
 #define ZL_TCPCONNECTOR_H
-#include "Define.h"
-#include "base/NonCopy.h"
-#include "net/SocketUtil.h"
-#include "net/InetAddress.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/net/SocketUtil.h"
+#include "zlreactor/net/InetAddress.h"
 NAMESPACE_ZL_NET_START
 class Socket;
 class Channel;

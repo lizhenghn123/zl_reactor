@@ -8,11 +8,11 @@
 // ***********************************************************************
 #ifndef ZL_BOUNDEDBLOCKINGQUEUE_H
 #define ZL_BOUNDEDBLOCKINGQUEUE_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <queue>
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
-#include "thread/BlockingQueue.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/Condition.h"
+#include "zlreactor/thread/BlockingQueue.h"
 
 NAMESPACE_ZL_THREAD_START
 

@@ -7,8 +7,8 @@
 #include <queue>
 #include <deque>
 #include <type_traits>
-#include "thread/Thread.h"
-#include "thread/ConcurrentQueue.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/ConcurrentQueue.h"
 
 // 测试代码参考 https://github.com/shines77/ConcurrentTest.git
 // 这里也说明了std::mutex 效率不如CRITICAL_SECTION

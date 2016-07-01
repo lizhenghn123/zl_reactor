@@ -8,8 +8,8 @@
 // ***********************************************************************
 #ifndef ZL_BLOCKQUEUEWORKER_H
 #define ZL_BLOCKQUEUEWORKER_H
-#include "thread/BlockingQueue.h"
-#include "thread/ThreadGroup.h"
+#include "zlreactor/thread/BlockingQueue.h"
+#include "zlreactor/thread/ThreadGroup.h"
 NAMESPACE_ZL_THREAD_START
 
 template <typename Queue>

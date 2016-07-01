@@ -8,8 +8,8 @@
 // ***********************************************************************
 #ifndef ZL_NETBUFFER_H
 #define ZL_NETBUFFER_H
-#include "Define.h"
-#include "net/NetUtil.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/net/NetUtil.h"
 NAMESPACE_ZL_NET_START
 
 /// A buffer class modeled after org.jboss.netty.buffer.ChannelBuffer

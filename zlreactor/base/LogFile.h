@@ -8,8 +8,8 @@
 // ***********************************************************************
 #ifndef ZL_LOGFILE_H
 #define ZL_LOGFILE_H
-#include "Define.h"
-#include "thread/Mutex.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/thread/Mutex.h"
 NAMESPACE_ZL_BASE_START
 
 #define MAX_LOG_FILE_SIZE  (100 * 1024 * 1024)   /** 默认每个日志文件大小（MB）*/

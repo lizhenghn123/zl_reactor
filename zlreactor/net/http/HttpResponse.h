@@ -8,8 +8,8 @@
 // ***********************************************************************
 #ifndef ZL_HTTPRESPONSE_H
 #define ZL_HTTPRESPONSE_H
-#include "Define.h"
-#include "net/http/HttpProtocol.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/net/http/HttpProtocol.h"
 NAMESPACE_ZL_NET_START
 
 class ByteBuffer;

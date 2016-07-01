@@ -14,7 +14,7 @@
 #include <assert.h>
 #include <list>
 #include <vector>
-#include "thread/Mutex.h"
+#include "zlreactor/thread/Mutex.h"
 namespace zl{ namespace base {
 
 template <typename T, class LockType = zl::thread::Mutex>

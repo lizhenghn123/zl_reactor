@@ -5,14 +5,14 @@
 #include <string>
 #include <iterator>
 #include <assert.h>
-#include "base/Logger.h"
-#include "base/LogFile.h"
-#include "base/Timestamp.h"
-#include "thread/Thread.h"
-#include "thread/Mutex.h"
-#include "thread/BlockingQueue.h"
-#include "thread/ThreadGroup.h"
-#include "thread/CountDownLatch.h"
+#include "zlreactor/base/Logger.h"
+#include "zlreactor/base/LogFile.h"
+#include "zlreactor/base/Timestamp.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/BlockingQueue.h"
+#include "zlreactor/thread/ThreadGroup.h"
+#include "zlreactor/thread/CountDownLatch.h"
 using namespace std;
 using namespace zl;
 using namespace zl::base;
@@ -37,11 +37,11 @@ public:
 
     void run(int jobs)
     {
-        latch_.wait();      // µÈµÈËùÓÐÏß³Ì¶¼ÒÑ¿ªÊ¼Ö´ÐÐÏß³Ìº¯Êý
+        latch_.wait();      // ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¶ï¿½ï¿½Ñ¿ï¿½Ê¼Ö´ï¿½ï¿½ï¿½ß³Ìºï¿½ï¿½ï¿½
 
         assert(jobs >= 0);
         jobs_ = jobs;
-        prducer(jobs);     // Éú²újobs¸öÊý¾Ý
+        prducer(jobs);     // ï¿½ï¿½ï¿½ï¿½jobsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 
     void joinAll()
@@ -74,7 +74,7 @@ private:
         {
             Timestamp now(Timestamp::now());
             queue_.push(now);
-            if (useSleep)   // ÊÇ·ñÐèÒªÈÃÉú²úÕßÐÝÏ¢Ò»»á
+            if (useSleep)   // ï¿½Ç·ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢Ò»ï¿½ï¿½
                 this_thread::sleep_for(chrono::microseconds(1000));
         }
     }
@@ -91,7 +91,7 @@ private:
             Timestamp t(queue_.pop());
             if (t.valid())
             {
-                int64_t us = Timestamp::now() - t;  // ¼ÆËãÎ¢Ãë
+                int64_t us = Timestamp::now() - t;  // ï¿½ï¿½ï¿½ï¿½Î¢ï¿½ï¿½
                 ++delays[us];
             }
             else

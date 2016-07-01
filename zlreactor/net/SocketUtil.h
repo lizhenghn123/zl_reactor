@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_SOCKETUTIL_H
 #define ZL_SOCKETUTIL_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #ifdef OS_WINDOWS
 #include <winsock2.h>
 #include <ws2tcpip.h>

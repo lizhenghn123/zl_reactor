@@ -1,8 +1,8 @@
-#include "net/Channel.h"
+#include "zlreactor/net/Channel.h"
 #include <sstream>
 #include <assert.h>
-#include "base/Logger.h"
-#include "net/EventLoop.h"
+#include "zlreactor/base/Logger.h"
+#include "zlreactor/net/EventLoop.h"
 NAMESPACE_ZL_NET_START
 
 Channel::Channel(EventLoop* loop, int fd)
@@ -17,7 +17,7 @@ Channel::~Channel()
 {
     if (loop_->isInLoopThread())
     {
-        // assert(!loop_->hasChannel(this));  // Ô­ÒòÍ¬TcpConnectionÎö¹¹Ê±µÄ×¢ÊÍ
+        // assert(!loop_->hasChannel(this));  // Ô­ï¿½ï¿½Í¬TcpConnectionï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½×¢ï¿½ï¿½
     }
 }
 

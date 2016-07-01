@@ -1,8 +1,8 @@
-#include "TcpConnection.h"
-#include "net/Socket.h"
-#include "base/Logger.h"
-#include "net/EventLoop.h"
-#include "net/Channel.h"
+#include "zlreactor/net/TcpConnection.h"
+#include "zlreactor/net/Socket.h"
+#include "zlreactor/base/Logger.h"
+#include "zlreactor/net/EventLoop.h"
+#include "zlreactor/net/Channel.h"
 NAMESPACE_ZL_NET_START
 
 void defaultConnectionCallback(const TcpConnectionPtr& conn)
@@ -58,6 +58,7 @@ const char* TcpConnection::getState(StateE state)
     default:
         assert(0); break;
     }
+    return "null";
 }
 
 void TcpConnection::send(const void* data, size_t len)

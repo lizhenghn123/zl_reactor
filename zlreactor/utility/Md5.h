@@ -32,7 +32,7 @@ documentation and/or software.
 
 #ifndef BZF_MD5_H
 #define BZF_MD5_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <string>
 #include <iostream>
 NAMESPACE_ZL_UTIL_START

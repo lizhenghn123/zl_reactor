@@ -7,8 +7,8 @@
 // ***********************************************************************
 #ifndef ZL_SEMAPHORE_H
 #define ZL_SEMAPHORE_H
-#include "OsDefine.h"
-#include "base/NonCopy.h"
+#include "vOsDefine.h"
+#include "zlreactor/base/NonCopy.h"
 #include <exception>
 #ifdef OS_WINDOWS
 #include <Windows.h>

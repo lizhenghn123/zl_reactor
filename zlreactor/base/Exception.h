@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_EXCEPTION_H
 #define ZL_EXCEPTION_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <exception>
 NAMESPACE_ZL_BASE_START
 

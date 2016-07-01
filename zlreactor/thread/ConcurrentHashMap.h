@@ -10,7 +10,7 @@
 #include <vector>
 #include <list>
 #include <utility>
-#include "thread/Mutex.h"
+#include "zlreactor/thread/Mutex.h"
 namespace zl { namespace thread {
     
 template<typename Key, typename Value, typename Hash = std::hash<Key>, typename Equality = std::equal_to<Key> >

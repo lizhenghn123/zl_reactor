@@ -11,9 +11,9 @@
 // ***********************************************************************
 #ifndef ZL_TIMER_H
 #define ZL_TIMER_H
-#include "Define.h"
-#include "base/Timestamp.h"
-#include "base/NonCopy.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/Timestamp.h"
+#include "zlreactor/base/NonCopy.h"
 NAMESPACE_ZL_NET_START
 
 using zl::base::Timestamp;

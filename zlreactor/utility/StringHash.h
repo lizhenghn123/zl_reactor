@@ -2,13 +2,13 @@
 // Filename         : StringHash.h
 // Author           : LIZHENG
 // Created          : 2014-09-23
-// Description      : ×Ö·û´®µÄ¶àÖÖhash¼ÆËã
+// Description      : ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½hashï¿½ï¿½ï¿½ï¿½
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_STRINGHASH_H
 #define ZL_STRINGHASH_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 NAMESPACE_ZL_UTIL_START
 
 //SDBM Hash Function

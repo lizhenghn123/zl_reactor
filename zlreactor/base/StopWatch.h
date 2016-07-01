@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_STOPWTACH_H
 #define ZL_STOPWTACH_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #include <time.h>

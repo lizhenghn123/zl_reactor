@@ -1,12 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <assert.h>
-#include "thread/Thread.h"
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
-#include "thread/ThreadPool.h"
-#include "thread/ThreadLocal.h"
-#include "thread/CountDownLatch.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/Condition.h"
+#include "zlreactor/thread/ThreadPool.h"
+#include "zlreactor/thread/ThreadLocal.h"
+#include "zlreactor/thread/CountDownLatch.h"
 using namespace std;
 using namespace zl;
 using namespace zl::thread;
@@ -251,7 +251,7 @@ namespace threadpool_usage
         this_thread::sleep_for(chrono::milliseconds(1000));
         CountDownLatch latch(1);
         pool.run(std::bind(&CountDownLatch::countDown, &latch));
-        latch.wait(); //Ëü·µ»ØµÄÊ±ºò£¬Ïß³Ì³ØÀïµÄËùÓÐÈÎÎñ¶¼ÒÑ¾­·Ö·¢ÁË£¨Î´±ØÔËÐÐ½áÊø£©£¡
+        latch.wait(); //ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½Ö·ï¿½ï¿½Ë£ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         assert(pool.size() == 0);
         pool.stop();
     }

@@ -8,10 +8,10 @@
 // ***********************************************************************
 #ifndef ZL_PROCESSUTIL_H
 #define ZL_PROCESSUTIL_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <unistd.h>
 #include <string>
-#include "base/Timestamp.h"
+#include "zlreactor/base/Timestamp.h"
 
 using zl::base::Timestamp;
 #ifdef OS_WINDOWS

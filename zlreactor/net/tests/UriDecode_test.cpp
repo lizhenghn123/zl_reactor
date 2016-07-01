@@ -2,7 +2,7 @@
 #include <string.h>
 #include <assert.h>
 #include <string>
-#include "net/http/UriUtil.h"
+#include "zlreactor/net/http/UriUtil.h"
 #include "UriDecode_gbk.h"
 #include "UriDecode_utf8.h"
 using namespace std;
@@ -71,7 +71,7 @@ int main()
         cout << "---------------\n";
     }
     {
-        char str[] = { "http://192.168.9.2:8080/bank/parser?line=²éÓà¶î&userid=795" };
+        char str[] = { "http://192.168.9.2:8080/bank/parser?line=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½&userid=795" };
         test_UriDecode(str);
         cout << "---------------\n";
     }

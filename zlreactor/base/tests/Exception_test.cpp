@@ -6,7 +6,7 @@
 #include <signal.h>
 #include <execinfo.h>
 #include <stdlib.h>
-#include "base/Exception.h"
+#include "zlreactor/base/Exception.h"
 using namespace std;
 using namespace zl::base;
 

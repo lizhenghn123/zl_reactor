@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_EVENTFD_H
 #define ZL_EVENTFD_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <stdint.h> 
 #include <sys/eventfd.h>
 NAMESPACE_ZL_NET_START

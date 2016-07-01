@@ -8,9 +8,9 @@
 #ifndef ZL_CYCLICbARRIER_H
 #define ZL_CYCLICbARRIER_H
 #include <functional>
-#include "base/NonCopy.h"
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/Condition.h"
 NAMESPACE_ZL_THREAD_START
 
 class CyclicBarrier : zl::NonCopy

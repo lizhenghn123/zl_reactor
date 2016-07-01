@@ -5,11 +5,11 @@
 	Created Time: 2015年06月23日 星期二 23时26分50秒
  ************************************************************************/
 #include<iostream>
-#include "thread/Thread.h"
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
-#include "thread/ThreadPool.h"
-#include "thread/ThreadGroup.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/Condition.h"
+#include "zlreactor/thread/ThreadPool.h"
+#include "zlreactor/thread/ThreadGroup.h"
 using namespace std;
 using namespace zl;
 using namespace zl::thread;

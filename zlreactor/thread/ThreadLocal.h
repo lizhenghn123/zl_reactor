@@ -7,9 +7,9 @@
 // ***********************************************************************
 #ifndef ZL_THREADLOCAL_H
 #define ZL_THREADLOCAL_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <assert.h>
-#include "base/NonCopy.h"
+#include "zlreactor/base/NonCopy.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #else

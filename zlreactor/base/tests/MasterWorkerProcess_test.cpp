@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <assert.h>
-#include "base/MasterWorkerProcess.h"
+#include "zlreactor/base/MasterWorkerProcess.h"
 using namespace zl;
 
 class Test

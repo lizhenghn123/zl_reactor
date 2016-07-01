@@ -1,7 +1,7 @@
-#include "net/http/HttpResponse.h"
-#include "net/http/HttpKeyValue.h"
-#include "base/FileUtil.h"
-#include "net/ByteBuffer.h"
+#include "zlreactor/net/http/HttpResponse.h"
+#include "zlreactor/net/http/HttpKeyValue.h"
+#include "zlreactor/base/FileUtil.h"
+#include "zlreactor/net/ByteBuffer.h"
 NAMESPACE_ZL_NET_START
 
 HttpResponse::HttpResponse(bool closeConn/* = true*/)

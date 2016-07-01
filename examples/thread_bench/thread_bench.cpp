@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include "thread/Thread.h"
-#include "base/Timestamp.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/base/Timestamp.h"
 using namespace zl;
 using namespace zl::base;
 using namespace zl::thread;

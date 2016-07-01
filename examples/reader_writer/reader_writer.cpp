@@ -8,11 +8,11 @@
 #include <vector>
 #include <map>
 #include <memory>      // for share_ptr
-#include "Define.h"
-#include "thread/Thread.h"
-#include "thread/Mutex.h"
-#include "thread/RWMutex.h"
-#include "thread/Atomic.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/RWMutex.h"
+#include "zlreactor/thread/Atomic.h"
 using namespace std;
 using namespace zl::thread;
 
@@ -63,7 +63,7 @@ namespace test_RWMutex   // rwMutex
      public:
          MapPtr getData() const
          {
-             RWMutexReadLockGuard lock(rwMutex_);
+             RWMutexReadLockGuard<RWMutex> lock(rwMutex_);
              return data_;
          }
          
@@ -88,7 +88,7 @@ namespace test_RWMutex   // rwMutex
              while(1)
              {
                  count ++;
-                 RWMutexWriteLockGuard lock(rwMutex_);
+                 RWMutexWriteLockGuard<RWMutex> lock(rwMutex_);
                  (*data_)[count] = count * count;
                  printf("writer thread[%ld] : writer one\n", this_thread::tid());
                  if(count > test_max_loop)

@@ -8,10 +8,10 @@
 // ***********************************************************************
 #ifndef ZL_BLOCKINGQUEUE_H
 #define ZL_BLOCKINGQUEUE_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <queue>
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/Condition.h"
 
 NAMESPACE_ZL_THREAD_START
 

@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_RWMUTEX_H
 #define ZL_RWMUTEX_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <exception>
 #ifdef OS_WINDOWS
 #include <Windows.h>

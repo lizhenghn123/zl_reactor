@@ -8,10 +8,10 @@
 // ***********************************************************************
 #ifndef ZL_CHANNEL_H
 #define ZL_CHANNEL_H
-#include "Define.h"
-#include "net/SocketUtil.h"
-#include "base/Timestamp.h"
-#include "base/NonCopy.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/net/SocketUtil.h"
+#include "zlreactor/base/Timestamp.h"
+#include "zlreactor/base/NonCopy.h"
 NAMESPACE_ZL_NET_START
 
 class EventLoop;

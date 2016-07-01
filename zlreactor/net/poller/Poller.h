@@ -9,9 +9,9 @@
 #ifndef ZL_POLLER_H
 #define ZL_POLLER_H
 #include <vector>
-#include "Define.h"
-#include "net/SocketUtil.h"
-#include "base/Timestamp.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/net/SocketUtil.h"
+#include "zlreactor/base/Timestamp.h"
 NAMESPACE_ZL_NET_START
 
 #define POLL_WAIT_INDEFINITE

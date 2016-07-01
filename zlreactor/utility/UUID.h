@@ -1,6 +1,6 @@
 #ifndef ZL_UUID_H
 #define ZL_UUID_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #else
