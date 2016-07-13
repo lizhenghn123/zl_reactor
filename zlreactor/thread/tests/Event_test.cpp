@@ -19,7 +19,7 @@ void test_usage()
         assert(ev.timed_wait(1000) == !AUTORESET);
         if(AUTORESET == false)
         {
-            assert(ev.wait() == true);
+            ev.wait();
         }
     }
 
@@ -71,7 +71,7 @@ void test_usage()
         assert(ev.try_wait() == true);
         assert(ev.timed_wait(1000) == true);
         assert(ev.timed_wait(1000) == true);
-        assert(ev.wait() == true);
+        ev.wait();
     }
 }
 
