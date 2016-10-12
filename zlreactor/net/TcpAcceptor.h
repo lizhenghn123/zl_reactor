@@ -8,9 +8,9 @@
 // ***********************************************************************
 #ifndef ZL_TCPACCEPTOR_H
 #define ZL_TCPACCEPTOR_H
-#include "Define.h"
-#include "base/Timestamp.h"
-#include "base/NonCopy.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/Timestamp.h"
+#include "zlreactor/base/NonCopy.h"
 NAMESPACE_ZL_NET_START
 class Socket;
 class InetAddress;

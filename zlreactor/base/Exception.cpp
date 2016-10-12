@@ -1,4 +1,4 @@
-﻿#include "base/Exception.h"
+﻿#include "zlreactor/base/Exception.h"
 #include <stdlib.h>
 #ifdef OS_WINDOWS
 #else
@@ -6,7 +6,7 @@
 #define DO_NAME_DEMANGLE
 #endif
 #ifdef DO_NAME_DEMANGLE
-#include "base/Demangle.h"
+#include "zlreactor/base/Demangle.h"
 #endif
 NAMESPACE_ZL_BASE_START
 

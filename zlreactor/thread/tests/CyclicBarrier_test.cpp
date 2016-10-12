@@ -3,9 +3,9 @@
 #include <string>
 #include <memory>
 #include <functional>
-#include "thread/Thread.h"
-#include "thread/CyclicBarrier.h"
-#include "base/StringUtil.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/CyclicBarrier.h"
+#include "zlreactor/base/StringUtil.h"
 using namespace std;
 using namespace zl;
 using namespace zl::thread;

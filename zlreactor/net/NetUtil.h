@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_NETUTIL_H
 #define ZL_NETUTIL_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 NAMESPACE_ZL_NET_START
 
 class NetUtil

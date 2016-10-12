@@ -2,18 +2,18 @@
 // Filename         : Base64.h
 // Author           : LIZHENG
 // Created          : 2014-09-16
-// Description      : Base64 ±à½âÂë
+// Description      : Base64 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_BASE64_H
 #define ZL_BASE64_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <string>
 NAMESPACE_ZL_UTIL_START
 
 // len == strlen(src), and strlen(dst) >= len * 4 / 3
-// ·µ»Ø±àÂëºóµÄ×Ö·û´®³¤¶È
+// ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 size_t         base64Encode(const char *src, size_t len, char *dst);
 size_t         base64Encode(const char *src, size_t len, std::string& dst);
 size_t         base64Encode(const std::string& src, std::string& dst);
@@ -21,7 +21,7 @@ std::string    base64Encode(const char *src, size_t len);
 std::string    base64Encode(const std::string& src);
 
 // len == strlen(src), and strlen(dst) >= len * 3 / 4
-// ·µ»Ø½âÂëºóµÄ×Ö·û´®³¤¶È
+// ï¿½ï¿½ï¿½Ø½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 size_t         base64Decode(const char *src, size_t len, char *dst);
 size_t         base64Decode(const char *src, size_t len, std::string& dst);
 size_t         base64Decode(const std::string& src, std::string& dst);

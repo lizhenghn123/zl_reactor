@@ -12,8 +12,8 @@
 // ***********************************************************************
 #ifndef ZL_SINGLETON_H
 #define ZL_SINGLETON_H
-#include "Define.h"
-#include "thread/Mutex.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/thread/Mutex.h"
 NAMESPACE_ZL_START
 
 #define DECLARE_SINGLETON_CLASS(type)  friend class zl::Singleton< type >

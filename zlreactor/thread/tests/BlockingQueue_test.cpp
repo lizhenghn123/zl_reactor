@@ -3,11 +3,11 @@
 #include <stack>
 #include <string>
 #include <iterator>
-#include "thread/Thread.h"
-#include "thread/BlockingQueue.h"
-#include "thread/BoundedBlockingQueue.h"
-#include "thread/ThreadPool.h"
-#include "thread/CountDownLatch.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/BlockingQueue.h"
+#include "zlreactor/thread/BoundedBlockingQueue.h"
+#include "zlreactor/thread/ThreadPool.h"
+#include "zlreactor/thread/CountDownLatch.h"
 using namespace std;
 using namespace zl;
 using namespace zl::thread;

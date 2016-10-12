@@ -7,9 +7,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <assert.h>
-#include "net/Socket.h"
-#include "net/SocketUtil.h"
-#include "thread/Thread.h"
+#include "zlreactor/net/Socket.h"
+#include "zlreactor/net/SocketUtil.h"
+#include "zlreactor/thread/Thread.h"
 using namespace std;
 using namespace zl;
 using namespace zl::net;

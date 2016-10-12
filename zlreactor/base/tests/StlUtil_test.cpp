@@ -9,8 +9,8 @@
 #include <assert.h>
 #include <map>
 #include <string>
-#include "base/StlUtil.h"
-#include "../StlUtil.h"
+#include "zlreactor/base/StlUtil.h"
+#include "zlreactor/../StlUtil.h"
 using namespace std;
 using namespace zl;
 using namespace zl::base;

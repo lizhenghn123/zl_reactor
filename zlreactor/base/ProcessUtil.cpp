@@ -1,6 +1,6 @@
-#include "ProcessUtil.h"
-#include "FileUtil.h"
-#include "thread/Thread.h"
+#include "zlreactor/base/ProcessUtil.h"
+#include "zlreactor/base/FileUtil.h"
+#include "zlreactor/thread/Thread.h"
 #include <dirent.h>
 #include <pwd.h>
 #include <stdio.h>         // snprintf
@@ -266,7 +266,7 @@ namespace ProcessUtil
     }
 
 
-    /// 根据进程名查找pid
+    /// 锟斤拷锟捷斤拷锟斤拷锟斤拷锟斤拷锟斤拷pid
     int getPidByName(const char* procname)
     {
         assert(procname);
@@ -283,14 +283,14 @@ namespace ProcessUtil
         //printf("====%s====\n", buffer);
         pclose(pf);
 
-        if (strstr(buffer, cmd) != NULL)   // "ps -ef|grep %s" 这个命令本身也会产生一个进程, 要把grep的进程过滤掉。
+        if (strstr(buffer, cmd) != NULL)   // "ps -ef|grep %s" 锟斤拷锟斤拷锟斤拷锟筋本锟斤拷也锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟斤拷, 要锟斤拷grep锟侥斤拷锟教癸拷锟剿碉拷锟斤拷
         {
             return -1;
         }
 
         int pid = -1;
-        char *p = strtok(buffer, " "); // 以空格分开，返回第二段指针
-        p = strtok(NULL, " "); //这句是否去掉，取决于当前系统中ps后，进程ID号是否是第一个字段 pclose(pstr);
+        char *p = strtok(buffer, " "); // 锟皆空革拷锟街匡拷锟斤拷锟斤拷锟截第讹拷锟斤拷指锟斤拷
+        p = strtok(NULL, " "); //锟斤拷锟斤拷锟角凤拷去锟斤拷锟斤拷取锟斤拷锟节碉拷前系统锟斤拷ps锟襟，斤拷锟斤拷ID锟斤拷锟角凤拷锟角碉拷一锟斤拷锟街讹拷 pclose(pstr);
         if (p == NULL || strlen(p) == 0)
         {
             return -1;
@@ -303,7 +303,7 @@ namespace ProcessUtil
 
         //printf("pidnum: %d\n", pid);
         //pid_t pID = (pid_t)pid;
-        //int ret = kill(pID, 0);//这里不是要杀死进程，而是验证一下进程是否真的存在，返回0表示真的存在
+        //int ret = kill(pID, 0);//锟斤拷锟斤不锟斤拷要杀锟斤拷锟斤拷锟教ｏ拷锟斤拷锟斤拷锟斤拷证一锟铰斤拷锟斤拷锟角凤拷锟斤拷锟侥达拷锟节ｏ拷锟斤拷锟斤拷0锟斤拷示锟斤拷锟侥达拷锟斤拷
         //printf("ret= %d \n", ret);
         //if (0 == ret)
         //    printf("process: %s exist!\n", procname);
@@ -312,7 +312,7 @@ namespace ProcessUtil
         return pid;
     }
 
-    /// 根据pid查找进程名
+    /// 锟斤拷锟斤拷pid锟斤拷锟揭斤拷锟斤拷锟斤拷
     string getNameByPid(pid_t pid)
     {
         static const std::string empty_name("");
@@ -328,7 +328,7 @@ namespace ProcessUtil
         else
         {
             char buf[1024] = { 0 };
-            if (fgets(buf, 1024 - 1, fp) == NULL)  // 第一行一般是  Name:	a.out
+            if (fgets(buf, 1024 - 1, fp) == NULL)  // 锟斤拷一锟斤拷一锟斤拷锟斤拷  Name:	a.out
             {
                 fclose(fp);
                 return empty_name;
@@ -340,7 +340,7 @@ namespace ProcessUtil
         }
     }
 
-    /// 获取指定进程的status信息, read /proc/pid/status 
+    /// 锟斤拷取指锟斤拷锟斤拷锟教碉拷status锟斤拷息, read /proc/pid/status 
     string procStatus(pid_t pid)
     {
         char buf[128] = { 0 };
@@ -350,7 +350,7 @@ namespace ProcessUtil
         return result;
     }
 
-    /// 获取指定进程的stat信息, read /proc/pid/stat 
+    /// 锟斤拷取指锟斤拷锟斤拷锟教碉拷stat锟斤拷息, read /proc/pid/stat 
     string procStat(pid_t pid)
     {
         char buf[128] = { 0 };
@@ -360,7 +360,7 @@ namespace ProcessUtil
         return result;
     }
 
-    /// 获取指定进程所创建的线程总数
+    /// 锟斤拷取指锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟竭筹拷锟斤拷锟斤拷
     int numThreads(pid_t pid)
     {
         int result = 0;
@@ -373,7 +373,7 @@ namespace ProcessUtil
         return result;
     }
 
-    /// 获取指定进程所创建的线程tid
+    /// 锟斤拷取指锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟竭筹拷tid
     std::vector<pid_t> threads(pid_t pid)
     {
         char buf[128] = { 0 };
@@ -387,7 +387,7 @@ namespace ProcessUtil
         return result;
     }
 
-    /// 获取指定进程的执行路径
+    /// 锟斤拷取指锟斤拷锟斤拷锟教碉拷执锟斤拷路锟斤拷
     string exePath(pid_t pid)
     {
         char cmd[256] = { 0 };

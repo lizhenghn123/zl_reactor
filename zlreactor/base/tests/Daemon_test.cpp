@@ -6,7 +6,7 @@
 #include <fcntl.h>    // for O_CREAT
 #include <string.h>
 #include <error.h>
-#include "base/Daemonize.h"
+#include "zlreactor/base/Daemonize.h"
 
 void test_daemon_print_log(int nochdir = 1, int noclose = 0, const char *pidfile = 0)
 {

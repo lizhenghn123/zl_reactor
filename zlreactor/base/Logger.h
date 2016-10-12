@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_ZLOG_H
 #define ZL_ZLOG_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <stdarg.h>
 #include <stdlib.h>
 NAMESPACE_ZL_BASE_START

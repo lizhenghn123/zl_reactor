@@ -8,9 +8,9 @@
 // ***********************************************************************
 #ifndef ZL_THREADPOOL_H
 #define ZL_THREADPOOL_H
-#include "Define.h"
-#include "base/NonCopy.h"
-#include "thread/BlockingQueue.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/thread/BlockingQueue.h"
 NAMESPACE_ZL_THREAD_START
 
 class Thread;

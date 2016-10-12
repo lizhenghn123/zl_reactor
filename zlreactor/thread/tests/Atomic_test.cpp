@@ -1,6 +1,6 @@
 #include <iostream>
 #include <assert.h>
-#include "thread/Atomic.h"
+#include "zlreactor/thread/Atomic.h"
 using namespace std;
 
 

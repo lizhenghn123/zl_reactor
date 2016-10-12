@@ -8,8 +8,8 @@
 // ***********************************************************************
 #ifndef ZL_SOCKET_H
 #define ZL_SOCKET_H
-#include "base/NonCopy.h"
-#include "net/SocketUtil.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/net/SocketUtil.h"
 NAMESPACE_ZL_NET_START
 
 class SocketAddress;

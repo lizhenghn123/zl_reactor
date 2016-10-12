@@ -1,6 +1,6 @@
 #include <iostream>
 #include <assert.h>
-#include "base/Singleton.h"
+#include "zlreactor/base/Singleton.h"
 using namespace std;
 //using namespace zl;
 

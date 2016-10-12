@@ -1,8 +1,8 @@
-#include "thread/ThreadPool.h"
+#include "zlreactor/thread/ThreadPool.h"
 #include <assert.h>
 #include <exception>
-#include "thread/Thread.h"
-#include "base/Exception.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/base/Exception.h"
 NAMESPACE_ZL_THREAD_START
 
 ThreadPool::ThreadPool(const std::string& name/* = "ThreadPool"*/)

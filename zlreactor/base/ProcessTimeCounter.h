@@ -2,13 +2,13 @@
 // Filename         : ProcessTimeCounter.h
 // Author           : LIZHENG
 // Created          : 2014-09-24
-// Description      : Óë½ø³ÌÏà¹ØµÄÐÔÄÜÍ³¼Æ¹¤¾ß
+// Description      : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½Æ¹ï¿½ï¿½ï¿½
 //                  
 // Copyright (c) lizhenghn@gmail.com. All rights reserved.
 // ***********************************************************************
 #ifndef ZL_PROCESSTIMECOUNTER_H
 #define ZL_PROCESSTIMECOUNTER_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #ifdef OS_LINUX
 #include <sys/time.h>
 #include <sys/types.h>

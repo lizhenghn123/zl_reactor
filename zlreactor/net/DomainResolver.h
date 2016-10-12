@@ -8,8 +8,8 @@
 // ***********************************************************************
 #ifndef ZL_DOMAINRESOLVER_H
 #define ZL_DOMAINRESOLVER_H
-#include "Define.h"
-#include "net/InetAddress.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/net/InetAddress.h"
 struct hostent;
 struct addrinfo;
 NAMESPACE_ZL_NET_START

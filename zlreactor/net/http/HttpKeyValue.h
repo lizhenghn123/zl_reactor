@@ -8,9 +8,9 @@
 // ***********************************************************************
 #ifndef ZL_HTTPKEYVALUE_H
 #define ZL_HTTPKEYVALUE_H
-#include "Define.h"
-#include "base/Singleton.h"
-#include "HttpProtocol.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/Singleton.h"
+#include "zlreactor/net/http/HttpProtocol.h"
 NAMESPACE_ZL_NET_START
 
 class HttpKeyValue : public zl::Singleton < HttpKeyValue >

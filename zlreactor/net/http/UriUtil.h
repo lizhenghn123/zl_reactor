@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_HTTP_URIUTIL_H
 #define ZL_HTTP_URIUTIL_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <string>
 NAMESPACE_ZL_NET_START
 

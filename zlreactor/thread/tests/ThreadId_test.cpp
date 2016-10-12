@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
-#include "Define.h"
+#include "zlreactor/Define.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #else
 #include <syscall.h>
 #endif
-#include "thread/Thread.h"
+#include "zlreactor/thread/Thread.h"
 using namespace std;
 using namespace zl;
 using namespace zl::thread;

@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_SMARTASSERT_H
 #define ZL_SMARTASSERT_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <string>
 #include <sstream>
 #include <stdlib.h>

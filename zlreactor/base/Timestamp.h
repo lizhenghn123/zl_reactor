@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_TIMESTAMP_H
 #define ZL_TIMESTAMP_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <string>
 
 #define ZL_MSEC_PER_SEC   (1000)

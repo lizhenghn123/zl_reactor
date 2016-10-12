@@ -1,4 +1,4 @@
-#include "utility/Base64.h"
+#include "zlreactor/utility/Base64.h"
 #include <string.h>
 NAMESPACE_ZL_UTIL_START
 
@@ -74,7 +74,7 @@ std::string    base64Decode(const std::string& src)
 
 static size_t base64EncodeImpl(const char *src, size_t len, std::string& dst)
 {
-    //±àÂë±í
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     static const char EncodeTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     unsigned char Tmp[4] = { 0 };
@@ -90,7 +90,7 @@ static size_t base64EncodeImpl(const char *src, size_t len, std::string& dst)
         dst += EncodeTable[Tmp[3] & 0x3F];
         if (LineLength += 4, LineLength == 76) { dst += "\r\n"; LineLength = 0; }
     }
-    //¶ÔÊ£ÓàÊý¾Ý½øÐÐ±àÂë
+    //ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½
     int Mod = len % 3;
     if (Mod == 1)
     {
@@ -114,7 +114,7 @@ static size_t base64EncodeImpl(const char *src, size_t len, std::string& dst)
 
 static size_t base64DecodeImpl(const char *src, size_t len, std::string& dst)
 {
-    //½âÂë±í
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     static const char DecodeTable[] =
     {
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 
@@ -148,7 +148,7 @@ static size_t base64DecodeImpl(const char *src, size_t len, std::string& dst)
             }
             i += 4;
         }
-        else   // »Ø³µ»»ÐÐ,Ìø¹ý
+        else   // ï¿½Ø³ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½
         {
             src++;
             i++;

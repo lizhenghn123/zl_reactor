@@ -8,9 +8,9 @@
 // ***********************************************************************
 #ifndef ZL_COUNTDOWNLATCH_H
 #define ZL_COUNTDOWNLATCH_H
-#include "base/NonCopy.h"
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/Condition.h"
 NAMESPACE_ZL_THREAD_START
 
 class CountDownLatch : zl::NonCopy

@@ -8,9 +8,9 @@
 // ***********************************************************************
 #ifndef ZL_INETADDRESS_H
 #define ZL_INETADDRESS_H
-#include "Define.h"
-#include "base/NonCopy.h"
-#include "net/SocketUtil.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/net/SocketUtil.h"
 #ifdef OS_WINDOWS
 #include <winsock2.h>
 #include <ws2tcpip.h>

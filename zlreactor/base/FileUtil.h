@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_FILEUTIL_H
 #define ZL_FILEUTIL_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <string>
 NAMESPACE_ZL_START
 

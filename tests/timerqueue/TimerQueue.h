@@ -2,7 +2,7 @@
 // Filename         : TimerQueue.h
 // Author           : LIZHENG
 // Created          : 2014-10-126
-// Description      : Ò»¸öÍ¨ÓÃµÄ¶¨Ê±Æ÷¹ÜÀí
+// Description      : Ò»ï¿½ï¿½Í¨ï¿½ÃµÄ¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //
 // Last Modified By : LIZHENG
 // Last Modified On : 2014-10-26
@@ -11,11 +11,11 @@
 // ***********************************************************************
 #ifndef ZL_TIMERQUEUE_H
 #define ZL_TIMERQUEUE_H
-#include "Define.h"
-#include "base/NonCopy.h"
-#include "thread/Mutex.h"
-#include "thread/Thread.h"
-#include "base/Timestamp.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/base/Timestamp.h"
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 
@@ -34,7 +34,7 @@ public:
 private:
     void addTimerWithHold(Timer *vtimer);
     void deleteTimerWithHold(Timer *vtimer);
-    void processThread();   //¶¨Ê±Æ÷ÑÓ³ÙÏß³Ì
+    void processThread();   //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ß³ï¿½
 
 private:
     typedef std::multimap<Timestamp, Timer*>  TimerList;

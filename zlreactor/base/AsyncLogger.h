@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_ASYNCLOGGER_H
 #define ZL_ASYNCLOGGER_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <vector>
 #include <memory>
 namespace zl

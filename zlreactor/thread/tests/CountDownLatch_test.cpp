@@ -3,10 +3,10 @@
 #include <string>
 #include <memory>
 #include <functional>
-#include "thread/Thread.h"
-#include "thread/CountDownLatch.h"
-#include "base/StringUtil.h"
-#include "base/Logger.h"
+#include "zlreactor/thread/Thread.h"
+#include "zlreactor/thread/CountDownLatch.h"
+#include "zlreactor/base/StringUtil.h"
+#include "zlreactor/base/Logger.h"
 using namespace std;
 using namespace zl;
 using namespace zl::thread;

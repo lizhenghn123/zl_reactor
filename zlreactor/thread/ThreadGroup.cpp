@@ -1,5 +1,5 @@
-#include "thread/ThreadGroup.h"
-#include "thread/Thread.h"
+#include "zlreactor/thread/ThreadGroup.h"
+#include "zlreactor/thread/Thread.h"
 #include <assert.h>
 NAMESPACE_ZL_THREAD_START
 

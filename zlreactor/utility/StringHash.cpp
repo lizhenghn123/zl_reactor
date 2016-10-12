@@ -1,4 +1,4 @@
-#include "StringHash.h"
+#include "zlreactor/utility/StringHash.h"
 NAMESPACE_ZL_UTIL_START
 
 //SDBM Hash Function

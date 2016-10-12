@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <assert.h>
-#include "thread/ConcurrentQueue.h"
+#include "zlreactor/thread/ConcurrentQueue.h"
 using namespace std;
 using namespace zl::thread;
 

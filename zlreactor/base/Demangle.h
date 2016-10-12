@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_DEMANGLE_H
 #define ZL_DEMANGLE_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 NAMESPACE_ZL_BASE_START
 
 // 根据重整后的名字解析出原函数原型名字

@@ -1,7 +1,7 @@
-﻿#include "base/LogFile.h"
+﻿#include "zlreactor/base/LogFile.h"
 #include <time.h>
-#include "base/FileUtil.h"
-#include "base/Logger.h"
+#include "zlreactor/base/FileUtil.h"
+#include "zlreactor/base/Logger.h"
 NAMESPACE_ZL_BASE_START
 
 LogFile::LogFile(const char *log_name/* = NULL*/, const char *log_dir/* = NULL*/, size_t max_file_size/* = MAX_LOG_FILE_SIZE*/, 

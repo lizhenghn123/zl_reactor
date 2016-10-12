@@ -1,6 +1,6 @@
 #ifndef HIGHPRECISIONTIME_FILE_H
 #define HIGHPRECISIONTIME_FILE_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #endif

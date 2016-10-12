@@ -8,11 +8,11 @@
 // ***********************************************************************
 #ifndef ZL_HTTPREQUEST_H
 #define ZL_HTTPREQUEST_H
-#include "Define.h"
-#include "base/Timestamp.h"
-#include "net/http/HttpProtocol.h"
-#include "net/http/HttpKeyValue.h"
-#include "base/StringUtil.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/Timestamp.h"
+#include "zlreactor/net/http/HttpProtocol.h"
+#include "zlreactor/net/http/HttpKeyValue.h"
+#include "zlreactor/base/StringUtil.h"
 using zl::base::Timestamp;
 NAMESPACE_ZL_NET_START
 

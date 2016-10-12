@@ -8,7 +8,7 @@
 // ***********************************************************************
 #ifndef ZL_ATOMIC_H
 #define ZL_ATOMIC_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #ifdef OS_LINUX
 #include <pthread.h>
 #define ATOMIC_ADD(ptr, v)            __sync_add_and_fetch(ptr, v)

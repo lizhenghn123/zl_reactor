@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
-#include "base/ObjectPool.h"
-#include "base/Singleton.h"
-#include "thread/Mutex.h"
-#include "thread/FastMutex.h"
+#include "zlreactor/base/ObjectPool.h"
+#include "zlreactor/base/Singleton.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/FastMutex.h"
 using namespace std;
 
 class TO

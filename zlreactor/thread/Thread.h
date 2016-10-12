@@ -8,9 +8,9 @@
 // ***********************************************************************
 #ifndef ZL_THREAD_H
 #define ZL_THREAD_H
-#include "Define.h"
-#include "base/NonCopy.h"
-#include "thread/Mutex.h"
+#include "zlreactor/Define.h"
+#include "zlreactor/base/NonCopy.h"
+#include "zlreactor/thread/Mutex.h"
 #include <string>
 NAMESPACE_ZL_THREAD_START
 

@@ -1,11 +1,11 @@
 #include <iostream>
 #include <string>
-#include "net/EventLoop.h"
-#include "net/http/HttpServer.h"
-#include "net/http/HttpRequest.h"
-#include "net/http/HttpResponse.h"
-#include "base/FileUtil.h"
-#include "base/Logger.h"
+#include "zlreactor/net/EventLoop.h"
+#include "zlreactor/net/http/HttpServer.h"
+#include "zlreactor/net/http/HttpRequest.h"
+#include "zlreactor/net/http/HttpResponse.h"
+#include "zlreactor/base/FileUtil.h"
+#include "zlreactor/base/Logger.h"
 using namespace std;
 using namespace zl::net;
 
@@ -67,14 +67,14 @@ void doGet(const HttpRequest& req, HttpResponse *resp)
     {
         resp->setStatusCode(HttpStatusOk);
         resp->setContentType("text/plain");
-        if (0)   // 每一次都从本地路径读取
+        if (0)   // 每一锟轿讹拷锟接憋拷锟斤拷路锟斤拷锟斤拷取
         {
             string path(g_httpserver->rootDir() + url);
             string data;
             zl::FileUtil::readFile(path.c_str(), data);
             resp->setBody(data);
         }
-        else    // 提前预读取
+        else    // 锟斤拷前预锟斤拷取
         {
             resp->setBody(g_indexData);
         }

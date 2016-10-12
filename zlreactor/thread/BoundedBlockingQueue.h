@@ -8,11 +8,11 @@
 // ***********************************************************************
 #ifndef ZL_BOUNDEDBLOCKINGQUEUE_H
 #define ZL_BOUNDEDBLOCKINGQUEUE_H
-#include "Define.h"
+#include "zlreactor/Define.h"
 #include <queue>
-#include "thread/Mutex.h"
-#include "thread/Condition.h"
-#include "thread/BlockingQueue.h"
+#include "zlreactor/thread/Mutex.h"
+#include "zlreactor/thread/Condition.h"
+#include "zlreactor/thread/BlockingQueue.h"
 
 NAMESPACE_ZL_THREAD_START
 
@@ -186,7 +186,7 @@ private:
     bool popOne(JobType& job, T tag);
 
     //template <>
-    bool popOne(JobType& job, tagFIFO tag)
+    bool popOne(JobType& job, tagFIFO /*tag*/)
     {
         if(queue_.empty())
             return false;
@@ -196,7 +196,7 @@ private:
     }
 
     //template <>
-    bool popOne(JobType& job, tagFILO tag)
+    bool popOne(JobType& job, tagFILO /*tag*/)
     {
         if(queue_.empty())
             return false;
@@ -206,7 +206,7 @@ private:
     }
 
     //template <>
-    bool popOne(JobType& job, tagPRIO tag)
+    bool popOne(JobType& job, tagPRIO /*tag*/)
     {
         if(queue_.empty())
             return false;
