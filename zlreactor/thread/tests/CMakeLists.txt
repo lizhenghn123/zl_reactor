@@ -22,6 +22,9 @@ target_link_libraries(CyclicBarrier_test zlreactor)
 add_executable(Mutex_test Mutex_test.cpp)
 target_link_libraries(Mutex_test zlreactor)
 
+add_executable(Event_test Event_test.cpp)
+target_link_libraries(Event_test zlreactor)
+
 add_executable(Thread_test Thread_test.cpp)
 target_link_libraries(Thread_test zlreactor)
 

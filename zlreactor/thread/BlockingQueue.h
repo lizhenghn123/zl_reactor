@@ -160,7 +160,7 @@ private:
     bool popOne(JobType& job, T tag);
 
     //template <>
-    bool popOne(JobType& job, tagFIFO tag)
+    bool popOne(JobType& job, tagFIFO /*tag*/)
     {
         if(queue_.empty())
             return false;
@@ -170,7 +170,7 @@ private:
     }
 
     //template <>
-    bool popOne(JobType& job, tagFILO tag)
+    bool popOne(JobType& job, tagFILO /*tag*/)
     {
         if(queue_.empty())
             return false;
@@ -180,7 +180,7 @@ private:
     }
 
     //template <>
-    bool popOne(JobType& job, tagPRIO tag)
+    bool popOne(JobType& job, tagPRIO /*tag*/)
     {
         if(queue_.empty())
             return false;
