@@ -26,7 +26,7 @@ int createDaemonize(int nochdir/* = 1*/, int noclose/* = 0*/, const char *pidfil
     if (pidfile)
     {
         int pid = checkPid(pidfile);
-        if (pid)
+        if (pid > 0)
         {
             fprintf(stderr, "The process is already running, pid = %d.\n", pid);
             return -1;
