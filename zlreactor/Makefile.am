@@ -80,5 +80,6 @@ libzlreactor_la_SOURCES =                             \
 					 net/http/HttpContext.cpp         \
 					 net/http/HttpServer.cpp          \
 					 net/websocket/WebSocket.cpp      \
+					 net/websocket/WebSocketClient.cpp      \
 					 net/websocket/WebSocketServer.cpp
 

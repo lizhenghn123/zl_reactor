@@ -21,3 +21,5 @@ SUBDIRS                += echo
 SUBDIRS                += thread_bench 
 
 SUBDIRS                += test_websocketserver 
+
+SUBDIRS                += test_websocketclient 
