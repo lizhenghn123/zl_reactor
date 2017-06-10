@@ -2,7 +2,7 @@
 #include "zlreactor/utility/SHA1.h"
 #include "zlreactor/utility/Base64.h"
 #include "zlreactor/base/Logger.h"
-
+#include "zlreactor/base/StringUtil.h"
 namespace zl
 {
 namespace net
@@ -39,6 +39,37 @@ namespace ws
             ((x >> 24) & 0x0000000000ff0000LL) |
             ((x >> 40) & 0x000000000000ff00LL) |
             (x << 56);
+    }
+
+    static void generateHash(char buffer[], size_t bufferlen)
+    {
+        /*byte*/int8_t bytes[16] = {0};
+        for(int i = 0; i < 16; i++)
+        {
+            bytes[i] = random() % 255;
+        }
+        zl::util::base64Encode((const char*)bytes, 16, buffer);
+    }
+
+    std::string makeHandshakeRequest(const std::string& url)
+    {
+        std::string buffer;
+        buffer.reserve(4096);
+        zl::base::stringFormatAppend(&buffer, "GET /%s HTTP/1.1\r\n", url.c_str());
+        //zl::base::stringFormatAppend(&buffer, "Host: %s:%d\r\n", url.c_str());
+        zl::base::stringFormatAppend(&buffer, "Upgrade: websocket\r\n");
+        zl::base::stringFormatAppend(&buffer, "Connection: Upgrade\r\n");
+
+        char hash[45] = {0};  
+        generateHash(hash, 45);
+        zl::base::stringFormatAppend(&buffer, "Sec-WebSocket-Key: %s\r\n", hash);
+        zl::base::stringFormatAppend(&buffer, "Connection: Upgrade\r\n");
+
+        //zl::base::stringFormatAppend(&buffer, "Sec-WebSocket-Protocol: %s\r\n", "");
+        zl::base::stringFormatAppend(&buffer, "Sec-WebSocket-Version: %d\r\n", 13);  /// 钦定了版本号
+
+        zl::base::stringFormatAppend(&buffer, "\r\n");    
+        return buffer;    
     }
 
     std::string makeHandshakeResponse(const char* seckey)
@@ -171,6 +202,11 @@ namespace ws
         if(msg_opcode == 0xA) return WS_PONG_FRAME;
 
         return WS_ERROR_FRAME;
+    }
+
+    int  encodeFrameByClient(WsFrameType frame_type, const char* msg, int msgsize, char* outbuf, int outsize)
+    {
+        return 0;
     }
 
     int encodeFrame(WsFrameType frame_type, const char* msg, int msg_length, char* outbuf, int bufsize)

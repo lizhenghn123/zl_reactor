@@ -98,7 +98,7 @@ void WsServer::handshake(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestam
 {
     LOG_INFO("client[%d] request handshake : \n", conn->fd());
     const char* over = buf->findDoubleCRLF();
-    if(!over)
+    if(!over)   /// 这个地方可能有问题，比如一次性并没有把所有头都发过来。。。
     {
         LOG_WARN("handshake request data is not ready[%s]", buf->toString().c_str());
         return;

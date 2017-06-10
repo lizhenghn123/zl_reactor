@@ -144,6 +144,9 @@ namespace ws
     uint64_t ntoh64(uint64_t);
     uint64_t hton64(uint64_t);
 
+    /// 设置请求server的handshake消息
+    std::string makeHandshakeRequest(const std::string& url);
+
     /// 设置返回给client的握手响应
     /// seckey : client的"Sec-WebSocket-Key"对应值
     std::string makeHandshakeResponse(const char* seckey);
@@ -154,6 +157,13 @@ namespace ws
     /// outbuf     : 解码缓冲区
     /// return     : WsFrameType
     WsFrameType decodeFrame(const char* inbuf, int insize, std::vector<char>* outbuf);
+
+    /// 将client发送给server的数据进行编码（加密）
+    /// msg        : 发回给server的数据
+    /// msglen     : 发回的数据大小
+    /// outbuf     : 编码缓冲区
+    /// outsize    : 编码缓冲区大小（建议outsize > insize + 10）
+    int  encodeFrameByClient(WsFrameType frame_type, const char* msg, int msgsize, char* outbuf, int outsize);
 
     /// 将发回给client的数据进行编码
     /// msg        : 发回给client的数据
