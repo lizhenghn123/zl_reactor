@@ -106,6 +106,17 @@ namespace ws
         WS_FLAG_SEC_PROTOCOL    = 0x0200,
     };
 
+    struct WsHeader
+    {
+        unsigned header_size;
+        bool fin;
+        bool mask;
+        WsOpcode opcode;
+        int N0;
+        uint64_t N;
+        uint8_t masking_key[4];
+    };
+
     class WsConnection
     {
     public:

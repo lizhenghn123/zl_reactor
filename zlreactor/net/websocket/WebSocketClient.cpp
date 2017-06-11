@@ -55,9 +55,10 @@ void WsClient::onConnection(const TcpConnectionPtr& conn)
     }
 }
 
+/// FIXME 这里面对server端的消息解析写的并不好，最好是单独写一个解码工具，用来保存中间状态，避免重复解析
 void WsClient::onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp receiveTime)
 {
-    LOG_INFO("WsClient::onMessage recv data [%d]", conn->fd());
+    LOG_INFO("WsClient::onMessage recv data (fd =%d)(size = %d)", conn->fd(), buf->readableBytes());
     WsConnection* wsconn = zl::stl::any_cast<WsConnection>(conn->getMutableContext());
     assert(wsconn);
     if(!wsconn->handshaked())       /// 尚未握手
@@ -71,7 +72,7 @@ void WsClient::onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestam
             if(onopen_)
             {
                 onopen_(conn);
-            }  
+            }
         }
         else if(ret < 0)
         {
@@ -81,30 +82,110 @@ void WsClient::onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestam
     }
     else                                /// 已经握手，接下来就是正常收发数据了
     {
-        std::vector<char> outbuf;
-        LOG_INFO("=========");
-        /*
-        WsFrameType type = decodeFrameByClient(buf->peek(), buf->readableBytes(), &outbuf);
-        std::cout << "getFrame : " << type << "\t" << outbuf.size() << "\t[" << outbuf.data() << "]\n";
-        if(type == WS_INCOMPLETE_TEXT_FRAME || type == WS_INCOMPLETE_BINARY_FRAME)
+        if(buf->readableBytes() < 2)    /// Need at least 2
         {
             return;
         }
-        else if(type == WS_TEXT_FRAME || type == WS_BINARY_FRAME)
+        WsHeader ws;
+        const uint8_t* data = (const uint8_t*)buf->peek();   // peek, but don't consume
+        ws.fin = (data[0] & 0x80) == 0x80;
+        ws.opcode = (WsOpcode)(data[0] & 0x0f);
+        ws.mask = (data[1] & 0x80) == 0x80;
+        ws.N0 = (data[1] & 0x7f);
+        ws.header_size = 2 + (ws.N0 == 126 ? 2 : 0) + (ws.N0 == 127 ? 8 : 0) + (ws.mask ? 4 : 0);
+        int i = 0;
+        if (ws.N0 < 126)
         {
-            buf->retrieveAll();
-            onmessage_(conn, outbuf, receiveTime);
+            ws.N = ws.N0;
+            i = 2;
         }
-        else if(type == WS_CLOSE_FRAME)
+        else if (ws.N0 == 126)
         {
-            conn->shutdown();
-            onclose_(conn);
+            ws.N = 0;
+            ws.N |= ((uint64_t) data[2]) << 8;
+            ws.N |= ((uint64_t) data[3]) << 0;
+            i = 4;
+        }
+        else if (ws.N0 == 127)
+        {
+            ws.N = 0;
+            ws.N |= ((uint64_t) data[2]) << 56;
+            ws.N |= ((uint64_t) data[3]) << 48;
+            ws.N |= ((uint64_t) data[4]) << 40;
+            ws.N |= ((uint64_t) data[5]) << 32;
+            ws.N |= ((uint64_t) data[6]) << 24;
+            ws.N |= ((uint64_t) data[7]) << 16;
+            ws.N |= ((uint64_t) data[8]) << 8;
+            ws.N |= ((uint64_t) data[9]) << 0;
+            i = 10;
+        }
+        if (ws.mask)
+        {
+            ws.masking_key[0] = ((uint8_t) data[i + 0]) << 0;
+            ws.masking_key[1] = ((uint8_t) data[i + 1]) << 0;
+            ws.masking_key[2] = ((uint8_t) data[i + 2]) << 0;
+            ws.masking_key[3] = ((uint8_t) data[i + 3]) << 0;
         }
         else
         {
-            LOG_WARN("No this [%d] opcode handler", type);
+            ws.masking_key[0] = 0;
+            ws.masking_key[1] = 0;
+            ws.masking_key[2] = 0;
+            ws.masking_key[3] = 0;
         }
-        */
+        LOG_DEBUG("WsHeader: fin=%d, opcode=%d, mask=%d, N0=%d, N=%d, header_size=%d", 
+                    ws.fin,  ws.opcode, ws.mask, ws.N0, ws.N, ws.header_size);
+
+        // We got a whole message, now do something with it:
+        if(buf->readableBytes() < ws.header_size + ws.N)   /// 实际数据还未到达
+        {
+            return;
+        }
+
+        std::vector<char> rxbuf;
+        rxbuf.reserve(ws.N);
+        if (false) { }
+        else if (ws.opcode == WS_OPCODE_PONG) { }
+        else if (ws.opcode == WS_OPCODE_CLOSE)
+        {
+            close(conn);
+        }
+        else if (ws.opcode == WS_OPCODE_PING)
+        {
+            rxbuf.assign(buf->peek(), buf->peek() + ws.N);
+            if (ws.mask)
+            {
+                for (size_t i = 0; i < ws.N; ++i)
+                {
+                    rxbuf[i] ^= ws.masking_key[i & 0x3];
+                }
+            }
+            sendData(conn, WS_OPCODE_PONG, rxbuf.size(), rxbuf.begin(), rxbuf.end());
+        }
+        else if (ws.opcode == WS_OPCODE_TEXT || ws.opcode == WS_OPCODE_BINARY || ws.opcode == WS_OPCODE_CONTINUE)
+        {
+            LOG_INFO("========= (%d)(%d)(%d)(%s)", ws.header_size, ws.N, buf->readableBytes(), buf->toString().c_str());
+            rxbuf.assign(buf->peek() + ws.header_size, buf->peek() + ws.header_size + ws.N);
+            LOG_INFO("111111 : %s", rxbuf.data());
+            if (ws.mask)
+            {
+                for (size_t i = 0; i < ws.N; ++i)
+                {
+                    rxbuf[i] ^= ws.masking_key[i & 0x3];
+                }
+            }
+            if (ws.fin && onmessage_)
+            {
+                onmessage_(conn, rxbuf, zl::base::Timestamp::now());               
+            }
+        }
+        else
+        {
+            LOG_ERROR("ERROR: Got unexpected WebSocket message.\n");
+            close(conn);
+        }
+        buf->retrieve(ws.header_size + ws.N);
+        LOG_INFO("========= (%s)(%d)", buf->toString().c_str(), buf->readableBytes());
     }
 }
 
@@ -150,8 +231,11 @@ int  WsClient::parseHandshakeResponse(const TcpConnectionPtr& conn, ByteBuffer* 
             LOG_ERROR("server handshake response is invalid(%s)", response.c_str());
             return -1;
         }
+        
+        buf->retrieve(doubleCRLF + 4 - buf->peek());
         //LOG_ALERT("%d, %d, %d", buf->readableBytes(), response.size(), doubleCRLF - buf->peek());
         LOG_INFO("WsClient::onMessage  parse request over.");
+        LOG_ALERT("####### %d", buf->readableBytes());
         return 0;
     }
     return 1;
@@ -162,16 +246,6 @@ void WsClient::connect()
     client_->enableRetry();
     client_->connect();
 }
-
-// void WsClient::sendText(const TcpConnectionPtr& conn, const char* data, size_t size)
-// {
-//     send(conn, data, size, WS_TEXT_FRAME);
-// }
-
-// void WsClient::sendBinary(const TcpConnectionPtr& conn, const char* data, size_t size)
-// {
-//     send(conn, data, size, WS_BINARY_FRAME);
-// }
 
 void WsClient::send(const TcpConnectionPtr& conn, const std::vector<uint8_t>& data)
 {

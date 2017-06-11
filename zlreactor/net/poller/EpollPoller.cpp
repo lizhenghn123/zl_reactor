@@ -99,7 +99,7 @@ Timestamp EpollPoller::pollOnce(int timeoutMs, ChannelList& activeChannels)
     Timestamp now(Timestamp::now());
     if (numEvents > 0)
     {
-        LOG_INFO("EpollPoller::pollOnce: [%d] events happended", numEvents);
+        LOG_DEBUG("EpollPoller::pollOnce: [%d] events happended", numEvents);
         fireActiveChannels(numEvents, activeChannels);
         if (static_cast<size_t>(numEvents) == events_.size())
         {
@@ -108,7 +108,7 @@ Timestamp EpollPoller::pollOnce(int timeoutMs, ChannelList& activeChannels)
     }
     else if (numEvents == 0)
     {
-        LOG_INFO("EpollPoller::pollOnce: nothing happended");
+        LOG_DEBUG("EpollPoller::pollOnce: nothing happended");
     }
     else
     {
@@ -117,7 +117,7 @@ Timestamp EpollPoller::pollOnce(int timeoutMs, ChannelList& activeChannels)
         if (savedErrno != SOCK_ERR_EINTR)
         {
             errno = savedErrno;
-            LOG_INFO("EpollPoller::pollOnce: error [%d]", savedErrno);
+            LOG_DEBUG("EpollPoller::pollOnce: error [%d]", savedErrno);
         }
     }
 

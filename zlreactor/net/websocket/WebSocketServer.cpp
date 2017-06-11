@@ -59,9 +59,9 @@ static void printRequestHeaders(const HttpRequest& req)
     std::cout << "---------------------------------------------------\n";
 }
 
-void WsServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestamp receiveTime)
+void WsServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp receiveTime)
 {
-    LOG_INFO("WsServer::onMessage recv data [%d]", conn->fd());
+    LOG_INFO("WsServer::onMessage recv data (%d)(size=%d)", conn->fd(), buf->readableBytes());
     WsConnection *wsconn = zl::stl::any_cast<WsConnection>(conn->getMutableContext());
     assert(wsconn);
     if(!wsconn->handshaked())
@@ -70,9 +70,10 @@ void WsServer::onMessage(const TcpConnectionPtr& conn, ByteBuffer *buf, Timestam
     }
     else
     {
+        LOG_DEBUG("incoming msg: (%d)(%s)", buf->readableBytes(), buf->toString().c_str());
         std::vector<char> outbuf;
         WsFrameType type = decodeFrame(buf->peek(), buf->readableBytes(), &outbuf);
-        std::cout << "getFrame : " << type << "\t" << outbuf.size() << "\t[" << outbuf.data() << "]\n";
+        LOG_DEBUG("getFrame : type=%d, size=%d, data=(%s)", type, outbuf.size(), outbuf.data());
         if(type == WS_INCOMPLETE_TEXT_FRAME || type == WS_INCOMPLETE_BINARY_FRAME)
         {
             return;

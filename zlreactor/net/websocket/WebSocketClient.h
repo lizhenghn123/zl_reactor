@@ -75,7 +75,6 @@ public:
         txbuf.insert(txbuf.end(), header.begin(), header.end());
         send(conn, txbuf);
     }
-
     
 private:
     void onConnection(const TcpConnectionPtr& conn);
@@ -163,7 +162,7 @@ void WsClient::sendData(const TcpConnectionPtr& conn, WsOpcode opcode, uint64_t 
     txbuf.insert(txbuf.end(), message_begin, message_end);
     if (useMask_)
     {
-        for (size_t i = 0; i != message_size; ++i)
+        for (size_t i = 0; i < message_size; ++i)
         {
             *(txbuf.end() - message_size + i) ^= masking_key[i & 0x3];
         }

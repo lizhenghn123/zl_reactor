@@ -59,7 +59,9 @@ private:
         LOG_INFO("EchoWebClient (%d) onopen\n", conn->fd());
         if (conn->connected())
         {
-            client_.sendText(conn, "hello", 5);
+            //client_.sendText(conn, "hello", 5);
+            std::string ss(128, 'a');   /// FIXME 超过126时，server端无法解析！！！
+            client_.sendText(conn, ss.c_str(), ss.size());
         }
         else
         {
@@ -76,9 +78,9 @@ private:
     void onmessage(const TcpConnectionPtr& conn, const std::vector<char>& buf, Timestamp)
     {
          LOG_INFO("EchoWebClient onmessage (%s)", buf.data());
-         //WsConnection *wsconn = zl::stl::any_cast<WsConnection>(conn->getMutableContext());
-         //client_->sendText(buf.data(), buf.size());
-         //client_.send(conn, buf.data(), buf.size());
+         //std::string ss(128, 'a');
+         //client_.sendText(conn, ss.c_str(), ss.size());
+         //client_.sendText(conn, buf.data(), buf.size());
     }
 
 private:
@@ -92,7 +94,7 @@ int main()
     EventLoop loop;
     InetAddress addr("0.0.0.0", 8888);
     
-    #if 1        /// 这样总是失败，实在没想明白！！！
+    #if 0
     zl::net::ws::WsClient client(&loop, addr, "/");
     client.setOnOpen(onOpen);
     client.setOnClose(onClose);

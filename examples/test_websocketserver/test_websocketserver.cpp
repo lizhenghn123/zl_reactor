@@ -53,7 +53,7 @@ private:
 
 int main()
 {
-    //LOG_DISABLE_ALL;
+    LOG_SET_DEBUG_MODE;
 
     EventLoop loop;
     EchoWebServer server(&loop, InetAddress("0.0.0.0", 8888));

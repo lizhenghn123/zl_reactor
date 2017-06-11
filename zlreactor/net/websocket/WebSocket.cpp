@@ -183,7 +183,7 @@ namespace ws
         }
         (*outbuf)[payload_length] = 0;
 
-        if(0)
+        if(1)
         {
             printf("IN:");
             for(int i=0; i < 20; i++)
