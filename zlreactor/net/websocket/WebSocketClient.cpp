@@ -52,19 +52,6 @@ void WsClient::onConnection(const TcpConnectionPtr& conn)
     }
 }
 
-static void printRequestHeaders(const HttpRequest& req)
-{
-    std::cout << "---------------print request headers---------------\n";
-    std::cout << "Headers " << req.method() << " " << req.path() << std::endl;
-
-    const HttpRequest::HeadersMap &headers = req.headers();
-    for (HttpRequest::HeadersMap::const_iterator it = headers.begin(); it != headers.end(); ++it)
-    {
-        std::cout << it->first << ": " << it->second << std::endl;
-    }
-    std::cout << "---------------------------------------------------\n";
-}
-
 void WsClient::onMessage(const TcpConnectionPtr& conn, ByteBuffer* buf, Timestamp receiveTime)
 {
     LOG_INFO("WsClient::onMessage recv data [%d]", conn->fd());
@@ -125,9 +112,8 @@ void WsClient::sendHandshake(const TcpConnectionPtr& conn)
     {
         return;
     }
-    LOG_INFO("client[%d] request sendHandshake : \n", conn->fd());
     std::string buffer = makeHandshakeRequest(url_);
-    LOG_INFO("client[%d] request sendHandshake : (%s)\n", conn->fd(), buffer.c_str());
+    LOG_DEBUG("client[%d] request sendHandshake : (%s)\n", conn->fd(), buffer.c_str());
     conn->send(buffer);
 }
 
@@ -138,22 +124,30 @@ int  WsClient::parseHandshakeResponse(const TcpConnectionPtr& conn, ByteBuffer* 
     {
         if(buf->readableBytes() > 1024 * 1024)  /// 超过 1 KB 仍然找不到 "\r\n\r\n"
         {
+            LOG_ERROR("Cannot find the double crlf in server handshake response");
             return -1;
         }
     }
     else
     {
-        HttpContext context;
-        if(!context.parseRequest(buf, zl::base::Timestamp::now()))// 解析失败
+        /// TODO 这里需要解析handshake响应，以判断server端是否能够正常处理
+        /***
+            HTTP/1.1 101 Switching Protocols
+            Upgrade: WebSocket
+            Connection: Upgrade
+            Sec-WebSocket-Version: 13
+            Sec-WebSocket-Accept: tlfzFb2mOM86dj/ZWpxF0VCvy6s=
+
+        ***/
+        const std::string response(buf->peek(), doubleCRLF + 4);
+        if(strcasestr(response.c_str(), "HTTP/1.1 101 Switching Protocols") == NULL
+            || strcasestr(response.c_str(), "Upgrade: WebSocket") == NULL
+            || strcasestr(response.c_str(), "Connection: Upgrade") == NULL)
         {
-            conn->send("HTTP/1.1 400 Bad Request\r\n\r\n");
-            conn->shutdown();
-            LOG_ALERT("1111111111111111111");
+            LOG_ERROR("server handshake response is invalid(%s)", response.c_str());
             return -1;
         }
-        assert(context.gotAll());
-        HttpRequest& req = context.request();
-        printRequestHeaders(req);
+        //LOG_ALERT("%d, %d, %d", buf->readableBytes(), response.size(), doubleCRLF - buf->peek());
         LOG_INFO("WsServer::onMessage  parse request over.");
         return 0;
     }
