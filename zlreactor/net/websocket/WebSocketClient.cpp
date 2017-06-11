@@ -27,6 +27,8 @@ WsClient::WsClient(EventLoop *loop, const InetAddress& serverAddr, const std::st
     , onclose_(NULL)
     , onmessage_(NULL)
     , url_(url)
+    , useMask_(true)
+    , conn_(NULL)
 {
     client_ = new zl::net::TcpClient(loop, serverAddr, cilentname);
     client_->setConnectionCallback(std::bind(&WsClient::onConnection, this, std::placeholders::_1));
@@ -45,6 +47,7 @@ void WsClient::onConnection(const TcpConnectionPtr& conn)
     {
         conn->setContext(WsConnection());
         sendHandshake(conn);    /// 连接成功之后就开始握手
+        conn_ = conn;
     }
     else
     {
@@ -148,7 +151,7 @@ int  WsClient::parseHandshakeResponse(const TcpConnectionPtr& conn, ByteBuffer* 
             return -1;
         }
         //LOG_ALERT("%d, %d, %d", buf->readableBytes(), response.size(), doubleCRLF - buf->peek());
-        LOG_INFO("WsServer::onMessage  parse request over.");
+        LOG_INFO("WsClient::onMessage  parse request over.");
         return 0;
     }
     return 1;
@@ -160,49 +163,19 @@ void WsClient::connect()
     client_->connect();
 }
 
-void WsClient::sendText(const TcpConnectionPtr& conn, const char* data, size_t size)
-{
-    send(conn, data, size, WS_TEXT_FRAME);
-}
+// void WsClient::sendText(const TcpConnectionPtr& conn, const char* data, size_t size)
+// {
+//     send(conn, data, size, WS_TEXT_FRAME);
+// }
 
-void WsClient::sendBinary(const TcpConnectionPtr& conn, const char* data, size_t size)
-{
-    send(conn, data, size, WS_BINARY_FRAME);
-}
+// void WsClient::sendBinary(const TcpConnectionPtr& conn, const char* data, size_t size)
+// {
+//     send(conn, data, size, WS_BINARY_FRAME);
+// }
 
-void WsClient::close(const TcpConnectionPtr& conn, WsCloseReason code, const char* reason)
+void WsClient::send(const TcpConnectionPtr& conn, const std::vector<uint8_t>& data)
 {
-    size_t len = 0;
-    char buf[128];
-    unsigned short code_be = hton16(code);
-    memcpy(buf, &code_be, 2);
-    len += 2;
-    if (reason)
-    {
-        len += ZL_SNPRINTF(buf + 2, 124, "%s", reason);
-    }
-
-    send(conn, buf, len, WS_CLOSE_FRAME);
-}
-
-void WsClient::send(const TcpConnectionPtr& conn, const char* data, size_t size, WsFrameType type/* = TEXT_FRAME*/)
-{
-    assert(0 && "需要编码, 不能像serve那样直接发");
-    const static size_t max_send_buf_size = 4096;
-    if(size < max_send_buf_size)
-    {
-        char outbuf[max_send_buf_size];
-        int encodesize = encodeFrameByClient(type, data, size, outbuf, max_send_buf_size);
-        conn->send(outbuf, encodesize);
-    }
-    else
-    {
-        LOG_DEBUG("client[%d] data big[%d]", conn->fd(), size);
-        std::vector<char> outbuf;
-        outbuf.resize(size + 10);
-        int encodesize = encodeFrameByClient(type, data, size, &*outbuf.begin(), outbuf.size());
-        conn->send(&*outbuf.begin(), encodesize);
-    }
+    conn->send(&*data.begin(), data.size());
 }
 
 }  }  }  // namespace zl { namespace net { namespace ws {
