@@ -151,12 +151,16 @@ namespace ws
         }
         else if(length_field == 126)  //msglen is 16bit!
         { 
-            payload_length = inp[2] + (inp[3]<<8);
+            payload_length = (inp[2] << 8) + inp[3];
             pos += 2;
         }
         else if(length_field == 127)  //msglen is 64bit!
         {
-            payload_length = inp[2] + (inp[3]<<8); 
+            payload_length = ((unsigned long long)inp[2] << 56) + ((unsigned long long)inp[3] << 48) + 
+                             ((unsigned long long)inp[4] << 40) + ((unsigned long long)inp[5] << 32) +
+                             ((unsigned long long)inp[6] << 24) + ((unsigned long long)inp[7] << 16) +
+                             ((unsigned long long)inp[8] << 8)  + ((unsigned long long)inp[9] << 0); 
+            payload_length = payload_length / 2;                 
             pos += 8;
         }
 
@@ -183,7 +187,7 @@ namespace ws
         }
         (*outbuf)[payload_length] = 0;
 
-        if(1)
+        if(0)
         {
             printf("IN:");
             for(int i=0; i < 20; i++)
@@ -202,11 +206,6 @@ namespace ws
         if(msg_opcode == 0xA) return WS_PONG_FRAME;
 
         return WS_ERROR_FRAME;
-    }
-
-    int  encodeFrameByClient(WsFrameType frame_type, const char* msg, int msgsize, char* outbuf, int outsize)
-    {
-        return 0;
     }
 
     int encodeFrame(WsFrameType frame_type, const char* msg, int msg_length, char* outbuf, int bufsize)

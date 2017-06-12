@@ -78,8 +78,8 @@ private:
     void onmessage(const TcpConnectionPtr& conn, const std::vector<char>& buf, Timestamp)
     {
          LOG_INFO("EchoWebClient onmessage (%s)", buf.data());
-         //std::string ss(128, 'a');
-         //client_.sendText(conn, ss.c_str(), ss.size());
+         std::string ss(128, 'a');
+         client_.sendText(conn, ss.c_str(), ss.size());
          //client_.sendText(conn, buf.data(), buf.size());
     }
 
